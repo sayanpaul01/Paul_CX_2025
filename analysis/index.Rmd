@@ -10,5 +10,8 @@ editor_options:
 
 Welcome to my research website.
 
-### **QC Data**  
-[Read alignment data](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_sample.html)
+### **QC Data**
+#### **Total Reads and mapped reads**  
+
+- **[Total Number of Reads across samples](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_sample.html)**  
+- **[Total Number of Reads by Treatment](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_treatment.html)**
