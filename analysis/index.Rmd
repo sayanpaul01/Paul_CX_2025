@@ -10,10 +10,8 @@ editor_options:
 
 Welcome to my research website.
 
-### **QC Data**
-#### **Total Reads and mapped reads**  
+  
+### **QC Data**  
+#### **Total Reads and Mapped Reads**  
 
-- **[Total Number of Reads across samples](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_sample.html)**  
-- **[Total Number of Reads by Treatment](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_treatment.html)**
-- **[Total Number of Reads by Individual](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_individual.html)**
-- **[Total Number of Reads by Time](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_time.html)**
+- **[Total Reads and Mapped Reads](https://sayanpaul01.github.io/CX5461_Project/total_reads_and_mapped_reads.html)**
