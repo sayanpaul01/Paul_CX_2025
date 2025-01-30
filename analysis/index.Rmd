@@ -15,3 +15,4 @@ Welcome to my research website.
 
 - **[Total Number of Reads across samples](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_sample.html)**  
 - **[Total Number of Reads by Treatment](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_treatment.html)**
+- **[Total Number of Reads by Individual](https://sayanpaul01.github.io/CX5461_Project/total_reads_by_individuals.html)**
