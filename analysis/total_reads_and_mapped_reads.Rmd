@@ -231,6 +231,7 @@ map_mapped_sample$Sample_name <- factor(map_mapped_sample$Sample_name, levels = 
 drug_palc <- c("#8B006D","#DF707E","#F1B72B", "#3386DD","#707031","#41B333")
 Ind_palc <- c("#ffbe0b","#ff006e","#fb5607", "#8338ec","#3a86ff","#4a4e69")
 Time_palc <- c("#0000FF","#80FF00", "#FF00FF")
+Map_palc <- c("#9b19f5","#e6d800", "#b3d4ff")
 Combined_palc <- c("#FF0000","#00FF00","#0000FF","#FFFF00","#FF00FF","#00FFFF",
                    "#FFA500","#800080","#FFC0CB","#A52A2A","#808080","#FFD700",
                    "#008080","#000080","#FFFFFF","#000000","#D2691E","#ADFF2F")
@@ -239,7 +240,7 @@ Combined_palc <- c("#FF0000","#00FF00","#0000FF","#FFFF00","#FF00FF","#00FFFF",
 ## **📍 5. Plot Mapped Reads by Sample**
 ```{r plot-mapped-reads, echo=TRUE, message=FALSE, warning=FALSE,fig.height=8,fig.width=18}
 # Generate the bar plot
-p_mapped <- ggplot(map, aes(x = Sample_name, y = Counts, fill = Condition)) +
+p_mapped <- ggplot(map_mapped_sample, aes(x = Sample_name, y = Counts, fill = Condition)) +
   geom_col() +
   scale_fill_manual(values = drug_palc) +
   scale_y_continuous(labels = function(x) paste0(x / 1e6, "M")) +
@@ -279,13 +280,13 @@ Combined_palc <- c("#FF0000","#00FF00","#0000FF","#FFFF00","#FF00FF","#00FFFF",
 
 ## **📍 Load dataset for Mapped reads by treatment**
 ```{r mapped treatment, echo=TRUE, message=FALSE}
-align1 <- read.csv("data/Total_number_of_mapped_reads_by_treatment.csv")  # Ensure this file is inside the 'data/' folder
-map1 <- data.frame(align1)
+align4 <- read.csv("data/Total_number_of_mapped_reads_by_treatment.csv")  # Ensure this file is inside the 'data/' folder
+map4 <- data.frame(align4)
 ```
 
 ## **📍 Generate the boxplot**
 ```{r generate_boxplot mapped treatment, echo=TRUE, message=FALSE}
-p__mapped_treatment <- ggplot(map1, aes(x = Condition, y = Counts, fill = Condition)) +
+p__mapped_treatment <- ggplot(map4, aes(x = Condition, y = Counts, fill = Condition)) +
   geom_boxplot() +
   scale_fill_manual(values = drug_palc) +
   scale_y_continuous(
@@ -320,14 +321,14 @@ Ind_palc <- c("#ffbe0b","#ff006e","#fb5607", "#8338ec","#3a86ff","#4a4e69")
 ## **📍 Load dataset for Mapped reads by individual**
 ```{r load-data-mapped individual, echo=TRUE, message=FALSE}
 # Load dataset for Mapped reads by individual
-align2 <- read.csv("data/Total_number_of_Mapped_reads_by_Individuals.csv")  # Ensure this file is inside the 'data/' folder
-map2 <- data.frame(align2)
+align5 <- read.csv("data/Total_number_of_Mapped_reads_by_Individuals.csv")  # Ensure this file is inside the 'data/' folder
+map5 <- data.frame(align5)
 ```
 
 ## **📍 Generate the boxplot**
 ```{r generate_boxplot mapped indv, echo=TRUE, message=FALSE}
 # Generate the boxplot
-p_mapped_individual <- ggplot(map2, aes(x = Ind, y = Counts, fill = Individual)) +
+p_mapped_individual <- ggplot(map5, aes(x = Ind, y = Counts, fill = Individual)) +
   geom_boxplot() +
   scale_fill_manual(values = Ind_palc) +
   scale_y_continuous(
@@ -364,21 +365,21 @@ Time_palc <- c("#0000FF","#80FF00", "#FF00FF")
 ## **📍 Load dataset for Mapped reads by time**
 ```{r load-data-mapped time, echo=TRUE, message=FALSE}
 # Load dataset for Mapped reads by time
-align3 <- read.csv("data/Total_number_of_mapped_reads_by_time.csv")  # Ensure this file is inside the 'data/' folder
-map3 <- data.frame(align3)
+align6 <- read.csv("data/Total_number_of_mapped_reads_by_time.csv")  # Ensure this file is inside the 'data/' folder
+map6 <- data.frame(align6)
 ```
 
 ## **📍 Generate the boxplot**
 ```{r generate_boxplot mapped time, echo=TRUE, message=FALSE}
 # Generate the boxplot
-p_mapped_time <- ggplot(map3, aes(x = Condition, y = Counts, fill = Time)) +
+p_mapped_time <- ggplot(map6, aes(x = Condition, y = Counts, fill = Time)) +
   geom_boxplot() +
   scale_fill_manual(values = Time_palc) +
   scale_y_continuous(
     limits = c(0, 40000000),  # Set y-axis range
     labels = function(x) paste0(x / 1e6, "M")  # Display labels in millions
   ) +
-  ggtitle(expression("Total number of reads by time")) +
+  ggtitle(expression("Total number of mapped reads by time")) +
   xlab("") +
   ylab(expression("RNA-sequencing reads")) +
   theme_bw() +
@@ -394,3 +395,95 @@ ggsave("output/total_reads_by_time_plot.png", p_mapped_time)
 # Display the plot in the document
 p_mapped_time
 ```
+
+
+### **🔹 Read Mapping Summary**
+
+```{r Read mapping, echo=TRUE, message=FALSE}
+# Load dataset for mapping summary
+align_mapping <- read.csv("data/Comparison.csv")  
+map_mapping <- data.frame(align_mapping)
+```
+
+### **📌 Read Mapping Across Samples**
+```{r generate_boxplot Read mapping samples, echo=TRUE, message=FALSE}
+p_mapping_samples <- ggplot(map_mapping, aes(x = Sample_name, y = Total, fill = Mapping)) +
+  geom_bar(position="dodge", stat="identity")+
+  #geom_hline(aes(yintercept=20000000))+
+  scale_fill_manual(values=Map_palc)+
+  scale_y_continuous(labels = label_number(suffix = " M", scale = 1e-6))+
+  ggtitle(expression("Read mapping summary across samples"))+
+  xlab("")+
+  ylab(expression("RNA -sequencing reads"))+
+  theme_bw()+
+  theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+        axis.title = element_text(size = 15, color = "black"),
+        axis.ticks = element_line(linewidth = 1.5),
+        axis.line = element_line(linewidth = 1.5),
+        axis.text.y = element_text(size =10, color = "black", angle = 0, hjust = 0.8, vjust = 0.5),
+        axis.text.x = element_text(size =10, color = "black", angle = 90, hjust = 1, vjust = 0.2),
+        #strip.text.x = element_text(size = 15, color = "black", face = "bold"),
+        strip.text.y = element_text(color = "white"))
+
+p_mapping_samples
+```
+
+### **📌 Read Mapping Across Treatments**
+```{r generate_boxplot Read mapping treatment, echo=TRUE, message=FALSE}
+p_mapping_treatments <- ggplot(map_mapping, aes(x = Mapping, y = Total, fill = Condition)) +
+  geom_boxplot() +
+  scale_fill_manual(values=drug_palc) +
+  scale_y_continuous(labels = function(x) paste0(x / 1e6, "M")) +
+  ggtitle("Read Mapping Summary Across Treatments") +
+  theme_bw()
+
+p_mapping_treatments
+```
+
+### **📌 Read Mapping Across Individuals**
+```{r generate_boxplot Read mapping Individuals, echo=TRUE, message=FALSE}
+p_mapping_individuals <- ggplot(map_mapping, aes(x = Mapping, y = Total, fill = Individual)) +
+  geom_boxplot() +
+  scale_fill_manual(values=Ind_palc) +
+  scale_y_continuous(labels = function(x) paste0(x / 1e6, "M")) +
+  ggtitle("Read Mapping Summary Across Individuals") +
+  theme_bw()
+
+p_mapping_individuals
+```
+
+### **📌 Read Mapping Across Timepoints**
+```{r generate_boxplot Read mapping Timepoints, echo=TRUE, message=FALSE}
+p_mapping_time <- ggplot(map_mapping, aes(x = Mapping, y = Total, fill = Time)) +
+  geom_boxplot() +
+  scale_fill_manual(values=Ind_palc) +
+  scale_y_continuous(labels = function(x) paste0(x / 1e6, "M")) +
+  ggtitle("Read Mapping Summary Across Timepoints") +
+  theme_bw()
+
+p_mapping_time
+```
+
+
+
+### **📌 Read Mapping Across treatment, concentration, and timepoints**
+```{r plot-mapping-summary-treatment-cond, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=6}
+map_mapping %>%
+  ggplot(., aes (x = Mapping, y = Total, fill = Treat_Cond)) +
+  geom_boxplot() +
+  scale_fill_manual(values = Combined_palc) +
+  scale_y_continuous(labels = label_number(suffix = " M", scale = 1e-6)) +
+  ggtitle(expression("Read mapping summary across treatment, Conc., timepoints")) +
+  xlab("") +
+  ylab(expression("RNA -sequencing reads")) +
+  theme_bw() +
+  theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+        axis.title = element_text(size = 15, color = "black"),
+        axis.ticks = element_line(linewidth = 1.5),
+        axis.line = element_line(linewidth = 1.5),
+        axis.text.y = element_text(size = 10, color = "black", angle = 0, hjust = 0.8, vjust = 0.5),
+        axis.text.x = element_text(size = 10, color = "black", angle = 90, hjust = 1, vjust = 0.2),
+        strip.text.y = element_text(color = "white"))
+```
+
+
