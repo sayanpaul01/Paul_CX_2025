@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreee3b04c6f40746397a087ec88971955374dd8d51ctargetblanke3b04c6a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeea621dc9e01c6027445d706fcb9485ce1f88069btargetblankea621dca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/e3b04c6f40746397a087ec88971955374dd8d51c" target="_blank">e3b04c6</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/ea621dc9e01c6027445d706fcb9485ce1f88069b" target="_blank">ea621dc</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreee3b04c6f40746397a087ec88971955374dd8d51ctargetblanke3b04c6a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeea621dc9e01c6027445d706fcb9485ce1f88069btargetblankea621dca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/e3b04c6f40746397a087ec88971955374dd8d51c" target="_blank">e3b04c6</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/ea621dc9e01c6027445d706fcb9485ce1f88069b" target="_blank">ea621dc</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,9 +550,21 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
+Untracked files:
+    Untracked:  data/Total_number_of_Mapped_reads_by_Individuals.csv
+    Untracked:  data/Total_number_of_mapped_reads_by_sample.csv
+    Untracked:  data/Total_number_of_mapped_reads_by_time.csv
+    Untracked:  data/Total_number_of_mapped_reads_by_treatment.csv
+    Untracked:  output/Mapped_reads_by_individual_plot.png
+    Untracked:  output/Mapped_reads_by_treatment_plot.png
+    Untracked:  output/total_mapped_reads_by_sample_plot.png
+
 Unstaged changes:
-    Modified:   analysis/index.Rmd
-    Deleted:    analysis/total_reads_by_sample.Rmd
+    Deleted:    analysis/feature_count_matrix.Rmd
+    Deleted:    analysis/total_reads_by_individual.Rmd
+    Deleted:    analysis/total_reads_by_time.Rmd
+    Deleted:    analysis/total_reads_by_treatment.Rmd
+    Modified:   output/total_reads_by_time_plot.png
 
 </code></pre>
 <p>
@@ -599,6 +611,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/ea621dc9e01c6027445d706fcb9485ce1f88069b/analysis/total_reads_and_mapped_reads.Rmd" target="_blank">ea621dc</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-30
+</td>
+<td>
+Added Total Reads and Mapped Reads visualization
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/d90515359bd42be2831bc03dc82c104d5a1173b1/docs/total_reads_and_mapped_reads.html" target="_blank">d905153</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -733,6 +779,43 @@ ggsave(&quot;output/total_reads_by_sample_plot.png&quot;, p)
 # Display the plot in the document
 p</code></pre>
 <p><img src="figure/total_reads_and_mapped_reads.Rmd/plot-total-reads-1.png" width="1728" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-total-reads-1">
+Past versions of plot-total-reads-1.png
+</button>
+</p>
+<div id="fig-plot-total-reads-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d90515359bd42be2831bc03dc82c104d5a1173b1/docs/figure/total_reads_and_mapped_reads.Rmd/plot-total-reads-1.png" target="_blank">d905153</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="total-reads-by-treatment" class="section level2">
 <h2><strong>📌 Total Reads by Treatment</strong></h2>
@@ -778,6 +861,43 @@ ggsave(&quot;output/total_reads_by_treatment_plot.png&quot;, p_treatment)
 # Display the plot in the document
 p_treatment</code></pre>
 <p><img src="figure/total_reads_and_mapped_reads.Rmd/generate_boxplot%20treatment-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-generate_boxplot-treatment-1">
+Past versions of "generate_boxplot treatment-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-generate_boxplot-treatment-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d90515359bd42be2831bc03dc82c104d5a1173b1/docs/figure/total_reads_and_mapped_reads.Rmd/generate_boxplot treatment-1.png" target="_blank">d905153</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="total-reads-by-individuals" class="section level2">
 <h2><strong>📌 Total Reads by Individuals</strong></h2>
@@ -820,6 +940,43 @@ ggsave(&quot;output/total_reads_by_individual_plot.png&quot;, p_individual)
 # Display the plot in the document
 p_individual</code></pre>
 <p><img src="figure/total_reads_and_mapped_reads.Rmd/generate_boxplot%20indv-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-generate_boxplot-indv-1">
+Past versions of "generate_boxplot indv-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-generate_boxplot-indv-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d90515359bd42be2831bc03dc82c104d5a1173b1/docs/figure/total_reads_and_mapped_reads.Rmd/generate_boxplot indv-1.png" target="_blank">d905153</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="total-reads-by-time" class="section level2">
 <h2><strong>📌 Total Reads by Time</strong></h2>
@@ -861,6 +1018,219 @@ ggsave(&quot;output/total_reads_by_time_plot.png&quot;, p_time)
 # Display the plot in the document
 p_time</code></pre>
 <p><img src="figure/total_reads_and_mapped_reads.Rmd/generate_boxplot%20time-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-generate_boxplot-time-1">
+Past versions of "generate_boxplot time-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-generate_boxplot-time-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d90515359bd42be2831bc03dc82c104d5a1173b1/docs/figure/total_reads_and_mapped_reads.Rmd/generate_boxplot time-1.png" target="_blank">d905153</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="mapped-reads-by-sample" class="section level2">
+<h2><strong>📌 Mapped Reads by Sample</strong></h2>
+</div>
+<div id="load-data-1" class="section level2">
+<h2><strong>📍 2. Load Data</strong></h2>
+<pre class="r"><code># Load dataset for total mapped reads by sample
+align_mapped_sample &lt;- read.csv(&quot;data/Total_number_of_mapped_reads_by_sample.csv&quot;)  
+map_mapped_sample &lt;- data.frame(align_mapped_sample)
+
+# Factor Sample Name
+map_mapped_sample$Sample_name &lt;- factor(map_mapped_sample$Sample_name, levels = map_mapped_sample$Sample_name)</code></pre>
+</div>
+<div id="define-color-palettes-4" class="section level2">
+<h2><strong>📍 3. Define Color Palettes</strong></h2>
+<pre class="r"><code># Define color palettes for plots
+drug_palc &lt;- c(&quot;#8B006D&quot;,&quot;#DF707E&quot;,&quot;#F1B72B&quot;, &quot;#3386DD&quot;,&quot;#707031&quot;,&quot;#41B333&quot;)
+Ind_palc &lt;- c(&quot;#ffbe0b&quot;,&quot;#ff006e&quot;,&quot;#fb5607&quot;, &quot;#8338ec&quot;,&quot;#3a86ff&quot;,&quot;#4a4e69&quot;)
+Time_palc &lt;- c(&quot;#0000FF&quot;,&quot;#80FF00&quot;, &quot;#FF00FF&quot;)
+Combined_palc &lt;- c(&quot;#FF0000&quot;,&quot;#00FF00&quot;,&quot;#0000FF&quot;,&quot;#FFFF00&quot;,&quot;#FF00FF&quot;,&quot;#00FFFF&quot;,
+                   &quot;#FFA500&quot;,&quot;#800080&quot;,&quot;#FFC0CB&quot;,&quot;#A52A2A&quot;,&quot;#808080&quot;,&quot;#FFD700&quot;,
+                   &quot;#008080&quot;,&quot;#000080&quot;,&quot;#FFFFFF&quot;,&quot;#000000&quot;,&quot;#D2691E&quot;,&quot;#ADFF2F&quot;)</code></pre>
+</div>
+<div id="plot-mapped-reads-by-sample" class="section level2">
+<h2><strong>📍 5. Plot Mapped Reads by Sample</strong></h2>
+<pre class="r"><code># Generate the bar plot
+p_mapped &lt;- ggplot(map, aes(x = Sample_name, y = Counts, fill = Condition)) +
+  geom_col() +
+  scale_fill_manual(values = drug_palc) +
+  scale_y_continuous(labels = function(x) paste0(x / 1e6, &quot;M&quot;)) +
+  ggtitle(expression(&quot;Total number of mapped reads by sample&quot;)) +
+  xlab(&quot;&quot;) +
+  ylab(expression(&quot;RNA-sequencing reads&quot;)) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;, angle = 0, hjust = 0.8, vjust = 0.5),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 90, hjust = 1, vjust = 0.2)
+  )
+
+# Save the plot as an image
+ggsave(&quot;output/total_mapped_reads_by_sample_plot.png&quot;, p_mapped)
+
+# Display the plot in the document
+p_mapped</code></pre>
+<p><img src="figure/total_reads_and_mapped_reads.Rmd/plot-mapped-reads-1.png" width="1728" style="display: block; margin: auto;" /></p>
+</div>
+<div id="mapped-reads-by-treatment" class="section level2">
+<h2><strong>📌 Mapped Reads by Treatment</strong></h2>
+</div>
+<div id="define-color-palettes-5" class="section level2">
+<h2><strong>📍 Define Color Palettes</strong></h2>
+<pre class="r"><code># Define color palettes for plots
+drug_palc &lt;- c(&quot;#8B006D&quot;,&quot;#DF707E&quot;,&quot;#F1B72B&quot;, &quot;#3386DD&quot;,&quot;#707031&quot;,&quot;#41B333&quot;)
+Ind_palc &lt;- c(&quot;#ffbe0b&quot;,&quot;#ff006e&quot;,&quot;#fb5607&quot;, &quot;#8338ec&quot;,&quot;#3a86ff&quot;,&quot;#4a4e69&quot;)
+Time_palc &lt;- c(&quot;#0000FF&quot;,&quot;#80FF00&quot;, &quot;#FF00FF&quot;)
+Combined_palc &lt;- c(&quot;#FF0000&quot;,&quot;#00FF00&quot;,&quot;#0000FF&quot;,&quot;#FFFF00&quot;,&quot;#FF00FF&quot;,&quot;#00FFFF&quot;,
+                   &quot;#FFA500&quot;,&quot;#800080&quot;,&quot;#FFC0CB&quot;,&quot;#A52A2A&quot;,&quot;#808080&quot;,&quot;#FFD700&quot;,
+                   &quot;#008080&quot;,&quot;#000080&quot;,&quot;#FFFFFF&quot;,&quot;#000000&quot;,&quot;#D2691E&quot;,&quot;#ADFF2F&quot;)</code></pre>
+</div>
+<div id="load-dataset-for-mapped-reads-by-treatment"
+class="section level2">
+<h2><strong>📍 Load dataset for Mapped reads by treatment</strong></h2>
+<pre class="r"><code>align1 &lt;- read.csv(&quot;data/Total_number_of_mapped_reads_by_treatment.csv&quot;)  # Ensure this file is inside the &#39;data/&#39; folder
+map1 &lt;- data.frame(align1)</code></pre>
+</div>
+<div id="generate-the-boxplot-3" class="section level2">
+<h2><strong>📍 Generate the boxplot</strong></h2>
+<pre class="r"><code>p__mapped_treatment &lt;- ggplot(map1, aes(x = Condition, y = Counts, fill = Condition)) +
+  geom_boxplot() +
+  scale_fill_manual(values = drug_palc) +
+  scale_y_continuous(
+    limits = c(0, 40000000),  # Set y-axis range
+    labels = function(x) paste0(x / 1e6, &quot;M&quot;)  # Display labels in millions
+  ) +
+  ggtitle(expression(&quot;Total number of mapped reads by treatment&quot;)) +
+  xlab(&quot;&quot;) +
+  ylab(expression(&quot;RNA-sequencing reads&quot;)) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, angle = 90, hjust = 1, vjust = 0.2)
+  )
+# Save the plot as an image
+ggsave(&quot;output/Mapped_reads_by_treatment_plot.png&quot;, p__mapped_treatment)
+
+# Display the plot in the document
+p__mapped_treatment</code></pre>
+<p><img src="figure/total_reads_and_mapped_reads.Rmd/generate_boxplot%20mapped%20treatment-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="mapped-reads-by-individuals" class="section level2">
+<h2><strong>📌 Mapped Reads by Individuals</strong></h2>
+</div>
+<div id="define-color-palettes-6" class="section level2">
+<h2><strong>📍 Define Color Palettes</strong></h2>
+<pre class="r"><code># Define color palette for individuals
+Ind_palc &lt;- c(&quot;#ffbe0b&quot;,&quot;#ff006e&quot;,&quot;#fb5607&quot;, &quot;#8338ec&quot;,&quot;#3a86ff&quot;,&quot;#4a4e69&quot;)</code></pre>
+</div>
+<div id="load-dataset-for-mapped-reads-by-individual"
+class="section level2">
+<h2><strong>📍 Load dataset for Mapped reads by individual</strong></h2>
+<pre class="r"><code># Load dataset for Mapped reads by individual
+align2 &lt;- read.csv(&quot;data/Total_number_of_Mapped_reads_by_Individuals.csv&quot;)  # Ensure this file is inside the &#39;data/&#39; folder
+map2 &lt;- data.frame(align2)</code></pre>
+</div>
+<div id="generate-the-boxplot-4" class="section level2">
+<h2><strong>📍 Generate the boxplot</strong></h2>
+<pre class="r"><code># Generate the boxplot
+p_mapped_individual &lt;- ggplot(map2, aes(x = Ind, y = Counts, fill = Individual)) +
+  geom_boxplot() +
+  scale_fill_manual(values = Ind_palc) +
+  scale_y_continuous(
+    limits = c(0, 40000000),  # Set y-axis range
+    labels = function(x) paste0(x / 1e6, &quot;M&quot;)  # Display labels in millions
+  ) +
+  ggtitle(expression(&quot;Total number of mapped number of reads by individual&quot;)) +
+  xlab(&quot;&quot;) +
+  ylab(expression(&quot;RNA-sequencing reads&quot;)) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, angle = 90, hjust = 1, vjust = 0.2)
+  )
+
+# Save the plot as an image
+ggsave(&quot;output/Mapped_reads_by_individual_plot.png&quot;, p_mapped_individual)
+
+# Display the plot in the document
+p_mapped_individual</code></pre>
+<p><img src="figure/total_reads_and_mapped_reads.Rmd/generate_boxplot%20mapped%20indv-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="mapped-reads-by-time" class="section level2">
+<h2><strong>📌 Mapped Reads by Time</strong></h2>
+</div>
+<div id="define-color-palettes-7" class="section level2">
+<h2><strong>📍 Define Color Palettes</strong></h2>
+<pre class="r"><code># Define color palette for time points
+Time_palc &lt;- c(&quot;#0000FF&quot;,&quot;#80FF00&quot;, &quot;#FF00FF&quot;)</code></pre>
+</div>
+<div id="load-dataset-for-mapped-reads-by-time" class="section level2">
+<h2><strong>📍 Load dataset for Mapped reads by time</strong></h2>
+<pre class="r"><code># Load dataset for Mapped reads by time
+align3 &lt;- read.csv(&quot;data/Total_number_of_mapped_reads_by_time.csv&quot;)  # Ensure this file is inside the &#39;data/&#39; folder
+map3 &lt;- data.frame(align3)</code></pre>
+</div>
+<div id="generate-the-boxplot-5" class="section level2">
+<h2><strong>📍 Generate the boxplot</strong></h2>
+<pre class="r"><code># Generate the boxplot
+p_mapped_time &lt;- ggplot(map3, aes(x = Condition, y = Counts, fill = Time)) +
+  geom_boxplot() +
+  scale_fill_manual(values = Time_palc) +
+  scale_y_continuous(
+    limits = c(0, 40000000),  # Set y-axis range
+    labels = function(x) paste0(x / 1e6, &quot;M&quot;)  # Display labels in millions
+  ) +
+  ggtitle(expression(&quot;Total number of reads by time&quot;)) +
+  xlab(&quot;&quot;) +
+  ylab(expression(&quot;RNA-sequencing reads&quot;)) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, angle = 90, hjust = 1, vjust = 0.2)
+  )
+
+# Save the plot as an image
+ggsave(&quot;output/total_reads_by_time_plot.png&quot;, p_mapped_time)
+
+# Display the plot in the document
+p_mapped_time</code></pre>
+<p><img src="figure/total_reads_and_mapped_reads.Rmd/generate_boxplot%20mapped%20time-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
