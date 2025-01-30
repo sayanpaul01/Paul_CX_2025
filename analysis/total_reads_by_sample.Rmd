@@ -48,7 +48,7 @@ map$Sample_name <- factor(map$Sample_name, levels = map$Sample_name)
 ```
 
 ## **📍 5. Plot Total Reads by Sample**
-```{r plot-total-reads, echo=TRUE, message=FALSE, warning=FALSE,fig.width=18}
+```{r plot-total-reads, echo=TRUE, message=FALSE, warning=FALSE,fig.height=8,fig.width=18}
 # Generate the bar plot
 p <- ggplot(map, aes(x = Sample_name, y = Counts, fill = Condition)) +
   geom_col() +
