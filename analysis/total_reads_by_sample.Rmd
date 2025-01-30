@@ -11,7 +11,6 @@ This section visualizes the total RNA-sequencing reads across samples.
 
 ---
 
-### **Load Required Libraries**
 ```{r setup, include=FALSE}
 # Load necessary R packages
 library(edgeR)
@@ -32,14 +31,14 @@ library(ggplot2)
 library(dplyr)
 ```
 
-
+## **📍 2. Load Data**
 ```{r load-data, echo=TRUE, message=FALSE}
 # Load the dataset containing the total reads per sample
 align <- read.csv("data/Total_number_of_reads_by_sample.csv")  # Ensure the file is in the 'data/' folder
 map <- data.frame(align)
 ```
 
-## **📍 2. Define Color Palettes**
+## **📍 3. Define Color Palettes**
 ```{r define-colors, echo=TRUE}
 # Define color palettes for plots
 drug_palc <- c("#8B006D","#DF707E","#F1B72B", "#3386DD","#707031","#41B333")
@@ -50,13 +49,13 @@ Combined_palc <- c("#FF0000","#00FF00","#0000FF","#FFFF00","#FF00FF","#00FFFF",
                    "#008080","#000080","#FFFFFF","#000000","#D2691E","#ADFF2F")
 ```
 
-## **📍 3. Prepare Data**
+## **📍 4. Prepare Data**
 ```{r prepare-data, echo=TRUE}
 # Factor Sample_name to maintain order
 map$Sample_name <- factor(map$Sample_name, levels = map$Sample_name)
 ```
 
-## **📍 4. Plot Total Reads by Sample**
+## **📍 5. Plot Total Reads by Sample**
 ```{r plot-total-reads, echo=TRUE, message=FALSE, warning=FALSE,fig.width=18}
 # Generate the bar plot
 p <- ggplot(map, aes(x = Sample_name, y = Counts, fill = Condition)) +
