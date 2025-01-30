@@ -11,22 +11,14 @@ This section visualizes the total RNA-sequencing reads across samples.
 
 ---
 
-```{r setup, include=FALSE}
+### **Load Required Libraries**
+```{r libraries, echo=TRUE}
 # Load necessary R packages
-library(edgeR)
 library(limma)
 library(RColorBrewer)
-library(gridExtra)
-library(reshape2)
 library(data.table)
 library(tidyverse)
 library(scales)
-library(biomaRt)
-library(cowplot)
-library(ggrepel)
-library(corrplot)
-library(Hmisc)
-library(ggpubr)
 library(ggplot2)
 library(dplyr)
 ```
