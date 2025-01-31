@@ -37,13 +37,16 @@ head(counts_matrix)
 ```
 
 ### **📌 Boxplot of Raw Counts (Unnormalized)**
-```{r boxplot unnormalized, echo=TRUE, message=FALSE,fig.width=28,fig.height=8}
+```{r boxplot_unnormalized, echo=TRUE, message=FALSE, fig.width=20, fig.height=8}
+# Adjust graphical parameters for better spacing
+par(mar = c(12, 5, 5, 2))  # Bottom margin increased to 12
+
 # Boxplot of unnormalized counts
 boxplot(counts_matrix, 
         main = "Boxplots of samples (Unnormalized)", 
         names = colnames(counts_matrix), 
-        las = 2, 
-        cex.axis = 0.7)
+        las = 2,      # Make labels vertical
+        cex.axis = 0.6)  # Reduce text size for better fit
 ```
 
 📍 Log-Transformed Counts (CPM)
