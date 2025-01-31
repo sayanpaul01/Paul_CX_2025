@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3c7e5bc34bae344a4b2998b4fc362a794a81ff0dtargetblank3c7e5bca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreef8bc593b810c30a05b5c9fcfd4076bfb8693cc7ftargetblankf8bc593a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3c7e5bc34bae344a4b2998b4fc362a794a81ff0d" target="_blank">3c7e5bc</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/f8bc593b810c30a05b5c9fcfd4076bfb8693cc7f" target="_blank">f8bc593</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3c7e5bc34bae344a4b2998b4fc362a794a81ff0dtargetblank3c7e5bca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreef8bc593b810c30a05b5c9fcfd4076bfb8693cc7ftargetblankf8bc593a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3c7e5bc34bae344a4b2998b4fc362a794a81ff0d" target="_blank">3c7e5bc</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/f8bc593b810c30a05b5c9fcfd4076bfb8693cc7f" target="_blank">f8bc593</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -549,9 +549,6 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  data/counts_matrix.csv
 
 </code></pre>
 <p>
@@ -597,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/f8bc593b810c30a05b5c9fcfd4076bfb8693cc7f/analysis/count_matrix_analysis.Rmd" target="_blank">f8bc593</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Fixed ‘True’ to ‘TRUE’ in R Markdown file
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/count_matrix_analysis.html" target="_blank">4ed05f7</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -819,14 +850,53 @@ head(counts_matrix)</code></pre>
 4              1                   0                   0               0
 5              0                   0                   0               0
 6              0                   0                   0               0</code></pre>
-<p>📍 Boxplot of Raw Counts (Unnormalized)</p>
+</div>
+<div id="boxplot-of-raw-counts-unnormalized" class="section level3">
+<h3><strong>📌 Boxplot of Raw Counts (Unnormalized)</strong></h3>
 <pre class="r"><code># Boxplot of unnormalized counts
 boxplot(counts_matrix, 
         main = &quot;Boxplots of samples (Unnormalized)&quot;, 
         names = colnames(counts_matrix), 
         las = 2, 
         cex.axis = 0.7)</code></pre>
-<p><img src="figure/count_matrix_analysis.Rmd/boxplot%20unnormalized-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/count_matrix_analysis.Rmd/boxplot%20unnormalized-1.png" width="2688" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-boxplot-unnormalized-1">
+Past versions of "boxplot unnormalized-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-boxplot-unnormalized-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/boxplot unnormalized-1.png" target="_blank">4ed05f7</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>📍 Log-Transformed Counts (CPM)</p>
 <pre class="r"><code># Compute CPM values
 cpm &lt;- cpm(counts_matrix)
@@ -835,42 +905,204 @@ lcpm &lt;- cpm(counts_matrix, log=TRUE)
 # Dimensions
 dim(lcpm)</code></pre>
 <pre><code>[1] 28395   108</code></pre>
-<p>📍 Histogram of Unfiltered Log Counts</p>
+</div>
+<div id="histogram-of-unfiltered-log-counts" class="section level3">
+<h3><strong>📌 Histogram of Unfiltered Log Counts</strong></h3>
 <pre class="r"><code>hist(lcpm,  
      main = &quot;Histogram of total counts (unfiltered)&quot;, 
      xlab = expression(&quot;Log&quot;[2]*&quot; counts-per-million&quot;), 
      col = 4)</code></pre>
-<p><img src="figure/count_matrix_analysis.Rmd/hist_cpm-1.png" width="2688" style="display: block; margin: auto;" /></p>
+<p><img src="figure/count_matrix_analysis.Rmd/hist_cpm-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-hist_cpm-1">
+Past versions of hist_cpm-1.png
+</button>
+</p>
+<div id="fig-hist_cpm-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/hist_cpm-1.png" target="_blank">4ed05f7</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>📍 Filtering Count Matrix (rowMeans &gt; 0)</p>
 <pre class="r"><code>filcpm_matrix &lt;- subset(lcpm, (rowMeans(lcpm) &gt; 0))
 dim(filcpm_matrix)</code></pre>
 <pre><code>[1] 14279   108</code></pre>
-<p>📍 Histogram of filtered Log Counts (rowMeans &gt; 0)</p>
+</div>
+<div id="histogram-of-filtered-log-counts-rowmeans-0"
+class="section level3">
+<h3><strong>📌 Histogram of filtered Log Counts (rowMeans &gt;
+0)</strong></h3>
 <pre class="r"><code>hist(filcpm_matrix,  
      main = &quot;Histogram of filtered counts using rowMeans &gt; 0 method&quot;, 
      xlab = expression(&quot;Log&quot;[2]*&quot; counts-per-million&quot;), 
      col = 2)</code></pre>
 <p><img src="figure/count_matrix_analysis.Rmd/hist_row0-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-hist_row0-1">
+Past versions of hist_row0-1.png
+</button>
+</p>
+<div id="fig-hist_row0-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/hist_row0-1.png" target="_blank">4ed05f7</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>📍 Filtering Count Matrix (rowMeans &gt; 0.5)</p>
 <pre class="r"><code>filcpm_matrix1 &lt;- subset(lcpm, (rowMeans(lcpm) &gt; 0.5))
 dim(filcpm_matrix1)</code></pre>
 <pre><code>[1] 13678   108</code></pre>
-<p>📍 Histogram of filtered Log Counts (rowMeans &gt; 0.5)</p>
+</div>
+<div id="histogram-of-filtered-log-counts-rowmeans-0.5"
+class="section level3">
+<h3><strong>📌 Histogram of filtered Log Counts (rowMeans &gt;
+0.5)</strong></h3>
 <pre class="r"><code>hist(filcpm_matrix1,  
      main = &quot;Histogram of filtered counts using rowMeans &gt; 0.5 method&quot;, 
      xlab = expression(&quot;Log&quot;[2]*&quot; counts-per-million&quot;), 
      col = 5)</code></pre>
 <p><img src="figure/count_matrix_analysis.Rmd/hist_row0.5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-hist_row0.5-1">
+Past versions of hist_row0.5-1.png
+</button>
+</p>
+<div id="fig-hist_row0.5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/hist_row0.5-1.png" target="_blank">4ed05f7</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>📍 Filtering Count Matrix (rowMeans &gt; 1)</p>
 <pre class="r"><code>filcpm_matrix2 &lt;- subset(lcpm, (rowMeans(lcpm) &gt; 1))
 dim(filcpm_matrix2)</code></pre>
 <pre><code>[1] 13047   108</code></pre>
-<p>📍 Histogram of filtered Log Counts (rowMeans &gt; 0.5)</p>
+</div>
+<div id="histogram-of-filtered-log-counts-rowmeans-0.5-1"
+class="section level3">
+<h3><strong>📌 Histogram of filtered Log Counts (rowMeans &gt;
+0.5)</strong></h3>
 <pre class="r"><code>hist(filcpm_matrix2,  
      main = &quot;Histogram of filtered counts using rowMeans &gt; 1 method&quot;, 
      xlab = expression(&quot;Log&quot;[2]*&quot; counts-per-million&quot;), 
      col = 6)</code></pre>
 <p><img src="figure/count_matrix_analysis.Rmd/hist_row1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-hist_row1-1">
+Past versions of hist_row1-1.png
+</button>
+</p>
+<div id="fig-hist_row1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/hist_row1-1.png" target="_blank">4ed05f7</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
