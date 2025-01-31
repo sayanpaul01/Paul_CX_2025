@@ -12,6 +12,7 @@ Welcome to my research website.
 
   
 ### **QC Data**  
-#### **Total Reads and Mapped Reads**  
 
 - **[Total Reads and Mapped Reads](https://sayanpaul01.github.io/CX5461_Project/total_reads_and_mapped_reads.html)**
+
+- **[Feature Count Matrix Analysis](https://sayanpaul01.github.io/CX5461_Project/count_matrix_analysis.html)** 
