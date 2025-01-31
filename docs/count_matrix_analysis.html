@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreef8bc593b810c30a05b5c9fcfd4076bfb8693cc7ftargetblankf8bc593a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3b5571ab2a43ac8563b2671311d0204209db4587targetblank3b5571aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/f8bc593b810c30a05b5c9fcfd4076bfb8693cc7f" target="_blank">f8bc593</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3b5571ab2a43ac8563b2671311d0204209db4587" target="_blank">3b5571a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreef8bc593b810c30a05b5c9fcfd4076bfb8693cc7ftargetblankf8bc593a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3b5571ab2a43ac8563b2671311d0204209db4587targetblank3b5571aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/f8bc593b810c30a05b5c9fcfd4076bfb8693cc7f" target="_blank">f8bc593</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3b5571ab2a43ac8563b2671311d0204209db4587" target="_blank">3b5571a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -594,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3b5571ab2a43ac8563b2671311d0204209db4587/analysis/count_matrix_analysis.Rmd" target="_blank">3b5571a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Fixed ‘True’ to ‘TRUE’ in R Markdown file
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/0a7593ac260eb3e80029763ba1ffd2bae9eb64fd/docs/count_matrix_analysis.html" target="_blank">0a7593a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -853,50 +887,16 @@ head(counts_matrix)</code></pre>
 </div>
 <div id="boxplot-of-raw-counts-unnormalized" class="section level3">
 <h3><strong>📌 Boxplot of Raw Counts (Unnormalized)</strong></h3>
-<pre class="r"><code># Boxplot of unnormalized counts
+<pre class="r"><code># Adjust graphical parameters for better spacing
+par(mar = c(12, 5, 5, 2))  # Bottom margin increased to 12
+
+# Boxplot of unnormalized counts
 boxplot(counts_matrix, 
         main = &quot;Boxplots of samples (Unnormalized)&quot;, 
         names = colnames(counts_matrix), 
-        las = 2, 
-        cex.axis = 0.7)</code></pre>
-<p><img src="figure/count_matrix_analysis.Rmd/boxplot%20unnormalized-1.png" width="2688" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-boxplot-unnormalized-1">
-Past versions of "boxplot unnormalized-1.png"
-</button>
-</p>
-<div id="fig-no-spaces-boxplot-unnormalized-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/boxplot unnormalized-1.png" target="_blank">4ed05f7</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-01-31
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+        las = 2,      # Make labels vertical
+        cex.axis = 0.6)  # Reduce text size for better fit</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/boxplot_unnormalized-1.png" width="1920" style="display: block; margin: auto;" /></p>
 <p>📍 Log-Transformed Counts (CPM)</p>
 <pre class="r"><code># Compute CPM values
 cpm &lt;- cpm(counts_matrix)
@@ -935,6 +935,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/0a7593ac260eb3e80029763ba1ffd2bae9eb64fd/docs/figure/count_matrix_analysis.Rmd/hist_cpm-1.png" target="_blank">0a7593a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/4ed05f7361806dc36548e9921efab3d1ac1f8e3e/docs/figure/count_matrix_analysis.Rmd/hist_cpm-1.png" target="_blank">4ed05f7</a>
