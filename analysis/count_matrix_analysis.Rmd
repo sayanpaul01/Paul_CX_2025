@@ -1,0 +1,109 @@
+---
+title: "Count Matrix Analysis"
+author: "Sayan Paul"
+date: "`r Sys.Date()`"
+output: workflowr::wflow_html
+---
+
+### **Load Required Libraries**
+```{r setup, include=FALSE}
+library(edgeR)
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(Biobase)
+library(limma)
+library(RColorBrewer)
+library(tidyverse)
+library(scales)
+library(biomaRt)
+library(Homo.sapiens)
+library(cowplot)
+library(ggrepel)
+library(corrplot)
+library(Hmisc)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+```
+
+📍 Load Count Matrix
+```{r Read mapping counts, echo=TRUE, message=FALSE}
+# Load the count matrix from the TSV file
+counts_matrix <- read.csv("data/counts_matrix.csv", header=TRUE, check.names=FALSE)
+# Remove "X" prefix from column names (if present)
+colnames(counts_matrix) <- gsub("^X", "", colnames(counts_matrix))
+# Display first few rows
+head(counts_matrix)
+```
+
+📍 Boxplot of Raw Counts (Unnormalized)
+```{r boxplot unnormalized, echo=TRUE, message=FALSE}
+# Boxplot of unnormalized counts
+boxplot(counts_matrix, 
+        main = "Boxplots of samples (Unnormalized)", 
+        names = colnames(counts_matrix), 
+        las = 2, 
+        cex.axis = 0.7)
+```
+
+📍 Log-Transformed Counts (CPM)
+```{r cpm, echo=TRUE, message=FALSE}
+# Compute CPM values
+cpm <- cpm(counts_matrix)
+lcpm <- cpm(counts_matrix, log=TRUE)
+
+# Dimensions
+dim(lcpm)
+```
+
+📍 Histogram of Unfiltered Log Counts
+```{r hist_cpm, echo=TRUE, message=FALSE,fig.width=28,fig.height=8}
+hist(lcpm,  
+     main = "Histogram of total counts (unfiltered)", 
+     xlab = expression("Log"[2]*" counts-per-million"), 
+     col = 4)
+```
+
+📍 Filtering Count Matrix (rowMeans > 0)
+```{r row0, echo=TRUE, message=FALSE}
+filcpm_matrix <- subset(lcpm, (rowMeans(lcpm) > 0))
+dim(filcpm_matrix)
+```
+
+📍 Histogram of filtered Log Counts (rowMeans > 0)
+```{r hist_row0, echo=TRUE, message=FALSE}
+hist(filcpm_matrix,  
+     main = "Histogram of filtered counts using rowMeans > 0 method", 
+     xlab = expression("Log"[2]*" counts-per-million"), 
+     col = 2)
+```
+
+📍 Filtering Count Matrix (rowMeans > 0.5)
+```{r row0.5, echo=TRUE, message=FALSE}
+filcpm_matrix1 <- subset(lcpm, (rowMeans(lcpm) > 0.5))
+dim(filcpm_matrix1)
+```
+
+📍 Histogram of filtered Log Counts (rowMeans > 0.5)
+```{r hist_row0.5, echo=TRUE, message=FALSE}
+hist(filcpm_matrix1,  
+     main = "Histogram of filtered counts using rowMeans > 0.5 method", 
+     xlab = expression("Log"[2]*" counts-per-million"), 
+     col = 5)
+```
+
+📍 Filtering Count Matrix (rowMeans > 1)
+```{r row1, echo=TRUE, message=FALSE}
+filcpm_matrix2 <- subset(lcpm, (rowMeans(lcpm) > 1))
+dim(filcpm_matrix2)
+```
+
+📍 Histogram of filtered Log Counts (rowMeans > 0.5)
+```{r hist_row1, echo=TRUE, message=FALSE}
+hist(filcpm_matrix2,  
+     main = "Histogram of filtered counts using rowMeans > 1 method", 
+     xlab = expression("Log"[2]*" counts-per-million"), 
+     col = 6)
+```
+
+
