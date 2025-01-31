@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree343bf56e0b33987ca96aab666ff6e9c726f63549targetblank343bf56a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree325a44863e1be514eb22e535874bbc42ee329548targetblank325a448a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/343bf56e0b33987ca96aab666ff6e9c726f63549" target="_blank">343bf56</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/325a44863e1be514eb22e535874bbc42ee329548" target="_blank">325a448</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree343bf56e0b33987ca96aab666ff6e9c726f63549targetblank343bf56a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree325a44863e1be514eb22e535874bbc42ee329548targetblank325a448a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/343bf56e0b33987ca96aab666ff6e9c726f63549" target="_blank">343bf56</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/325a44863e1be514eb22e535874bbc42ee329548" target="_blank">325a448</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -594,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/325a44863e1be514eb22e535874bbc42ee329548/analysis/count_matrix_analysis.Rmd" target="_blank">325a448</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+wflow_publish("analysis/count_matrix_analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/ae0576209664e12b1b6be831c2cde0b654dddff8/docs/count_matrix_analysis.html" target="_blank">ae05762</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -756,202 +790,49 @@ Fixed ‘True’ to ‘TRUE’ in R Markdown file
 </div>
 <div id="load-required-libraries" class="section level3">
 <h3><strong>Load Required Libraries</strong></h3>
+<pre class="r"><code>library(edgeR)</code></pre>
+<pre><code>Warning: package &#39;edgeR&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;limma&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<pre><code>Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(reshape2)
+library(dplyr)</code></pre>
+<pre><code>Warning: package &#39;dplyr&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(Biobase)</code></pre>
+<pre><code>Warning: package &#39;Biobase&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;BiocGenerics&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(limma)
+library(RColorBrewer)
+library(tidyverse)</code></pre>
+<pre><code>Warning: package &#39;tidyverse&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;purrr&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;stringr&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;lubridate&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(scales)</code></pre>
+<pre><code>Warning: package &#39;scales&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(biomaRt)</code></pre>
+<pre><code>Warning: package &#39;biomaRt&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(Homo.sapiens)</code></pre>
+<pre><code>Warning: package &#39;AnnotationDbi&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;IRanges&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;S4Vectors&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;OrganismDbi&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;GenomicFeatures&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;GenomeInfoDb&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;GenomicRanges&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(cowplot)</code></pre>
+<pre><code>Warning: package &#39;cowplot&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(ggrepel)</code></pre>
+<pre><code>Warning: package &#39;ggrepel&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(corrplot)</code></pre>
+<pre><code>Warning: package &#39;corrplot&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(Hmisc)</code></pre>
+<pre><code>Warning: package &#39;Hmisc&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(org.Hs.eg.db)
+library(AnnotationDbi)</code></pre>
 <p>📍 Load Count Matrix</p>
-<pre class="r"><code># Load the count matrix from the TSV file
-counts_matrix &lt;- read.csv(&quot;data/counts_matrix.csv&quot;, header=TRUE, check.names=FALSE)
-# Remove &quot;X&quot; prefix from column names (if present)
-colnames(counts_matrix) &lt;- gsub(&quot;^X&quot;, &quot;&quot;, colnames(counts_matrix))
-# Display first few rows
-head(counts_matrix)</code></pre>
-<pre><code>  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 87.1_DOX_0.5_24 87.1_VEH_0.1_24
-1                  8               1               5               6
-2                238             227             358             276
-3                  4              11              12               7
-4                  0               0               1               0
-5                  0               0               1               0
-6                  0               0               0               0
-  87.1_VEH_0.5_24 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48
-1               3                   3                   9               7
-2             298                 349                 254             335
-3               8                   8                   9              10
-4               0                   1                   0               0
-5               0                   0                   0               0
-6               0                   0                   0               1
-  87.1_DOX_0.5_48 87.1_VEH_0.1_48 87.1_VEH_0.5_48 17.3_VEH_0.1_24
-1               7               2               5               5
-2             427             234             267             225
-3              12               3              10               2
-4               1               0               0               0
-5               1               0               0               0
-6               1               0               0               0
-  17.3_VEH_0.5_24 17.3_CX.5461_0.1_48 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48
-1               3                   5                   3              10
-2             187                 214                 168             301
-3               4                   7                   3              11
-4               0                   0                   0               2
-5               0                   0                   0               0
-6               0                   0                   0               0
-  17.3_DOX_0.5_48 17.3_VEH_0.1_48 17.3_VEH_0.5_48 84.1_CX.5461_0.1_3
-1              14               5               4                  0
-2             370             304             151                220
-3               6               5               5                  4
-4               1               0               0                  0
-5               1               0               0                  0
-6               0               0               0                  0
-  17.3_CX.5461_0.5_3 84.1_CX.5461_0.5_3 84.1_DOX_0.1_3 84.1_DOX_0.5_3
-1                  4                  1              0              0
-2                178                217            235            228
-3                  2                  4              6              9
-4                  0                  1              0              0
-5                  1                  0              0              0
-6                  0                  0              0              0
-  84.1_VEH_0.1_3 84.1_VEH_0.5_3 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24
-1              0              0                   0                   0
-2            235            178                 330                 244
-3              8              3                   3                   3
-4              0              0                   0                   0
-5              0              0                   0                   0
-6              0              0                   0                   0
-  84.1_DOX_0.1_24 84.1_DOX_0.5_24 84.1_VEH_0.1_24 17.3_DOX_0.1_3
-1               0               0               1              6
-2             310             320             211            213
-3              13               5               2              7
-4               0               1               0              2
-5               0               0               0              0
-6               0               0               0              0
-  84.1_VEH_0.5_24 84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48 84.1_DOX_0.1_48
-1               0                   0                   0               0
-2             241                 153                 279             266
-3              11                   3                   7               9
-4               0                   0                   0               0
-5               1                   0                   0               0
-6               0                   0                   0               0
-  84.1_DOX_0.5_48 84.1_VEH_0.1_48 84.1_VEH_0.5_48 90.1_CX.5461_0.1_3
-1               2               0               0                  6
-2             272             174             194                321
-3               5               6              14                 11
-4               0               0               0                  0
-5               0               0               0                  0
-6               0               0               0                  0
-  90.1_CX.5461_0.5_3 90.1_DOX_0.1_3 17.3_DOX_0.5_3 90.1_DOX_0.5_3
-1                  0              1              3              7
-2                260            320            207            340
-3                  4             11             13              9
-4                  0              0              0              1
-5                  0              0              0              0
-6                  0              0              0              0
-  90.1_VEH_0.1_3 90.1_VEH_0.5_3 90.1_CX.5461_0.1_24 90.1_CX.5461_0.5_24
-1              2              3                   3                   7
-2            320            279                 258                 311
-3             11              7                  10                  11
-4              0              1                   0                   0
-5              0              0                   1                   0
-6              0              0                   0                   0
-  90.1_DOX_0.1_24 90.1_DOX_0.5_24 90.1_VEH_0.1_24 90.1_VEH_0.5_24
-1               3               8               4               1
-2             331             453             398             395
-3               9              18              15              15
-4               0               0               0               0
-5               0               0               0               0
-6               0               0               0               0
-  90.1_CX.5461_0.1_48 17.3_VEH_0.1_3 90.1_CX.5461_0.5_48 90.1_DOX_0.1_48
-1                   4              7                   5               6
-2                 415            324                 283             283
-3                  17              9                  11               8
-4                   0              0                   0               0
-5                   0              0                   0               0
-6                   0              0                   0               0
-  90.1_DOX_0.5_48 90.1_VEH_0.1_48 90.1_VEH_0.5_48 75.1_CX.5461_0.1_3
-1              20               2              10                  1
-2             453             301             265                309
-3               9               7               5                 10
-4               0               0               0                  0
-5               1               1               0                  0
-6               1               0               0                  0
-  75.1_CX.5461_0.5_3 75.1_DOX_0.1_3 75.1_DOX_0.5_3 75.1_VEH_0.1_3
-1                  1              3              3              2
-2                306            317            216            303
-3                 11              7              7             10
-4                  0              0              0              1
-5                  0              0              0              0
-6                  0              0              0              0
-  17.3_VEH_0.5_3 75.1_VEH_0.5_3 75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
-1              3              2                   2                   1
-2            248            269                 368                 263
-3              8             10                  17                   6
-4              0              0                   1                   0
-5              1              0                   0                   0
-6              0              0                   0                   0
-  75.1_DOX_0.1_24 75.1_DOX_0.5_24 75.1_VEH_0.1_24 75.1_VEH_0.5_24
-1               2               2               0               1
-2             540             284             405             429
-3              28               4              16               9
-4               0              11               2               0
-5               0               3               0               0
-6               0               0               0               0
-  75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48 75.1_DOX_0.1_48 17.3_CX.5461_0.1_24
-1                   3                   1               6                   6
-2                 356                 357             344                 236
-3                  11                  21              13                   7
-4                   0                   0               0                   0
-5                   0                   0               1                   0
-6                   0                   0               0                   0
-  75.1_DOX_0.5_48 75.1_VEH_0.1_48 75.1_VEH_0.5_48 78.1_CX.5461_0.1_3
-1               3               3               0                  0
-2             317             304             406                222
-3              10              21              11                  3
-4              10               0               1                  0
-5               1               0               0                  0
-6               1               0               0                  0
-  78.1_CX.5461_0.5_3 78.1_DOX_0.1_3 78.1_DOX_0.5_3 78.1_VEH_0.1_3
-1                  0              1              0              0
-2                196            221            205            231
-3                  5              3              5              8
-4                  0              0              0              0
-5                  0              0              0              0
-6                  0              0              0              0
-  78.1_VEH_0.5_3 78.1_CX.5461_0.1_24 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24
-1              0                   0                   2                   0
-2            171                 191                 238                 153
-3              2                   2                   6                   1
-4              0                   0                   0                   0
-5              0                   0                   0                   0
-6              0                   0                   0                   0
-  78.1_DOX_0.1_24 78.1_DOX_0.5_24 78.1_VEH_0.1_24 78.1_VEH_0.5_24
-1               0               1               1               0
-2             410              55             183             184
-3              11               0               1               8
-4               0               2               0               0
-5               0               0               0               0
-6               0               0               0               0
-  78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48 78.1_DOX_0.5_48
-1                   0                   1               1               0
-2                 234                 187             245             205
-3                   4                   3               5               1
-4                   0                   0               0              16
-5                   0                   0               0               0
-6                   0                   0               0               1
-  78.1_VEH_0.1_48 17.3_DOX_0.1_24 78.1_VEH_0.5_48 87.1_CX.5461_0.1_3
-1               0              10               1                  2
-2             226             364             212                251
-3               7               9               4                 10
-4               0               0               0                  0
-5               0               1               0                  0
-6               1               0               0                  0
-  87.1_CX.5461_0.5_3 87.1_DOX_0.1_3 87.1_DOX_0.5_3 87.1_VEH_0.1_3
-1                  4              3              9              6
-2                307            289            344            242
-3                 11              7              6              7
-4                  1              0              0              0
-5                  0              0              0              0
-6                  0              0              0              0
-  87.1_VEH_0.5_3 87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24 87.1_DOX_0.1_24
-1              4                   7                   4               4
-2            300                 423                 314             283
-3             14                  15                   4               5
-4              1                   0                   0               0
-5              0                   0                   0               0
-6              0                   0                   0               0</code></pre>
 </div>
 <div id="boxplot-of-raw-counts-unnormalized" class="section level3">
 <h3><strong>📌 Boxplot of Raw Counts (Unnormalized)</strong></h3>
