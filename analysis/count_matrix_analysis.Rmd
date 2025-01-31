@@ -6,7 +6,7 @@ output: workflowr::wflow_html
 ---
 
 ### **Load Required Libraries**
-```{r setup, include=FALSE}
+```{r setup, echo=TRUE,message=FALSE}
 library(edgeR)
 library(ggplot2)
 library(reshape2)
@@ -27,7 +27,7 @@ library(AnnotationDbi)
 ```
 
 📍 Load Count Matrix
-```{r Read mapping counts, echo=TRUE, message=FALSE}
+```{r Read mapping counts, echo=FALSE, include=FALSE}
 # Load the count matrix from the TSV file
 counts_matrix <- read.csv("data/counts_matrix.csv", header=TRUE, check.names=FALSE)
 # Remove "X" prefix from column names (if present)
