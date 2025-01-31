@@ -36,8 +36,8 @@ colnames(counts_matrix) <- gsub("^X", "", colnames(counts_matrix))
 head(counts_matrix)
 ```
 
-📍 Boxplot of Raw Counts (Unnormalized)
-```{r boxplot unnormalized, echo=TRUE, message=FALSE}
+### **📌 Boxplot of Raw Counts (Unnormalized)**
+```{r boxplot unnormalized, echo=TRUE, message=FALSE,fig.width=28,fig.height=8}
 # Boxplot of unnormalized counts
 boxplot(counts_matrix, 
         main = "Boxplots of samples (Unnormalized)", 
@@ -56,8 +56,8 @@ lcpm <- cpm(counts_matrix, log=TRUE)
 dim(lcpm)
 ```
 
-📍 Histogram of Unfiltered Log Counts
-```{r hist_cpm, echo=TRUE, message=FALSE,fig.width=28,fig.height=8}
+### **📌 Histogram of Unfiltered Log Counts**
+```{r hist_cpm, echo=TRUE, message=FALSE}
 hist(lcpm,  
      main = "Histogram of total counts (unfiltered)", 
      xlab = expression("Log"[2]*" counts-per-million"), 
@@ -70,7 +70,7 @@ filcpm_matrix <- subset(lcpm, (rowMeans(lcpm) > 0))
 dim(filcpm_matrix)
 ```
 
-📍 Histogram of filtered Log Counts (rowMeans > 0)
+### **📌 Histogram of filtered Log Counts (rowMeans > 0)**
 ```{r hist_row0, echo=TRUE, message=FALSE}
 hist(filcpm_matrix,  
      main = "Histogram of filtered counts using rowMeans > 0 method", 
@@ -84,7 +84,7 @@ filcpm_matrix1 <- subset(lcpm, (rowMeans(lcpm) > 0.5))
 dim(filcpm_matrix1)
 ```
 
-📍 Histogram of filtered Log Counts (rowMeans > 0.5)
+### **📌 Histogram of filtered Log Counts (rowMeans > 0.5)**
 ```{r hist_row0.5, echo=TRUE, message=FALSE}
 hist(filcpm_matrix1,  
      main = "Histogram of filtered counts using rowMeans > 0.5 method", 
@@ -98,7 +98,7 @@ filcpm_matrix2 <- subset(lcpm, (rowMeans(lcpm) > 1))
 dim(filcpm_matrix2)
 ```
 
-📍 Histogram of filtered Log Counts (rowMeans > 0.5)
+### **📌 Histogram of filtered Log Counts (rowMeans > 0.5)**
 ```{r hist_row1, echo=TRUE, message=FALSE}
 hist(filcpm_matrix2,  
      main = "Histogram of filtered counts using rowMeans > 1 method", 
