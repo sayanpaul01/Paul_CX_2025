@@ -110,3 +110,98 @@ hist(filcpm_matrix2,
 ```
 
 
+### **📌 Density Plots for Log2 CPM Values**
+```{r den_lCPM, echo=TRUE, message=FALSE}
+## Convert log2 CPM matrix into long format for visualization
+log2_cpm_long <- as.data.frame(as.table(lcpm))
+colnames(log2_cpm_long) <- c("Feature", "Sample", "Log2_CPM")
+
+## Density Plot of Log2 CPM Values (Unfiltered)
+ggplot(log2_cpm_long, aes(x = Log2_CPM)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Density Plot of Log2 CPM Values (Unfiltered)", x = "Log2 CPM", y = "Density") +
+  theme_minimal()
+
+## Histogram + Density Plot for Log2 CPM Values (Unfiltered)
+ggplot(log2_cpm_long, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = "lightblue",
+                 color = "black") +
+  geom_density(alpha = 0.5, fill = "lightgreen") +
+  labs(title = "Log2 CPM Values (Unfiltered) (Density+Histogram)",
+       x = "Log2 CPM",
+       y = "Density") +
+  theme_minimal()
+```
+
+### **📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 0)**
+```{r den_lCPM0, echo=TRUE, message=FALSE}
+log2_cpm_long1 <- as.data.frame(as.table(filcpm_matrix))
+colnames(log2_cpm_long1) <- c("Feature", "Sample", "Log2_CPM")
+
+## Density Plot for Log2 CPM (rowMeans > 0)
+ggplot(log2_cpm_long1, aes(x = Log2_CPM)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Density Plot of Log2 CPM Values (rowMeans > 0)", x = "Log2 CPM", y = "Density") +
+  theme_minimal()
+
+## Histogram + Density Plot for Log2 CPM (rowMeans > 0)
+ggplot(log2_cpm_long1, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = "lightblue",
+                 color = "black") +
+  geom_density(alpha = 0.5, fill = "lightgreen") +
+  labs(title = "Log2 CPM Values (rowMeans > 0) (Density+Histogram)",
+       x = "Log2 CPM",
+       y = "Density") +
+  theme_minimal()
+```
+
+###**📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 0.5)**
+```{r den_lCPM0.5, echo=TRUE, message=FALSE}
+log2_cpm_long2 <- as.data.frame(as.table(filcpm_matrix1))
+colnames(log2_cpm_long2) <- c("Feature", "Sample", "Log2_CPM")
+
+## Density Plot for Log2 CPM (rowMeans > 0.5)
+ggplot(log2_cpm_long2, aes(x = Log2_CPM)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Density Plot of Log2 CPM Values (rowMeans > 0.5)", x = "Log2 CPM", y = "Density") +
+  theme_minimal()
+
+## Histogram + Density Plot for Log2 CPM (rowMeans > 0.5)
+ggplot(log2_cpm_long2, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = "lightblue",
+                 color = "black") +
+  geom_density(alpha = 0.5, fill = "lightgreen") +
+  labs(title = "Log2 CPM Values (rowMeans > 0.5) (Density+Histogram)",
+       x = "Log2 CPM",
+       y = "Density") +
+  theme_minimal()
+```
+
+###**📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 1)**
+```{r den_lCPM1, echo=TRUE, message=FALSE}
+log2_cpm_long3 <- as.data.frame(as.table(filcpm_matrix2))
+
+colnames(log2_cpm_long3) <- c("Feature", "Sample", "Log2_CPM")
+## Density Plot for Log2 CPM (rowMeans > 1)
+ggplot(log2_cpm_long3, aes(x = Log2_CPM)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Density Plot of Log2 CPM Values (rowMeans > 1)", x = "Log2 CPM", y = "Density") +
+  theme_minimal()
+## Histogram + Density Plot for Log2 CPM (rowMeans > 1)
+ggplot(log2_cpm_long3, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = "lightblue",
+                 color = "black") +
+  geom_density(alpha = 0.5, fill = "lightgreen") +
+  labs(title = "Log2 CPM Values (rowMeans > 1) (Density+Histogram)",
+       x = "Log2 CPM",
+       y = "Density") +
+  theme_minimal()
+```
