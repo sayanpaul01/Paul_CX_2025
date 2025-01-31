@@ -207,7 +207,7 @@ ggplot(log2_cpm_long3, aes(x = Log2_CPM)) +
 ```
 
 ### **📌 Boxplots of Log CPM Per Sample**
-```{r box_lCPM, echo=TRUE, message=FALSE}
+```{r box_lCPM, echo=TRUE, message=FALSE,fig.width=18,fig.height=8}
 # Set margin parameters to prevent X-axis label cutoff
 par(mar = c(8,5,2,2))
 
@@ -219,7 +219,7 @@ boxplot(lcpm,
 ```
 
 ### **📌 Boxplot of log CPM per sample (Filtered: rowMeans > 0)**
-```{r box_lCPM0, echo=TRUE, message=FALSE}
+```{r box_lCPM0, echo=TRUE, message=FALSE,fig.width=18,fig.height=8}
 boxplot(filcpm_matrix, 
         main = "Boxplots of log CPM per sample (Filtered: rowMeans > 0)", 
         names = colnames(filcpm_matrix), 
@@ -227,7 +227,7 @@ boxplot(filcpm_matrix,
 ```
 
 ### **📌 Boxplot of log CPM per sample (Filtered: rowMeans > 0.5)**
-```{r box_lCPM0.5, echo=TRUE, message=FALSE}
+```{r box_lCPM0.5, echo=TRUE, message=FALSE,fig.width=18,fig.height=8}
 # Boxplot of log CPM per sample (Filtered: rowMeans > 0.5)
 boxplot(filcpm_matrix1, 
         main = "Boxplots of log CPM per sample (Filtered: rowMeans > 0.5)", 
@@ -236,7 +236,7 @@ boxplot(filcpm_matrix1,
 ```
 
 ### **📌 Boxplot of log CPM per sample (Filtered: rowMeans > 1)**
-```{r box_lCPM1, echo=TRUE, message=FALSE}
+```{r box_lCPM1, echo=TRUE, message=FALSE,fig.width=18,fig.height=8}
 # Boxplot of log CPM per sample (Filtered: rowMeans > 1)
 boxplot(filcpm_matrix2, 
         main = "Boxplots of log CPM per sample (Filtered: rowMeans > 1)", 
