@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3b5571ab2a43ac8563b2671311d0204209db4587targetblank3b5571aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebe5d458bcffe34cd7fdff438e6961de6bd74fc5btargetblankbe5d458a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3b5571ab2a43ac8563b2671311d0204209db4587" target="_blank">3b5571a</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/be5d458bcffe34cd7fdff438e6961de6bd74fc5b" target="_blank">be5d458</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3b5571ab2a43ac8563b2671311d0204209db4587targetblank3b5571aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebe5d458bcffe34cd7fdff438e6961de6bd74fc5btargetblankbe5d458a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3b5571ab2a43ac8563b2671311d0204209db4587" target="_blank">3b5571a</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/be5d458bcffe34cd7fdff438e6961de6bd74fc5b" target="_blank">be5d458</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -594,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/be5d458bcffe34cd7fdff438e6961de6bd74fc5b/analysis/count_matrix_analysis.Rmd" target="_blank">be5d458</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+wflow_publish("analysis/count_matrix_analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/8a4824382d0d2c3c50a435f494fc25d8ff950dd9/docs/count_matrix_analysis.html" target="_blank">8a48243</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -897,6 +931,43 @@ boxplot(counts_matrix,
         las = 2,      # Make labels vertical
         cex.axis = 0.6)  # Reduce text size for better fit</code></pre>
 <p><img src="figure/count_matrix_analysis.Rmd/boxplot_unnormalized-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-boxplot_unnormalized-1">
+Past versions of boxplot_unnormalized-1.png
+</button>
+</p>
+<div id="fig-boxplot_unnormalized-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/8a4824382d0d2c3c50a435f494fc25d8ff950dd9/docs/figure/count_matrix_analysis.Rmd/boxplot_unnormalized-1.png" target="_blank">8a48243</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>📍 Log-Transformed Counts (CPM)</p>
 <pre class="r"><code># Compute CPM values
 cpm &lt;- cpm(counts_matrix)
@@ -1114,6 +1185,108 @@ sayanpaul01
 </table>
 </div>
 </div>
+</div>
+<div id="density-plots-for-log2-cpm-values" class="section level3">
+<h3><strong>📌 Density Plots for Log2 CPM Values</strong></h3>
+<pre class="r"><code>## Convert log2 CPM matrix into long format for visualization
+log2_cpm_long &lt;- as.data.frame(as.table(lcpm))
+colnames(log2_cpm_long) &lt;- c(&quot;Feature&quot;, &quot;Sample&quot;, &quot;Log2_CPM&quot;)
+
+## Density Plot of Log2 CPM Values (Unfiltered)
+ggplot(log2_cpm_long, aes(x = Log2_CPM)) +
+  geom_density(fill = &quot;blue&quot;, alpha = 0.5) +
+  labs(title = &quot;Density Plot of Log2 CPM Values (Unfiltered)&quot;, x = &quot;Log2 CPM&quot;, y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Histogram + Density Plot for Log2 CPM Values (Unfiltered)
+ggplot(log2_cpm_long, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = &quot;lightblue&quot;,
+                 color = &quot;black&quot;) +
+  geom_density(alpha = 0.5, fill = &quot;lightgreen&quot;) +
+  labs(title = &quot;Log2 CPM Values (Unfiltered) (Density+Histogram)&quot;,
+       x = &quot;Log2 CPM&quot;,
+       y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<pre><code>Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+ℹ Please use `after_stat(density)` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="density-plots-for-filtered-log2-cpm-values-rowmeans-0"
+class="section level3">
+<h3><strong>📌 Density Plots for Filtered Log2 CPM Values (rowMeans &gt;
+0)</strong></h3>
+<pre class="r"><code>log2_cpm_long1 &lt;- as.data.frame(as.table(filcpm_matrix))
+colnames(log2_cpm_long1) &lt;- c(&quot;Feature&quot;, &quot;Sample&quot;, &quot;Log2_CPM&quot;)
+
+## Density Plot for Log2 CPM (rowMeans &gt; 0)
+ggplot(log2_cpm_long1, aes(x = Log2_CPM)) +
+  geom_density(fill = &quot;blue&quot;, alpha = 0.5) +
+  labs(title = &quot;Density Plot of Log2 CPM Values (rowMeans &gt; 0)&quot;, x = &quot;Log2 CPM&quot;, y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM0-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Histogram + Density Plot for Log2 CPM (rowMeans &gt; 0)
+ggplot(log2_cpm_long1, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = &quot;lightblue&quot;,
+                 color = &quot;black&quot;) +
+  geom_density(alpha = 0.5, fill = &quot;lightgreen&quot;) +
+  labs(title = &quot;Log2 CPM Values (rowMeans &gt; 0) (Density+Histogram)&quot;,
+       x = &quot;Log2 CPM&quot;,
+       y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM0-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>###<strong>📌 Density Plots for Filtered Log2 CPM Values (rowMeans
+&gt; 0.5)</strong></p>
+<pre class="r"><code>log2_cpm_long2 &lt;- as.data.frame(as.table(filcpm_matrix1))
+colnames(log2_cpm_long2) &lt;- c(&quot;Feature&quot;, &quot;Sample&quot;, &quot;Log2_CPM&quot;)
+
+## Density Plot for Log2 CPM (rowMeans &gt; 0.5)
+ggplot(log2_cpm_long2, aes(x = Log2_CPM)) +
+  geom_density(fill = &quot;blue&quot;, alpha = 0.5) +
+  labs(title = &quot;Density Plot of Log2 CPM Values (rowMeans &gt; 0.5)&quot;, x = &quot;Log2 CPM&quot;, y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM0.5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Histogram + Density Plot for Log2 CPM (rowMeans &gt; 0.5)
+ggplot(log2_cpm_long2, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = &quot;lightblue&quot;,
+                 color = &quot;black&quot;) +
+  geom_density(alpha = 0.5, fill = &quot;lightgreen&quot;) +
+  labs(title = &quot;Log2 CPM Values (rowMeans &gt; 0.5) (Density+Histogram)&quot;,
+       x = &quot;Log2 CPM&quot;,
+       y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM0.5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>###<strong>📌 Density Plots for Filtered Log2 CPM Values (rowMeans
+&gt; 1)</strong></p>
+<pre class="r"><code>log2_cpm_long3 &lt;- as.data.frame(as.table(filcpm_matrix2))
+
+colnames(log2_cpm_long3) &lt;- c(&quot;Feature&quot;, &quot;Sample&quot;, &quot;Log2_CPM&quot;)
+## Density Plot for Log2 CPM (rowMeans &gt; 1)
+ggplot(log2_cpm_long3, aes(x = Log2_CPM)) +
+  geom_density(fill = &quot;blue&quot;, alpha = 0.5) +
+  labs(title = &quot;Density Plot of Log2 CPM Values (rowMeans &gt; 1)&quot;, x = &quot;Log2 CPM&quot;, y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Histogram + Density Plot for Log2 CPM (rowMeans &gt; 1)
+ggplot(log2_cpm_long3, aes(x = Log2_CPM)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 40,
+                 fill = &quot;lightblue&quot;,
+                 color = &quot;black&quot;) +
+  geom_density(alpha = 0.5, fill = &quot;lightgreen&quot;) +
+  labs(title = &quot;Log2 CPM Values (rowMeans &gt; 1) (Density+Histogram)&quot;,
+       x = &quot;Log2 CPM&quot;,
+       y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="figure/count_matrix_analysis.Rmd/den_lCPM1-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1182,60 +1355,61 @@ other attached packages:
 
 loaded via a namespace (and not attached):
   [1] rstudioapi_0.17.1           jsonlite_1.8.9             
-  [3] magrittr_2.0.3              rmarkdown_2.29             
-  [5] fs_1.6.3                    BiocIO_1.12.0              
-  [7] zlibbioc_1.48.0             vctrs_0.6.5                
-  [9] memoise_2.0.1               Rsamtools_2.18.0           
- [11] RCurl_1.98-1.13             base64enc_0.1-3            
- [13] htmltools_0.5.8.1           S4Arrays_1.2.1             
- [15] progress_1.2.3              curl_6.0.1                 
- [17] Formula_1.2-5               SparseArray_1.2.4          
- [19] sass_0.4.9                  bslib_0.8.0                
- [21] htmlwidgets_1.6.4           plyr_1.8.9                 
- [23] cachem_1.0.8                GenomicAlignments_1.38.2   
- [25] whisker_0.4.1               lifecycle_1.0.4            
- [27] pkgconfig_2.0.3             Matrix_1.6-1.1             
- [29] R6_2.5.1                    fastmap_1.1.1              
- [31] GenomeInfoDbData_1.2.11     MatrixGenerics_1.14.0      
- [33] digest_0.6.34               colorspace_2.1-0           
- [35] ps_1.8.1                    rprojroot_2.0.4            
- [37] RSQLite_2.3.3               filelock_1.0.3             
- [39] timechange_0.3.0            httr_1.4.7                 
- [41] abind_1.4-8                 compiler_4.3.0             
- [43] bit64_4.0.5                 withr_3.0.2                
- [45] backports_1.5.0             htmlTable_2.4.3            
- [47] BiocParallel_1.36.0         DBI_1.2.3                  
- [49] rappdirs_0.3.3              DelayedArray_0.28.0        
- [51] rjson_0.2.23                tools_4.3.0                
- [53] foreign_0.8-87              httpuv_1.6.15              
- [55] nnet_7.3-19                 glue_1.7.0                 
- [57] restfulr_0.0.15             callr_3.7.6                
- [59] promises_1.3.0              grid_4.3.0                 
- [61] checkmate_2.3.2             getPass_0.2-4              
- [63] cluster_2.1.6               generics_0.1.3             
- [65] gtable_0.3.6                tzdb_0.4.0                 
- [67] data.table_1.14.10          hms_1.1.3                  
- [69] xml2_1.3.6                  XVector_0.42.0             
- [71] pillar_1.10.1               later_1.3.2                
- [73] BiocFileCache_2.10.2        lattice_0.22-5             
- [75] rtracklayer_1.62.0          bit_4.0.5                  
- [77] tidyselect_1.2.1            RBGL_1.78.0                
- [79] locfit_1.5-9.8              Biostrings_2.70.1          
- [81] knitr_1.49                  git2r_0.35.0               
- [83] gridExtra_2.3               SummarizedExperiment_1.32.0
- [85] xfun_0.50                   statmod_1.5.0              
- [87] matrixStats_1.4.1           stringi_1.8.3              
- [89] yaml_2.3.10                 evaluate_1.0.3             
- [91] codetools_0.2-20            BiocManager_1.30.25        
- [93] graph_1.80.0                cli_3.6.1                  
- [95] rpart_4.1.23                munsell_0.5.1              
- [97] processx_3.8.5              jquerylib_0.1.4            
- [99] Rcpp_1.0.12                 dbplyr_2.5.0               
-[101] png_0.1-8                   XML_3.99-0.17              
-[103] parallel_4.3.0              blob_1.2.4                 
-[105] prettyunits_1.2.0           bitops_1.0-7               
-[107] crayon_1.5.3                rlang_1.1.3                
-[109] KEGGREST_1.42.0            </code></pre>
+  [3] magrittr_2.0.3              farver_2.1.2               
+  [5] rmarkdown_2.29              fs_1.6.3                   
+  [7] BiocIO_1.12.0               zlibbioc_1.48.0            
+  [9] vctrs_0.6.5                 memoise_2.0.1              
+ [11] Rsamtools_2.18.0            RCurl_1.98-1.13            
+ [13] base64enc_0.1-3             htmltools_0.5.8.1          
+ [15] S4Arrays_1.2.1              progress_1.2.3             
+ [17] curl_6.0.1                  Formula_1.2-5              
+ [19] SparseArray_1.2.4           sass_0.4.9                 
+ [21] bslib_0.8.0                 htmlwidgets_1.6.4          
+ [23] plyr_1.8.9                  cachem_1.0.8               
+ [25] GenomicAlignments_1.38.2    whisker_0.4.1              
+ [27] lifecycle_1.0.4             pkgconfig_2.0.3            
+ [29] Matrix_1.6-1.1              R6_2.5.1                   
+ [31] fastmap_1.1.1               GenomeInfoDbData_1.2.11    
+ [33] MatrixGenerics_1.14.0       digest_0.6.34              
+ [35] colorspace_2.1-0            ps_1.8.1                   
+ [37] rprojroot_2.0.4             RSQLite_2.3.3              
+ [39] labeling_0.4.3              filelock_1.0.3             
+ [41] timechange_0.3.0            httr_1.4.7                 
+ [43] abind_1.4-8                 compiler_4.3.0             
+ [45] bit64_4.0.5                 withr_3.0.2                
+ [47] backports_1.5.0             htmlTable_2.4.3            
+ [49] BiocParallel_1.36.0         DBI_1.2.3                  
+ [51] rappdirs_0.3.3              DelayedArray_0.28.0        
+ [53] rjson_0.2.23                tools_4.3.0                
+ [55] foreign_0.8-87              httpuv_1.6.15              
+ [57] nnet_7.3-19                 glue_1.7.0                 
+ [59] restfulr_0.0.15             callr_3.7.6                
+ [61] promises_1.3.0              grid_4.3.0                 
+ [63] checkmate_2.3.2             getPass_0.2-4              
+ [65] cluster_2.1.6               generics_0.1.3             
+ [67] gtable_0.3.6                tzdb_0.4.0                 
+ [69] data.table_1.14.10          hms_1.1.3                  
+ [71] xml2_1.3.6                  XVector_0.42.0             
+ [73] pillar_1.10.1               later_1.3.2                
+ [75] BiocFileCache_2.10.2        lattice_0.22-5             
+ [77] rtracklayer_1.62.0          bit_4.0.5                  
+ [79] tidyselect_1.2.1            RBGL_1.78.0                
+ [81] locfit_1.5-9.8              Biostrings_2.70.1          
+ [83] knitr_1.49                  git2r_0.35.0               
+ [85] gridExtra_2.3               SummarizedExperiment_1.32.0
+ [87] xfun_0.50                   statmod_1.5.0              
+ [89] matrixStats_1.4.1           stringi_1.8.3              
+ [91] yaml_2.3.10                 evaluate_1.0.3             
+ [93] codetools_0.2-20            BiocManager_1.30.25        
+ [95] graph_1.80.0                cli_3.6.1                  
+ [97] rpart_4.1.23                munsell_0.5.1              
+ [99] processx_3.8.5              jquerylib_0.1.4            
+[101] Rcpp_1.0.12                 dbplyr_2.5.0               
+[103] png_0.1-8                   XML_3.99-0.17              
+[105] parallel_4.3.0              blob_1.2.4                 
+[107] prettyunits_1.2.0           bitops_1.0-7               
+[109] crayon_1.5.3                rlang_1.1.3                
+[111] KEGGREST_1.42.0            </code></pre>
 </div>
 </div>
 
