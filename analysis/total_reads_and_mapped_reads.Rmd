@@ -406,7 +406,7 @@ map_mapping <- data.frame(align_mapping)
 ```
 
 ### **📌 Read Mapping Across Samples**
-```{r generate_boxplot Read mapping samples, echo=TRUE, message=FALSE, fig.height=8,fig.width=18}
+```{r generate_boxplot Read mapping samples, echo=TRUE, message=FALSE, fig.height=8,fig.width=28}
 p_mapping_samples <- ggplot(map_mapping, aes(x = Sample_name, y = Total, fill = Mapping)) +
   geom_bar(position="dodge", stat="identity")+
   #geom_hline(aes(yintercept=20000000))+
