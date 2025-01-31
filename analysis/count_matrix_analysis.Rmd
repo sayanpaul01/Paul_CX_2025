@@ -159,7 +159,7 @@ ggplot(log2_cpm_long1, aes(x = Log2_CPM)) +
   theme_minimal()
 ```
 
-###**📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 0.5)**
+### **📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 0.5)**
 ```{r den_lCPM0.5, echo=TRUE, message=FALSE}
 log2_cpm_long2 <- as.data.frame(as.table(filcpm_matrix1))
 colnames(log2_cpm_long2) <- c("Feature", "Sample", "Log2_CPM")
@@ -183,7 +183,7 @@ ggplot(log2_cpm_long2, aes(x = Log2_CPM)) +
   theme_minimal()
 ```
 
-###**📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 1)**
+### **📌 Density Plots for Filtered Log2 CPM Values (rowMeans > 1)**
 ```{r den_lCPM1, echo=TRUE, message=FALSE}
 log2_cpm_long3 <- as.data.frame(as.table(filcpm_matrix2))
 
