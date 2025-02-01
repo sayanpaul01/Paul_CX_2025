@@ -209,7 +209,7 @@ ggplot(log2_cpm_long3, aes(x = Log2_CPM)) +
 ### **📌 Boxplots of Log CPM Per Sample**
 ```{r box_lCPM, echo=TRUE, message=FALSE,fig.width=18,fig.height=8}
 # Set margin parameters to prevent X-axis label cutoff
-par(mar = c(8,5,2,2))
+par(mar = c(12,5,2,2))
 
 # Boxplot of log CPM per sample (Unfiltered)
 boxplot(lcpm, 
