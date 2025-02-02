@@ -1,0 +1,206 @@
+---
+title: "PCA Analysis"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  workflowr::wflow_html:
+    toc: true
+    toc_float: true
+    number_sections: false
+---
+
+### **Load Required Libraries**
+```{r setup, echo=TRUE,message=FALSE}
+library(edgeR)
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(Biobase)
+library(limma)
+library(tidyverse)
+library(scales)
+library(biomaRt)
+library(ggrepel)
+library(corrplot)
+library(Hmisc)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+library(tidyr)
+library(ggfortify)
+```
+
+📍 Load the Count Matrix CSV file
+
+```{r Read mapping counts, echo=FALSE, include=FALSE}
+# Load the count matrix from the TSV file
+counts_matrix <- read.csv("data/counts_matrix.csv", header=TRUE, check.names=FALSE)
+
+# Compute log2 Counts Per Million (CPM)
+cpm <- cpm(counts_matrix)
+lcpm <- cpm(counts_matrix, log=TRUE)  # Log2 CPM matrix
+
+# Apply filtering thresholds
+filcpm_matrix <- subset(lcpm, rowMeans(lcpm) > 0)
+filcpm_matrix1 <- subset(lcpm, rowMeans(lcpm) > 0.5)
+filcpm_matrix2 <- subset(lcpm, rowMeans(lcpm) > 1)
+```
+
+
+## **📌Color palettes**
+
+```{r color_palettes, echo=TRUE, message=FALSE}
+drug_palc <- c("#8B006D","#DF707E","#F1B72B", "#3386DD","#707031","#41B333")
+drug_palc1 <- c("#8B006D","#F1B72B", "#3386DD","#707031")
+drug_palc2 <- c("#8B006D","#F1B72B", "#3386DD")
+```
+
+## **📌Load Metadata**
+
+```{r load_metadata, echo=FALSE, include=FALSE}
+Metadata <- read.csv("data/Metadata.csv")
+dim(Metadata)
+head(Metadata)
+Metadata$Time <- as.character(Metadata$Time)
+Metadata$Ind <- as.character(Metadata$Ind)
+Indiv <- as.character(Metadata$Ind)
+```
+
+
+## **📌PCA of Unfiltered log2(CPM)**
+
+```{r pca_unfiltered, echo=TRUE, message=FALSE}
+prcomp_res <- prcomp(t(lcpm %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered")) +
+  theme_bw()
+```
+
+
+```{r pca_unfiltered2, echo=TRUE, message=FALSE}
+prcomp_res <- prcomp(t(lcpm %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res, data = Metadata, colour = "Condition", shape = "Time", size =4, x=2, y=3) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered")) +
+  theme_bw()
+```
+
+
+```{r pca_unfiltered3, echo=TRUE, message=FALSE}
+prcomp_res <- prcomp(t(lcpm %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res, data = Metadata, colour = "Condition", shape = "Time", size =4, x=3, y=4) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered")) +
+  theme_bw()
+```
+
+
+## **📌PCA of Filtered log2(CPM) (RowMeans > 0)**
+
+```{r pca_filtered_0, echo=TRUE, message=FALSE}
+prcomp_res1 <- prcomp(t(filcpm_matrix %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0)")) +
+  theme_bw()
+```
+
+```{r pca_filtered_0_1, echo=TRUE, message=FALSE}
+prcomp_res1 <- prcomp(t(filcpm_matrix %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "Time", size =4, x=2, y=3) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0)")) +
+  theme_bw()
+```
+
+```{r pca_filtered_0_2, echo=TRUE, message=FALSE}
+prcomp_res1 <- prcomp(t(filcpm_matrix %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "Time", size =4, x=3, y=4) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0)")) +
+  theme_bw()
+```
+
+## **📌PCA of Filtered log2(CPM) (RowMeans > 0.5)**
+
+```{r pca_filtered_0.5, echo=TRUE, message=FALSE}
+prcomp_res2 <- prcomp(t(filcpm_matrix1 %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res2, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0.5)")) +
+  theme_bw()
+```
+
+
+```{r pca_filtered_0.5_1, echo=TRUE, message=FALSE}
+prcomp_res2 <- prcomp(t(filcpm_matrix1 %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res2, data = Metadata, colour = "Condition", shape = "Time", size =4, x=2, y=3) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0.5)")) +
+  theme_bw()
+```
+
+
+```{r pca_filtered_0.5_2, echo=TRUE, message=FALSE}
+prcomp_res2 <- prcomp(t(filcpm_matrix1 %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res2, data = Metadata, colour = "Condition", shape = "Time", size =4, x=3, y=4) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0.5)")) +
+  theme_bw()
+```
+
+
+## **📌PCA of Filtered log2(CPM) (RowMeans > 1)**
+
+```{r pca_filtered_1, echo=TRUE, message=FALSE}
+prcomp_res3 <- prcomp(t(filcpm_matrix2 %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res3, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >1)")) +
+  theme_bw()
+```
+
+
+```{r pca_filtered_1_1, echo=TRUE, message=FALSE}
+prcomp_res3 <- prcomp(t(filcpm_matrix2 %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res3, data = Metadata, colour = "Condition", shape = "Time", size =4, x=2, y=3) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >1)")) +
+  theme_bw()
+```
+
+
+```{r pca_filtered_1_2, echo=TRUE, message=FALSE}
+prcomp_res3 <- prcomp(t(filcpm_matrix2 %>% as.matrix()), center = TRUE)
+
+ggplot2::autoplot(prcomp_res3, data = Metadata, colour = "Condition", shape = "Time", size =4, x=3, y=4) +
+  ggrepel::geom_text_repel(label=Indiv) +
+  scale_color_manual(values=drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >1)")) +
+  theme_bw()
+```
+
+
+
