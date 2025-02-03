@@ -19,6 +19,9 @@ Welcome to my research website.
 
 - **[PCA Analysis](https://sayanpaul01.github.io/CX5461_Project/PCA.html)**  
 
+- **[Correlation Heatmap of Samples](https://sayanpaul01.github.io/CX5461_Project/Correlation_Heatmap_of_Samples.html)**
+
+
 
 
 ### 🔗 **Source Code**  
