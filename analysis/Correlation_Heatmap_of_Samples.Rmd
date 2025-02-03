@@ -1,0 +1,129 @@
+---
+title: "Correlation Heatmap of Sample"
+author: "Sayan Paul"
+date: "`r Sys.Date()`"
+output: workflowr::wflow_html
+---
+
+## **📌 Correlation Heatmap of Samples**
+
+This analysis generates **Pearson** and **Spearman** correlation heatmaps to explore relationships between RNA-seq samples.
+
+---
+
+### **📌 Load Required Libraries**
+```{r setup, echo=TRUE, message=FALSE}
+# Load required libraries
+library(ComplexHeatmap)
+library(circlize)  # For color mapping
+library(dplyr)
+library(edgeR)
+library(ggplot2)
+library(reshape2)
+library(Biobase)
+library(limma)
+library(tidyverse)
+library(scales)
+library(biomaRt)
+library(ggrepel)
+library(corrplot)
+library(Hmisc)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+library(tidyr)
+library(ggfortify)
+```
+
+📍 Load Count Matrix
+```{r Read mapping counts, echo=FALSE, include=FALSE}
+# Load the count matrix from the TSV file
+counts_matrix <- read.csv("data/counts_matrix.csv", header=TRUE, check.names=FALSE)
+
+# Compute log2 Counts Per Million (CPM)
+cpm <- cpm(counts_matrix)
+lcpm <- cpm(counts_matrix, log=TRUE)  # Log2 CPM matrix
+
+# Apply filtering thresholds
+filcpm_matrix <- subset(lcpm, rowMeans(lcpm) > 0)
+```
+
+```{r load_metadata, echo=FALSE, include=FALSE}
+Metadata <- read.csv("data/Metadata.csv")
+dim(Metadata)
+head(Metadata)
+```
+
+
+### **📌Data Preparation**
+```{r Data_prep, echo=TRUE, message=FALSE}
+# Ensure the correct column names are assigned
+lcpm_2 <- filcpm_matrix
+colnames(lcpm_2) <- Metadata$Sample_name
+
+# Compute correlation matrices
+cor_matrix_pearson <- cor(lcpm_2, method = "pearson")
+cor_matrix_spearman <- cor(lcpm_2, method = "spearman")
+
+# Extract metadata columns
+individuals <- as.character(Metadata$Ind)
+timepoints <- as.character(Metadata$Time)
+drugs <- as.character(Metadata$Drug)
+concentrations <- as.character(Metadata$Conc.)
+
+# Define color palettes for annotations
+ind_colors <- c("1" = "red", "2" = "blue", "3" = "green", "4" = "orange", "5" = "thistle", "6" = "magenta4")
+time_colors <- c("3" = "purple", "24" = "pink", "48" = "tomato3")
+drug_colors <- c("CX-5461" = "yellow", "DOX" = "magenta4", "VEH" = "red3")
+conc_colors <- c("0.1" = "lightblue", "0.5" = "lightcoral")
+
+# Create annotations
+top_annotation <- HeatmapAnnotation(
+  individuals = individuals, 
+  timepoints = timepoints,
+  drugs = drugs,
+  concentrations = concentrations,
+  col = list(
+    individuals = ind_colors, 
+    timepoints = time_colors,
+    drugs = drug_colors,
+    concentrations = conc_colors
+  )
+)
+```
+
+
+### **📌Pearson Correlation Heatmap**
+```{r Pearson, echo=TRUE, message=FALSE,fig.width=28,fig.height=18}
+# Generate the heatmap with annotations (Pearson Correlation)
+heatmap_pearson <- Heatmap(cor_matrix_pearson,
+                           name = "Pearson Correlation",
+                           top_annotation = top_annotation,
+                           show_row_names = TRUE,
+                           show_column_names = TRUE,
+                           cluster_rows = TRUE,
+                           cluster_columns = TRUE,
+                           col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")))
+
+# Draw the heatmap
+draw(heatmap_pearson)
+```
+
+
+### **📌Spearman  Correlation Heatmap**
+```{r Spearman, echo=TRUE, message=FALSE,fig.width=28,fig.height=18}
+# Generate the heatmap with annotations (Spearman Correlation)
+heatmap_spearman <- Heatmap(cor_matrix_spearman,
+                            name = "Spearman Correlation",
+                            top_annotation = top_annotation,
+                            show_row_names = TRUE,
+                            show_column_names = TRUE,
+                            cluster_rows = TRUE,
+                            cluster_columns = TRUE,
+                            col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")))
+
+# Draw the heatmap
+draw(heatmap_spearman)
+```
+
+
+
