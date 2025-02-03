@@ -18,3 +18,9 @@ Welcome to my research website.
 - **[Feature Count Matrix Analysis](https://sayanpaul01.github.io/CX5461_Project/count_matrix_analysis.html)**
 
 - **[PCA Analysis](https://sayanpaul01.github.io/CX5461_Project/PCA.html)**  
+
+
+
+### 🔗 **Source Code**  
+
+[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/sayanpaul01/CX5461_Project)
