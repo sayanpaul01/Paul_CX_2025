@@ -101,8 +101,7 @@ heatmap_pearson <- Heatmap(cor_matrix_pearson,
                            show_row_names = TRUE,
                            show_column_names = TRUE,
                            cluster_rows = TRUE,
-                           cluster_columns = TRUE,
-                           col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")))
+                           cluster_columns = TRUE)
 
 # Draw the heatmap
 draw(heatmap_pearson)
@@ -118,8 +117,7 @@ heatmap_spearman <- Heatmap(cor_matrix_spearman,
                             show_row_names = TRUE,
                             show_column_names = TRUE,
                             cluster_rows = TRUE,
-                            cluster_columns = TRUE,
-                            col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")))
+                            cluster_columns = TRUE)
 
 # Draw the heatmap
 draw(heatmap_spearman)
