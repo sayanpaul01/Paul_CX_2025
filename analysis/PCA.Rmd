@@ -63,6 +63,8 @@ head(Metadata)
 Metadata$Time <- as.character(Metadata$Time)
 Metadata$Ind <- as.character(Metadata$Ind)
 Indiv <- as.character(Metadata$Ind)
+# Convert to matrix
+matrix <- as.matrix(lcpm)
 ```
 
 
@@ -202,5 +204,361 @@ ggplot2::autoplot(prcomp_res3, data = Metadata, colour = "Condition", shape = "T
   theme_bw()
 ```
 
+
+## **📌 PCA Analysis by Drugs**
+
+## **📌 PCA Analysis: CX-5461 & VEH **
+```{r pca_drug, echo=TRUE, message=FALSE}
+selected_columns <- grepl("VEH|CX.5461", colnames(matrix))
+subset_matrix_CX <- matrix[, selected_columns]
+
+subset_meta <- subset(Metadata, Metadata$Drug %in% c("VEH", "CX-5461"))
+
+prcomp_res4 <- prcomp(t(subset_matrix_CX), center = TRUE)
+
+ggplot2::autoplot(prcomp_res4, data = as.data.frame(subset_meta), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta$Ind) +  # ✅ Corrected label
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered (CX-5461 vs VEH)")) +
+  theme_bw()
+```
+
+
+```{r pca_drug_1, echo=TRUE, message=FALSE}
+prcomp_res5 <- prcomp(t(subset_matrix_CX[rowMeans(subset_matrix_CX) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res5, data = as.data.frame(subset_meta), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (CX-5461 vs VEH)")) +
+  theme_bw()
+```
+
+```{r pca_drug_2, echo=TRUE, message=FALSE}
+prcomp_res6 <- prcomp(t(subset_matrix_CX[rowMeans(subset_matrix_CX) > 0.5, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res6, data = as.data.frame(subset_meta), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0.5 (CX-5461 vs VEH)")) +
+  theme_bw()
+```
+
+```{r pca_drug_3, echo=TRUE, message=FALSE}
+prcomp_res7 <- prcomp(t(subset_matrix_CX[rowMeans(subset_matrix_CX) > 1, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res7, data = as.data.frame(subset_meta), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 1 (CX-5461 vs VEH)")) +
+  theme_bw()
+```
+
+
+## **📌 PCA Analysis: DOX & VEH **
+
+```{r pca_drug_dox_veh, echo=TRUE, message=FALSE}
+selected_columns <- grepl("VEH|DOX", colnames(matrix))
+subset_matrix_DOX <- matrix[, selected_columns]
+
+subset_meta_dox <- subset(Metadata, Metadata$Drug %in% c("VEH", "DOX"))
+
+prcomp_res8 <- prcomp(t(subset_matrix_DOX), center = TRUE)
+
+ggplot2::autoplot(prcomp_res8, data = as.data.frame(subset_meta_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered (DOX vs VEH)")) +
+  theme_bw()
+```
+
+
+```{r pca_drug_dox_veh_1, echo=TRUE, message=FALSE}
+prcomp_res9 <- prcomp(t(subset_matrix_DOX[rowMeans(subset_matrix_DOX) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res9, data = as.data.frame(subset_meta_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (DOX vs VEH)")) +
+  theme_bw()
+```
+
+
+```{r pca_drug_dox_veh_2, echo=TRUE, message=FALSE}
+prcomp_res10 <- prcomp(t(subset_matrix_DOX[rowMeans(subset_matrix_DOX) > 0.5, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res10, data = as.data.frame(subset_meta_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0.5 (DOX vs VEH)")) +
+  theme_bw()
+```
+
+
+
+```{r pca_drug_dox_veh_3, echo=TRUE, message=FALSE}
+prcomp_res11 <- prcomp(t(subset_matrix_DOX[rowMeans(subset_matrix_DOX) > 1, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res11, data = as.data.frame(subset_meta_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 1 (DOX vs VEH)")) +
+  theme_bw()
+```
+
+
+## **📌 PCA Analysis: CX-5461 & DOX**
+
+```{r pca_drug_cx_dox, echo=TRUE, message=FALSE}
+selected_columns <- grepl("CX.5461|DOX", colnames(matrix))
+subset_matrix_CX_DOX <- matrix[, selected_columns]
+
+subset_meta_cx_dox <- subset(Metadata, Metadata$Drug %in% c("CX-5461", "DOX"))
+
+prcomp_res12 <- prcomp(t(subset_matrix_CX_DOX), center = TRUE)
+
+ggplot2::autoplot(prcomp_res12, data = as.data.frame(subset_meta_cx_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_cx_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered (CX-5461 vs DOX)")) +
+  theme_bw()
+```
+
+
+```{r pca_drug_cx_dox_1, echo=TRUE, message=FALSE}
+prcomp_res13 <- prcomp(t(subset_matrix_CX_DOX[rowMeans(subset_matrix_CX_DOX) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res13, data = as.data.frame(subset_meta_cx_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_cx_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (CX-5461 vs DOX)")) +
+  theme_bw()
+```
+
+
+
+```{r pca_drug_cx_dox_2, echo=TRUE, message=FALSE}
+prcomp_res14 <- prcomp(t(subset_matrix_CX_DOX[rowMeans(subset_matrix_CX_DOX) > 0.5, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res14, data = as.data.frame(subset_meta_cx_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_cx_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0.5 (CX-5461 vs DOX)")) +
+  theme_bw()
+```
+
+
+```{r pca_drug_cx_dox_3, echo=TRUE, message=FALSE}
+prcomp_res15 <- prcomp(t(subset_matrix_CX_DOX[rowMeans(subset_matrix_CX_DOX) > 1, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res15, data = as.data.frame(subset_meta_cx_dox), colour = "Condition", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_cx_dox$Ind) +
+  scale_color_manual(values = drug_palc1) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 1 (CX-5461 vs DOX)")) +
+  theme_bw()
+```
+
+## **📌 PCA Analysis by Timepoints**
+
+## **📌 3-Hour Timepoint**
+
+```{r pca_3hr, echo=TRUE, message=FALSE}
+selected_columns <- grepl("_3", colnames(matrix))
+subset_matrix_3hr <- matrix[, selected_columns]
+
+subset_meta_3hr <- subset(Metadata, Metadata$Time == 3)
+
+prcomp_res_3hr <- prcomp(t(subset_matrix_3hr[rowMeans(subset_matrix_3hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour = "Condition", shape = "Drug", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_3hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (3 Hours)")) +
+  theme_bw()
+```
+
+```{r pca_3hr_2, echo=TRUE, message=FALSE}
+prcomp_res_3hr <- prcomp(t(subset_matrix_3hr[rowMeans(subset_matrix_3hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour = "Condition", shape = "Drug", size = 4, x=2, y=3) +
+  ggrepel::geom_text_repel(label = subset_meta_3hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (3 Hours)")) +
+  theme_bw()
+```
+
+
+```{r pca_3hr_3, echo=TRUE, message=FALSE}
+prcomp_res_3hr <- prcomp(t(subset_matrix_3hr[rowMeans(subset_matrix_3hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour = "Condition", shape = "Drug", size = 4, x=3, y=4) +
+  ggrepel::geom_text_repel(label = subset_meta_3hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (3 Hours)")) +
+  theme_bw()
+```
+
+
+## **📌 24-Hour Timepoint**
+
+```{r pca_24hr, echo=TRUE, message=FALSE}
+selected_columns <- grepl("_24", colnames(matrix))
+subset_matrix_24hr <- matrix[, selected_columns]
+
+subset_meta_24hr <- subset(Metadata, Metadata$Time == 24)
+
+prcomp_res_24hr <- prcomp(t(subset_matrix_24hr[rowMeans(subset_matrix_24hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colour = "Condition", shape = "Drug", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_24hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (24 Hours)")) +
+  theme_bw()
+```
+
+
+```{r pca_24hr_1, echo=TRUE, message=FALSE}
+prcomp_res_24hr <- prcomp(t(subset_matrix_24hr[rowMeans(subset_matrix_24hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colour = "Condition", shape = "Drug", size = 4, x=2, y=3) +
+  ggrepel::geom_text_repel(label = subset_meta_24hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (24 Hours)")) +
+  theme_bw()
+```
+
+
+```{r pca_24hr_2, echo=TRUE, message=FALSE}
+prcomp_res_24hr <- prcomp(t(subset_matrix_24hr[rowMeans(subset_matrix_24hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colour = "Condition", shape = "Drug", size = 4, x=3, y=4) +
+  ggrepel::geom_text_repel(label = subset_meta_24hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (24 Hours)")) +
+  theme_bw()
+```
+
+
+
+## **📌 48-Hour Timepoint**
+```{r pca_48hr, echo=TRUE, message=FALSE}
+selected_columns <- grepl("_48", colnames(matrix))
+subset_matrix_48hr <- matrix[, selected_columns]
+subset_meta_48hr <- subset(Metadata, Metadata$Time == 48)
+
+prcomp_res_48hr_1 <- prcomp(t(subset_matrix_48hr[rowMeans(subset_matrix_48hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), colour = "Condition", shape = "Drug", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_48hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (48 Hours)")) +
+  theme_bw()
+```
+
+
+```{r pca_48hr_1, echo=TRUE, message=FALSE}
+
+prcomp_res_48hr_1 <- prcomp(t(subset_matrix_48hr[rowMeans(subset_matrix_48hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), colour = "Condition", shape = "Drug", size = 4, x=2, y=3) +
+  ggrepel::geom_text_repel(label = subset_meta_48hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (48 Hours)")) +
+  theme_bw()
+```
+
+
+```{r pca_48hr_2, echo=TRUE, message=FALSE}
+
+prcomp_res_48hr_1 <- prcomp(t(subset_matrix_48hr[rowMeans(subset_matrix_48hr) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), colour = "Condition", shape = "Drug", size = 4, x=3, y=4) +
+  ggrepel::geom_text_repel(label = subset_meta_48hr$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (48 Hours)")) +
+  theme_bw()
+```
+
+
+## **📌 PCA Analysis by Concentrations**
+
+## **📌0.1 µM Concentration**
+
+```{r pca_0.1, echo=TRUE, message=FALSE}
+selected_columns <- grepl("_0.1_", colnames(matrix))
+subset_matrix_0.1 <- matrix[, selected_columns]
+
+subset_meta_0.1 <- subset(Metadata, Metadata$Conc. == 0.1)
+
+prcomp_res_0.1 <- prcomp(t(subset_matrix_0.1[rowMeans(subset_matrix_0.1) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour = "Drug", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_0.1$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (0.1 µM)")) +
+  theme_bw()
+```
+
+
+```{r pca_0.1_1, echo=TRUE, message=FALSE}
+prcomp_res_0.1 <- prcomp(t(subset_matrix_0.1[rowMeans(subset_matrix_0.1) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour = "Drug", shape = "Time", size = 4, x=2, y=3) +
+  ggrepel::geom_text_repel(label = subset_meta_0.1$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (0.1 µM)")) +
+  theme_bw()
+```
+
+
+```{r pca_0.1_2, echo=TRUE, message=FALSE}
+prcomp_res_0.1 <- prcomp(t(subset_matrix_0.1[rowMeans(subset_matrix_0.1) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour = "Drug", shape = "Time", size = 4, x=3, y=4) +
+  ggrepel::geom_text_repel(label = subset_meta_0.1$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (0.1 µM)")) +
+  theme_bw()
+```
+
+
+## **📌0.5 µM Concentration**
+```{r pca_0.5, echo=TRUE, message=FALSE}
+selected_columns <- grepl("_0.5_", colnames(matrix))
+subset_matrix_0.5 <- matrix[, selected_columns]
+
+subset_meta_0.5 <- subset(Metadata, Metadata$Conc. == 0.5)
+
+prcomp_res_0.5 <- prcomp(t(subset_matrix_0.5[rowMeans(subset_matrix_0.5) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour = "Drug", shape = "Time", size = 4) +
+  ggrepel::geom_text_repel(label = subset_meta_0.5$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (0.5 µM)")) +
+  theme_bw()
+```
+
+
+```{r pca_0.5_1, echo=TRUE, message=FALSE}
+prcomp_res_0.5 <- prcomp(t(subset_matrix_0.5[rowMeans(subset_matrix_0.5) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour = "Drug", shape = "Time", size = 4, x=2, y=3) +
+  ggrepel::geom_text_repel(label = subset_meta_0.5$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (0.5 µM)")) +
+  theme_bw()
+```
+
+
+
+```{r pca_0.5_2, echo=TRUE, message=FALSE}
+prcomp_res_0.5 <- prcomp(t(subset_matrix_0.5[rowMeans(subset_matrix_0.5) > 0, ]), center = TRUE)
+
+ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour = "Drug", shape = "Time", size = 4, x=3, y=4) +
+  ggrepel::geom_text_repel(label = subset_meta_0.5$Ind) +
+  scale_color_manual(values = drug_palc) +
+  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (0.5 µM)")) +
+  theme_bw()
+```
 
 
