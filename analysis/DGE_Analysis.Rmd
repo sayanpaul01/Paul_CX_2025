@@ -7,7 +7,7 @@ editor_options:
 
 ## **📌 Differential Gene Expression Analysis **
 
-### **1️⃣ Load Required Libraries**
+### **📌 Load Required Libraries**
 ```{r load_libraries, echo=TRUE, message=FALSE}
 # Load necessary packages
 library(edgeR)
