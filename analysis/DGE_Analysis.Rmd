@@ -124,7 +124,17 @@ contrast_matrix <- makeContrasts(
 # ✅ Apply Contrasts
 fit2 <- contrasts.fit(fit, contrast_matrix)
 fit2 <- eBayes(fit2)
+```
 
+## **📌 Mean-Variance Trend Plot**
+```{r fit2, echo=TRUE, message=FALSE}
+# Plot Mean-Variance Trend
+plotSA(fit2, main = "Final model: Mean-Variance trend")
+```
+
+
+## **📌Summary of Results**
+```{r summary, echo=TRUE, message=FALSE}
 # ✅ Summary of Results
 results_summary <- decideTests(fit2, adjust.method = "BH", p.value = 0.05)
 summary(results_summary)
