@@ -42,7 +42,7 @@ head(counts_matrix)
 ```
 
 ## **📌 Normalize and Filter Counts**
-```{r filtercounts, echo=TRUE, message=FALSE}
+```{r filtercounts, echo=FALSE, include=FALSE}
 # ✅ Convert to Log2 CPM
 lcpm <- cpm(counts_matrix, log=TRUE)
 
@@ -56,7 +56,7 @@ head(filcpm_matrix)
 
 
 ## **📌 Prepare DGEList Object**
-```{r DGElist, echo=TRUE, message=FALSE}
+```{r DGElist, echo=FALSE, include=FALSE}
 # Subset count matrix based on filtered CPM matrix
 x <- counts_matrix[row.names(filcpm_matrix),]
 dim(x)
