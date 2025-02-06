@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Differential Gene Expression Analysis</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CX5461_Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Differential Gene Expression Analysis</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-02-06
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250129code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250129)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250129code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250129)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreed31730d64c2d509cb4e48ac77ce13ca85cf5283etargetblankd31730da">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/d31730d64c2d509cb4e48ac77ce13ca85cf5283e" target="_blank">d31730d</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreed31730d64c2d509cb4e48ac77ce13ca85cf5283etargetblankd31730da"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/d31730d64c2d509cb4e48ac77ce13ca85cf5283e" target="_blank">d31730d</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/Count_matrix2.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/DGE_Analysis.Rmd</code>) and HTML
+(<code>docs/DGE_Analysis.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d31730d64c2d509cb4e48ac77ce13ca85cf5283e/analysis/DGE_Analysis.Rmd" target="_blank">d31730d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-06
+</td>
+<td>
+Added DGE Analysis with structured chunks
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="differential-gene-expression-analysis" class="section level2">
+<h2><strong>📌 Differential Gene Expression Analysis </strong></h2>
+<div id="load-required-libraries" class="section level3">
+<h3><strong>1️⃣ Load Required Libraries</strong></h3>
+<pre class="r"><code># Load necessary packages
+library(edgeR)</code></pre>
+<pre><code>Warning: package &#39;edgeR&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;limma&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(limma)
+library(data.table)</code></pre>
+<pre><code>Warning: package &#39;data.table&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>Warning: package &#39;tidyverse&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;purrr&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;dplyr&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;stringr&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;lubridate&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(scales)</code></pre>
+<pre><code>Warning: package &#39;scales&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(biomaRt)</code></pre>
+<pre><code>Warning: package &#39;biomaRt&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(Homo.sapiens)</code></pre>
+<pre><code>Warning: package &#39;AnnotationDbi&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;BiocGenerics&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;Biobase&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;IRanges&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;S4Vectors&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;OrganismDbi&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;GenomicFeatures&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;GenomeInfoDb&#39; was built under R version 4.3.3</code></pre>
+<pre><code>Warning: package &#39;GenomicRanges&#39; was built under R version 4.3.1</code></pre>
+<p>📍 Load Data</p>
+</div>
+</div>
+<div id="normalize-and-filter-counts" class="section level2">
+<h2><strong>📌 Normalize and Filter Counts</strong></h2>
+<pre class="r"><code># ✅ Convert to Log2 CPM
+lcpm &lt;- cpm(counts_matrix, log=TRUE)
+
+# ✅ Filter genes based on rowMeans &gt; 0
+filcpm_matrix &lt;- subset(lcpm, (rowMeans(lcpm) &gt; 0))
+
+# ✅ Check dimensions of filtered matrix
+dim(filcpm_matrix)</code></pre>
+<pre><code>[1] 14279   108</code></pre>
+<pre class="r"><code>head(filcpm_matrix)</code></pre>
+<pre><code>          MCW_SP_JT_R1_R1.bam MCW_SP_JT_R10_R1.bam MCW_SP_JT_R100_R1.bam
+653635               3.499737             3.777758              4.051060
+729737               4.018739             3.087263              2.799033
+102723897            3.581464             3.765087              4.210151
+100132287            3.229725             2.970710              1.422530
+102465432            6.910839             6.896427              5.596078
+100133331            3.044515             2.902929              1.971919
+          MCW_SP_JT_R101_R1.bam MCW_SP_JT_R102_R1.bam MCW_SP_JT_R103_R1.bam
+653635                 3.631547              3.758155              3.982758
+729737                 3.631547              4.399176              4.292059
+102723897              3.707275              3.679166              4.047012
+100132287              2.309608              2.553616              2.748309
+102465432              5.581451              5.117157              5.156085
+100133331              2.674101              2.861516              2.903876
+          MCW_SP_JT_R104_R1.bam MCW_SP_JT_R105_R1.bam MCW_SP_JT_R106_R1.bam
+653635                 3.621628              3.730948              4.424852
+729737                 3.859895              3.335209              2.188740
+102723897              3.830959              3.849826              4.383929
+100132287              2.223026              1.751824              1.409709
+102465432              4.996110              5.818078              5.553327
+100133331              2.576789              2.446809              2.020941
+          MCW_SP_JT_R107_R1.bam MCW_SP_JT_R108_R1.bam MCW_SP_JT_R11_R1.bam
+653635                 3.457651              3.723735             3.844478
+729737                 3.451531              4.198994             4.393697
+102723897              3.254703              3.969588             3.863450
+100132287              1.825924              2.664169             3.400807
+102465432              4.426062              4.868680             6.592588
+100133331              2.483272              3.001402             3.283624
+          MCW_SP_JT_R12_R1.bam MCW_SP_JT_R13_R1.bam MCW_SP_JT_R14_R1.bam
+653635                3.589909             3.545176             3.328201
+729737                3.898580             4.286356             3.861968
+102723897             3.574530             3.616862             3.473598
+100132287             3.349076             3.344798             3.118157
+102465432             6.027172             6.153771             6.533534
+100133331             2.806973             3.138844             2.995086
+          MCW_SP_JT_R15_R1.bam MCW_SP_JT_R16_R1.bam MCW_SP_JT_R17_R1.bam
+653635                3.875850             4.296957             3.630656
+729737                4.247230             3.357586             4.030829
+102723897             3.812616             4.383515             3.316437
+100132287             3.414294             2.734813             3.054069
+102465432             6.497835             6.103301             6.328824
+100133331             3.269659             2.723314             3.129273
+          MCW_SP_JT_R18_R1.bam MCW_SP_JT_R19_R1.bam MCW_SP_JT_R2_R1.bam
+653635                3.164894             3.688006            3.343134
+729737                3.969134             3.558796            3.599682
+102723897             3.407690             3.551664            3.269066
+100132287             3.097226             3.032344            2.839430
+102465432             6.414278             5.698763            6.595579
+100133331             2.764790             3.241816            2.733250
+          MCW_SP_JT_R20_R1.bam MCW_SP_JT_R21_R1.bam MCW_SP_JT_R22_R1.bam
+653635                3.661566             3.768006             3.691687
+729737                3.270063             2.922711             3.627513
+102723897             3.433442             3.486337             3.504276
+100132287             2.930283             2.832376             3.369519
+102465432             6.175604             5.991332             6.385198
+100133331             2.994511             2.772902             3.131144
+          MCW_SP_JT_R23_R1.bam MCW_SP_JT_R24_R1.bam MCW_SP_JT_R25_R1.bam
+653635                3.615626             3.375291             3.798182
+729737                3.281483             3.625161             3.500438
+102723897             3.289137             3.505629             3.521617
+100132287             2.856198             3.214165             3.089806
+102465432             5.843189             6.530526             6.050846
+100133331             2.866466             3.301206             3.159020
+          MCW_SP_JT_R26_R1.bam MCW_SP_JT_R27_R1.bam MCW_SP_JT_R28_R1.bam
+653635                3.656405             3.985945             4.163996
+729737                3.213791             3.358868             2.876598
+102723897             3.620785             3.700588             4.002932
+100132287             2.632912             2.880691             2.774609
+102465432             5.849481             5.759741             5.728299
+100133331             2.873872             2.995369             2.843396
+          MCW_SP_JT_R29_R1.bam MCW_SP_JT_R3_R1.bam MCW_SP_JT_R30_R1.bam
+653635                3.690480            3.708306             3.690736
+729737                3.414789            3.908737             3.395218
+102723897             3.471148            3.451582             3.560313
+100132287             2.885044            2.901147             2.831789
+102465432             5.788580            6.298268             5.660946
+100133331             3.052714            2.981187             3.096700
+          MCW_SP_JT_R31_R1.bam MCW_SP_JT_R32_R1.bam MCW_SP_JT_R33_R1.bam
+653635                3.484063             3.794184             4.059394
+729737                3.530033             3.214611             4.070133
+102723897             3.346964             3.499083             3.713919
+100132287             3.076583             3.060991             3.268120
+102465432             6.339198             5.543553             6.064772
+100133331             3.000254             3.017691             3.323028
+          MCW_SP_JT_R34_R1.bam MCW_SP_JT_R35_R1.bam MCW_SP_JT_R36_R1.bam
+653635                4.067770             3.520514             3.486032
+729737                2.030846             3.638776             3.571840
+102723897             3.648676             3.427179             3.280504
+100132287             2.009051             3.071078             3.322369
+102465432             5.614652             5.835268             5.765707
+100133331             2.269541             3.025487             3.070539
+          MCW_SP_JT_R37_R1.bam MCW_SP_JT_R38_R1.bam MCW_SP_JT_R39_R1.bam
+653635                4.348863             3.865031             3.986159
+729737                3.259608             3.040493             3.342022
+102723897             4.073834             3.750410             3.972660
+100132287             2.468648             2.187540             2.562966
+102465432             5.892568             5.382835             5.330899
+100133331             2.609673             2.222361             2.328735
+          MCW_SP_JT_R4_R1.bam MCW_SP_JT_R40_R1.bam MCW_SP_JT_R41_R1.bam
+653635               3.519166             4.044758             4.005217
+729737               3.303539             3.002627             3.075515
+102723897            3.381588             3.740798             3.745836
+100132287            2.644074             1.895905             2.275072
+102465432            6.190731             5.435471             4.975615
+100133331            2.425670             1.986496             2.275072
+          MCW_SP_JT_R42_R1.bam MCW_SP_JT_R43_R1.bam MCW_SP_JT_R44_R1.bam
+653635                3.974853             4.101836             4.136763
+729737                3.266218             3.461840             3.753420
+102723897             3.917212             3.930917             4.031566
+100132287             2.264998             2.500886             2.304367
+102465432             5.779068             5.471101             5.851456
+100133331             2.438923             2.500886             2.600289
+          MCW_SP_JT_R45_R1.bam MCW_SP_JT_R46_R1.bam MCW_SP_JT_R47_R1.bam
+653635                4.295232             4.555097             4.277421
+729737                3.943473             2.854727             3.763068
+102723897             4.013662             4.401335             3.928326
+100132287             2.613999             2.151772             2.753470
+102465432             5.551270             5.437887             5.271744
+100133331             2.796599             2.201235             2.711388
+          MCW_SP_JT_R48_R1.bam MCW_SP_JT_R49_R1.bam MCW_SP_JT_R5_R1.bam
+653635                4.317992             4.129247            3.629845
+729737                3.713030             3.570782            3.861831
+102723897             4.119661             3.933378            3.534008
+100132287             2.343923             2.371794            3.224695
+102465432             5.182738             5.453640            6.167150
+100133331             2.718915             2.935266            3.102742
+          MCW_SP_JT_R50_R1.bam MCW_SP_JT_R51_R1.bam MCW_SP_JT_R52_R1.bam
+653635                3.931173             4.000536             4.500237
+729737                3.420081             3.211480             2.163499
+102723897             3.596454             3.851259             4.332327
+100132287             2.201911             2.414032             1.801331
+102465432             5.588742             5.582633             5.931258
+100133331             2.375675             2.530857             1.900746
+          MCW_SP_JT_R53_R1.bam MCW_SP_JT_R54_R1.bam MCW_SP_JT_R55_R1.bam
+653635                3.953858             3.915305             3.953640
+729737                3.537281             2.983090             3.958270
+102723897             3.738614             3.904451             3.832775
+100132287             2.744298             2.567489             2.930663
+102465432             5.419675             5.480903             5.890536
+100133331             2.340340             2.511366             2.986128
+          MCW_SP_JT_R56_R1.bam MCW_SP_JT_R57_R1.bam MCW_SP_JT_R58_R1.bam
+653635                3.951355             4.099690             3.831640
+729737                4.102389             3.916661             3.763764
+102723897             3.782640             3.931986             3.562742
+100132287             2.803895             2.700634             2.689516
+102465432             5.927505             6.206681             6.011032
+100133331             2.961006             3.001092             2.614427
+          MCW_SP_JT_R59_R1.bam MCW_SP_JT_R6_R1.bam MCW_SP_JT_R60_R1.bam
+653635                3.999480            3.775726             3.667632
+729737                3.921735            3.821188             4.085040
+102723897             3.970814            3.610768             3.745294
+100132287             2.936536            3.244299             3.004008
+102465432             6.251708            6.110782             5.746996
+100133331             2.975535            3.038354             3.178405
+          MCW_SP_JT_R61_R1.bam MCW_SP_JT_R62_R1.bam MCW_SP_JT_R63_R1.bam
+653635                4.261731             4.206359             4.627284
+729737                4.488571             4.316587             3.700621
+102723897             4.218190             4.206359             4.536705
+100132287             3.458278             3.411851             2.569848
+102465432             5.949511             5.952886             6.334155
+100133331             3.292603             3.175974             2.841571
+          MCW_SP_JT_R64_R1.bam MCW_SP_JT_R65_R1.bam MCW_SP_JT_R66_R1.bam
+653635                4.056825             4.359597             4.322034
+729737                3.710437             4.198531             4.355106
+102723897             4.272144             4.074462             4.078431
+100132287             2.790233             2.985665             3.236722
+102465432             6.701197             6.612388             5.872602
+100133331             2.353918             3.230118             3.285575
+          MCW_SP_JT_R67_R1.bam MCW_SP_JT_R68_R1.bam MCW_SP_JT_R69_R1.bam
+653635                4.093075             4.169506             4.284365
+729737                3.975643             4.056729             2.967701
+102723897             3.828573             3.939104             4.130434
+100132287             3.069437             2.758961             2.355694
+102465432             6.213256             4.388984             6.032591
+100133331             3.019448             3.074312             2.462787
+          MCW_SP_JT_R7_R1.bam MCW_SP_JT_R70_R1.bam MCW_SP_JT_R71_R1.bam
+653635               3.702870             4.350319             3.862762
+729737               3.906166             2.824111             3.780351
+102723897            3.653521             4.256793             3.765307
+100132287            3.307701             2.583392             2.989805
+102465432            6.785167             6.981247             6.019382
+100133331            3.055626             2.313010             3.145096
+          MCW_SP_JT_R72_R1.bam MCW_SP_JT_R73_R1.bam MCW_SP_JT_R74_R1.bam
+653635                4.255097             3.425747             3.347306
+729737                3.772805             4.160997             3.872723
+102723897             4.178903             3.519192             3.217809
+100132287             2.763989             3.346373             2.956400
+102465432             6.549999             6.696252             5.672028
+100133331             2.976098             3.247889             2.975381
+          MCW_SP_JT_R75_R1.bam MCW_SP_JT_R76_R1.bam MCW_SP_JT_R77_R1.bam
+653635                3.553832             3.256103             3.535859
+729737                3.439417             3.579072             4.101951
+102723897             3.592140             3.304026             3.485473
+100132287             2.572931             2.640369             3.081263
+102465432             5.635716             6.157283             6.012195
+100133331             2.818898             2.820624             3.365227
+          MCW_SP_JT_R78_R1.bam MCW_SP_JT_R79_R1.bam MCW_SP_JT_R8_R1.bam
+653635                3.288436             3.520963            3.901020
+729737                4.107062             3.973416            4.399858
+102723897             3.271644             3.543245            3.755467
+100132287             3.148289             3.057062            3.623059
+102465432             5.891118             6.221300            6.711815
+100133331             3.313262             3.213453            3.452829
+          MCW_SP_JT_R80_R1.bam MCW_SP_JT_R81_R1.bam MCW_SP_JT_R82_R1.bam
+653635                3.263082             3.885913             3.122967
+729737                3.930600             3.002975             2.899120
+102723897             3.335835             3.839760             3.015380
+100132287             2.727055             2.113936             2.262756
+102465432             6.066384             6.109827             6.208978
+100133331             3.299917             2.250462             2.353913
+          MCW_SP_JT_R83_R1.bam MCW_SP_JT_R84_R1.bam MCW_SP_JT_R85_R1.bam
+653635                3.354050             3.309292             3.468823
+729737                3.735780             3.758927             3.775752
+102723897             3.330447             3.213049             3.715256
+100132287             2.941293             3.055458             3.046060
+102465432             5.653153             5.990854             5.813942
+100133331             3.002313             3.073842             3.148749
+          MCW_SP_JT_R86_R1.bam MCW_SP_JT_R87_R1.bam MCW_SP_JT_R88_R1.bam
+653635                3.358211             3.716322             3.667240
+729737                3.696974             3.389934             2.510252
+102723897             3.205285             3.784776             4.029517
+100132287             2.935293             2.454054             2.494602
+102465432             5.188764             6.005393             6.339715
+100133331             3.043734             2.686519             2.766293
+          MCW_SP_JT_R89_R1.bam MCW_SP_JT_R9_R1.bam MCW_SP_JT_R90_R1.bam
+653635                3.473576            3.935642             3.533785
+729737                3.916589            4.286806             4.045149
+102723897             3.651816            3.825236             3.699269
+100132287             3.233295            3.114900             3.392174
+102465432             5.450633            6.776393             5.644493
+100133331             3.240746            3.072566             3.471774
+          MCW_SP_JT_R91_R1.bam MCW_SP_JT_R92_R1.bam MCW_SP_JT_R93_R1.bam
+653635                3.683725             3.847415             3.817342
+729737                3.739641             3.559183             3.305198
+102723897             3.695083             3.833350             3.772041
+100132287             2.559014             2.192977             2.141834
+102465432             5.694894             4.941701             4.935861
+100133331             2.958286             2.472487             2.688600
+          MCW_SP_JT_R94_R1.bam MCW_SP_JT_R95_R1.bam MCW_SP_JT_R96_R1.bam
+653635                3.920662             3.788745             3.768642
+729737                3.817067             3.487133             3.628417
+102723897             4.040498             3.788745             3.759065
+100132287             2.309429             2.159710             2.088023
+102465432             5.661112             5.780593             5.021250
+100133331             2.454577             2.624960             2.661193
+          MCW_SP_JT_R97_R1.bam MCW_SP_JT_R98_R1.bam MCW_SP_JT_R99_R1.bam
+653635                3.821755             3.837615             3.733312
+729737                4.190234             3.262419             4.049943
+102723897             3.900803             3.800656             3.944660
+100132287             2.680030             1.823367             2.400419
+102465432             5.551285             6.230572             5.490575
+100133331             2.868814             1.946904             2.789010</code></pre>
+</div>
+<div id="prepare-dgelist-object" class="section level2">
+<h2><strong>📌 Prepare DGEList Object</strong></h2>
+<pre class="r"><code># Subset count matrix based on filtered CPM matrix
+x &lt;- counts_matrix[row.names(filcpm_matrix),]
+dim(x)</code></pre>
+<pre><code>[1] 14279   108</code></pre>
+<pre class="r"><code># Modify Metadata
+Metadata_2 &lt;- Metadata
+rownames(Metadata_2) &lt;- Metadata_2$Sample_bam
+colnames(x) &lt;- Metadata_2$Sample_ID
+rownames(Metadata_2) &lt;- Metadata_2$Sample_ID
+
+Metadata_2$Drug_time &lt;- make.names(Metadata_2$Drug_time)
+Metadata_2$Ind &lt;- as.character(Metadata_2$Ind)
+
+# ✅ Create DGEList object
+dge &lt;- DGEList(counts = x)
+dge$samples$group &lt;- factor(Metadata_2$Drug_time)
+dge &lt;- calcNormFactors(dge, method = &quot;TMM&quot;)
+
+# ✅ Check normalization factors
+dge$samples</code></pre>
+<pre><code>                             group lib.size norm.factors
+CX-5461_0.1_3_17-3   CX.5461_0.1_3 21200035    1.0102693
+DOX_0.5_24_17-3         DOX_0.5_24 16563771    1.1076182
+DOX_0.5_24_87-1         DOX_0.5_24 21656653    0.9933568
+VEH_0.1_24_87-1         VEH_0.1_24 22426842    0.9766783
+VEH_0.5_24_87-1         VEH_0.5_24 22162275    0.9924549
+CX-5461_0.1_48_87-1 CX.5461_0.1_48 22187620    0.9683497
+CX-5461_0.5_48_87-1 CX.5461_0.5_48 20782167    0.9814665
+DOX_0.1_48_87-1         DOX_0.1_48 25382841    1.0011030
+DOX_0.5_48_87-1         DOX_0.5_48 19863531    1.0541528
+VEH_0.1_48_87-1         VEH_0.1_48 21473253    1.0138011
+VEH_0.5_48_87-1         VEH_0.5_48 20337337    1.0219756
+VEH_0.1_24_17-3         VEH_0.1_24 15750538    0.9952313
+VEH_0.5_24_17-3         VEH_0.5_24 15638967    1.0367909
+CX-5461_0.1_48_17-3 CX.5461_0.1_48 18465522    0.9543636
+CX-5461_0.5_48_17-3 CX.5461_0.5_48 16876134    0.9636074
+DOX_0.1_48_17-3         DOX_0.1_48 20609601    0.9839708
+DOX_0.5_48_17-3         DOX_0.5_48 18829944    1.1876478
+VEH_0.1_48_17-3         VEH_0.1_48 24712537    0.9804184
+VEH_0.5_48_17-3         VEH_0.5_48 17006648    0.9707617
+CX-5461_0.1_3_84-1   CX.5461_0.1_3 17178171    1.0219387
+CX-5461_0.5_3_17-3   CX.5461_0.5_3 17694385    1.0103837
+CX-5461_0.5_3_84-1   CX.5461_0.5_3 17261114    1.0060170
+DOX_0.1_3_84-1           DOX_0.1_3 17352493    0.9911466
+DOX_0.5_3_84-1           DOX_0.5_3 17757477    1.0034479
+VEH_0.1_3_84-1           VEH_0.1_3 19305213    1.0354377
+VEH_0.5_3_84-1           VEH_0.5_3 17297185    1.0285524
+CX-5461_0.1_24_84-1 CX.5461_0.1_24 23860498    0.9857321
+CX-5461_0.5_24_84-1 CX.5461_0.5_24 19482159    0.9638391
+DOX_0.1_24_84-1         DOX_0.1_24 19659504    0.9565317
+DOX_0.5_24_84-1         DOX_0.5_24 17875612    1.0212021
+VEH_0.1_24_84-1         VEH_0.1_24 16449210    0.9998393
+DOX_0.1_3_17-3           DOX_0.1_3 16400599    0.9962197
+VEH_0.5_24_84-1         VEH_0.5_24 18783630    0.9616033
+CX-5461_0.1_48_84-1 CX.5461_0.1_48 13781326    0.9400278
+CX-5461_0.5_48_84-1 CX.5461_0.5_48 20232591    0.9563694
+DOX_0.1_48_84-1         DOX_0.1_48 16028063    0.9651474
+DOX_0.5_48_84-1         DOX_0.5_48 16269098    1.0652791
+VEH_0.1_48_84-1         VEH_0.1_48 15276408    0.9612979
+VEH_0.5_48_84-1         VEH_0.5_48 17447290    1.0050272
+CX-5461_0.1_3_90-1   CX.5461_0.1_3 15807726    0.9991915
+CX-5461_0.5_3_90-1   CX.5461_0.5_3 17946649    0.9956913
+DOX_0.1_3_90-1           DOX_0.1_3 20294777    0.9830679
+DOX_0.5_3_17-3           DOX_0.5_3 18191217    0.9080939
+DOX_0.5_3_90-1           DOX_0.5_3 20699125    0.9833929
+VEH_0.1_3_90-1           VEH_0.1_3 20027541    0.9953796
+VEH_0.5_3_90-1           VEH_0.5_3 17833214    1.0003025
+CX-5461_0.1_24_90-1 CX.5461_0.1_24 15094639    1.0102577
+CX-5461_0.5_24_90-1 CX.5461_0.5_24 17758047    1.0114258
+DOX_0.1_24_90-1         DOX_0.1_24 16921727    0.9900805
+DOX_0.5_24_90-1         DOX_0.5_24 19271264    1.0068767
+VEH_0.1_24_90-1         VEH_0.1_24 20601703    0.9898691
+VEH_0.5_24_90-1         VEH_0.5_24 19875553    1.0060950
+CX-5461_0.1_48_90-1 CX.5461_0.1_48 23817456    1.0255425
+VEH_0.1_3_17-3           VEH_0.1_3 26353255    0.9919794
+CX-5461_0.5_48_90-1 CX.5461_0.5_48 18651093    1.0370010
+DOX_0.1_48_90-1         DOX_0.1_48 17767662    1.0233343
+DOX_0.5_48_90-1         DOX_0.5_48 20031141    1.1189284
+VEH_0.1_48_90-1         VEH_0.1_48 19523120    1.0484497
+VEH_0.5_48_90-1         VEH_0.5_48 17657193    1.0550052
+CX-5461_0.1_3_75-1   CX.5461_0.1_3 20046785    0.9894881
+CX-5461_0.5_3_75-1   CX.5461_0.5_3 19885297    0.9767025
+DOX_0.1_3_75-1           DOX_0.1_3 18575114    0.9755788
+DOX_0.5_3_75-1           DOX_0.5_3 15260497    0.9562336
+VEH_0.1_3_75-1           VEH_0.1_3 19040007    0.9839769
+VEH_0.5_3_17-3           VEH_0.5_3 18217503    0.9735069
+VEH_0.5_3_75-1           VEH_0.5_3 21311999    0.9663251
+CX-5461_0.1_24_75-1 CX.5461_0.1_24 19256517    1.0184093
+CX-5461_0.5_24_75-1 CX.5461_0.5_24 14304255    1.0186309
+DOX_0.1_24_75-1         DOX_0.1_24 21875105    1.0386302
+DOX_0.5_24_75-1         DOX_0.5_24 17032433    0.9686987
+VEH_0.1_24_75-1         VEH_0.1_24 19796422    1.0295019
+VEH_0.5_24_75-1         VEH_0.5_24 21524523    1.0376940
+CX-5461_0.1_48_75-1 CX.5461_0.1_48 20955873    0.9752971
+CX-5461_0.5_48_75-1 CX.5461_0.5_48 19924867    0.9768371
+DOX_0.1_48_75-1         DOX_0.1_48 17698471    1.0369925
+CX-5461_0.1_24_17-3 CX.5461_0.1_24 18239213    0.9808618
+DOX_0.5_48_75-1         DOX_0.5_48 15422887    1.0296304
+VEH_0.1_48_75-1         VEH_0.1_48 21014387    1.0100812
+VEH_0.5_48_75-1         VEH_0.5_48 21346438    1.0015670
+CX-5461_0.1_3_78-1   CX.5461_0.1_3 20824890    0.9686975
+CX-5461_0.5_3_78-1   CX.5461_0.5_3 19425405    1.0100551
+DOX_0.1_3_78-1           DOX_0.1_3 18950843    0.9933529
+DOX_0.5_3_78-1           DOX_0.5_3 21654404    0.9808038
+VEH_0.1_3_78-1           VEH_0.1_3 20054872    0.9802655
+VEH_0.5_3_78-1           VEH_0.5_3 17661233    1.0220629
+CX-5461_0.1_24_78-1 CX.5461_0.1_24 16754941    0.9785599
+CX-5461_0.5_24_17-3 CX.5461_0.5_24 16014473    1.0010257
+CX-5461_0.5_24_78-1 CX.5461_0.5_24 16077548    0.9819166
+DOX_0.1_24_78-1         DOX_0.1_24 27842910    0.9788383
+DOX_0.5_24_78-1         DOX_0.5_24  6326261    1.0007627
+VEH_0.1_24_78-1         VEH_0.1_24 18032196    0.9767098
+VEH_0.5_24_78-1         VEH_0.5_24 18727398    0.9931695
+CX-5461_0.1_48_78-1 CX.5461_0.1_48 21292146    1.0036183
+CX-5461_0.5_48_78-1 CX.5461_0.5_48 18392707    0.9988905
+DOX_0.1_48_78-1         DOX_0.1_48 18735925    1.0433629
+DOX_0.5_48_78-1         DOX_0.5_48 16079343    1.1063695
+VEH_0.1_48_78-1         VEH_0.1_48 20500742    1.0149206
+DOX_0.1_24_17-3         DOX_0.1_24 23900805    1.0243090
+VEH_0.5_48_78-1         VEH_0.5_48 18433692    1.0396358
+CX-5461_0.1_3_87-1   CX.5461_0.1_3 19664754    0.9573708
+CX-5461_0.5_3_87-1   CX.5461_0.5_3 21451819    1.0192062
+DOX_0.1_3_87-1           DOX_0.1_3 20624889    0.9539861
+DOX_0.5_3_87-1           DOX_0.5_3 22838835    0.9919424
+VEH_0.1_3_87-1           VEH_0.1_3 17616767    0.9841881
+VEH_0.5_3_87-1           VEH_0.5_3 22148086    1.0203028
+CX-5461_0.1_24_87-1 CX.5461_0.1_24 30093416    0.9439250
+CX-5461_0.5_24_87-1 CX.5461_0.5_24 22093483    0.9589794
+DOX_0.1_24_87-1         DOX_0.1_24 21415578    0.9549937</code></pre>
+</div>
+<div id="create-design-matrix" class="section level2">
+<h2><strong>📌 Create Design Matrix</strong></h2>
+<pre class="r"><code># ✅ Create Design Matrix
+design &lt;- model.matrix(~ 0 + Metadata_2$Drug_time)
+colnames(design) &lt;- gsub(&quot;Metadata_2\\$Drug_time&quot;, &quot;&quot;, colnames(design))
+design</code></pre>
+<pre><code>    CX.5461_0.1_24 CX.5461_0.1_3 CX.5461_0.1_48 CX.5461_0.5_24 CX.5461_0.5_3
+1                0             1              0              0             0
+2                0             0              0              0             0
+3                0             0              0              0             0
+4                0             0              0              0             0
+5                0             0              0              0             0
+6                0             0              1              0             0
+7                0             0              0              0             0
+8                0             0              0              0             0
+9                0             0              0              0             0
+10               0             0              0              0             0
+11               0             0              0              0             0
+12               0             0              0              0             0
+13               0             0              0              0             0
+14               0             0              1              0             0
+15               0             0              0              0             0
+16               0             0              0              0             0
+17               0             0              0              0             0
+18               0             0              0              0             0
+19               0             0              0              0             0
+20               0             1              0              0             0
+21               0             0              0              0             1
+22               0             0              0              0             1
+23               0             0              0              0             0
+24               0             0              0              0             0
+25               0             0              0              0             0
+26               0             0              0              0             0
+27               1             0              0              0             0
+28               0             0              0              1             0
+29               0             0              0              0             0
+30               0             0              0              0             0
+31               0             0              0              0             0
+32               0             0              0              0             0
+33               0             0              0              0             0
+34               0             0              1              0             0
+35               0             0              0              0             0
+36               0             0              0              0             0
+37               0             0              0              0             0
+38               0             0              0              0             0
+39               0             0              0              0             0
+40               0             1              0              0             0
+41               0             0              0              0             1
+42               0             0              0              0             0
+43               0             0              0              0             0
+44               0             0              0              0             0
+45               0             0              0              0             0
+46               0             0              0              0             0
+47               1             0              0              0             0
+48               0             0              0              1             0
+49               0             0              0              0             0
+50               0             0              0              0             0
+51               0             0              0              0             0
+52               0             0              0              0             0
+53               0             0              1              0             0
+54               0             0              0              0             0
+55               0             0              0              0             0
+56               0             0              0              0             0
+57               0             0              0              0             0
+58               0             0              0              0             0
+59               0             0              0              0             0
+60               0             1              0              0             0
+61               0             0              0              0             1
+62               0             0              0              0             0
+63               0             0              0              0             0
+64               0             0              0              0             0
+65               0             0              0              0             0
+66               0             0              0              0             0
+67               1             0              0              0             0
+68               0             0              0              1             0
+69               0             0              0              0             0
+70               0             0              0              0             0
+71               0             0              0              0             0
+72               0             0              0              0             0
+73               0             0              1              0             0
+74               0             0              0              0             0
+75               0             0              0              0             0
+76               1             0              0              0             0
+77               0             0              0              0             0
+78               0             0              0              0             0
+79               0             0              0              0             0
+80               0             1              0              0             0
+81               0             0              0              0             1
+82               0             0              0              0             0
+83               0             0              0              0             0
+84               0             0              0              0             0
+85               0             0              0              0             0
+86               1             0              0              0             0
+87               0             0              0              1             0
+88               0             0              0              1             0
+89               0             0              0              0             0
+90               0             0              0              0             0
+91               0             0              0              0             0
+92               0             0              0              0             0
+93               0             0              1              0             0
+94               0             0              0              0             0
+95               0             0              0              0             0
+96               0             0              0              0             0
+97               0             0              0              0             0
+98               0             0              0              0             0
+99               0             0              0              0             0
+100              0             1              0              0             0
+101              0             0              0              0             1
+102              0             0              0              0             0
+103              0             0              0              0             0
+104              0             0              0              0             0
+105              0             0              0              0             0
+106              1             0              0              0             0
+107              0             0              0              1             0
+108              0             0              0              0             0
+    CX.5461_0.5_48 DOX_0.1_24 DOX_0.1_3 DOX_0.1_48 DOX_0.5_24 DOX_0.5_3
+1                0          0         0          0          0         0
+2                0          0         0          0          1         0
+3                0          0         0          0          1         0
+4                0          0         0          0          0         0
+5                0          0         0          0          0         0
+6                0          0         0          0          0         0
+7                1          0         0          0          0         0
+8                0          0         0          1          0         0
+9                0          0         0          0          0         0
+10               0          0         0          0          0         0
+11               0          0         0          0          0         0
+12               0          0         0          0          0         0
+13               0          0         0          0          0         0
+14               0          0         0          0          0         0
+15               1          0         0          0          0         0
+16               0          0         0          1          0         0
+17               0          0         0          0          0         0
+18               0          0         0          0          0         0
+19               0          0         0          0          0         0
+20               0          0         0          0          0         0
+21               0          0         0          0          0         0
+22               0          0         0          0          0         0
+23               0          0         1          0          0         0
+24               0          0         0          0          0         1
+25               0          0         0          0          0         0
+26               0          0         0          0          0         0
+27               0          0         0          0          0         0
+28               0          0         0          0          0         0
+29               0          1         0          0          0         0
+30               0          0         0          0          1         0
+31               0          0         0          0          0         0
+32               0          0         1          0          0         0
+33               0          0         0          0          0         0
+34               0          0         0          0          0         0
+35               1          0         0          0          0         0
+36               0          0         0          1          0         0
+37               0          0         0          0          0         0
+38               0          0         0          0          0         0
+39               0          0         0          0          0         0
+40               0          0         0          0          0         0
+41               0          0         0          0          0         0
+42               0          0         1          0          0         0
+43               0          0         0          0          0         1
+44               0          0         0          0          0         1
+45               0          0         0          0          0         0
+46               0          0         0          0          0         0
+47               0          0         0          0          0         0
+48               0          0         0          0          0         0
+49               0          1         0          0          0         0
+50               0          0         0          0          1         0
+51               0          0         0          0          0         0
+52               0          0         0          0          0         0
+53               0          0         0          0          0         0
+54               0          0         0          0          0         0
+55               1          0         0          0          0         0
+56               0          0         0          1          0         0
+57               0          0         0          0          0         0
+58               0          0         0          0          0         0
+59               0          0         0          0          0         0
+60               0          0         0          0          0         0
+61               0          0         0          0          0         0
+62               0          0         1          0          0         0
+63               0          0         0          0          0         1
+64               0          0         0          0          0         0
+65               0          0         0          0          0         0
+66               0          0         0          0          0         0
+67               0          0         0          0          0         0
+68               0          0         0          0          0         0
+69               0          1         0          0          0         0
+70               0          0         0          0          1         0
+71               0          0         0          0          0         0
+72               0          0         0          0          0         0
+73               0          0         0          0          0         0
+74               1          0         0          0          0         0
+75               0          0         0          1          0         0
+76               0          0         0          0          0         0
+77               0          0         0          0          0         0
+78               0          0         0          0          0         0
+79               0          0         0          0          0         0
+80               0          0         0          0          0         0
+81               0          0         0          0          0         0
+82               0          0         1          0          0         0
+83               0          0         0          0          0         1
+84               0          0         0          0          0         0
+85               0          0         0          0          0         0
+86               0          0         0          0          0         0
+87               0          0         0          0          0         0
+88               0          0         0          0          0         0
+89               0          1         0          0          0         0
+90               0          0         0          0          1         0
+91               0          0         0          0          0         0
+92               0          0         0          0          0         0
+93               0          0         0          0          0         0
+94               1          0         0          0          0         0
+95               0          0         0          1          0         0
+96               0          0         0          0          0         0
+97               0          0         0          0          0         0
+98               0          1         0          0          0         0
+99               0          0         0          0          0         0
+100              0          0         0          0          0         0
+101              0          0         0          0          0         0
+102              0          0         1          0          0         0
+103              0          0         0          0          0         1
+104              0          0         0          0          0         0
+105              0          0         0          0          0         0
+106              0          0         0          0          0         0
+107              0          0         0          0          0         0
+108              0          1         0          0          0         0
+    DOX_0.5_48 VEH_0.1_24 VEH_0.1_3 VEH_0.1_48 VEH_0.5_24 VEH_0.5_3 VEH_0.5_48
+1            0          0         0          0          0         0          0
+2            0          0         0          0          0         0          0
+3            0          0         0          0          0         0          0
+4            0          1         0          0          0         0          0
+5            0          0         0          0          1         0          0
+6            0          0         0          0          0         0          0
+7            0          0         0          0          0         0          0
+8            0          0         0          0          0         0          0
+9            1          0         0          0          0         0          0
+10           0          0         0          1          0         0          0
+11           0          0         0          0          0         0          1
+12           0          1         0          0          0         0          0
+13           0          0         0          0          1         0          0
+14           0          0         0          0          0         0          0
+15           0          0         0          0          0         0          0
+16           0          0         0          0          0         0          0
+17           1          0         0          0          0         0          0
+18           0          0         0          1          0         0          0
+19           0          0         0          0          0         0          1
+20           0          0         0          0          0         0          0
+21           0          0         0          0          0         0          0
+22           0          0         0          0          0         0          0
+23           0          0         0          0          0         0          0
+24           0          0         0          0          0         0          0
+25           0          0         1          0          0         0          0
+26           0          0         0          0          0         1          0
+27           0          0         0          0          0         0          0
+28           0          0         0          0          0         0          0
+29           0          0         0          0          0         0          0
+30           0          0         0          0          0         0          0
+31           0          1         0          0          0         0          0
+32           0          0         0          0          0         0          0
+33           0          0         0          0          1         0          0
+34           0          0         0          0          0         0          0
+35           0          0         0          0          0         0          0
+36           0          0         0          0          0         0          0
+37           1          0         0          0          0         0          0
+38           0          0         0          1          0         0          0
+39           0          0         0          0          0         0          1
+40           0          0         0          0          0         0          0
+41           0          0         0          0          0         0          0
+42           0          0         0          0          0         0          0
+43           0          0         0          0          0         0          0
+44           0          0         0          0          0         0          0
+45           0          0         1          0          0         0          0
+46           0          0         0          0          0         1          0
+47           0          0         0          0          0         0          0
+48           0          0         0          0          0         0          0
+49           0          0         0          0          0         0          0
+50           0          0         0          0          0         0          0
+51           0          1         0          0          0         0          0
+52           0          0         0          0          1         0          0
+53           0          0         0          0          0         0          0
+54           0          0         1          0          0         0          0
+55           0          0         0          0          0         0          0
+56           0          0         0          0          0         0          0
+57           1          0         0          0          0         0          0
+58           0          0         0          1          0         0          0
+59           0          0         0          0          0         0          1
+60           0          0         0          0          0         0          0
+61           0          0         0          0          0         0          0
+62           0          0         0          0          0         0          0
+63           0          0         0          0          0         0          0
+64           0          0         1          0          0         0          0
+65           0          0         0          0          0         1          0
+66           0          0         0          0          0         1          0
+67           0          0         0          0          0         0          0
+68           0          0         0          0          0         0          0
+69           0          0         0          0          0         0          0
+70           0          0         0          0          0         0          0
+71           0          1         0          0          0         0          0
+72           0          0         0          0          1         0          0
+73           0          0         0          0          0         0          0
+74           0          0         0          0          0         0          0
+75           0          0         0          0          0         0          0
+76           0          0         0          0          0         0          0
+77           1          0         0          0          0         0          0
+78           0          0         0          1          0         0          0
+79           0          0         0          0          0         0          1
+80           0          0         0          0          0         0          0
+81           0          0         0          0          0         0          0
+82           0          0         0          0          0         0          0
+83           0          0         0          0          0         0          0
+84           0          0         1          0          0         0          0
+85           0          0         0          0          0         1          0
+86           0          0         0          0          0         0          0
+87           0          0         0          0          0         0          0
+88           0          0         0          0          0         0          0
+89           0          0         0          0          0         0          0
+90           0          0         0          0          0         0          0
+91           0          1         0          0          0         0          0
+92           0          0         0          0          1         0          0
+93           0          0         0          0          0         0          0
+94           0          0         0          0          0         0          0
+95           0          0         0          0          0         0          0
+96           1          0         0          0          0         0          0
+97           0          0         0          1          0         0          0
+98           0          0         0          0          0         0          0
+99           0          0         0          0          0         0          1
+100          0          0         0          0          0         0          0
+101          0          0         0          0          0         0          0
+102          0          0         0          0          0         0          0
+103          0          0         0          0          0         0          0
+104          0          0         1          0          0         0          0
+105          0          0         0          0          0         1          0
+106          0          0         0          0          0         0          0
+107          0          0         0          0          0         0          0
+108          0          0         0          0          0         0          0
+attr(,&quot;assign&quot;)
+ [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+attr(,&quot;contrasts&quot;)
+attr(,&quot;contrasts&quot;)$`Metadata_2$Drug_time`
+[1] &quot;contr.treatment&quot;</code></pre>
+</div>
+<div id="voom-transformation-and-linear-modeling"
+class="section level2">
+<h2><strong>📌 Voom Transformation and Linear Modeling</strong></h2>
+<pre class="r"><code># ✅ Duplicate Correlation for Individual Effect
+corfit &lt;- duplicateCorrelation(object = dge$counts, design = design, block = Metadata_2$Ind)
+
+# ✅ Voom Transformation
+v &lt;- voom(dge, design, block = Metadata_2$Ind, correlation = corfit$consensus.correlation, plot = TRUE)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/Voom-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># ✅ Fit Linear Model
+fit &lt;- lmFit(v, design, block = Metadata_2$Ind, correlation = corfit$consensus.correlation)</code></pre>
+</div>
+<div id="create-contrast-matrix" class="section level2">
+<h2><strong>📌 Create Contrast Matrix</strong></h2>
+<pre class="r"><code>contrast_matrix &lt;- makeContrasts(
+  CX_0.1_3vsVEH_0.1_3 = CX.5461_0.1_3 - VEH_0.1_3,
+  CX_0.1_24vsVEH_0.1_24 = CX.5461_0.1_24 - VEH_0.1_24,
+  CX_0.1_48vsVEH_0.1_48 = CX.5461_0.1_48 - VEH_0.1_48,
+  CX_0.5_3vsVEH_0.5_3 = CX.5461_0.5_3 - VEH_0.5_3,
+  CX_0.5_24vsVEH_0.5_24 = CX.5461_0.5_24 - VEH_0.5_24,
+  CX_0.5_48vsVEH_0.5_48 = CX.5461_0.5_48 - VEH_0.5_48,
+  DOX_0.1_3vsVEH_0.1_3 = DOX_0.1_3 - VEH_0.1_3,
+  DOX_0.1_24vsVEH_0.1_24 = DOX_0.1_24 - VEH_0.1_24,
+  DOX_0.1_48vsVEH_0.1_48 = DOX_0.1_48 - VEH_0.1_48,
+  DOX_0.5_3vsVEH_0.5_3 = DOX_0.5_3 - VEH_0.5_3,
+  DOX_0.5_24vsVEH_0.5_24 = DOX_0.5_24 - VEH_0.5_24,
+  DOX_0.5_48vsVEH_0.5_48 = DOX_0.5_48 - VEH_0.5_48,
+  levels = design
+)</code></pre>
+</div>
+<div id="fit-model-and-generate-results" class="section level2">
+<h2><strong>📌 Fit Model and Generate Results</strong></h2>
+<pre class="r"><code># ✅ Apply Contrasts
+fit2 &lt;- contrasts.fit(fit, contrast_matrix)
+fit2 &lt;- eBayes(fit2)
+
+# ✅ Summary of Results
+results_summary &lt;- decideTests(fit2, adjust.method = &quot;BH&quot;, p.value = 0.05)
+summary(results_summary)</code></pre>
+<pre><code>       CX_0.1_3vsVEH_0.1_3 CX_0.1_24vsVEH_0.1_24 CX_0.1_48vsVEH_0.1_48
+Down                     0                   204                   294
+NotSig               14278                 14074                 13961
+Up                       1                     1                    24
+       CX_0.5_3vsVEH_0.5_3 CX_0.5_24vsVEH_0.5_24 CX_0.5_48vsVEH_0.5_48
+Down                     1                   259                   337
+NotSig               14277                 14001                 13909
+Up                       1                    19                    33
+       DOX_0.1_3vsVEH_0.1_3 DOX_0.1_24vsVEH_0.1_24 DOX_0.1_48vsVEH_0.1_48
+Down                      1                   2528                   1696
+NotSig                14277                   9215                  10818
+Up                        1                   2536                   1765
+       DOX_0.5_3vsVEH_0.5_3 DOX_0.5_24vsVEH_0.5_24 DOX_0.5_48vsVEH_0.5_48
+Down                    476                   5067                   5177
+NotSig                13746                   4451                   4151
+Up                       57                   4761                   4951</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.0 (2023-04-21 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 11 x64 (build 22631)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] Homo.sapiens_1.3.1                     
+ [2] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+ [3] org.Hs.eg.db_3.18.0                    
+ [4] GO.db_3.18.0                           
+ [5] OrganismDbi_1.44.0                     
+ [6] GenomicFeatures_1.54.4                 
+ [7] GenomicRanges_1.54.1                   
+ [8] GenomeInfoDb_1.38.8                    
+ [9] AnnotationDbi_1.64.1                   
+[10] IRanges_2.36.0                         
+[11] S4Vectors_0.40.1                       
+[12] Biobase_2.62.0                         
+[13] BiocGenerics_0.48.1                    
+[14] biomaRt_2.58.2                         
+[15] scales_1.3.0                           
+[16] lubridate_1.9.3                        
+[17] forcats_1.0.0                          
+[18] stringr_1.5.1                          
+[19] dplyr_1.1.4                            
+[20] purrr_1.0.2                            
+[21] readr_2.1.5                            
+[22] tidyr_1.3.1                            
+[23] tibble_3.2.1                           
+[24] ggplot2_3.5.1                          
+[25] tidyverse_2.0.0                        
+[26] data.table_1.14.10                     
+[27] edgeR_4.0.1                            
+[28] limma_3.58.1                           
+[29] workflowr_1.7.1                        
+
+loaded via a namespace (and not attached):
+ [1] DBI_1.2.3                   bitops_1.0-7               
+ [3] RBGL_1.78.0                 rlang_1.1.3                
+ [5] magrittr_2.0.3              git2r_0.35.0               
+ [7] matrixStats_1.4.1           compiler_4.3.0             
+ [9] RSQLite_2.3.3               getPass_0.2-4              
+[11] png_0.1-8                   callr_3.7.6                
+[13] vctrs_0.6.5                 pkgconfig_2.0.3            
+[15] crayon_1.5.3                fastmap_1.1.1              
+[17] dbplyr_2.5.0                XVector_0.42.0             
+[19] Rsamtools_2.18.0            promises_1.3.0             
+[21] rmarkdown_2.29              tzdb_0.4.0                 
+[23] graph_1.80.0                ps_1.8.1                   
+[25] bit_4.0.5                   xfun_0.50                  
+[27] zlibbioc_1.48.0             cachem_1.0.8               
+[29] jsonlite_1.8.9              progress_1.2.3             
+[31] blob_1.2.4                  later_1.3.2                
+[33] DelayedArray_0.28.0         BiocParallel_1.36.0        
+[35] parallel_4.3.0              prettyunits_1.2.0          
+[37] R6_2.5.1                    bslib_0.8.0                
+[39] stringi_1.8.3               rtracklayer_1.62.0         
+[41] jquerylib_0.1.4             SummarizedExperiment_1.32.0
+[43] Rcpp_1.0.12                 knitr_1.49                 
+[45] Matrix_1.6-1.1              httpuv_1.6.15              
+[47] timechange_0.3.0            tidyselect_1.2.1           
+[49] abind_1.4-8                 rstudioapi_0.17.1          
+[51] yaml_2.3.10                 codetools_0.2-20           
+[53] curl_6.0.1                  processx_3.8.5             
+[55] lattice_0.22-5              withr_3.0.2                
+[57] KEGGREST_1.42.0             evaluate_1.0.3             
+[59] BiocFileCache_2.10.2        xml2_1.3.6                 
+[61] Biostrings_2.70.1           BiocManager_1.30.25        
+[63] pillar_1.10.1               filelock_1.0.3             
+[65] MatrixGenerics_1.14.0       whisker_0.4.1              
+[67] generics_0.1.3              rprojroot_2.0.4            
+[69] RCurl_1.98-1.13             hms_1.1.3                  
+[71] munsell_0.5.1               glue_1.7.0                 
+[73] tools_4.3.0                 BiocIO_1.12.0              
+[75] locfit_1.5-9.8              GenomicAlignments_1.38.2   
+[77] fs_1.6.3                    XML_3.99-0.17              
+[79] grid_4.3.0                  colorspace_2.1-0           
+[81] GenomeInfoDbData_1.2.11     restfulr_0.0.15            
+[83] cli_3.6.1                   rappdirs_0.3.3             
+[85] S4Arrays_1.2.1              gtable_0.3.6               
+[87] sass_0.4.9                  digest_0.6.34              
+[89] SparseArray_1.2.4           rjson_0.2.23               
+[91] memoise_2.0.1               htmltools_0.5.8.1          
+[93] lifecycle_1.0.4             httr_1.4.7                 
+[95] statmod_1.5.0               bit64_4.0.5                </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
