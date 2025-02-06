@@ -1,0 +1,132 @@
+---
+title: "Differential Gene Expression Analysis"
+output: workflowr::wflow_html
+editor_options: 
+  chunk_output_type: console
+---
+
+## **📌 Differential Gene Expression Analysis **
+
+### **1️⃣ Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+# Load necessary packages
+library(edgeR)
+library(limma)
+library(data.table)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(biomaRt)
+library(Homo.sapiens)
+```
+
+
+📍 Load Data
+
+```{r load_Data, echo=FALSE, include=FALSE}
+# 📌 Load Metadata
+Metadata <- read.csv("data/Metadata.csv")
+
+# 📌 Load Raw Count Matrix
+file_path <- "data/Count_matrix2.csv"
+counts_matrix <- fread(file_path, data.table = FALSE)
+
+# ✅ Set ENTREZID as row names and remove first two columns
+rownames(counts_matrix) <- counts_matrix$ENTREZID
+counts_matrix <- counts_matrix[, -c(1,2)]
+
+# ✅ Check dimensions
+dim(counts_matrix)
+head(counts_matrix)
+```
+
+## **📌 Normalize and Filter Counts**
+```{r filtercounts, echo=TRUE, message=FALSE}
+# ✅ Convert to Log2 CPM
+lcpm <- cpm(counts_matrix, log=TRUE)
+
+# ✅ Filter genes based on rowMeans > 0
+filcpm_matrix <- subset(lcpm, (rowMeans(lcpm) > 0))
+
+# ✅ Check dimensions of filtered matrix
+dim(filcpm_matrix)
+head(filcpm_matrix)
+```
+
+
+## **📌 Prepare DGEList Object**
+```{r DGElist, echo=TRUE, message=FALSE}
+# Subset count matrix based on filtered CPM matrix
+x <- counts_matrix[row.names(filcpm_matrix),]
+dim(x)
+
+# Modify Metadata
+Metadata_2 <- Metadata
+rownames(Metadata_2) <- Metadata_2$Sample_bam
+colnames(x) <- Metadata_2$Sample_ID
+rownames(Metadata_2) <- Metadata_2$Sample_ID
+
+Metadata_2$Drug_time <- make.names(Metadata_2$Drug_time)
+Metadata_2$Ind <- as.character(Metadata_2$Ind)
+
+# ✅ Create DGEList object
+dge <- DGEList(counts = x)
+dge$samples$group <- factor(Metadata_2$Drug_time)
+dge <- calcNormFactors(dge, method = "TMM")
+
+# ✅ Check normalization factors
+dge$samples
+```
+
+
+## **📌 Create Design Matrix**
+```{r Design Matrix, echo=TRUE, message=FALSE}
+# ✅ Create Design Matrix
+design <- model.matrix(~ 0 + Metadata_2$Drug_time)
+colnames(design) <- gsub("Metadata_2\\$Drug_time", "", colnames(design))
+design
+```
+
+## **📌 Voom Transformation and Linear Modeling**
+```{r Voom, echo=TRUE, message=FALSE}
+# ✅ Duplicate Correlation for Individual Effect
+corfit <- duplicateCorrelation(object = dge$counts, design = design, block = Metadata_2$Ind)
+
+# ✅ Voom Transformation
+v <- voom(dge, design, block = Metadata_2$Ind, correlation = corfit$consensus.correlation, plot = TRUE)
+
+# ✅ Fit Linear Model
+fit <- lmFit(v, design, block = Metadata_2$Ind, correlation = corfit$consensus.correlation)
+```
+
+## **📌 Create Contrast Matrix**
+```{r Contrast, echo=TRUE, message=FALSE}
+contrast_matrix <- makeContrasts(
+  CX_0.1_3vsVEH_0.1_3 = CX.5461_0.1_3 - VEH_0.1_3,
+  CX_0.1_24vsVEH_0.1_24 = CX.5461_0.1_24 - VEH_0.1_24,
+  CX_0.1_48vsVEH_0.1_48 = CX.5461_0.1_48 - VEH_0.1_48,
+  CX_0.5_3vsVEH_0.5_3 = CX.5461_0.5_3 - VEH_0.5_3,
+  CX_0.5_24vsVEH_0.5_24 = CX.5461_0.5_24 - VEH_0.5_24,
+  CX_0.5_48vsVEH_0.5_48 = CX.5461_0.5_48 - VEH_0.5_48,
+  DOX_0.1_3vsVEH_0.1_3 = DOX_0.1_3 - VEH_0.1_3,
+  DOX_0.1_24vsVEH_0.1_24 = DOX_0.1_24 - VEH_0.1_24,
+  DOX_0.1_48vsVEH_0.1_48 = DOX_0.1_48 - VEH_0.1_48,
+  DOX_0.5_3vsVEH_0.5_3 = DOX_0.5_3 - VEH_0.5_3,
+  DOX_0.5_24vsVEH_0.5_24 = DOX_0.5_24 - VEH_0.5_24,
+  DOX_0.5_48vsVEH_0.5_48 = DOX_0.5_48 - VEH_0.5_48,
+  levels = design
+)
+```
+
+## **📌 Fit Model and Generate Results**
+```{r Fit, echo=TRUE, message=FALSE}
+# ✅ Apply Contrasts
+fit2 <- contrasts.fit(fit, contrast_matrix)
+fit2 <- eBayes(fit2)
+
+# ✅ Summary of Results
+results_summary <- decideTests(fit2, adjust.method = "BH", p.value = 0.05)
+summary(results_summary)
+```
+
