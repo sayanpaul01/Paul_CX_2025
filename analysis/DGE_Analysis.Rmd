@@ -56,7 +56,7 @@ head(filcpm_matrix)
 
 
 ## **📌 Prepare DGEList Object**
-```{r DGElist, echo=FALSE, include=FALSE}
+```{r DGElist, echo=TRUE, message=FALSE}
 # Subset count matrix based on filtered CPM matrix
 x <- counts_matrix[row.names(filcpm_matrix),]
 dim(x)
