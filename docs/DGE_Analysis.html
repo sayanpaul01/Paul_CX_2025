@@ -509,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree4306834016806a55ae92ee460303be80c5c8d3d0targetblank4306834a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeeebe7d21cf0f3ca2f52d16c96959ced94418b6a1targetblankeebe7d2a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/4306834016806a55ae92ee460303be80c5c8d3d0" target="_blank">4306834</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/eebe7d21cf0f3ca2f52d16c96959ced94418b6a1" target="_blank">eebe7d2</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree4306834016806a55ae92ee460303be80c5c8d3d0targetblank4306834a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeeebe7d21cf0f3ca2f52d16c96959ced94418b6a1targetblankeebe7d2a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/4306834016806a55ae92ee460303be80c5c8d3d0" target="_blank">4306834</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/eebe7d21cf0f3ca2f52d16c96959ced94418b6a1" target="_blank">eebe7d2</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -545,9 +545,6 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  data/Count_matrix2.csv
 
 </code></pre>
 <p>
@@ -593,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/eebe7d21cf0f3ca2f52d16c96959ced94418b6a1/analysis/DGE_Analysis.Rmd" target="_blank">eebe7d2</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-06
+</td>
+<td>
+wflow_publish("analysis/DGE_Analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/1ab310a2868484e3894cf13650eefbd3753c6e8a/docs/DGE_Analysis.html" target="_blank">1ab310a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -729,6 +760,135 @@ library(scales)</code></pre>
 </div>
 <div id="prepare-dgelist-object" class="section level2">
 <h2><strong>📌 Prepare DGEList Object</strong></h2>
+<pre class="r"><code># Subset count matrix based on filtered CPM matrix
+x &lt;- counts_matrix[row.names(filcpm_matrix),]
+dim(x)</code></pre>
+<pre><code>[1] 14279   108</code></pre>
+<pre class="r"><code># Modify Metadata
+Metadata_2 &lt;- Metadata
+rownames(Metadata_2) &lt;- Metadata_2$Sample_bam
+colnames(x) &lt;- Metadata_2$Sample_ID
+rownames(Metadata_2) &lt;- Metadata_2$Sample_ID
+
+Metadata_2$Drug_time &lt;- make.names(Metadata_2$Drug_time)
+Metadata_2$Ind &lt;- as.character(Metadata_2$Ind)
+
+# ✅ Create DGEList object
+dge &lt;- DGEList(counts = x)
+dge$samples$group &lt;- factor(Metadata_2$Drug_time)
+dge &lt;- calcNormFactors(dge, method = &quot;TMM&quot;)
+
+# ✅ Check normalization factors
+dge$samples</code></pre>
+<pre><code>                             group lib.size norm.factors
+CX-5461_0.1_3_17-3   CX.5461_0.1_3 21200035    1.0102693
+DOX_0.5_24_17-3         DOX_0.5_24 16563771    1.1076182
+DOX_0.5_24_87-1         DOX_0.5_24 21656653    0.9933568
+VEH_0.1_24_87-1         VEH_0.1_24 22426842    0.9766783
+VEH_0.5_24_87-1         VEH_0.5_24 22162275    0.9924549
+CX-5461_0.1_48_87-1 CX.5461_0.1_48 22187620    0.9683497
+CX-5461_0.5_48_87-1 CX.5461_0.5_48 20782167    0.9814665
+DOX_0.1_48_87-1         DOX_0.1_48 25382841    1.0011030
+DOX_0.5_48_87-1         DOX_0.5_48 19863531    1.0541528
+VEH_0.1_48_87-1         VEH_0.1_48 21473253    1.0138011
+VEH_0.5_48_87-1         VEH_0.5_48 20337337    1.0219756
+VEH_0.1_24_17-3         VEH_0.1_24 15750538    0.9952313
+VEH_0.5_24_17-3         VEH_0.5_24 15638967    1.0367909
+CX-5461_0.1_48_17-3 CX.5461_0.1_48 18465522    0.9543636
+CX-5461_0.5_48_17-3 CX.5461_0.5_48 16876134    0.9636074
+DOX_0.1_48_17-3         DOX_0.1_48 20609601    0.9839708
+DOX_0.5_48_17-3         DOX_0.5_48 18829944    1.1876478
+VEH_0.1_48_17-3         VEH_0.1_48 24712537    0.9804184
+VEH_0.5_48_17-3         VEH_0.5_48 17006648    0.9707617
+CX-5461_0.1_3_84-1   CX.5461_0.1_3 17178171    1.0219387
+CX-5461_0.5_3_17-3   CX.5461_0.5_3 17694385    1.0103837
+CX-5461_0.5_3_84-1   CX.5461_0.5_3 17261114    1.0060170
+DOX_0.1_3_84-1           DOX_0.1_3 17352493    0.9911466
+DOX_0.5_3_84-1           DOX_0.5_3 17757477    1.0034479
+VEH_0.1_3_84-1           VEH_0.1_3 19305213    1.0354377
+VEH_0.5_3_84-1           VEH_0.5_3 17297185    1.0285524
+CX-5461_0.1_24_84-1 CX.5461_0.1_24 23860498    0.9857321
+CX-5461_0.5_24_84-1 CX.5461_0.5_24 19482159    0.9638391
+DOX_0.1_24_84-1         DOX_0.1_24 19659504    0.9565317
+DOX_0.5_24_84-1         DOX_0.5_24 17875612    1.0212021
+VEH_0.1_24_84-1         VEH_0.1_24 16449210    0.9998393
+DOX_0.1_3_17-3           DOX_0.1_3 16400599    0.9962197
+VEH_0.5_24_84-1         VEH_0.5_24 18783630    0.9616033
+CX-5461_0.1_48_84-1 CX.5461_0.1_48 13781326    0.9400278
+CX-5461_0.5_48_84-1 CX.5461_0.5_48 20232591    0.9563694
+DOX_0.1_48_84-1         DOX_0.1_48 16028063    0.9651474
+DOX_0.5_48_84-1         DOX_0.5_48 16269098    1.0652791
+VEH_0.1_48_84-1         VEH_0.1_48 15276408    0.9612979
+VEH_0.5_48_84-1         VEH_0.5_48 17447290    1.0050272
+CX-5461_0.1_3_90-1   CX.5461_0.1_3 15807726    0.9991915
+CX-5461_0.5_3_90-1   CX.5461_0.5_3 17946649    0.9956913
+DOX_0.1_3_90-1           DOX_0.1_3 20294777    0.9830679
+DOX_0.5_3_17-3           DOX_0.5_3 18191217    0.9080939
+DOX_0.5_3_90-1           DOX_0.5_3 20699125    0.9833929
+VEH_0.1_3_90-1           VEH_0.1_3 20027541    0.9953796
+VEH_0.5_3_90-1           VEH_0.5_3 17833214    1.0003025
+CX-5461_0.1_24_90-1 CX.5461_0.1_24 15094639    1.0102577
+CX-5461_0.5_24_90-1 CX.5461_0.5_24 17758047    1.0114258
+DOX_0.1_24_90-1         DOX_0.1_24 16921727    0.9900805
+DOX_0.5_24_90-1         DOX_0.5_24 19271264    1.0068767
+VEH_0.1_24_90-1         VEH_0.1_24 20601703    0.9898691
+VEH_0.5_24_90-1         VEH_0.5_24 19875553    1.0060950
+CX-5461_0.1_48_90-1 CX.5461_0.1_48 23817456    1.0255425
+VEH_0.1_3_17-3           VEH_0.1_3 26353255    0.9919794
+CX-5461_0.5_48_90-1 CX.5461_0.5_48 18651093    1.0370010
+DOX_0.1_48_90-1         DOX_0.1_48 17767662    1.0233343
+DOX_0.5_48_90-1         DOX_0.5_48 20031141    1.1189284
+VEH_0.1_48_90-1         VEH_0.1_48 19523120    1.0484497
+VEH_0.5_48_90-1         VEH_0.5_48 17657193    1.0550052
+CX-5461_0.1_3_75-1   CX.5461_0.1_3 20046785    0.9894881
+CX-5461_0.5_3_75-1   CX.5461_0.5_3 19885297    0.9767025
+DOX_0.1_3_75-1           DOX_0.1_3 18575114    0.9755788
+DOX_0.5_3_75-1           DOX_0.5_3 15260497    0.9562336
+VEH_0.1_3_75-1           VEH_0.1_3 19040007    0.9839769
+VEH_0.5_3_17-3           VEH_0.5_3 18217503    0.9735069
+VEH_0.5_3_75-1           VEH_0.5_3 21311999    0.9663251
+CX-5461_0.1_24_75-1 CX.5461_0.1_24 19256517    1.0184093
+CX-5461_0.5_24_75-1 CX.5461_0.5_24 14304255    1.0186309
+DOX_0.1_24_75-1         DOX_0.1_24 21875105    1.0386302
+DOX_0.5_24_75-1         DOX_0.5_24 17032433    0.9686987
+VEH_0.1_24_75-1         VEH_0.1_24 19796422    1.0295019
+VEH_0.5_24_75-1         VEH_0.5_24 21524523    1.0376940
+CX-5461_0.1_48_75-1 CX.5461_0.1_48 20955873    0.9752971
+CX-5461_0.5_48_75-1 CX.5461_0.5_48 19924867    0.9768371
+DOX_0.1_48_75-1         DOX_0.1_48 17698471    1.0369925
+CX-5461_0.1_24_17-3 CX.5461_0.1_24 18239213    0.9808618
+DOX_0.5_48_75-1         DOX_0.5_48 15422887    1.0296304
+VEH_0.1_48_75-1         VEH_0.1_48 21014387    1.0100812
+VEH_0.5_48_75-1         VEH_0.5_48 21346438    1.0015670
+CX-5461_0.1_3_78-1   CX.5461_0.1_3 20824890    0.9686975
+CX-5461_0.5_3_78-1   CX.5461_0.5_3 19425405    1.0100551
+DOX_0.1_3_78-1           DOX_0.1_3 18950843    0.9933529
+DOX_0.5_3_78-1           DOX_0.5_3 21654404    0.9808038
+VEH_0.1_3_78-1           VEH_0.1_3 20054872    0.9802655
+VEH_0.5_3_78-1           VEH_0.5_3 17661233    1.0220629
+CX-5461_0.1_24_78-1 CX.5461_0.1_24 16754941    0.9785599
+CX-5461_0.5_24_17-3 CX.5461_0.5_24 16014473    1.0010257
+CX-5461_0.5_24_78-1 CX.5461_0.5_24 16077548    0.9819166
+DOX_0.1_24_78-1         DOX_0.1_24 27842910    0.9788383
+DOX_0.5_24_78-1         DOX_0.5_24  6326261    1.0007627
+VEH_0.1_24_78-1         VEH_0.1_24 18032196    0.9767098
+VEH_0.5_24_78-1         VEH_0.5_24 18727398    0.9931695
+CX-5461_0.1_48_78-1 CX.5461_0.1_48 21292146    1.0036183
+CX-5461_0.5_48_78-1 CX.5461_0.5_48 18392707    0.9988905
+DOX_0.1_48_78-1         DOX_0.1_48 18735925    1.0433629
+DOX_0.5_48_78-1         DOX_0.5_48 16079343    1.1063695
+VEH_0.1_48_78-1         VEH_0.1_48 20500742    1.0149206
+DOX_0.1_24_17-3         DOX_0.1_24 23900805    1.0243090
+VEH_0.5_48_78-1         VEH_0.5_48 18433692    1.0396358
+CX-5461_0.1_3_87-1   CX.5461_0.1_3 19664754    0.9573708
+CX-5461_0.5_3_87-1   CX.5461_0.5_3 21451819    1.0192062
+DOX_0.1_3_87-1           DOX_0.1_3 20624889    0.9539861
+DOX_0.5_3_87-1           DOX_0.5_3 22838835    0.9919424
+VEH_0.1_3_87-1           VEH_0.1_3 17616767    0.9841881
+VEH_0.5_3_87-1           VEH_0.5_3 22148086    1.0203028
+CX-5461_0.1_24_87-1 CX.5461_0.1_24 30093416    0.9439250
+CX-5461_0.5_24_87-1 CX.5461_0.5_24 22093483    0.9589794
+DOX_0.1_24_87-1         DOX_0.1_24 21415578    0.9549937</code></pre>
 </div>
 <div id="create-design-matrix" class="section level2">
 <h2><strong>📌 Create Design Matrix</strong></h2>
@@ -1147,6 +1307,43 @@ fit2 &lt;- eBayes(fit2)</code></pre>
 <pre class="r"><code># Plot Mean-Variance Trend
 plotSA(fit2, main = &quot;Final model: Mean-Variance trend&quot;)</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/fit2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-fit2-1">
+Past versions of fit2-1.png
+</button>
+</p>
+<div id="fig-fit2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1ab310a2868484e3894cf13650eefbd3753c6e8a/docs/figure/DGE_Analysis.Rmd/fit2-1.png" target="_blank">1ab310a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="summary-of-results" class="section level2">
 <h2><strong>📌Summary of Results</strong></h2>
