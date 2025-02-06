@@ -22,6 +22,11 @@ Welcome to my research website.
 - **[Correlation Heatmap of Samples](https://sayanpaul01.github.io/CX5461_Project/Correlation_Heatmap_of_Samples.html)**
 
 
+## **Differential Gene Expression Analysis**  
+
+- **[DGE Analysis](https://sayanpaul01.github.io/CX5461_Project/DGE_Analysis.html)**
+
+
 
 
 ### 🔗 **Source Code**  
