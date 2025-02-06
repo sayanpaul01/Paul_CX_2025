@@ -509,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree8bfc3198e17cf4191ef896fdfd42d8f8562fcd95targetblank8bfc319a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree9f3ac074d486430a1a32b24765acb844105a2147targetblank9f3ac07a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/8bfc3198e17cf4191ef896fdfd42d8f8562fcd95" target="_blank">8bfc319</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/9f3ac074d486430a1a32b24765acb844105a2147" target="_blank">9f3ac07</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree8bfc3198e17cf4191ef896fdfd42d8f8562fcd95targetblank8bfc319a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree9f3ac074d486430a1a32b24765acb844105a2147targetblank9f3ac07a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/8bfc3198e17cf4191ef896fdfd42d8f8562fcd95" target="_blank">8bfc319</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/9f3ac074d486430a1a32b24765acb844105a2147" target="_blank">9f3ac07</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -590,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/9f3ac074d486430a1a32b24765acb844105a2147/analysis/DGE_Analysis.Rmd" target="_blank">9f3ac07</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-06
+</td>
+<td>
+Added Volcano Plots for all DEGs
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/705bc0beb1901215cb45444b35067e229b579056/docs/DGE_Analysis.html" target="_blank">705bc0b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1400,6 +1434,95 @@ Up                        1                   2536                   1765
 Down                    476                   5067                   5177
 NotSig                13746                   4451                   4151
 Up                       57                   4761                   4951</code></pre>
+</div>
+<div id="extract-differentially-expressed-genes" class="section level2">
+<h2><strong>📌 Extract Differentially Expressed Genes</strong></h2>
+<pre class="r"><code># Generate Top Table for Specific Comparisons
+
+Toptable_CX_0.1_3 &lt;- topTable(fit = fit2, coef = &quot;CX_0.1_3vsVEH_0.1_3&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_CX_0.1_24 &lt;- topTable(fit = fit2, coef = &quot;CX_0.1_24vsVEH_0.1_24&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_CX_0.1_48 &lt;- topTable(fit = fit2, coef = &quot;CX_0.1_48vsVEH_0.1_48&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_CX_0.5_3 &lt;- topTable(fit = fit2, coef = &quot;CX_0.5_3vsVEH_0.5_3&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_CX_0.5_24 &lt;- topTable(fit = fit2, coef = &quot;CX_0.5_24vsVEH_0.5_24&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_CX_0.5_48 &lt;- topTable(fit = fit2, coef = &quot;CX_0.5_48vsVEH_0.5_48&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_DOX_0.1_3 &lt;- topTable(fit = fit2, coef = &quot;DOX_0.1_3vsVEH_0.1_3&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_DOX_0.1_24 &lt;- topTable(fit = fit2, coef = &quot;DOX_0.1_24vsVEH_0.1_24&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_DOX_0.1_48 &lt;- topTable(fit = fit2, coef = &quot;DOX_0.1_48vsVEH_0.1_48&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_DOX_0.5_3 &lt;- topTable(fit = fit2, coef = &quot;DOX_0.5_3vsVEH_0.5_3&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_DOX_0.5_24 &lt;- topTable(fit = fit2, coef = &quot;DOX_0.5_24vsVEH_0.5_24&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)
+
+Toptable_DOX_0.5_48 &lt;- topTable(fit = fit2, coef = &quot;DOX_0.5_48vsVEH_0.5_48&quot;, number = nrow(x), adjust.method = &quot;BH&quot;, p.value = 1, sort.by = &quot;none&quot;)</code></pre>
+</div>
+<div id="volcano-plots-for-differential-expression-analysis"
+class="section level2">
+<h2><strong>📌 Volcano Plots for Differential Expression
+Analysis</strong></h2>
+<pre class="r"><code># Define a function to generate volcano plots
+generate_volcano_plot &lt;- function(toptable, title) {
+  
+  # Add Significance Labels
+  toptable$Significance &lt;- &quot;Not Significant&quot;
+  toptable$Significance[toptable$logFC &gt; 0 &amp; toptable$adj.P.Val &lt; 0.05] &lt;- &quot;Upregulated&quot;
+  toptable$Significance[toptable$logFC &lt; 0 &amp; toptable$adj.P.Val &lt; 0.05] &lt;- &quot;Downregulated&quot;
+
+  # Generate Volcano Plot
+  ggplot(toptable, aes(x = logFC, y = -log10(P.Value), color = Significance)) +
+    geom_point(alpha = 0.4, size = 2) + 
+    scale_color_manual(values = c(&quot;Downregulated&quot; = &quot;red&quot;, &quot;Upregulated&quot; = &quot;blue&quot;, &quot;Not Significant&quot; = &quot;gray&quot;)) +
+    xlim(-5, 5) +
+    labs(title = title, x = &quot;log2 Fold Change&quot;, y = &quot;-log10 P-value&quot;) +
+    theme(legend.position = &quot;none&quot;, 
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25))) +
+    theme_bw()
+}
+
+# Generate volcano plots for all comparisons
+volcano_plots &lt;- list(
+  &quot;CX_0.1_3&quot; = generate_volcano_plot(Toptable_CX_0.1_3, &quot;Volcano Plot CX_0.1_3 (adj P-val&lt;0.05)&quot;),
+  &quot;CX_0.1_24&quot; = generate_volcano_plot(Toptable_CX_0.1_24, &quot;Volcano Plot CX_0.1_24 (adj P-val&lt;0.05)&quot;),
+  &quot;CX_0.1_48&quot; = generate_volcano_plot(Toptable_CX_0.1_48, &quot;Volcano Plot CX_0.1_48 (adj P-val&lt;0.05)&quot;),
+  &quot;CX_0.5_3&quot; = generate_volcano_plot(Toptable_CX_0.5_3, &quot;Volcano Plot CX_0.5_3 (adj P-val&lt;0.05)&quot;),
+  &quot;CX_0.5_24&quot; = generate_volcano_plot(Toptable_CX_0.5_24, &quot;Volcano Plot CX_0.5_24 (adj P-val&lt;0.05)&quot;),
+  &quot;CX_0.5_48&quot; = generate_volcano_plot(Toptable_CX_0.5_48, &quot;Volcano Plot CX_0.5_48 (adj P-val&lt;0.05)&quot;),
+  &quot;DOX_0.1_3&quot; = generate_volcano_plot(Toptable_DOX_0.1_3, &quot;Volcano Plot DOX_0.1_3 (adj P-val&lt;0.05)&quot;),
+  &quot;DOX_0.1_24&quot; = generate_volcano_plot(Toptable_DOX_0.1_24, &quot;Volcano Plot DOX_0.1_24 (adj P-val&lt;0.05)&quot;),
+  &quot;DOX_0.1_48&quot; = generate_volcano_plot(Toptable_DOX_0.1_48, &quot;Volcano Plot DOX_0.1_48 (adj P-val&lt;0.05)&quot;),
+  &quot;DOX_0.5_3&quot; = generate_volcano_plot(Toptable_DOX_0.5_3, &quot;Volcano Plot DOX_0.5_3 (adj P-val&lt;0.05)&quot;),
+  &quot;DOX_0.5_24&quot; = generate_volcano_plot(Toptable_DOX_0.5_24, &quot;Volcano Plot DOX_0.5_24 (adj P-val&lt;0.05)&quot;),
+  &quot;DOX_0.5_48&quot; = generate_volcano_plot(Toptable_DOX_0.5_48, &quot;Volcano Plot DOX_0.5_48 (adj P-val&lt;0.05)&quot;)
+)
+
+# Display each volcano plot
+for (plot_name in names(volcano_plots)) {
+  print(volcano_plots[[plot_name]])
+}</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/volcano%20plot-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/DGE_Analysis.Rmd/volcano%20plot-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/DGE_Analysis.Rmd/volcano%20plot-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/DGE_Analysis.Rmd/volcano%20plot-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/DGE_Analysis.Rmd/volcano%20plot-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: Removed 3 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/volcano%20plot-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/DGE_Analysis.Rmd/volcano%20plot-7.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/volcano%20plot-8.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: Removed 34 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/volcano%20plot-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/DGE_Analysis.Rmd/volcano%20plot-10.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: Removed 28 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/volcano%20plot-11.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: Removed 24 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/volcano%20plot-12.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1471,45 +1594,46 @@ loaded via a namespace (and not attached):
 [13] vctrs_0.6.5                 pkgconfig_2.0.3            
 [15] crayon_1.5.3                fastmap_1.1.1              
 [17] dbplyr_2.5.0                XVector_0.42.0             
-[19] Rsamtools_2.18.0            promises_1.3.0             
-[21] rmarkdown_2.29              tzdb_0.4.0                 
-[23] graph_1.80.0                ps_1.8.1                   
-[25] bit_4.0.5                   xfun_0.50                  
-[27] zlibbioc_1.48.0             cachem_1.0.8               
-[29] jsonlite_1.8.9              progress_1.2.3             
-[31] blob_1.2.4                  later_1.3.2                
-[33] DelayedArray_0.28.0         BiocParallel_1.36.0        
-[35] parallel_4.3.0              prettyunits_1.2.0          
-[37] R6_2.5.1                    bslib_0.8.0                
-[39] stringi_1.8.3               rtracklayer_1.62.0         
-[41] jquerylib_0.1.4             SummarizedExperiment_1.32.0
-[43] Rcpp_1.0.12                 knitr_1.49                 
-[45] Matrix_1.6-1.1              httpuv_1.6.15              
-[47] timechange_0.3.0            tidyselect_1.2.1           
-[49] abind_1.4-8                 rstudioapi_0.17.1          
-[51] yaml_2.3.10                 codetools_0.2-20           
-[53] curl_6.0.1                  processx_3.8.5             
-[55] lattice_0.22-5              withr_3.0.2                
-[57] KEGGREST_1.42.0             evaluate_1.0.3             
-[59] BiocFileCache_2.10.2        xml2_1.3.6                 
-[61] Biostrings_2.70.1           BiocManager_1.30.25        
-[63] pillar_1.10.1               filelock_1.0.3             
-[65] MatrixGenerics_1.14.0       whisker_0.4.1              
-[67] generics_0.1.3              rprojroot_2.0.4            
-[69] RCurl_1.98-1.13             hms_1.1.3                  
-[71] munsell_0.5.1               glue_1.7.0                 
-[73] tools_4.3.0                 BiocIO_1.12.0              
-[75] locfit_1.5-9.8              GenomicAlignments_1.38.2   
-[77] fs_1.6.3                    XML_3.99-0.17              
-[79] grid_4.3.0                  colorspace_2.1-0           
-[81] GenomeInfoDbData_1.2.11     restfulr_0.0.15            
-[83] cli_3.6.1                   rappdirs_0.3.3             
-[85] S4Arrays_1.2.1              gtable_0.3.6               
-[87] sass_0.4.9                  digest_0.6.34              
-[89] SparseArray_1.2.4           rjson_0.2.23               
-[91] memoise_2.0.1               htmltools_0.5.8.1          
-[93] lifecycle_1.0.4             httr_1.4.7                 
-[95] statmod_1.5.0               bit64_4.0.5                </code></pre>
+[19] labeling_0.4.3              Rsamtools_2.18.0           
+[21] promises_1.3.0              rmarkdown_2.29             
+[23] tzdb_0.4.0                  graph_1.80.0               
+[25] ps_1.8.1                    bit_4.0.5                  
+[27] xfun_0.50                   zlibbioc_1.48.0            
+[29] cachem_1.0.8                jsonlite_1.8.9             
+[31] progress_1.2.3              blob_1.2.4                 
+[33] later_1.3.2                 DelayedArray_0.28.0        
+[35] BiocParallel_1.36.0         parallel_4.3.0             
+[37] prettyunits_1.2.0           R6_2.5.1                   
+[39] bslib_0.8.0                 stringi_1.8.3              
+[41] rtracklayer_1.62.0          jquerylib_0.1.4            
+[43] SummarizedExperiment_1.32.0 Rcpp_1.0.12                
+[45] knitr_1.49                  Matrix_1.6-1.1             
+[47] httpuv_1.6.15               timechange_0.3.0           
+[49] tidyselect_1.2.1            abind_1.4-8                
+[51] rstudioapi_0.17.1           yaml_2.3.10                
+[53] codetools_0.2-20            curl_6.0.1                 
+[55] processx_3.8.5              lattice_0.22-5             
+[57] withr_3.0.2                 KEGGREST_1.42.0            
+[59] evaluate_1.0.3              BiocFileCache_2.10.2       
+[61] xml2_1.3.6                  Biostrings_2.70.1          
+[63] BiocManager_1.30.25         pillar_1.10.1              
+[65] filelock_1.0.3              MatrixGenerics_1.14.0      
+[67] whisker_0.4.1               generics_0.1.3             
+[69] rprojroot_2.0.4             RCurl_1.98-1.13            
+[71] hms_1.1.3                   munsell_0.5.1              
+[73] glue_1.7.0                  tools_4.3.0                
+[75] BiocIO_1.12.0               locfit_1.5-9.8             
+[77] GenomicAlignments_1.38.2    fs_1.6.3                   
+[79] XML_3.99-0.17               grid_4.3.0                 
+[81] colorspace_2.1-0            GenomeInfoDbData_1.2.11    
+[83] restfulr_0.0.15             cli_3.6.1                  
+[85] rappdirs_0.3.3              S4Arrays_1.2.1             
+[87] gtable_0.3.6                sass_0.4.9                 
+[89] digest_0.6.34               SparseArray_1.2.4          
+[91] farver_2.1.2                rjson_0.2.23               
+[93] memoise_2.0.1               htmltools_0.5.8.1          
+[95] lifecycle_1.0.4             httr_1.4.7                 
+[97] statmod_1.5.0               bit64_4.0.5                </code></pre>
 </div>
 </div>
 
