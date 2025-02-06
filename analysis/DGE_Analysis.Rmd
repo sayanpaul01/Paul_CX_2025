@@ -140,3 +140,78 @@ results_summary <- decideTests(fit2, adjust.method = "BH", p.value = 0.05)
 summary(results_summary)
 ```
 
+
+## **📌 Extract Differentially Expressed Genes**
+```{r save_toptables, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Generate Top Table for Specific Comparisons
+
+Toptable_CX_0.1_3 <- topTable(fit = fit2, coef = "CX_0.1_3vsVEH_0.1_3", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_CX_0.1_24 <- topTable(fit = fit2, coef = "CX_0.1_24vsVEH_0.1_24", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_CX_0.1_48 <- topTable(fit = fit2, coef = "CX_0.1_48vsVEH_0.1_48", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_CX_0.5_3 <- topTable(fit = fit2, coef = "CX_0.5_3vsVEH_0.5_3", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_CX_0.5_24 <- topTable(fit = fit2, coef = "CX_0.5_24vsVEH_0.5_24", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_CX_0.5_48 <- topTable(fit = fit2, coef = "CX_0.5_48vsVEH_0.5_48", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_DOX_0.1_3 <- topTable(fit = fit2, coef = "DOX_0.1_3vsVEH_0.1_3", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_DOX_0.1_24 <- topTable(fit = fit2, coef = "DOX_0.1_24vsVEH_0.1_24", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_DOX_0.1_48 <- topTable(fit = fit2, coef = "DOX_0.1_48vsVEH_0.1_48", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_DOX_0.5_3 <- topTable(fit = fit2, coef = "DOX_0.5_3vsVEH_0.5_3", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_DOX_0.5_24 <- topTable(fit = fit2, coef = "DOX_0.5_24vsVEH_0.5_24", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+
+Toptable_DOX_0.5_48 <- topTable(fit = fit2, coef = "DOX_0.5_48vsVEH_0.5_48", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
+```
+
+## **📌 Volcano Plots for Differential Expression Analysis**
+```{r volcano plot, echo=TRUE, message=FALSE}
+# Define a function to generate volcano plots
+generate_volcano_plot <- function(toptable, title) {
+  
+  # Add Significance Labels
+  toptable$Significance <- "Not Significant"
+  toptable$Significance[toptable$logFC > 0 & toptable$adj.P.Val < 0.05] <- "Upregulated"
+  toptable$Significance[toptable$logFC < 0 & toptable$adj.P.Val < 0.05] <- "Downregulated"
+
+  # Generate Volcano Plot
+  ggplot(toptable, aes(x = logFC, y = -log10(P.Value), color = Significance)) +
+    geom_point(alpha = 0.4, size = 2) + 
+    scale_color_manual(values = c("Downregulated" = "red", "Upregulated" = "blue", "Not Significant" = "gray")) +
+    xlim(-5, 5) +
+    labs(title = title, x = "log2 Fold Change", y = "-log10 P-value") +
+    theme(legend.position = "none", 
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25))) +
+    theme_bw()
+}
+
+# Generate volcano plots for all comparisons
+volcano_plots <- list(
+  "CX_0.1_3" = generate_volcano_plot(Toptable_CX_0.1_3, "Volcano Plot CX_0.1_3 (adj P-val<0.05)"),
+  "CX_0.1_24" = generate_volcano_plot(Toptable_CX_0.1_24, "Volcano Plot CX_0.1_24 (adj P-val<0.05)"),
+  "CX_0.1_48" = generate_volcano_plot(Toptable_CX_0.1_48, "Volcano Plot CX_0.1_48 (adj P-val<0.05)"),
+  "CX_0.5_3" = generate_volcano_plot(Toptable_CX_0.5_3, "Volcano Plot CX_0.5_3 (adj P-val<0.05)"),
+  "CX_0.5_24" = generate_volcano_plot(Toptable_CX_0.5_24, "Volcano Plot CX_0.5_24 (adj P-val<0.05)"),
+  "CX_0.5_48" = generate_volcano_plot(Toptable_CX_0.5_48, "Volcano Plot CX_0.5_48 (adj P-val<0.05)"),
+  "DOX_0.1_3" = generate_volcano_plot(Toptable_DOX_0.1_3, "Volcano Plot DOX_0.1_3 (adj P-val<0.05)"),
+  "DOX_0.1_24" = generate_volcano_plot(Toptable_DOX_0.1_24, "Volcano Plot DOX_0.1_24 (adj P-val<0.05)"),
+  "DOX_0.1_48" = generate_volcano_plot(Toptable_DOX_0.1_48, "Volcano Plot DOX_0.1_48 (adj P-val<0.05)"),
+  "DOX_0.5_3" = generate_volcano_plot(Toptable_DOX_0.5_3, "Volcano Plot DOX_0.5_3 (adj P-val<0.05)"),
+  "DOX_0.5_24" = generate_volcano_plot(Toptable_DOX_0.5_24, "Volcano Plot DOX_0.5_24 (adj P-val<0.05)"),
+  "DOX_0.5_48" = generate_volcano_plot(Toptable_DOX_0.5_48, "Volcano Plot DOX_0.5_48 (adj P-val<0.05)")
+)
+
+# Display each volcano plot
+for (plot_name in names(volcano_plots)) {
+  print(volcano_plots[[plot_name]])
+}
+```
+
+
