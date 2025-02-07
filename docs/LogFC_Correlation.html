@@ -509,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree450696eef005253449f2e046e0cec18befa1eb92targetblank450696ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7f4d39b001ac9b2231bca63d62392da5de44524etargetblank7f4d39ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/450696eef005253449f2e046e0cec18befa1eb92" target="_blank">450696e</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7f4d39b001ac9b2231bca63d62392da5de44524e" target="_blank">7f4d39b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree450696eef005253449f2e046e0cec18befa1eb92targetblank450696ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7f4d39b001ac9b2231bca63d62392da5de44524etargetblank7f4d39ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/450696eef005253449f2e046e0cec18befa1eb92" target="_blank">450696e</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7f4d39b001ac9b2231bca63d62392da5de44524e" target="_blank">7f4d39b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -598,6 +598,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/7f4d39b001ac9b2231bca63d62392da5de44524e/analysis/LogFC_Correlation.Rmd" target="_blank">7f4d39b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-07
+</td>
+<td>
+Fixed file path issue
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/7f3dfe540aee535fb8e4869bd75377a64ea0b8cf/docs/LogFC_Correlation.html" target="_blank">7f3dfe5</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/450696eef005253449f2e046e0cec18befa1eb92/analysis/LogFC_Correlation.Rmd" target="_blank">450696e</a>
 </td>
 <td>
@@ -655,8 +689,9 @@ Build site.
 <h2><strong>📌 LogFC Correlation Analysis</strong></h2>
 <p>This analysis generates correlation heatmaps of log fold change
 (logFC) values across different comparisons.</p>
-<div id="load-required-libraries" class="section level3">
-<h3><strong>📌 Load Required Libraries</strong></h3>
+</div>
+<div id="load-required-libraries" class="section level2">
+<h2><strong>📌 Load Required Libraries</strong></h2>
 <pre class="r"><code>library(ComplexHeatmap)</code></pre>
 <pre><code>Warning: package &#39;ComplexHeatmap&#39; was built under R version 4.3.1</code></pre>
 <pre class="r"><code>library(tidyverse)</code></pre>
@@ -671,8 +706,8 @@ Build site.
 <pre class="r"><code>library(data.table)</code></pre>
 <pre><code>Warning: package &#39;data.table&#39; was built under R version 4.3.2</code></pre>
 </div>
-<div id="load-logfc-data" class="section level3">
-<h3><strong>📌 Load LogFC Data</strong></h3>
+<div id="load-logfc-data" class="section level2">
+<h2><strong>📌 Load LogFC Data</strong></h2>
 <pre class="r"><code># Load logFC data from CSV
 logFC_corr &lt;- read.csv(&quot;data/LOG2FC.csv&quot;)
 
@@ -709,8 +744,8 @@ print(head(log2corr))</code></pre>
 [5,]  0.1966726
 [6,] -0.7475815</code></pre>
 </div>
-<div id="load-metadata" class="section level3">
-<h3><strong>📌 Load Metadata</strong></h3>
+<div id="load-metadata" class="section level2">
+<h2><strong>📌 Load Metadata</strong></h2>
 <pre class="r"><code># Load metadata
 meta &lt;- read.csv(&quot;data/Meta.csv&quot;)
 
@@ -720,8 +755,8 @@ Drug &lt;- meta$Drug
 time &lt;- meta$Time
 conc &lt;- as.character(meta$Conc.)</code></pre>
 </div>
-<div id="define-color-annotations-for-heatmap" class="section level3">
-<h3><strong>📌 Define Color Annotations for Heatmap</strong></h3>
+<div id="define-color-annotations-for-heatmap" class="section level2">
+<h2><strong>📌 Define Color Annotations for Heatmap</strong></h2>
 <pre class="r"><code>time_colors &lt;- c(&quot;3&quot; = &quot;purple&quot;, &quot;24&quot; = &quot;pink&quot;, &quot;48&quot; = &quot;tomato3&quot;)
 drug_colors &lt;- c(&quot;CX-5461&quot; = &quot;yellow&quot;, &quot;DOX&quot; = &quot;magenta4&quot;)
 conc_colors &lt;- c(&quot;0.1&quot; = &quot;lightblue&quot;, &quot;0.5&quot; = &quot;lightcoral&quot;)
@@ -739,14 +774,14 @@ top_annotation1 &lt;- HeatmapAnnotation(
 )</code></pre>
 </div>
 <div id="compute-pearson-and-spearman-correlation-matrices"
-class="section level3">
-<h3><strong>📌 Compute Pearson and Spearman Correlation
-Matrices</strong></h3>
+class="section level2">
+<h2><strong>📌 Compute Pearson and Spearman Correlation
+Matrices</strong></h2>
 <pre class="r"><code>cor_matrix1 &lt;- cor(log2corr, method = &quot;pearson&quot;)
 cor_matrix2 &lt;- cor(log2corr, method = &quot;spearman&quot;)</code></pre>
 </div>
-<div id="generate-heatmap-pearson-correlation" class="section level3">
-<h3><strong>📌 Generate Heatmap (Pearson Correlation)</strong></h3>
+<div id="generate-heatmap-pearson-correlation" class="section level2">
+<h2><strong>📌 Generate Heatmap (Pearson Correlation)</strong></h2>
 <pre class="r"><code>heatmap1 &lt;- Heatmap(
   cor_matrix1,
   name = &quot;Correlation&quot;,
@@ -762,9 +797,46 @@ cor_matrix2 &lt;- cor(log2corr, method = &quot;spearman&quot;)</code></pre>
 # Draw the heatmap
 draw(heatmap1)</code></pre>
 <p><img src="figure/LogFC_Correlation.Rmd/pearson_heatmap-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pearson_heatmap-1">
+Past versions of pearson_heatmap-1.png
+</button>
+</p>
+<div id="fig-pearson_heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/7f3dfe540aee535fb8e4869bd75377a64ea0b8cf/docs/figure/LogFC_Correlation.Rmd/pearson_heatmap-1.png" target="_blank">7f3dfe5</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-07
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="generate-heatmap-spearman-correlation" class="section level3">
-<h3><strong>📌 Generate Heatmap (Spearman Correlation)</strong></h3>
+</div>
+</div>
+<div id="generate-heatmap-spearman-correlation" class="section level2">
+<h2><strong>📌 Generate Heatmap (Spearman Correlation)</strong></h2>
 <pre class="r"><code>heatmap2 &lt;- Heatmap(
   cor_matrix2,
   name = &quot;Correlation&quot;,
@@ -780,6 +852,43 @@ draw(heatmap1)</code></pre>
 # Draw the heatmap
 draw(heatmap2)</code></pre>
 <p><img src="figure/LogFC_Correlation.Rmd/spearman_heatmap-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-spearman_heatmap-1">
+Past versions of spearman_heatmap-1.png
+</button>
+</p>
+<div id="fig-spearman_heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/7f3dfe540aee535fb8e4869bd75377a64ea0b8cf/docs/figure/LogFC_Correlation.Rmd/spearman_heatmap-1.png" target="_blank">7f3dfe5</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -842,7 +951,6 @@ loaded via a namespace (and not attached):
 [64] rlang_1.1.3         Rcpp_1.0.12         glue_1.7.0         
 [67] BiocGenerics_0.48.1 rstudioapi_0.17.1   jsonlite_1.8.9     
 [70] R6_2.5.1            fs_1.6.3           </code></pre>
-</div>
 </div>
 </div>
 
