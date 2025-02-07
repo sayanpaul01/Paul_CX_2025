@@ -5,68 +5,49 @@ editor_options:
   chunk_output_type: console
 ---
 
-## **📌LogFC Correlation Analysis**
+## **📌 LogFC Correlation Analysis**
 
 This analysis generates correlation heatmaps of log fold change (logFC) values across different comparisons.
 
-### **📌Load Required Libraries**
+### **📌 Load Required Libraries**
 ```{r load_libraries, echo=TRUE, message=FALSE}
-library(data.table)
 library(ComplexHeatmap)
-library(circlize)
-library(RColorBrewer)
-library(grid)
+library(tidyverse)
+library(data.table)
 ```
 
-### **📌Prepare LogFC Data for Correlation Analysis**
+### **📌 Load LogFC Data**
+```{r load_data, echo=TRUE, message=FALSE}
+# Load logFC data from CSV
+logFC_corr <- read.csv("data/LOG2FC.csv")
 
-```{r load_data, echo=TRUE, results='hide', message=FALSE}
-# Load Toptables directly from the DGE_Analysis Rmd environment
-source("analysis/DGE_Analysis.Rmd")
+# Convert to dataframe
+logFC_corr_df <- data.frame(logFC_corr)
 
-# Ensure that all required Toptables are available
-toptable_list <- list(
-  CX_0.1_3 = Toptable_CX_0.1_3,
-  CX_0.1_24 = Toptable_CX_0.1_24,
-  CX_0.1_48 = Toptable_CX_0.1_48,
-  CX_0.5_3 = Toptable_CX_0.5_3,
-  CX_0.5_24 = Toptable_CX_0.5_24,
-  CX_0.5_48 = Toptable_CX_0.5_48,
-  DOX_0.1_3 = Toptable_DOX_0.1_3,
-  DOX_0.1_24 = Toptable_DOX_0.1_24,
-  DOX_0.1_48 = Toptable_DOX_0.1_48,
-  DOX_0.5_3 = Toptable_DOX_0.5_3,
-  DOX_0.5_24 = Toptable_DOX_0.5_24,
-  DOX_0.5_48 = Toptable_DOX_0.5_48
-)
+# Remove 'X' prefix from the first column
+names(logFC_corr_df)[1] <- sub("^X", "", names(logFC_corr_df)[1])
 
-# Extract Entrez_IDs from row names and logFC values
-logFC_list <- lapply(names(toptable_list), function(name) {
-  df <- toptable_list[[name]]
-  df <- data.frame(Entrez_IDs = rownames(df), logFC = df$logFC)
-  colnames(df)[2] <- name  # Rename the logFC column to the respective toptable name
-  return(df)
-})
+# Convert to matrix format for correlation analysis
+log2corr <- as.matrix(logFC_corr_df[, -1])
 
-# Merge all logFC data frames by Entrez_IDs
-final_df <- Reduce(function(x, y) merge(x, y, by = "Entrez_IDs", all = TRUE), logFC_list)
-
-# Print or save the final dataframe
-print(head(final_df))  # Display first few rows
+# Display first few rows
+print(head(log2corr))
 ```
 
-### **📌Load Metadata**
-```{r load_Metadata, echo=TRUE, message=FALSE}
-meta <- read.csv("data/Metadata.csv")
+### **📌 Load Metadata**
+```{r load_metadata, echo=TRUE, message=FALSE}
+# Load metadata
+meta <- read.csv("data/Meta.csv")
 
-colnames(final_df)[-1] <- meta$Sample_ID
+# Assign column names based on sample metadata
+colnames(log2corr) <- meta$Sample
 Drug <- meta$Drug
 time <- meta$Time
 conc <- as.character(meta$Conc.)
 ```
 
-### **📌Define Color Annotations for Heatmap**
-```{r Color Annotations, echo=TRUE, message=FALSE}
+### **📌 Define Color Annotations for Heatmap**
+```{r color_annotations, echo=TRUE, message=FALSE}
 time_colors <- c("3" = "purple", "24" = "pink", "48" = "tomato3")
 drug_colors <- c("CX-5461" = "yellow", "DOX" = "magenta4")
 conc_colors <- c("0.1" = "lightblue", "0.5" = "lightcoral")
@@ -84,17 +65,14 @@ top_annotation1 <- HeatmapAnnotation(
 )
 ```
 
-### **📌Compute Pearson and Spearman Correlation Matrices**
-```{r Correlation, echo=TRUE, message=FALSE}
-log2corr <- final_df[, -1]
-
+### **📌 Compute Pearson and Spearman Correlation Matrices**
+```{r correlation_matrices, echo=TRUE, message=FALSE}
 cor_matrix1 <- cor(log2corr, method = "pearson")
 cor_matrix2 <- cor(log2corr, method = "spearman")
 ```
 
-
-### **📌Generate Heatmap (Pearson Correlation)**
-```{r Pearson, echo=TRUE, message=FALSE}
+### **📌 Generate Heatmap (Pearson Correlation)**
+```{r pearson_heatmap, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
 heatmap1 <- Heatmap(
   cor_matrix1,
   name = "Correlation",
@@ -111,9 +89,8 @@ heatmap1 <- Heatmap(
 draw(heatmap1)
 ```
 
-
-### **📌Generate Heatmap (Spearman Correlation)**
-```{r Spearman, echo=TRUE, message=FALSE}
+### **📌 Generate Heatmap (Spearman Correlation)**
+```{r spearman_heatmap, echo=TRUE, message=FALSE,fig.width=11, fig.height=8}
 heatmap2 <- Heatmap(
   cor_matrix2,
   name = "Correlation",
@@ -129,8 +106,4 @@ heatmap2 <- Heatmap(
 # Draw the heatmap
 draw(heatmap2)
 ```
-
-
-
-
 
