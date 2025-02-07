@@ -170,6 +170,25 @@ Toptable_DOX_0.5_24 <- topTable(fit = fit2, coef = "DOX_0.5_24vsVEH_0.5_24", num
 Toptable_DOX_0.5_48 <- topTable(fit = fit2, coef = "DOX_0.5_48vsVEH_0.5_48", number = nrow(x), adjust.method = "BH", p.value = 1, sort.by = "none")
 ```
 
+## **📌 Save all Toptables as an RDS file**
+```{r toptables, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+saveRDS(list(
+  CX_0.1_3 = Toptable_CX_0.1_3,
+  CX_0.1_24 = Toptable_CX_0.1_24,
+  CX_0.1_48 = Toptable_CX_0.1_48,
+  CX_0.5_3 = Toptable_CX_0.5_3,
+  CX_0.5_24 = Toptable_CX_0.5_24,
+  CX_0.5_48 = Toptable_CX_0.5_48,
+  DOX_0.1_3 = Toptable_DOX_0.1_3,
+  DOX_0.1_24 = Toptable_DOX_0.1_24,
+  DOX_0.1_48 = Toptable_DOX_0.1_48,
+  DOX_0.5_3 = Toptable_DOX_0.5_3,
+  DOX_0.5_24 = Toptable_DOX_0.5_24,
+  DOX_0.5_48 = Toptable_DOX_0.5_48
+), file = "data/Toptable_list.rds")
+```
+
+
 ## **📌 Volcano Plots for Differential Expression Analysis**
 ```{r volcano plot, echo=TRUE, message=FALSE}
 # Define a function to generate volcano plots
@@ -214,22 +233,4 @@ for (plot_name in names(volcano_plots)) {
 }
 ```
 
-
-# **📌 Save all Toptables as an RDS file**
-```{r Toptables, echo=TRUE, results='hide', message=FALSE}
-saveRDS(list(
-  CX_0.1_3 = Toptable_CX_0.1_3,
-  CX_0.1_24 = Toptable_CX_0.1_24,
-  CX_0.1_48 = Toptable_CX_0.1_48,
-  CX_0.5_3 = Toptable_CX_0.5_3,
-  CX_0.5_24 = Toptable_CX_0.5_24,
-  CX_0.5_48 = Toptable_CX_0.5_48,
-  DOX_0.1_3 = Toptable_DOX_0.1_3,
-  DOX_0.1_24 = Toptable_DOX_0.1_24,
-  DOX_0.1_48 = Toptable_DOX_0.1_48,
-  DOX_0.5_3 = Toptable_DOX_0.5_3,
-  DOX_0.5_24 = Toptable_DOX_0.5_24,
-  DOX_0.5_48 = Toptable_DOX_0.5_48
-), file = "data/Toptable_list.rds")
-```
 
