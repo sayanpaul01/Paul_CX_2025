@@ -11,11 +11,11 @@ This analysis generates correlation heatmaps of log fold change (logFC) values a
 
 ### **📌Load Required Libraries**
 ```{r load_libraries, echo=TRUE, message=FALSE}
-library(ComplexHeatmap)
-library(tidyverse)
-library(edgeR)
-library(limma)
 library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(RColorBrewer)
+library(grid)
 ```
 
 ### **📌Prepare LogFC Data for Correlation Analysis**
