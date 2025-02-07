@@ -215,3 +215,21 @@ for (plot_name in names(volcano_plots)) {
 ```
 
 
+# **📌 Save all Toptables as an RDS file**
+```{r Toptables, echo=TRUE, results='hide', message=FALSE}
+saveRDS(list(
+  CX_0.1_3 = Toptable_CX_0.1_3,
+  CX_0.1_24 = Toptable_CX_0.1_24,
+  CX_0.1_48 = Toptable_CX_0.1_48,
+  CX_0.5_3 = Toptable_CX_0.5_3,
+  CX_0.5_24 = Toptable_CX_0.5_24,
+  CX_0.5_48 = Toptable_CX_0.5_48,
+  DOX_0.1_3 = Toptable_DOX_0.1_3,
+  DOX_0.1_24 = Toptable_DOX_0.1_24,
+  DOX_0.1_48 = Toptable_DOX_0.1_48,
+  DOX_0.5_3 = Toptable_DOX_0.5_3,
+  DOX_0.5_24 = Toptable_DOX_0.5_24,
+  DOX_0.5_48 = Toptable_DOX_0.5_48
+), file = "data/Toptable_list.rds")
+```
+
