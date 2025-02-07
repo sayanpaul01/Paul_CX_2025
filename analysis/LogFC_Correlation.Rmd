@@ -9,14 +9,14 @@ editor_options:
 
 This analysis generates correlation heatmaps of log fold change (logFC) values across different comparisons.
 
-### **📌 Load Required Libraries**
+## **📌 Load Required Libraries**
 ```{r load_libraries, echo=TRUE, message=FALSE}
 library(ComplexHeatmap)
 library(tidyverse)
 library(data.table)
 ```
 
-### **📌 Load LogFC Data**
+## **📌 Load LogFC Data**
 ```{r load_data, echo=TRUE, message=FALSE}
 # Load logFC data from CSV
 logFC_corr <- read.csv("data/LOG2FC.csv")
@@ -34,7 +34,7 @@ log2corr <- as.matrix(logFC_corr_df[, -1])
 print(head(log2corr))
 ```
 
-### **📌 Load Metadata**
+## **📌 Load Metadata**
 ```{r load_metadata, echo=TRUE, message=FALSE}
 # Load metadata
 meta <- read.csv("data/Meta.csv")
@@ -46,7 +46,7 @@ time <- meta$Time
 conc <- as.character(meta$Conc.)
 ```
 
-### **📌 Define Color Annotations for Heatmap**
+## **📌 Define Color Annotations for Heatmap**
 ```{r color_annotations, echo=TRUE, message=FALSE}
 time_colors <- c("3" = "purple", "24" = "pink", "48" = "tomato3")
 drug_colors <- c("CX-5461" = "yellow", "DOX" = "magenta4")
@@ -65,13 +65,13 @@ top_annotation1 <- HeatmapAnnotation(
 )
 ```
 
-### **📌 Compute Pearson and Spearman Correlation Matrices**
+## **📌 Compute Pearson and Spearman Correlation Matrices**
 ```{r correlation_matrices, echo=TRUE, message=FALSE}
 cor_matrix1 <- cor(log2corr, method = "pearson")
 cor_matrix2 <- cor(log2corr, method = "spearman")
 ```
 
-### **📌 Generate Heatmap (Pearson Correlation)**
+## **📌 Generate Heatmap (Pearson Correlation)**
 ```{r pearson_heatmap, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
 heatmap1 <- Heatmap(
   cor_matrix1,
@@ -89,7 +89,7 @@ heatmap1 <- Heatmap(
 draw(heatmap1)
 ```
 
-### **📌 Generate Heatmap (Spearman Correlation)**
+## **📌 Generate Heatmap (Spearman Correlation)**
 ```{r spearman_heatmap, echo=TRUE, message=FALSE,fig.width=11, fig.height=8}
 heatmap2 <- Heatmap(
   cor_matrix2,
