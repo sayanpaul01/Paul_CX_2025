@@ -1,0 +1,136 @@
+---
+title: "LogFC Correlation"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌LogFC Correlation Analysis**
+
+This analysis generates correlation heatmaps of log fold change (logFC) values across different comparisons.
+
+### **📌Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+library(ComplexHeatmap)
+library(tidyverse)
+library(edgeR)
+library(limma)
+library(data.table)
+```
+
+### **📌Prepare LogFC Data for Correlation Analysis**
+
+```{r load_data, echo=TRUE, results='hide', message=FALSE}
+# Load Toptables directly from the DGE_Analysis Rmd environment
+source("analysis/DGE_Analysis.Rmd")
+
+# Ensure that all required Toptables are available
+toptable_list <- list(
+  CX_0.1_3 = Toptable_CX_0.1_3,
+  CX_0.1_24 = Toptable_CX_0.1_24,
+  CX_0.1_48 = Toptable_CX_0.1_48,
+  CX_0.5_3 = Toptable_CX_0.5_3,
+  CX_0.5_24 = Toptable_CX_0.5_24,
+  CX_0.5_48 = Toptable_CX_0.5_48,
+  DOX_0.1_3 = Toptable_DOX_0.1_3,
+  DOX_0.1_24 = Toptable_DOX_0.1_24,
+  DOX_0.1_48 = Toptable_DOX_0.1_48,
+  DOX_0.5_3 = Toptable_DOX_0.5_3,
+  DOX_0.5_24 = Toptable_DOX_0.5_24,
+  DOX_0.5_48 = Toptable_DOX_0.5_48
+)
+
+# Extract Entrez_IDs from row names and logFC values
+logFC_list <- lapply(names(toptable_list), function(name) {
+  df <- toptable_list[[name]]
+  df <- data.frame(Entrez_IDs = rownames(df), logFC = df$logFC)
+  colnames(df)[2] <- name  # Rename the logFC column to the respective toptable name
+  return(df)
+})
+
+# Merge all logFC data frames by Entrez_IDs
+final_df <- Reduce(function(x, y) merge(x, y, by = "Entrez_IDs", all = TRUE), logFC_list)
+
+# Print or save the final dataframe
+print(head(final_df))  # Display first few rows
+```
+
+### **📌Load Metadata**
+```{r load_Metadata, echo=TRUE, message=FALSE}
+meta <- read.csv("data/Metadata.csv")
+
+colnames(final_df)[-1] <- meta$Sample_ID
+Drug <- meta$Drug
+time <- meta$Time
+conc <- as.character(meta$Conc.)
+```
+
+### **📌Define Color Annotations for Heatmap**
+```{r Color Annotations, echo=TRUE, message=FALSE}
+time_colors <- c("3" = "purple", "24" = "pink", "48" = "tomato3")
+drug_colors <- c("CX-5461" = "yellow", "DOX" = "magenta4")
+conc_colors <- c("0.1" = "lightblue", "0.5" = "lightcoral")
+
+# Create annotations
+top_annotation1 <- HeatmapAnnotation(
+  timepoints = time,
+  drugs = Drug,
+  concentrations = conc,
+  col = list(
+    timepoints = time_colors,
+    drugs = drug_colors,
+    concentrations = conc_colors
+  )
+)
+```
+
+### **📌Compute Pearson and Spearman Correlation Matrices**
+```{r Correlation, echo=TRUE, message=FALSE}
+log2corr <- final_df[, -1]
+
+cor_matrix1 <- cor(log2corr, method = "pearson")
+cor_matrix2 <- cor(log2corr, method = "spearman")
+```
+
+
+### **📌Generate Heatmap (Pearson Correlation)**
+```{r Pearson, echo=TRUE, message=FALSE}
+heatmap1 <- Heatmap(
+  cor_matrix1,
+  name = "Correlation",
+  top_annotation = top_annotation1,
+  rect_gp = gpar(col = "black", lwd = 1),
+  show_row_names = TRUE,
+  show_column_names = TRUE,
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    grid.text(sprintf("%.3f", cor_matrix1[i, j]), x, y, gp = gpar(fontsize = 10, col = "black"))
+  }
+)
+
+# Draw the heatmap
+draw(heatmap1)
+```
+
+
+### **📌Generate Heatmap (Spearman Correlation)**
+```{r Spearman, echo=TRUE, message=FALSE}
+heatmap2 <- Heatmap(
+  cor_matrix2,
+  name = "Correlation",
+  top_annotation = top_annotation1,
+  rect_gp = gpar(col = "black", lwd = 1),
+  show_row_names = TRUE,
+  show_column_names = TRUE,
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    grid.text(sprintf("%.3f", cor_matrix2[i, j]), x, y, gp = gpar(fontsize = 10, col = "black"))
+  }
+)
+
+# Draw the heatmap
+draw(heatmap2)
+```
+
+
+
+
+
