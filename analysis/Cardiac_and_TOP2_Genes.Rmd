@@ -157,8 +157,11 @@ for (gene in top2_genes) {
               inherit.aes = FALSE, size = 6, color = "black") +
     ggtitle(paste("Log2CPM Expression of", gene)) +
     labs(x = "Treatment", y = "log2CPM") +
-    theme_bw()
-
+    theme_bw() +
+    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+          axis.title = element_text(size = 15, color = "black"),
+          axis.text.x = element_text(size = 10, color = "black", angle = 90, hjust = 1))
+  
   print(p)
 }
 ```
