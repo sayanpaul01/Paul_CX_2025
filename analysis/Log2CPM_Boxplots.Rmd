@@ -414,3 +414,1194 @@ ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text.y = element_text(color = "white")
   )
 ```
+
+
+## **📌 CX_0.5_3 vs VEH_0.5_3**
+
+## **📌 Define File Paths**
+```{r load_path_CX0.53, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_CX_0.5_3.csv"
+output_boxplot <- "data/Boxplot_CX_0.5_3.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_CX0.53, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|CX.5461_0.5_3|VEH_0.5_3", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_CX0.53, echo=TRUE,message=FALSE}
+drug_palc <- c("CX.5461" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_CX0.53, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_0.53, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_CX0.53, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_CX0.53, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("CX.5461", Sample), "CX.5461", "VEH"),
+    Conc = "0.5",
+    Timepoint = "3"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_CX0.53, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM CX.5461_0.5 vs Vehicle_0.5 (3hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+## **📌 CX_0.5_24 vs VEH_0.5_24**
+
+## **📌 Define File Paths**
+```{r load_path_CX0.524, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_CX_0.5_24.csv"
+output_boxplot <- "data/Boxplot_CX_0.5_24.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_CX0.524, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|CX.5461_0.5_24|VEH_0.5_24", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_CX0.524, echo=TRUE,message=FALSE}
+drug_palc <- c("CX.5461" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_CX0.524, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_0.524, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_CX0.524, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_CX0.524, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("CX.5461", Sample), "CX.5461", "VEH"),
+    Conc = "0.5",
+    Timepoint = "24"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_CX0.524, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM CX.5461_0.5 vs Vehicle_0.5 (24hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+## **📌 CX_0.5_48 vs VEH_0.5_48**
+
+## **📌 Define File Paths**
+```{r load_path_CX0.548, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_CX_0.5_48.csv"
+output_boxplot <- "data/Boxplot_CX_0.5_48.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_CX0.548, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|CX.5461_0.5_48|VEH_0.5_48", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_CX0.548, echo=TRUE,message=FALSE}
+drug_palc <- c("CX.5461" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_CX0.548, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_0.548, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_CX0.548, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_CX0.548, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("CX.5461", Sample), "CX.5461", "VEH"),
+    Conc = "0.5",
+    Timepoint = "48"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_CX0.548, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM CX.5461_0.5 vs Vehicle_0.5 (48hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+
+## **📌 DOX_0.1_3 vs VEH_0.1_3**
+
+## **📌 Define File Paths**
+```{r load_path_DOX0.13, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_DOX_0.1_3.csv"
+output_boxplot <- "data/Boxplot_DOX_0.1_3.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_DOX0.13, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|DOX_0.1_3|VEH_0.1_3", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_DOX0.13, echo=TRUE,message=FALSE}
+drug_palc <- c("DOX" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_DOX0.13, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_DOX0.13, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_DOX0.13, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_DOX0.13, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("DOX", Sample), "DOX", "VEH"),
+    Conc = "0.1",
+    Timepoint = "3"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_DOX0.13, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM DOX_0.1 vs Vehicle_0.1 (3hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+
+## **📌 DOX_0.1_24 vs VEH_0.1_24**
+
+## **📌 Define File Paths**
+```{r load_path_DOX0.124, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_DOX_0.1_24.csv"
+output_boxplot <- "data/Boxplot_DOX_0.1_24.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_DOX0.124, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|DOX_0.1_24|VEH_0.1_24", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_DOX0.124, echo=TRUE,message=FALSE}
+drug_palc <- c("DOX" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_DOX0.124, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_DOX0.124, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_DOX0.124, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_DOX0.124, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("DOX", Sample), "DOX", "VEH"),
+    Conc = "0.1",
+    Timepoint = "24"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_DOX0.124, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM DOX_0.1 vs Vehicle_0.1 (24hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+## **📌 DOX_0.1_48 vs VEH_0.1_48**
+
+## **📌 Define File Paths**
+```{r load_path_DOX0.148, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_DOX_0.1_48.csv"
+output_boxplot <- "data/Boxplot_DOX_0.1_48.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_DOX0.148, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|DOX_0.1_48|VEH_0.1_48", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_DOX0.148, echo=TRUE,message=FALSE}
+drug_palc <- c("DOX" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_DOX0.148, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_DOX0.148, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_DOX0.148, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_DOX0.148, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("DOX", Sample), "DOX", "VEH"),
+    Conc = "0.1",
+    Timepoint = "48"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_DOX0.148, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM DOX_0.1 vs Vehicle_0.1 (48hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+## **📌 DOX_0.5_3 vs VEH_0.5_3**
+
+## **📌 Define File Paths**
+```{r load_path_DOX0.53, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_DOX_0.5_3.csv"
+output_boxplot <- "data/Boxplot_DOX_0.5_3.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_DOX0.53, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|DOX_0.5_3|VEH_0.5_3", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_DOX0.53, echo=TRUE,message=FALSE}
+drug_palc <- c("DOX" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_DOX0.53, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_DOX0.53, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_DOX0.53, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_DOX0.53, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("DOX", Sample), "DOX", "VEH"),
+    Conc = "0.5",
+    Timepoint = "3"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_DOX0.53, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM DOX_0.5 vs Vehicle_0.5 (3hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+## **📌 DOX_0.5_24 vs VEH_0.5_24**
+
+## **📌 Define File Paths**
+```{r load_path_DOX0.524, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_DOX_0.5_24.csv"
+output_boxplot <- "data/Boxplot_DOX_0.5_24.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_DOX0.524, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|DOX_0.5_24|VEH_0.5_24", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_DOX0.524, echo=TRUE,message=FALSE}
+drug_palc <- c("DOX" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_DOX0.524, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_DOX0.524, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_DOX0.524, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_DOX0.524, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("DOX", Sample), "DOX", "VEH"),
+    Conc = "0.5",
+    Timepoint = "24"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_DOX0.524, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM DOX_0.5 vs Vehicle_0.5 (24hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
+## **📌 DOX_0.5_48 vs VEH_0.5_48**
+
+## **📌 Define File Paths**
+```{r load_path_DOX0.548, echo=TRUE,results='hide',message=FALSE}
+# Define file paths
+input_file <- "data/Feature_count_Matrix_Log2CPM_filtered.csv"
+toptable_file <- "data/DEGs/Toptable_DOX_0.5_48.csv"
+output_boxplot <- "data/Boxplot_DOX_0.5_48.csv"
+output_log2CPM <- "data/log2CPM_filtered.csv"
+```
+
+
+## **📌 Read and Clean Dataset**
+```{r load_data_DOX0.548, echo=TRUE,results='hide',message=FALSE}
+# Read Log2CPM Matrix
+boxplot1 <- read.csv(input_file) %>%
+  as.data.frame()
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  # Clean column names
+
+# Select relevant columns
+matching_columns <- grep("ENTREZID|SYMBOL|DOX_0.5_48|VEH_0.5_48", colnames(boxplot1), value = TRUE)
+
+if (!"SYMBOL" %in% colnames(boxplot1)) stop("ERROR: 'SYMBOL' column is missing in boxplot1! Check dataset.")
+
+new_boxplot1 <- boxplot1[, matching_columns]
+
+# Save cleaned datasets
+write.csv(boxplot1, output_log2CPM, row.names = FALSE)
+write.csv(new_boxplot1, output_boxplot, row.names = FALSE)
+
+# Display first few rows
+head(new_boxplot1)
+```
+
+## **📌 Define Color Palettes**
+```{r load_color_DOX0.548, echo=TRUE,message=FALSE}
+drug_palc <- c("DOX" = "#8B006D", "VEH" = "#F1B72B")
+```
+
+
+## **📌 Read and Process Toptable Data**
+```{r Read_DOX0.548, echo=TRUE,message=FALSE}
+toptable <- read.csv(toptable_file)
+colnames(toptable)[1] <- "Entrezid"
+
+filtered_toptable <- toptable %>%
+  filter(adj.P.Val < 0.05) %>%
+  arrange(adj.P.Val) %>%
+  slice_head(n = 10)
+
+# Display first few rows of the filtered Toptable
+head(filtered_toptable)
+```
+
+## **📌 Filter Boxplot Data for Selected Genes**
+```{r Filter_DOX0.548, echo=TRUE,message=FALSE}
+filtered_boxplot <- new_boxplot1 %>%
+  filter(ENTREZID %in% filtered_toptable$Entrezid)
+
+if (!"SYMBOL" %in% colnames(filtered_boxplot)) stop("ERROR: 'SYMBOL' column is missing in filtered_boxplot!")
+
+# Pivot data to long format
+long_boxplot <- filtered_boxplot %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL), names_to = "Sample", values_to = "log2CPM") %>%
+  as.data.frame()
+
+if (!"SYMBOL" %in% colnames(long_boxplot)) stop("ERROR: 'SYMBOL' column is missing after pivoting!")
+
+long_boxplot$SYMBOL <- as.character(long_boxplot$SYMBOL)
+```
+
+
+## **📌 Define Individual Mapping**
+```{r Ind_DOX0.548, echo=TRUE, message=FALSE}
+indv_mapping <- c("75.1" = 1, "78.1" = 2, "87.1" = 3, "17.3" = 4, "84.1" = 5, "90.1" = 6)
+
+# Debug: Print column names before mutate
+print("Columns in long_boxplot before mutate():")
+print(colnames(long_boxplot))
+```
+
+## **📌Process Data with Metadata**
+```{r meta_DOX0.548, echo=TRUE, message=FALSE}
+formatted_data <- long_boxplot %>%
+  mutate(
+    Indv_id = sub("_.*", "", Sample),  # Extract individual ID
+    Indv = ifelse(Indv_id %in% names(indv_mapping), as.character(indv_mapping[Indv_id]), NA),
+    Drug = ifelse(grepl("DOX", Sample), "DOX", "VEH"),
+    Conc = "0.5",
+    Timepoint = "48"
+  ) %>%
+  dplyr::select(any_of(c("ENTREZID", "SYMBOL", "Sample", "Indv", "Drug", "Conc", "Timepoint", "log2CPM"))) %>%
+  as.data.frame()
+
+# Rename SYMBOL → Gene
+colnames(formatted_data) <- trimws(colnames(formatted_data))
+if ("SYMBOL" %in% colnames(formatted_data)) {
+  colnames(formatted_data)[colnames(formatted_data) == "SYMBOL"] <- "Gene"
+} else {
+  stop("ERROR: 'SYMBOL' column is missing before renaming.")
+}
+
+if (!"Gene" %in% colnames(formatted_data)) stop("ERROR: 'Gene' column is missing after renaming.")
+
+formatted_data$Indv <- as.character(formatted_data$Indv)
+
+# Display first few rows
+head(formatted_data)
+```
+
+## **📌Generate Boxplot**
+```{r box_DOX0.548, echo=TRUE, message=FALSE, fig.width=11, fig.height=8}
+ggplot(formatted_data, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palc) +
+  facet_wrap(~ Gene, ncol = 5) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+  ggtitle("log2CPM DOX_0.5 vs Vehicle_0.5 (48hrs)") +
+  labs(x = "Drugs", y = "log2CPM") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(2), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black"),
+    strip.text.y = element_text(color = "white")
+  )
+```
+
+
