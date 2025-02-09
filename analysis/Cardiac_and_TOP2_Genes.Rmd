@@ -44,12 +44,16 @@ deg_files <- list.files("data/DEGs", pattern = "Toptable_.*\\.csv", full.names =
 deg_list <- lapply(deg_files, read.csv)
 names(deg_list) <- gsub("data/DEGs/Toptable_|\\.csv", "", deg_files)  
 
-# Function to check significance
-is_significant <- function(gene, condition) {
+# Function to check significance based on **Entrez_ID in the correct sample**
+is_significant <- function(gene, drug, conc, timepoint) {
+  condition <- paste(drug, conc, timepoint, sep = "_")
   if (!condition %in% names(deg_list)) return(FALSE)
+  
   toptable <- deg_list[[condition]]
   gene_entrez <- boxplot1$ENTREZID[boxplot1$SYMBOL == gene]
+  
   if (length(gene_entrez) == 0) return(FALSE)
+  
   return(any(gene_entrez %in% toptable$Entrez_ID[toptable$adj.P.Val < 0.05]))
 }
 ```
@@ -93,14 +97,24 @@ process_gene_data <- function(gene) {
       ),
       Condition = paste(Drug, Conc., Timepoint, sep = "_")
     )
+
+  # **Ensure Condition is Ordered Correctly**
+  long_data$Condition <- factor(
+    long_data$Condition, 
+    levels = c(
+      "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+      "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48",
+      "VEH_0.1_3", "VEH_0.1_24", "VEH_0.1_48", "VEH_0.5_3", "VEH_0.5_24", "VEH_0.5_48"
+    )
+  )
   
-  # Identify significant conditions
+  # Identify significant conditions **per Drug, Conc, and Timepoint**
   significance_labels <- long_data %>%
-    distinct(Condition) %>%
+    distinct(Drug, Conc., Timepoint, Condition) %>%
     rowwise() %>%
     mutate(
       max_log2CPM = max(long_data$log2CPM[long_data$Condition == Condition], na.rm = TRUE),
-      Significance = ifelse(is_significant(gene, Condition), "*", "")
+      Significance = ifelse(is_significant(gene, Drug, Conc., Timepoint), "*", "")
     ) %>%
     filter(Significance != "") %>% ungroup()
   
@@ -143,11 +157,8 @@ for (gene in top2_genes) {
               inherit.aes = FALSE, size = 6, color = "black") +
     ggtitle(paste("Log2CPM Expression of", gene)) +
     labs(x = "Treatment", y = "log2CPM") +
-    theme_bw() +
-    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
-          axis.title = element_text(size = 15, color = "black"),
-          axis.text.x = element_text(size = 10, color = "black", angle = 90, hjust = 1))
-  
+    theme_bw()
+
   print(p)
 }
 ```
