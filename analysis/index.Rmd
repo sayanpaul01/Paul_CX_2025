@@ -28,7 +28,9 @@ Welcome to my research website.
 
 - **[LogFC Correlation](https://sayanpaul01.github.io/CX5461_Project/LogFC_Correlation.html)**  
 
-- **[Log2CPM Boxplots](https://sayanpaul01.github.io/CX5461_Project/Log2CPM_Boxplots.html)**  
+- **[Log2CPM Boxplots](https://sayanpaul01.github.io/CX5461_Project/Log2CPM_Boxplots.html)** 
+
+- **[Cardiac and TOP2 Genes](https://sayanpaul01.github.io/CX5461_Project/Cardiac_and_TOP2_Genes.html)**
 
 
 ### 🔗 **Source Code**  
