@@ -1,0 +1,155 @@
+---
+title: "Cardiac and TOP2 Genes - Log2CPM Boxplots"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 Log2CPM Boxplots for Cardiac and TOP2 Genes**
+
+This analysis generates **boxplots for cardiac genes and TOP2 genes** across different treatments and timepoints.
+
+---
+
+## **📌 Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+## **📌 Read Log2CPM Data**
+```{r load_File Paths, echo=TRUE,results='hide',message=FALSE}
+# Load feature count matrix
+boxplot1 <- read.csv("data/Feature_count_Matrix_Log2CPM_filtered.csv") %>% as.data.frame()
+
+# Ensure column names are cleaned
+colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))  
+```
+
+
+## **📌 Define Genes of Interest**
+```{r Genes of Interest, echo=TRUE, message=FALSE}
+# Define the genes of interest
+top2_genes <- c("TOP2A", "TOP2B")
+cardiac_genes <- c("ACTN2", "CALR", "MYBPC3", "MYH6", "MYH7", 
+                   "MYL2", "RYR2", "SCN5A", "TNNI3", "TNNT2", "TTN")
+```
+
+
+## **📌 Read and Process DEGs Data**
+```{r load_Feature Count Matrix, echo=TRUE,results='hide',message=FALSE}
+# Load Toptables
+deg_files <- list.files("data/DEGs", pattern = "Toptable_.*\\.csv", full.names = TRUE)
+deg_list <- lapply(deg_files, read.csv)
+names(deg_list) <- gsub("data/DEGs/Toptable_|\\.csv", "", deg_files)  
+
+# Function to check significance
+is_significant <- function(gene, condition) {
+  if (!condition %in% names(deg_list)) return(FALSE)
+  toptable <- deg_list[[condition]]
+  gene_entrez <- boxplot1$ENTREZID[boxplot1$SYMBOL == gene]
+  if (length(gene_entrez) == 0) return(FALSE)
+  return(any(gene_entrez %in% toptable$Entrez_ID[toptable$adj.P.Val < 0.05]))
+}
+```
+
+
+## **📌 Process Data for Plotting**
+```{r Data for Plotting, echo=TRUE, message=FALSE}
+process_gene_data <- function(gene) {
+  # Filter log2CPM data for the gene
+  gene_data <- boxplot1 %>% filter(SYMBOL == gene)
+  
+  # Reshape data
+  long_data <- gene_data %>%
+    pivot_longer(cols = -c(ENTREZID, SYMBOL, GENENAME), names_to = "Sample", values_to = "log2CPM") %>%
+    mutate(
+      Indv = case_when(
+        grepl("75.1", Sample) ~ "1",
+        grepl("78.1", Sample) ~ "2",
+        grepl("87.1", Sample) ~ "3",
+        grepl("17.3", Sample) ~ "4",
+        grepl("84.1", Sample) ~ "5",
+        grepl("90.1", Sample) ~ "6",
+        TRUE ~ NA_character_
+      ),
+      Drug = case_when(
+        grepl("CX.5461", Sample) ~ "CX",
+        grepl("DOX", Sample) ~ "DOX",
+        grepl("VEH", Sample) ~ "VEH",
+        TRUE ~ NA_character_
+      ),
+      Conc. = case_when(
+        grepl("_0.1_", Sample) ~ "0.1",
+        grepl("_0.5_", Sample) ~ "0.5",
+        TRUE ~ NA_character_
+      ),
+      Timepoint = case_when(
+        grepl("_3$", Sample) ~ "3",
+        grepl("_24$", Sample) ~ "24",
+        grepl("_48$", Sample) ~ "48",
+        TRUE ~ NA_character_
+      ),
+      Condition = paste(Drug, Conc., Timepoint, sep = "_")
+    )
+  
+  # Identify significant conditions
+  significance_labels <- long_data %>%
+    distinct(Condition) %>%
+    rowwise() %>%
+    mutate(
+      max_log2CPM = max(long_data$log2CPM[long_data$Condition == Condition], na.rm = TRUE),
+      Significance = ifelse(is_significant(gene, Condition), "*", "")
+    ) %>%
+    filter(Significance != "") %>% ungroup()
+  
+  list(long_data = long_data, significance_labels = significance_labels)
+}
+```
+
+
+## **📌Generate Boxplots for Cardiac Genes**
+```{r Cardiac, echo=TRUE,message=FALSE}
+for (gene in cardiac_genes) {
+  data_info <- process_gene_data(gene)
+  p <- ggplot(data_info$long_data, aes(x = Condition, y = log2CPM, fill = Drug)) +
+    geom_boxplot(outlier.shape = NA) +
+    scale_fill_manual(values = c("CX" = "#0000FF", "DOX" = "#e6d800", "VEH" = "#FF00FF")) +
+    geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+    geom_text(data = data_info$significance_labels, aes(x = Condition, y = max_log2CPM + 0.5, label = Significance),
+              inherit.aes = FALSE, size = 6, color = "black") +
+    ggtitle(paste("Log2CPM Expression of", gene)) +
+    labs(x = "Treatment", y = "log2CPM") +
+    theme_bw() +
+    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+          axis.title = element_text(size = 15, color = "black"),
+          axis.text.x = element_text(size = 10, color = "black", angle = 90, hjust = 1))
+  
+  print(p)
+}
+```
+
+
+## **📌Generate Boxplots for TOP2 Genes**
+```{r TOP2, echo=TRUE,message=FALSE}
+for (gene in top2_genes) {
+  data_info <- process_gene_data(gene)
+  p <- ggplot(data_info$long_data, aes(x = Condition, y = log2CPM, fill = Drug)) +
+    geom_boxplot(outlier.shape = NA) +
+    scale_fill_manual(values = c("CX" = "#0000FF", "DOX" = "#e6d800", "VEH" = "#FF00FF")) +
+    geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+    geom_text(data = data_info$significance_labels, aes(x = Condition, y = max_log2CPM + 0.5, label = Significance),
+              inherit.aes = FALSE, size = 6, color = "black") +
+    ggtitle(paste("Log2CPM Expression of", gene)) +
+    labs(x = "Treatment", y = "log2CPM") +
+    theme_bw() +
+    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+          axis.title = element_text(size = 15, color = "black"),
+          axis.text.x = element_text(size = 10, color = "black", angle = 90, hjust = 1))
+  
+  print(p)
+}
+```
+
+
