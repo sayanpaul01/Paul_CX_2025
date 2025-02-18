@@ -34,6 +34,7 @@ colnames(boxplot1) <- trimws(gsub("^X", "", colnames(boxplot1)))
 top2_genes <- c("TOP2A", "TOP2B")
 cardiac_genes <- c("ACTN2", "CALR", "MYBPC3", "MYH6", "MYH7", 
                    "MYL2", "RYR2", "SCN5A", "TNNI3", "TNNT2", "TTN")
+dna_damage_genes <- c("TP53")  # Using correct gene symbol TP53
 ```
 
 
@@ -148,6 +149,27 @@ for (gene in cardiac_genes) {
 ## **📌Generate Boxplots for TOP2 Genes**
 ```{r TOP2, echo=TRUE,message=FALSE}
 for (gene in top2_genes) {
+  data_info <- process_gene_data(gene)
+  p <- ggplot(data_info$long_data, aes(x = Condition, y = log2CPM, fill = Drug)) +
+    geom_boxplot(outlier.shape = NA) +
+    scale_fill_manual(values = c("CX" = "#0000FF", "DOX" = "#e6d800", "VEH" = "#FF00FF")) +
+    geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = -1, height = 0)) +
+    geom_text(data = data_info$significance_labels, aes(x = Condition, y = max_log2CPM + 0.5, label = Significance),
+              inherit.aes = FALSE, size = 6, color = "black") +
+    ggtitle(paste("Log2CPM Expression of", gene)) +
+    labs(x = "Treatment", y = "log2CPM") +
+    theme_bw() +
+    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+          axis.title = element_text(size = 15, color = "black"),
+          axis.text.x = element_text(size = 10, color = "black", angle = 90, hjust = 1))
+  
+  print(p)
+}
+```
+
+## **📌 Generate Boxplots for DNA Damage Genes**
+```{r DNA Damage, echo=TRUE,message=FALSE}
+for (gene in dna_damage_genes) {
   data_info <- process_gene_data(gene)
   p <- ggplot(data_info$long_data, aes(x = Condition, y = log2CPM, fill = Drug)) +
     geom_boxplot(outlier.shape = NA) +
