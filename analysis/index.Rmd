@@ -30,7 +30,7 @@ Welcome to my research website.
 
 - **[Log2CPM Boxplots](https://sayanpaul01.github.io/CX5461_Project/Log2CPM_Boxplots.html)** 
 
-- **[Cardiac and TOP2 Genes](https://sayanpaul01.github.io/CX5461_Project/Cardiac_and_TOP2_Genes.html)**
+- **[Cardiac, TOP2 and DNA damage Genes](https://sayanpaul01.github.io/CX5461_Project/Cardiac_TOP2_DNA_damage_Genes.html)**
 
 
 ### 🔗 **Source Code**  
