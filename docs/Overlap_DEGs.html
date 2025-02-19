@@ -509,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeaf515756fe0be3881d4cc85ef259954fe654a547targetblankaf51575a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebef2c813b7e8db5ef938d8ac5011e79827118a95targetblankbef2c81a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/af515756fe0be3881d4cc85ef259954fe654a547" target="_blank">af51575</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/bef2c813b7e8db5ef938d8ac5011e79827118a95" target="_blank">bef2c81</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeaf515756fe0be3881d4cc85ef259954fe654a547targetblankaf51575a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebef2c813b7e8db5ef938d8ac5011e79827118a95targetblankbef2c81a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/af515756fe0be3881d4cc85ef259954fe654a547" target="_blank">af51575</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/bef2c813b7e8db5ef938d8ac5011e79827118a95" target="_blank">bef2c81</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -595,6 +595,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/bef2c813b7e8db5ef938d8ac5011e79827118a95/analysis/Overlap_DEGs.Rmd" target="_blank">bef2c81</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+<td>
+Added UpSet plots for DEGs across samples, drugs, concentrations, and
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/Overlap_DEGs.html" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/af515756fe0be3881d4cc85ef259954fe654a547/analysis/Overlap_DEGs.Rmd" target="_blank">af51575</a>
 </td>
 <td>
@@ -652,7 +686,8 @@ DEG12 &lt;- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val &lt; 0.05]</code></pre>
 <div id="load-libraries" class="section level2">
 <h2><strong>📌 Load Libraries</strong></h2>
 <pre class="r"><code>library(ggplot2)
-library(ggVennDiagram)</code></pre>
+library(ggVennDiagram)
+library(UpSetR)</code></pre>
 </div>
 <div id="across-drugs" class="section level2">
 <h2><strong>📌 Across Drugs</strong></h2>
@@ -670,6 +705,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn1-1">
+Past versions of venn1-1.png
+</button>
+</p>
+<div id="fig-venn1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn1-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="venn-diagram-cx-5461-vs-veh-0.5-µm" class="section level2">
 <h2><strong>📌Venn Diagram: CX-5461 vs VEH (0.5 µM)</strong></h2>
@@ -684,6 +756,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn2-1">
+Past versions of venn2-1.png
+</button>
+</p>
+<div id="fig-venn2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn2-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="venn-diagram-dox-vs-veh-0.1-µm" class="section level2">
 <h2><strong>📌Venn Diagram: DOX vs VEH (0.1 µM)</strong></h2>
@@ -698,6 +807,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn3-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn3-1">
+Past versions of venn3-1.png
+</button>
+</p>
+<div id="fig-venn3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn3-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="venn-diagram-dox-vs-veh-0.5-µm" class="section level2">
 <h2><strong>📌Venn Diagram: DOX vs VEH (0.5 µM)</strong></h2>
@@ -712,6 +858,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn4-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn4-1">
+Past versions of venn4-1.png
+</button>
+</p>
+<div id="fig-venn4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn4-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="across-concentrations" class="section level2">
 <h2><strong>📌 Across Concentrations</strong></h2>
@@ -728,6 +911,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn5-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn5-1">
+Past versions of venn5-1.png
+</button>
+</p>
+<div id="fig-venn5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn5-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="venn-diagram-0.5-micromolar" class="section level2">
 <h2><strong>📌Venn Diagram: 0.5 Micromolar</strong></h2>
@@ -741,6 +961,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn6-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn6-1">
+Past versions of venn6-1.png
+</button>
+</p>
+<div id="fig-venn6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn6-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="across-timepoints" class="section level2">
 <h2><strong>📌 Across Timepoints</strong></h2>
@@ -757,6 +1014,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn7-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn7-1">
+Past versions of venn7-1.png
+</button>
+</p>
+<div id="fig-venn7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn7-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="venn-diagram-24-hour-timepoint" class="section level2">
 <h2><strong>📌Venn Diagram: 24-hour Timepoint</strong></h2>
@@ -770,6 +1064,43 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn8-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn8-1">
+Past versions of venn8-1.png
+</button>
+</p>
+<div id="fig-venn8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn8-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="venn-diagram-48-hour-timepoint" class="section level2">
 <h2><strong>📌Venn Diagram: 48-hour Timepoint</strong></h2>
@@ -783,6 +1114,188 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )</code></pre>
 <p><img src="figure/Overlap_DEGs.Rmd/venn9-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-venn9-1">
+Past versions of venn9-1.png
+</button>
+</p>
+<div id="fig-venn9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1dcb0c817da88bf51b0956d2e16bd053f3b40b56/docs/figure/Overlap_DEGs.Rmd/venn9-1.png" target="_blank">1dcb0c8</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="overlap-of-degs-upset-plot" class="section level2">
+<h2><strong>📌 Overlap of DEGs (Upset Plot)</strong></h2>
+</div>
+<div id="loading-data" class="section level2">
+<h2><strong>📌 Loading data</strong></h2>
+<pre class="r"><code># Extract Significant DEGs
+# Create a list of DEGs for each sample
+DEG_list &lt;- list(
+  CX_0.1_3 = CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val &lt; 0.05],
+  CX_0.1_24 = CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val &lt; 0.05],
+  CX_0.1_48 = CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val &lt; 0.05],
+  CX_0.5_3 = CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val &lt; 0.05],
+  CX_0.5_24 = CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val &lt; 0.05],
+  CX_0.5_48 = CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val &lt; 0.05],
+  DOX_0.1_3 = DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val &lt; 0.05],
+  DOX_0.1_24 = DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val &lt; 0.05],
+  DOX_0.1_48 = DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val &lt; 0.05],
+  DOX_0.5_3 = DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val &lt; 0.05],
+  DOX_0.5_24 = DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val &lt; 0.05],
+  DOX_0.5_48 = DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val &lt; 0.05]
+)
+
+# Convert list to binary matrix
+DEG_matrix &lt;- fromList(DEG_list)
+
+# Define order of sets
+set_order &lt;- names(DEG_list)</code></pre>
+</div>
+<div
+id="upset-plot-of-degs-across-samplesshow-all-intersections-till-lowest-size-5"
+class="section level2">
+<h2><strong>📌 UpSet Plot of DEGs Across Samples(Show all intersections
+till lowest size 5)</strong></h2>
+<pre class="r"><code>upset(
+  DEG_matrix,
+  sets = set_order,  # Specify the exact order of sets
+  order.by = &quot;freq&quot;,  # Order intersections by frequency
+  main.bar.color = &quot;blue&quot;,  # Color for the intersection bars
+  matrix.color = &quot;black&quot;,  # Color for matrix dots
+  sets.bar.color = rainbow(length(DEG_list)),  # Assign different colors to set size bars
+  keep.order = TRUE,  # Keep the specified order of sets
+  number.angles = 0,  # Angle of numbers in intersection size bars
+  point.size = 2.5,  # Size of points in the matrix
+  text.scale = 1,  # Scale for text elements
+  show.numbers = &quot;yes&quot;  # Show intersection size numbers directly
+)</code></pre>
+<p><img src="figure/Overlap_DEGs.Rmd/upset2-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="upset-plot-of-degs-across-samplesshow-all-intersections-till-last-lowest-size"
+class="section level2">
+<h2><strong>📌 UpSet Plot of DEGs Across Samples(Show all intersections
+till last lowest size)</strong></h2>
+<pre class="r"><code>upset(
+  DEG_matrix,
+  sets = set_order,  # Specify the exact order of sets
+  order.by = &quot;freq&quot;,  # Order intersections by frequency
+  main.bar.color = &quot;blue&quot;,  # Color for the intersection bars
+  matrix.color = &quot;black&quot;,  # Color for matrix dots
+  sets.bar.color = rainbow(length(DEG_list)),  # Assign different colors to set size bars
+  keep.order = TRUE,  # Keep the specified order of sets
+  number.angles = 0,  # Angle of numbers in intersection size bars
+  point.size = 2.5,  # Size of points in the matrix
+  text.scale = 1,  # Scale for text elements
+  show.numbers = &quot;yes&quot;,  # Show intersection size numbers directly
+  nintersects = NA  # Show all intersections including those with lowest size
+)</code></pre>
+<p><img src="figure/Overlap_DEGs.Rmd/upset3-1.png" width="1536" style="display: block; margin: auto;" /></p>
+</div>
+<div id="drug-specific-de-genes" class="section level2">
+<h2><strong>📌 Drug Specific DE genes</strong></h2>
+</div>
+<div id="upset-plot-cx-5461-vs-dox" class="section level2">
+<h2><strong>📌 UpSet Plot: CX-5461 vs DOX</strong></h2>
+<pre class="r"><code># Combine DEGs under CX-5461 and DOX
+CX_DEGs &lt;- unique(unlist(DEG_list[1:6]))
+DOX_DEGs &lt;- unique(unlist(DEG_list[7:12]))
+
+# Create binary matrix for drug-specific DEGs
+DEG_matrix_drug &lt;- fromList(list(CX_5461 = CX_DEGs, DOX = DOX_DEGs))
+
+# Generate the UpSet plot for drugs
+upset(
+  DEG_matrix_drug,
+  sets = c(&quot;CX_5461&quot;, &quot;DOX&quot;),
+  order.by = &quot;freq&quot;,
+  main.bar.color = &quot;darkgreen&quot;,
+  point.size = 3,
+  text.scale = 1.5,
+  matrix.color = &quot;purple&quot;,
+  sets.bar.color = c(&quot;blue&quot;, &quot;red&quot;)
+)</code></pre>
+<p><img src="figure/Overlap_DEGs.Rmd/upset4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="conc.-specific-de-genes" class="section level2">
+<h2><strong>📌 Conc. Specific DE genes</strong></h2>
+</div>
+<div id="upset-plot-concentration-specific-degs" class="section level2">
+<h2><strong>📌 UpSet Plot: Concentration-Specific DEGs</strong></h2>
+<pre class="r"><code># Combine DEGs under concentrations 0.1 and 0.5
+DEG_0.1 &lt;- unique(unlist(DEG_list[c(1, 2, 3, 7, 8, 9)]))
+DEG_0.5 &lt;- unique(unlist(DEG_list[c(4, 5, 6, 10, 11, 12)]))
+
+# Create binary matrix for concentration-specific DEGs
+DEG_matrix_concentration &lt;- fromList(list(Concentration_0.1 = DEG_0.1, Concentration_0.5 = DEG_0.5))
+
+# Generate the UpSet plot for concentration
+upset(
+  DEG_matrix_concentration,
+  sets = c(&quot;Concentration_0.1&quot;, &quot;Concentration_0.5&quot;),
+  order.by = &quot;freq&quot;,
+  main.bar.color = &quot;darkorange&quot;,
+  matrix.color = &quot;darkblue&quot;,
+  sets.bar.color = c(&quot;cyan&quot;, &quot;magenta&quot;),
+  text.scale = 1.5,
+  keep.order = TRUE
+)</code></pre>
+<p><img src="figure/Overlap_DEGs.Rmd/upset5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="timepoints-specific-de-genes" class="section level2">
+<h2><strong>📌 Timepoints Specific DE genes</strong></h2>
+</div>
+<div id="upset-plot-timepoint-specific-degs" class="section level2">
+<h2><strong>📌 UpSet Plot: Timepoint-Specific DEGs</strong></h2>
+<pre class="r"><code># Combine DEGs under timepoints 3hr, 24hr, and 48hr
+DEG_3hr &lt;- unique(unlist(DEG_list[c(1, 4, 7, 10)]))
+DEG_24hr &lt;- unique(unlist(DEG_list[c(2, 5, 8, 11)]))
+DEG_48hr &lt;- unique(unlist(DEG_list[c(3, 6, 9, 12)]))
+
+# Create binary matrix for timepoint-specific DEGs
+DEG_matrix_timepoint &lt;- fromList(list(Timepoint_3hr = DEG_3hr, Timepoint_24hr = DEG_24hr, Timepoint_48hr = DEG_48hr))
+
+# Generate the UpSet plot for timepoints
+upset(
+  DEG_matrix_timepoint,
+  sets = c(&quot;Timepoint_3hr&quot;, &quot;Timepoint_24hr&quot;, &quot;Timepoint_48hr&quot;),
+  order.by = &quot;freq&quot;,
+  main.bar.color = &quot;darkgreen&quot;,
+  matrix.color = &quot;darkred&quot;,
+  sets.bar.color = c(&quot;blue&quot;, &quot;orange&quot;, &quot;purple&quot;),
+  text.scale = 1.5,
+  keep.order = TRUE
+)</code></pre>
+<p><img src="figure/Overlap_DEGs.Rmd/upset6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -813,22 +1326,24 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggVennDiagram_1.5.2 ggplot2_3.5.1       workflowr_1.7.1    
+[1] UpSetR_1.4.0        ggVennDiagram_1.5.2 ggplot2_3.5.1      
+[4] workflowr_1.7.1    
 
 loaded via a namespace (and not attached):
  [1] gtable_0.3.6      jsonlite_1.8.9    dplyr_1.1.4       compiler_4.3.0   
  [5] promises_1.3.0    tidyselect_1.2.1  Rcpp_1.0.12       stringr_1.5.1    
- [9] git2r_0.35.0      callr_3.7.6       later_1.3.2       jquerylib_0.1.4  
-[13] scales_1.3.0      yaml_2.3.10       fastmap_1.1.1     R6_2.5.1         
-[17] labeling_0.4.3    generics_0.1.3    knitr_1.49        tibble_3.2.1     
-[21] munsell_0.5.1     rprojroot_2.0.4   bslib_0.8.0       pillar_1.10.1    
-[25] rlang_1.1.3       cachem_1.0.8      stringi_1.8.3     httpuv_1.6.15    
-[29] xfun_0.50         getPass_0.2-4     fs_1.6.3          sass_0.4.9       
-[33] cli_3.6.1         withr_3.0.2       magrittr_2.0.3    ps_1.8.1         
-[37] digest_0.6.34     grid_4.3.0        processx_3.8.5    rstudioapi_0.17.1
-[41] lifecycle_1.0.4   vctrs_0.6.5       evaluate_1.0.3    glue_1.7.0       
-[45] farver_2.1.2      whisker_0.4.1     colorspace_2.1-0  rmarkdown_2.29   
-[49] httr_1.4.7        tools_4.3.0       pkgconfig_2.0.3   htmltools_0.5.8.1</code></pre>
+ [9] git2r_0.35.0      gridExtra_2.3     callr_3.7.6       later_1.3.2      
+[13] jquerylib_0.1.4   scales_1.3.0      yaml_2.3.10       fastmap_1.1.1    
+[17] plyr_1.8.9        R6_2.5.1          labeling_0.4.3    generics_0.1.3   
+[21] knitr_1.49        tibble_3.2.1      munsell_0.5.1     rprojroot_2.0.4  
+[25] bslib_0.8.0       pillar_1.10.1     rlang_1.1.3       cachem_1.0.8     
+[29] stringi_1.8.3     httpuv_1.6.15     xfun_0.50         getPass_0.2-4    
+[33] fs_1.6.3          sass_0.4.9        cli_3.6.1         withr_3.0.2      
+[37] magrittr_2.0.3    ps_1.8.1          digest_0.6.34     grid_4.3.0       
+[41] processx_3.8.5    rstudioapi_0.17.1 lifecycle_1.0.4   vctrs_0.6.5      
+[45] evaluate_1.0.3    glue_1.7.0        farver_2.1.2      whisker_0.4.1    
+[49] colorspace_2.1-0  rmarkdown_2.29    httr_1.4.7        tools_4.3.0      
+[53] pkgconfig_2.0.3   htmltools_0.5.8.1</code></pre>
 </div>
 </div>
 
