@@ -228,7 +228,7 @@ upset(
 ```
 
 ## **📌 UpSet Plot of DEGs Across Samples\n(Show all intersections till last lowest size)**
-```{r upset3, echo=TRUE, message=FALSE,fig.width=16, fig.height=9}
+```{r upset3, echo=TRUE, message=FALSE,fig.width=20, fig.height=9}
 upset(
   DEG_matrix,
   sets = set_order,  # Specify the exact order of sets
