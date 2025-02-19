@@ -16,6 +16,8 @@ This analysis generates **boxplots for cardiac genes and TOP2 genes** across dif
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(org.Hs.eg.db)
+library(clusterProfiler)
 ```
 
 ## **📌 Read Log2CPM Data**
@@ -187,5 +189,195 @@ for (gene in dna_damage_genes) {
   print(p)
 }
 ```
+##**📌 DNA Damage Proportion**
+
+## **📌 Read and Process DEG Data**
+```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Extract Significant DEGs
+DEGs <- list(
+  "CX_0.1_3" = CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05],
+  "CX_0.1_24" = CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05],
+  "CX_0.1_48" = CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05],
+  "CX_0.5_3" = CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05],
+  "CX_0.5_24" = CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05],
+  "CX_0.5_48" = CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05],
+  "DOX_0.1_3" = DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05],
+  "DOX_0.1_24" = DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05],
+  "DOX_0.1_48" = DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05],
+  "DOX_0.5_3" = DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05],
+  "DOX_0.5_24" = DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05],
+  "DOX_0.5_48" = DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
+)
+
+# Extract Significant DEGs
+DEG1 <- CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05]
+DEG2 <- CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05]
+DEG3 <- CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05]
+DEG4 <- CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05]
+DEG5 <- CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05]
+DEG6 <- CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05]
+
+DEG7 <- DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05]
+DEG8 <- DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05]
+DEG9 <- DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05]
+DEG10 <- DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05]
+DEG11 <- DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05]
+DEG12 <- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
+```
+
+## **📌 DNA Damage Proportion with Chi-Square Test**
+```{r DNA_Damage_Proportion, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load DNA Damage Genes List
+DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
+DNA_damage$Entrez_ID <- mapIds(org.Hs.eg.db,
+                               keys = DNA_damage$Symbol,
+                               column = "ENTREZID",
+                               keytype = "SYMBOL",
+                               multiVals = "first")
+
+# Define CX-5461 DEG lists
+CX_DEGs <- list(
+  "CX_0.1_3" = DEG1, "CX_0.1_24" = DEG2, "CX_0.1_48" = DEG3,
+  "CX_0.5_3" = DEG4, "CX_0.5_24" = DEG5, "CX_0.5_48" = DEG6
+)
+
+# Define DOX DEG lists
+DOX_DEGs <- list(
+  "DOX_0.1_3" = DEG7, "DOX_0.1_24" = DEG8, "DOX_0.1_48" = DEG9,
+  "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
+)
+
+# Extract Entrez_IDs from DNA Damage gene dataset
+DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+
+# Combine CX-5461 DEGs into a dataframe with a "Drug" column
+CX_DEGs_df <- bind_rows(
+  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "CX-5461")),
+  .id = "Sample"
+)
+
+# Combine DOX DEGs into a dataframe with a "Drug" column
+DOX_DEGs_df <- bind_rows(
+  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "DOX")),
+  .id = "Sample"
+)
+
+# Merge CX-5461 and DOX datasets
+DEGs_df <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+
+# Check if genes are in DNA Damage list
+DEGs_df <- DEGs_df %>%
+  mutate(Category = ifelse(Entrez_ID %in% DNA_damage_genes, "Yes", "No"))
+
+# Count DNA damage genes in each sample
+proportion_data <- DEGs_df %>%
+  group_by(Sample, Drug, Category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Sample, Drug) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Normalize Percentages to Sum Exactly 100%
+proportion_data <- proportion_data %>%
+  group_by(Sample) %>%
+  mutate(Percentage = round(Percentage, 2)) %>%
+  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %>%
+  mutate(Percentage = ifelse(Category == "No", Percentage + Adjustment, Percentage)) %>%
+  mutate(Percentage = ifelse(Percentage < 0, 0, Percentage)) %>%
+  mutate(Percentage = ifelse(Percentage > 100, 100, Percentage)) %>%
+  ungroup() %>%
+  replace_na(list(Percentage = 0))
+
+# Ensure "Yes" is at the Bottom and "No" is at the Top
+proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
+
+# **🔹 Maintain Correct X-Axis Order (3 → 24 → 48)**
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", 
+  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", 
+  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+
+# **Perform Chi-Square Test for CX vs DOX Pairs**
+chi_square_results <- data.frame(Sample = character(), P_Value = numeric())
+
+for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
+  cx_sample <- sample_order[i]
+  dox_sample <- sample_order[i + 6]  # Correctly pairs CX_0.1_3 with DOX_0.1_3, etc.
+  
+  cx_data <- filter(proportion_data, Sample == cx_sample)
+  dox_data <- filter(proportion_data, Sample == dox_sample)
+  
+  # Construct contingency table for Chi-Square test
+  contingency_table <- matrix(
+    c(sum(cx_data$Count[cx_data$Category == "Yes"]), sum(cx_data$Count[cx_data$Category == "No"]),
+      sum(dox_data$Count[dox_data$Category == "Yes"]), sum(dox_data$Count[dox_data$Category == "No"])),
+    nrow = 2, byrow = TRUE
+  )
+  
+  # Run Chi-Square Test
+  test_result <- chisq.test(contingency_table)
+  p_value <- test_result$p.value
+  
+  # Store results
+  chi_square_results <- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value))
+}
+
+# Identify significant CX samples (p < 0.05)
+chi_square_results$Significant <- ifelse(chi_square_results$P_Value < 0.05, "*", "")
+
+# **🔹 Merge Chi-Square Results WITHOUT Modifying Order**
+proportion_data <- left_join(proportion_data, chi_square_results, by = "Sample")
+
+# **Reapply Factor Order to Prevent Changes**
+proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+```
+
+
+## **📌 DNA Damage Proportion Plot**
+```{r ggplot, echo=TRUE, message=FALSE}
+
+# **Generate Proportion Plot for CX-5461 and DOX**
+ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(data = subset(proportion_data, Significant == "*"),
+            aes(x = Sample, y = 102, label = "*"),
+            size = 6, color = "black", fontface = "bold") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +
+  labs(
+    title = "Proportion of DNA Damage Genes in CX-5461 and DOX DEGs with Significance",
+    x = "Samples (CX-5461 and DOX)",
+    y = "Percentage",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
 
 
