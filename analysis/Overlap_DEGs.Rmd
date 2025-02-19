@@ -1,0 +1,181 @@
+---
+title: "Venn Diagram Overlap of DE Genes"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 overlap of DE genes**
+
+## **📌 Read and Process DEG Data**
+```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Extract Significant DEGs
+DEG1 <- CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05]
+DEG2 <- CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05]
+DEG3 <- CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05]
+DEG4 <- CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05]
+DEG5 <- CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05]
+DEG6 <- CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05]
+
+DEG7 <- DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05]
+DEG8 <- DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05]
+DEG9 <- DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05]
+DEG10 <- DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05]
+DEG11 <- DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05]
+DEG12 <- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
+```
+
+## **📌 Load Libraries**
+```{r load_lib, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggVennDiagram)
+```
+
+## **📌 Across Drugs**
+
+## **📌Venn Diagram: CX-5461 vs VEH (0.1 µM)**
+```{r venn1, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest <- list(DEG1, DEG2, DEG3)
+ggVennDiagram(
+  venntest,
+  category.names = c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48"),
+  fill = c("red", "blue", "green")
+) + ggtitle("CX-5461 Vs VEH 0.1 micromolar")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+
+```
+
+## **📌Venn Diagram: CX-5461 vs VEH (0.5 µM)**
+```{r venn2, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest1 <- list(DEG4, DEG5, DEG6)
+ggVennDiagram(
+  venntest1,
+  category.names = c("CX_0.5_3", "CX_0.5_24", "CX_0.5_48"),
+  fill = c("red", "blue", "green")
+) + ggtitle("CX-5461 Vs VEH 0.5 micromolar")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+## **📌Venn Diagram: DOX vs VEH (0.1 µM)**
+```{r venn3, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest2 <- list(DEG7, DEG8, DEG9)
+ggVennDiagram(
+  venntest2,
+  category.names = c("DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48"),
+  fill = c("red", "blue", "green")
+) + ggtitle("DOX Vs VEH 0.1 micromolar")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+## **📌Venn Diagram: DOX vs VEH (0.5 µM)**
+```{r venn4, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest3 <- list(DEG10, DEG11, DEG12)
+ggVennDiagram(
+  venntest3,
+  category.names = c("DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"),
+  fill = c("red", "blue", "green")
+) + ggtitle("DOX Vs VEH 0.5 micromolar")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+
+## **📌 Across Concentrations**
+
+## **📌Venn Diagram: 0.1 Micromolar**
+```{r venn5, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest7 <- list(DEG1, DEG2, DEG3, DEG7, DEG8, DEG9)
+ggVennDiagram(
+  venntest7, label = "count",
+  category.names = c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48")
+) + ggtitle("0.1 micromolar")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+
+## **📌Venn Diagram: 0.5 Micromolar**
+```{r venn6, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest8 <- list(DEG4, DEG5, DEG6, DEG10, DEG11, DEG12)
+ggVennDiagram(
+  venntest8, label = "count",
+  category.names = c("CX_0.5_3", "CX_0.5_24", "CX_0.5_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+) + ggtitle("0.5 micromolar")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+
+## **📌 Across Timepoints**
+
+
+## **📌Venn Diagram: 3-hour Timepoint**
+```{r venn7, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest4 <- list(DEG1, DEG4, DEG7, DEG10)
+ggVennDiagram(
+  venntest4, label_percent_digit = 2,
+  category.names = c("CX_0.1_3", "CX_0.5_3", "DOX_0.1_3", "DOX_0.5_3")
+) + ggtitle("3hr")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+
+## **📌Venn Diagram: 24-hour Timepoint**
+```{r venn8, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest5 <- list(DEG2, DEG5, DEG8, DEG11)
+ggVennDiagram(
+  venntest5, label_percent_digit = 2,
+  category.names = c("CX_0.1_24", "CX_0.5_24", "DOX_0.1_24", "DOX_0.5_24")
+) + ggtitle("24hr")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
+
+
+## **📌Venn Diagram: 48-hour Timepoint**
+```{r venn9, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+venntest6 <- list(DEG3, DEG6, DEG9, DEG12)
+ggVennDiagram(
+  venntest6, label_percent_digit = 2,
+  category.names = c("CX_0.1_48", "CX_0.5_48", "DOX_0.1_48", "DOX_0.5_48")
+) + ggtitle("48hr")+
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Increase title size
+    text = element_text(size = 16)  # Increase text size globally
+  )
+```
