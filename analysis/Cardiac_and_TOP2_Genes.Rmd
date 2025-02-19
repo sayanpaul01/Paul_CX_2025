@@ -362,7 +362,7 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
   scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
   scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +
   labs(
-    title = "Proportion of DNA Damage Genes in CX-5461 and DOX DEGs with Significance",
+    title = "Proportion of DNA Damage Genes in CX-5461 and DOX DEGs\nwith Significance",
     x = "Samples (CX-5461 and DOX)",
     y = "Percentage",
     fill = "Category"
