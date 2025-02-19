@@ -44,6 +44,7 @@ DEG12 <- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
 ```{r load_lib, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 library(ggplot2)
 library(ggVennDiagram)
+library(UpSetR)
 ```
 
 ## **📌 Across Drugs**
@@ -179,3 +180,141 @@ ggVennDiagram(
     text = element_text(size = 16)  # Increase text size globally
   )
 ```
+
+
+## **📌 Overlap of DEGs (Upset Plot)**
+
+## **📌 Loading data**
+```{r upset1, echo=TRUE, results='hide', message=FALSE}
+# Extract Significant DEGs
+# Create a list of DEGs for each sample
+DEG_list <- list(
+  CX_0.1_3 = CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05],
+  CX_0.1_24 = CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05],
+  CX_0.1_48 = CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05],
+  CX_0.5_3 = CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05],
+  CX_0.5_24 = CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05],
+  CX_0.5_48 = CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05],
+  DOX_0.1_3 = DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05],
+  DOX_0.1_24 = DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05],
+  DOX_0.1_48 = DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05],
+  DOX_0.5_3 = DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05],
+  DOX_0.5_24 = DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05],
+  DOX_0.5_48 = DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
+)
+
+# Convert list to binary matrix
+DEG_matrix <- fromList(DEG_list)
+
+# Define order of sets
+set_order <- names(DEG_list)
+```
+
+## **📌 UpSet Plot of DEGs Across Samples\n(Show all intersections till lowest size 5)**
+```{r upset2, echo=TRUE, message=FALSE, fig.width=12, fig.height=8}
+upset(
+  DEG_matrix,
+  sets = set_order,  # Specify the exact order of sets
+  order.by = "freq",  # Order intersections by frequency
+  main.bar.color = "blue",  # Color for the intersection bars
+  matrix.color = "black",  # Color for matrix dots
+  sets.bar.color = rainbow(length(DEG_list)),  # Assign different colors to set size bars
+  keep.order = TRUE,  # Keep the specified order of sets
+  number.angles = 0,  # Angle of numbers in intersection size bars
+  point.size = 2.5,  # Size of points in the matrix
+  text.scale = 1,  # Scale for text elements
+  show.numbers = "yes"  # Show intersection size numbers directly
+)
+```
+
+## **📌 UpSet Plot of DEGs Across Samples\n(Show all intersections till last lowest size)**
+```{r upset3, echo=TRUE, message=FALSE,fig.width=16, fig.height=9}
+upset(
+  DEG_matrix,
+  sets = set_order,  # Specify the exact order of sets
+  order.by = "freq",  # Order intersections by frequency
+  main.bar.color = "blue",  # Color for the intersection bars
+  matrix.color = "black",  # Color for matrix dots
+  sets.bar.color = rainbow(length(DEG_list)),  # Assign different colors to set size bars
+  keep.order = TRUE,  # Keep the specified order of sets
+  number.angles = 0,  # Angle of numbers in intersection size bars
+  point.size = 2.5,  # Size of points in the matrix
+  text.scale = 1,  # Scale for text elements
+  show.numbers = "yes",  # Show intersection size numbers directly
+  nintersects = NA  # Show all intersections including those with lowest size
+)
+```
+
+## **📌 Drug Specific DE genes**
+
+## **📌 UpSet Plot: CX-5461 vs DOX**
+```{r upset4, echo=TRUE, message=FALSE}
+# Combine DEGs under CX-5461 and DOX
+CX_DEGs <- unique(unlist(DEG_list[1:6]))
+DOX_DEGs <- unique(unlist(DEG_list[7:12]))
+
+# Create binary matrix for drug-specific DEGs
+DEG_matrix_drug <- fromList(list(CX_5461 = CX_DEGs, DOX = DOX_DEGs))
+
+# Generate the UpSet plot for drugs
+upset(
+  DEG_matrix_drug,
+  sets = c("CX_5461", "DOX"),
+  order.by = "freq",
+  main.bar.color = "darkgreen",
+  point.size = 3,
+  text.scale = 1.5,
+  matrix.color = "purple",
+  sets.bar.color = c("blue", "red")
+)
+```
+
+## **📌 Conc. Specific DE genes**
+## **📌 UpSet Plot: Concentration-Specific DEGs**
+```{r upset5, echo=TRUE, message=FALSE}
+# Combine DEGs under concentrations 0.1 and 0.5
+DEG_0.1 <- unique(unlist(DEG_list[c(1, 2, 3, 7, 8, 9)]))
+DEG_0.5 <- unique(unlist(DEG_list[c(4, 5, 6, 10, 11, 12)]))
+
+# Create binary matrix for concentration-specific DEGs
+DEG_matrix_concentration <- fromList(list(Concentration_0.1 = DEG_0.1, Concentration_0.5 = DEG_0.5))
+
+# Generate the UpSet plot for concentration
+upset(
+  DEG_matrix_concentration,
+  sets = c("Concentration_0.1", "Concentration_0.5"),
+  order.by = "freq",
+  main.bar.color = "darkorange",
+  matrix.color = "darkblue",
+  sets.bar.color = c("cyan", "magenta"),
+  text.scale = 1.5,
+  keep.order = TRUE
+)
+```
+
+
+## **📌 Timepoints Specific DE genes**
+## **📌 UpSet Plot: Timepoint-Specific DEGs**
+```{r upset6, echo=TRUE, message=FALSE}
+# Combine DEGs under timepoints 3hr, 24hr, and 48hr
+DEG_3hr <- unique(unlist(DEG_list[c(1, 4, 7, 10)]))
+DEG_24hr <- unique(unlist(DEG_list[c(2, 5, 8, 11)]))
+DEG_48hr <- unique(unlist(DEG_list[c(3, 6, 9, 12)]))
+
+# Create binary matrix for timepoint-specific DEGs
+DEG_matrix_timepoint <- fromList(list(Timepoint_3hr = DEG_3hr, Timepoint_24hr = DEG_24hr, Timepoint_48hr = DEG_48hr))
+
+# Generate the UpSet plot for timepoints
+upset(
+  DEG_matrix_timepoint,
+  sets = c("Timepoint_3hr", "Timepoint_24hr", "Timepoint_48hr"),
+  order.by = "freq",
+  main.bar.color = "darkgreen",
+  matrix.color = "darkred",
+  sets.bar.color = c("blue", "orange", "purple"),
+  text.scale = 1.5,
+  keep.order = TRUE
+)
+```
+
+
