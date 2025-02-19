@@ -240,7 +240,7 @@ DEG11 <- DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05]
 DEG12 <- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
 ```
 
-## **📌 DNA Damage Proportion with Chi-Square Test**
+## **📌 DNA Damage Repair Proportion with Chi-Square Test**
 ```{r DNA_Damage_Proportion, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 # Load DNA Damage Genes List
 DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
@@ -350,7 +350,7 @@ proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, 
 ```
 
 
-## **📌 DNA Damage Proportion Plot**
+## **📌 DNA Damage Repair Proportion Plot**
 ```{r ggplot, echo=TRUE, message=FALSE}
 
 # **Generate Proportion Plot for CX-5461 and DOX**
@@ -362,7 +362,7 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
   scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
   scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +
   labs(
-    title = "Proportion of DNA Damage Genes in CX-5461 and DOX DEGs\nwith Significance",
+    title = "Proportion of DNA Damage Repair Genes in\nCX-5461 and DOX DEGs with Significance",
     x = "Samples (CX-5461 and DOX)",
     y = "Percentage",
     fill = "Category"
