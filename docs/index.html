@@ -281,7 +281,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -292,8 +292,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -306,9 +306,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -331,36 +331,33 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree6a1580c39867acf0c70c50f2e49e7680a80dd15dtargetblank6a1580ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7f9dc0289c28242d041bc31e19e61a31b6cdaac4targetblank7f9dc02a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/6a1580c39867acf0c70c50f2e49e7680a80dd15d" target="_blank">6a1580c</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7f9dc0289c28242d041bc31e19e61a31b6cdaac4" target="_blank">7f9dc02</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree6a1580c39867acf0c70c50f2e49e7680a80dd15dtargetblank6a1580ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7f9dc0289c28242d041bc31e19e61a31b6cdaac4targetblank7f9dc02a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -370,7 +367,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/6a1580c39867acf0c70c50f2e49e7680a80dd15d" target="_blank">6a1580c</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7f9dc0289c28242d041bc31e19e61a31b6cdaac4" target="_blank">7f9dc02</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -390,10 +387,20 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  analysis/GO_KEGG_DEG.Rmd
+    Untracked:  data/CX_0.1_24 (Combined).csv
+    Untracked:  data/CX_0.1_48 (Combined).csv
+    Untracked:  data/CX_0.5_24 (Combined).csv
+    Untracked:  data/CX_0.5_3 (Combined).csv
+    Untracked:  data/CX_0.5_48 (Combined).csv
+    Untracked:  data/DOX_0.1_24 (Combined).csv
+    Untracked:  data/DOX_0.1_3 (Combined).csv
+    Untracked:  data/DOX_0.1_48 (Combined).csv
+    Untracked:  data/DOX_0.5_24 (Combined).csv
+    Untracked:  data/DOX_0.5_3 (Combined).csv
+    Untracked:  data/DOX_0.5_48 (Combined).csv
 
 Unstaged changes:
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/Overlap_DEGs.Rmd
 
 </code></pre>
 <p>
@@ -438,6 +445,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/7f9dc0289c28242d041bc31e19e61a31b6cdaac4/analysis/index.Rmd" target="_blank">7f9dc02</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-20
+</td>
+<td>
+Added Overlap of GO Terms in DEGs and updated index
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/f57065b66ef1db6a04b65520fdad7d3175f7247a/docs/index.html" target="_blank">f57065b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-20
+</td>
+<td>
+Updated index to include Function and Pathway Enrichment of DEGs
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/00119551aa1e0237ac3aca917de5204dc1e8017d/analysis/index.Rmd" target="_blank">0011955</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-20
+</td>
+<td>
+Updated index to include Function and Pathway Enrichment of DEGs
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1334,6 +1392,9 @@ of DEGs</a></strong></p></li>
 <li><p><strong><a
 href="https://sayanpaul01.github.io/CX5461_Project/GO_KEGG_DEG.html">Function
 and Pathway Enrichment of DEGs</a></strong></p></li>
+<li><p><strong><a
+href="https://sayanpaul01.github.io/CX5461_Project/Overlap_GO_DEG.html">Overlap
+of GO Terms in DEGs</a></strong></p></li>
 </ul>
 <div id="source-code" class="section level3">
 <h3>🔗 <strong>Source Code</strong></h3>
