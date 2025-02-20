@@ -34,6 +34,10 @@ Welcome to my research website.
 
 - **[Overlap of DEGs](https://sayanpaul01.github.io/CX5461_Project/Overlap_DEGs.html)**
 
+- **[Function and Pathway Enrichment of DEGs](https://sayanpaul01.github.io/CX5461_Project/GO_KEGG_DEG.html)** 
+
+
+
 ### 🔗 **Source Code**  
 
 [![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/sayanpaul01/CX5461_Project)
