@@ -1,0 +1,179 @@
+---
+title: "Overlap of GO Terms in DEGs"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 Load Required Libraries**
+```{r load_libraries, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
+library(ggVennDiagram)
+library(ggplot2)
+library(dplyr)
+```
+
+## **📌 Read and Process GO Terms**
+```{r load_GO, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
+# Load GO term data for different conditions
+# Load GO term data for different conditions
+CX_0.1_24_GO <- read.csv("data/CX_0.1_24 (Combined).csv")
+CX_0.1_48_GO <- read.csv("data/CX_0.1_48 (Combined).csv")
+CX_0.5_3_GO  <- read.csv("data/CX_0.5_3 (Combined).csv")
+CX_0.5_24_GO <- read.csv("data/CX_0.5_24 (Combined).csv")
+CX_0.5_48_GO <- read.csv("data/CX_0.5_48 (Combined).csv")
+
+DOX_0.1_3_GO  <- read.csv("data/DOX_0.1_3 (Combined).csv")
+DOX_0.1_24_GO <- read.csv("data/DOX_0.1_24 (Combined).csv")
+DOX_0.1_48_GO <- read.csv("data/DOX_0.1_48 (Combined).csv")
+DOX_0.5_3_GO  <- read.csv("data/DOX_0.5_3 (Combined).csv")
+DOX_0.5_24_GO <- read.csv("data/DOX_0.5_24 (Combined).csv")
+DOX_0.5_48_GO <- read.csv("data/DOX_0.5_48 (Combined).csv")
+
+# Extract GO term IDs for each condition
+DEG2_GO <- CX_0.1_24_GO$ID
+DEG3_GO <- CX_0.1_48_GO$ID
+DEG4_GO <- CX_0.5_3_GO$ID
+DEG5_GO <- CX_0.5_24_GO$ID
+DEG6_GO <- CX_0.5_48_GO$ID
+DEG7_GO <- DOX_0.1_3_GO$ID
+DEG8_GO <- DOX_0.1_24_GO$ID
+DEG9_GO <- DOX_0.1_48_GO$ID
+DEG10_GO <- DOX_0.5_3_GO$ID
+DEG11_GO <- DOX_0.5_24_GO$ID
+DEG12_GO <- DOX_0.5_48_GO$term_id
+```
+
+## **📌 Overlap of GO Terms across the drugs**
+
+## **📌 Overlap of GO Terms in CX-5461 vs VEH**
+```{r Venn1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+CX_Datasets <- list(
+  "CX_0.1_24" = DEG2_GO,
+  "CX_0.1_48" = DEG3_GO,
+  "CX_0.5_3" = DEG4_GO,
+  "CX_0.5_24" = DEG5_GO,
+  "CX_0.5_48" = DEG6_GO
+)
+
+ggVennDiagram(CX_Datasets, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "CX-5461 GO Term Overlap")
+```
+
+## **📌 Overlap of GO Terms in DOX vs VEH**
+```{r Venn2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+DOX_Datasets <- list(
+  "DOX_0.1_3" = DEG7_GO,
+  "DOX_0.1_24" = DEG8_GO,
+  "DOX_0.1_48" = DEG9_GO,
+  "DOX_0.5_3" = DEG10_GO,
+  "DOX_0.5_24" = DEG11_GO,
+  "DOX_0.5_48" = DEG12_GO
+)
+
+ggVennDiagram(DOX_Datasets, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "DOX GO Term Overlap")
+```
+
+## **📌 Overlap of GO Terms across concentrations**
+## **📌 0.1 µM Concentration**
+```{r Venn3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+Concentration_0_1 <- list(
+  "CX_0.1_24" = DEG2_GO,
+  "CX_0.1_48" = DEG3_GO,
+  "DOX_0.1_3" = DEG7_GO,
+  "DOX_0.1_24" = DEG8_GO,
+  "DOX_0.1_48" = DEG9_GO
+)
+
+ggVennDiagram(Concentration_0_1, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "0.1 µM GO Term Overlap")
+```
+
+## **📌 0.5 µM Concentration**
+```{r Venn4, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+Concentration_0_5 <- list(
+  "CX_0.5_3" = DEG4_GO,
+  "CX_0.5_24" = DEG5_GO,
+  "CX_0.5_48" = DEG6_GO,
+  "DOX_0.5_3" = DEG10_GO,
+  "DOX_0.5_24" = DEG11_GO,
+  "DOX_0.5_48" = DEG12_GO
+)
+
+ggVennDiagram(Concentration_0_5, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "0.5 µM GO Term Overlap")
+```
+
+## **📌 Overlap of GO Terms Across Timepoints**
+## **📌3 Hours**
+```{r Venn5, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+Timepoint_3hrs <- list(
+  "CX_0.5_3" = DEG4_GO,
+  "DOX_0.1_3" = DEG7_GO,
+  "DOX_0.5_3" = DEG10_GO
+)
+
+ggVennDiagram(Timepoint_3hrs, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "3 Hours GO Term Overlap")
+```
+
+## **📌24 Hours**
+```{r Venn6, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+Timepoint_24hrs <- list(
+  "CX_0.1_24" = DEG2_GO,
+  "CX_0.5_24" = DEG5_GO,
+  "DOX_0.1_24" = DEG8_GO,
+  "DOX_0.5_24" = DEG11_GO
+)
+
+ggVennDiagram(Timepoint_24hrs, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "24 Hours GO Term Overlap")
+```
+
+## **📌48 Hours**
+```{r Venn7, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+Timepoint_48hrs <- list(
+  "CX_0.1_48" = DEG3_GO,
+  "CX_0.5_48" = DEG6_GO,
+  "DOX_0.1_48" = DEG9_GO,
+  "DOX_0.5_48" = DEG12_GO
+)
+
+ggVennDiagram(Timepoint_48hrs, label = "count") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  labs(title = "48 Hours GO Term Overlap")
+```
