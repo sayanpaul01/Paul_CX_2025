@@ -50,7 +50,7 @@ library(UpSetR)
 ## **📌 Across Drugs**
 
 ## **📌Venn Diagram: CX-5461 vs VEH (0.1 µM)**
-```{r venn1, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn1, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest <- list(DEG1, DEG2, DEG3)
 ggVennDiagram(
   venntest,
@@ -65,7 +65,7 @@ ggVennDiagram(
 ```
 
 ## **📌Venn Diagram: CX-5461 vs VEH (0.5 µM)**
-```{r venn2, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn2, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest1 <- list(DEG4, DEG5, DEG6)
 ggVennDiagram(
   venntest1,
@@ -79,7 +79,7 @@ ggVennDiagram(
 ```
 
 ## **📌Venn Diagram: DOX vs VEH (0.1 µM)**
-```{r venn3, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn3, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest2 <- list(DEG7, DEG8, DEG9)
 ggVennDiagram(
   venntest2,
@@ -93,7 +93,7 @@ ggVennDiagram(
 ```
 
 ## **📌Venn Diagram: DOX vs VEH (0.5 µM)**
-```{r venn4, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn4, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest3 <- list(DEG10, DEG11, DEG12)
 ggVennDiagram(
   venntest3,
@@ -110,7 +110,7 @@ ggVennDiagram(
 ## **📌 Across Concentrations**
 
 ## **📌Venn Diagram: 0.1 Micromolar**
-```{r venn5, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn5, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest7 <- list(DEG1, DEG2, DEG3, DEG7, DEG8, DEG9)
 ggVennDiagram(
   venntest7, label = "count",
@@ -124,7 +124,7 @@ ggVennDiagram(
 
 
 ## **📌Venn Diagram: 0.5 Micromolar**
-```{r venn6, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn6, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest8 <- list(DEG4, DEG5, DEG6, DEG10, DEG11, DEG12)
 ggVennDiagram(
   venntest8, label = "count",
@@ -141,7 +141,7 @@ ggVennDiagram(
 
 
 ## **📌Venn Diagram: 3-hour Timepoint**
-```{r venn7, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn7, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest4 <- list(DEG1, DEG4, DEG7, DEG10)
 ggVennDiagram(
   venntest4, label_percent_digit = 2,
@@ -155,7 +155,7 @@ ggVennDiagram(
 
 
 ## **📌Venn Diagram: 24-hour Timepoint**
-```{r venn8, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn8, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest5 <- list(DEG2, DEG5, DEG8, DEG11)
 ggVennDiagram(
   venntest5, label_percent_digit = 2,
@@ -169,7 +169,7 @@ ggVennDiagram(
 
 
 ## **📌Venn Diagram: 48-hour Timepoint**
-```{r venn9, echo=TRUE, results='hide', message=FALSE, fig.width=10, fig.height=8}
+```{r venn9, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 venntest6 <- list(DEG3, DEG6, DEG9, DEG12)
 ggVennDiagram(
   venntest6, label_percent_digit = 2,
