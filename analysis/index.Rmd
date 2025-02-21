@@ -39,6 +39,12 @@ Welcome to my research website.
 - **[Overlap of GO Terms across drugs, concentrations, and timepoints](https://sayanpaul01.github.io/CX5461_Project/Overlap_GO_DEG.html)**
 
 
+## **📌 Bayesian Clustering of Gene Expression with Corrmotif**
+
+- **[Corrmotif Model and Patterns](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all.html)**
+
+
+
 ### 🔗 **Source Code**  
 
 [![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/sayanpaul01/CX5461_Project)
