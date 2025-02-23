@@ -763,6 +763,7 @@ plotMotif<-function(fitted_cormotif,title="")
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
+library(reshape2)
 library(clusterProfiler)
 library(AnnotationDbi)
 library(org.Hs.eg.db)
@@ -893,4 +894,293 @@ ggplot(data, aes(x = "", y = Value, fill = Category)) +
   theme_void() +
   scale_fill_manual(values = custom_colors)
 ```
+
+## **📌 Corr-motif Boxplots**
+## **📌 Non response (MRPL20)**
+```{r box1, echo=TRUE, message=FALSE, warning=FALSE}
+# Load the dataset from the data folder
+# Load the dataset from the data folder
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+
+boxplot1 <- as.data.frame(boxplot1)
+
+# Print first few column names to check structure
+print(colnames(boxplot1))
+
+# Print first few rows to check format
+print(head(boxplot1[, 1:10]))
+
+# Filter data for the gene with Entrez ID: 55052
+gene_data <- boxplot1[boxplot1$ENTREZID == 55052, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop("No data found for the selected gene ENTIREZID 55052.")
+}
+
+# Reshape data from wide to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))
+
+# Extract details from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))
+
+# Convert extracted columns to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = c("0.1", "0.5"))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long <- gene_data_long %>%
+  group_by(Concentration) %>%
+  filter(all(Concentration == "0.1") | all(Concentration == "0.5")) %>%
+  ungroup()
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))
+
+# Check for missing values and handle them
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(is.na(Indv), "Unknown", Indv))  # Assign "Unknown" to unidentified individuals
+
+# Define drug colors
+drug_palette <- c("CX.5461" = "blue", "DOX" = "red", "VEH" = "green")
+
+# Extract the gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("Non response") +
+  labs(
+    title = "Non response",
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+
+## **📌 Non response (FAAP20)**
+```{r box2, echo=TRUE, message=FALSE, warning=FALSE}
+# Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID: 199990
+gene_data <- boxplot1[boxplot1$ENTREZID == 199990, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop("No data found for the selected gene ENTIREZID 199990.")
+}
+
+# Reshape data from wide to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))
+
+# Extract details from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))
+
+# Convert extracted columns to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = c("0.1", "0.5"))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long <- gene_data_long %>%
+  group_by(Concentration) %>%
+  filter(all(Concentration == "0.1") | all(Concentration == "0.5")) %>%
+  ungroup()
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))
+
+# Check for missing values and handle them
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(is.na(Indv), "Unknown", Indv))  # Assign "Unknown" to unidentified individuals
+
+# Define drug colors
+drug_palette <- c("CX.5461" = "blue", "DOX" = "red", "VEH" = "green")
+
+# Extract the gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("Non response") +
+  labs(
+    title = "Non response",
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+
+## **📌 CX_DOX shared late response (MPHOSPH9)**
+```{r box3, echo=TRUE, message=FALSE, warning=FALSE}
+# Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID: 10198
+gene_data <- boxplot1[boxplot1$ENTREZID == 10198, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop("No data found for the selected gene ENTIREZID 10198.")
+}
+
+# Reshape data from wide to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))
+
+# Extract details from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))
+
+# Convert extracted columns to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = c("0.1", "0.5"))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long <- gene_data_long %>%
+  group_by(Concentration) %>%
+  filter(all(Concentration == "0.1") | all(Concentration == "0.5")) %>%
+  ungroup()
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))
+
+# Check for missing values and handle them
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(is.na(Indv), "Unknown", Indv))  # Assign "Unknown" to unidentified individuals
+
+# Define drug colors
+drug_palette <- c("CX.5461" = "blue", "DOX" = "red", "VEH" = "green")
+
+# Extract the gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("Non response") +
+  labs(
+    title = "Non response",
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
 
