@@ -378,7 +378,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-21
+<strong>Last updated:</strong> 2025-02-23
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -509,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebf0c4a3dac81065d5077b580f92949b6a8911bc1targetblankbf0c4a3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec4ed3e0b60e059fc645507b7232e0d9ad89ef780targetblankc4ed3e0a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/bf0c4a3dac81065d5077b580f92949b6a8911bc1" target="_blank">bf0c4a3</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c4ed3e0b60e059fc645507b7232e0d9ad89ef780" target="_blank">c4ed3e0</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebf0c4a3dac81065d5077b580f92949b6a8911bc1targetblankbf0c4a3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec4ed3e0b60e059fc645507b7232e0d9ad89ef780targetblankc4ed3e0a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/bf0c4a3dac81065d5077b580f92949b6a8911bc1" target="_blank">bf0c4a3</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c4ed3e0b60e059fc645507b7232e0d9ad89ef780" target="_blank">c4ed3e0</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -547,7 +547,7 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  data/Corrmotif/
+    Untracked:  data/boxplot1.csv
 
 </code></pre>
 <p>
@@ -593,6 +593,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c4ed3e0b60e059fc645507b7232e0d9ad89ef780/analysis/Corrmotif_all.Rmd" target="_blank">c4ed3e0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+<td>
+Updated Corrmotif analysis and index file
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/b56a62ae3daececcbdeee937b8acc8e5fac7b4ff/docs/Corrmotif_all.html" target="_blank">b56a62a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1371,6 +1405,7 @@ plotMotif&lt;-function(fitted_cormotif,title=&quot;&quot;)
 <pre class="r"><code>library(tidyverse)
 library(ggplot2)
 library(dplyr)
+library(reshape2)
 library(clusterProfiler)
 library(AnnotationDbi)
 library(org.Hs.eg.db)
@@ -1425,9 +1460,83 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot BIC and AIC scores
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/Model-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model-1">
+Past versions of Model-1.png
+</button>
+</p>
+<div id="fig-Model-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b56a62ae3daececcbdeee937b8acc8e5fac7b4ff/docs/figure/Corrmotif_all.Rmd/Model-1.png" target="_blank">b56a62a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot Corrmotif Patterns for K=1:8
 plotMotif(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/Model-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model-2">
+Past versions of Model-2.png
+</button>
+</p>
+<div id="fig-Model-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b56a62ae3daececcbdeee937b8acc8e5fac7b4ff/docs/figure/Corrmotif_all.Rmd/Model-2.png" target="_blank">b56a62a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="fit-corrmotif-model-k4" class="section level2">
 <h2><strong>📌 Fit Corrmotif Model (K=4)</strong></h2>
@@ -1449,9 +1558,83 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot BIC and AIC scores
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/Model1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model1-1">
+Past versions of Model1-1.png
+</button>
+</p>
+<div id="fig-Model1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b56a62ae3daececcbdeee937b8acc8e5fac7b4ff/docs/figure/Corrmotif_all.Rmd/Model1-1.png" target="_blank">b56a62a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot Corrmotif Patterns for K=4
 plotMotif(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/Model1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model1-2">
+Past versions of Model1-2.png
+</button>
+</p>
+<div id="fig-Model1-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b56a62ae3daececcbdeee937b8acc8e5fac7b4ff/docs/figure/Corrmotif_all.Rmd/Model1-2.png" target="_blank">b56a62a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="extract-gene-probabilities" class="section level2">
 <h2><strong>📌 Extract Gene Probabilities</strong></h2>
@@ -1508,6 +1691,499 @@ ggplot(data, aes(x = &quot;&quot;, y = Value, fill = Category)) +
   theme_void() +
   scale_fill_manual(values = custom_colors)</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/pie-chart-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pie-chart-1">
+Past versions of pie-chart-1.png
+</button>
+</p>
+<div id="fig-pie-chart-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b56a62ae3daececcbdeee937b8acc8e5fac7b4ff/docs/figure/Corrmotif_all.Rmd/pie-chart-1.png" target="_blank">b56a62a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="corr-motif-boxplots" class="section level2">
+<h2><strong>📌 Corr-motif Boxplots</strong></h2>
+</div>
+<div id="non-response-mrpl20" class="section level2">
+<h2><strong>📌 Non response (MRPL20)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+boxplot1 &lt;- read.csv(&quot;data/boxplot1.csv&quot;, check.names = FALSE)
+
+boxplot1 &lt;- as.data.frame(boxplot1)
+
+# Print first few column names to check structure
+print(colnames(boxplot1))</code></pre>
+<pre><code>  [1] &quot;&quot;                    &quot;ENTREZID&quot;            &quot;SYMBOL&quot;             
+  [4] &quot;GENENAME&quot;            &quot;17.3_CX.5461_0.1_3&quot;  &quot;17.3_DOX_0.5_24&quot;    
+  [7] &quot;87.1_DOX_0.5_24&quot;     &quot;87.1_VEH_0.1_24&quot;     &quot;87.1_VEH_0.5_24&quot;    
+ [10] &quot;87.1_CX.5461_0.1_48&quot; &quot;87.1_CX.5461_0.5_48&quot; &quot;87.1_DOX_0.1_48&quot;    
+ [13] &quot;87.1_DOX_0.5_48&quot;     &quot;87.1_VEH_0.1_48&quot;     &quot;87.1_VEH_0.5_48&quot;    
+ [16] &quot;17.3_VEH_0.1_24&quot;     &quot;17.3_VEH_0.5_24&quot;     &quot;17.3_CX.5461_0.1_48&quot;
+ [19] &quot;17.3_CX.5461_0.5_48&quot; &quot;17.3_DOX_0.1_48&quot;     &quot;17.3_DOX_0.5_48&quot;    
+ [22] &quot;17.3_VEH_0.1_48&quot;     &quot;17.3_VEH_0.5_48&quot;     &quot;84.1_CX.5461_0.1_3&quot; 
+ [25] &quot;17.3_CX.5461_0.5_3&quot;  &quot;84.1_CX.5461_0.5_3&quot;  &quot;84.1_DOX_0.1_3&quot;     
+ [28] &quot;84.1_DOX_0.5_3&quot;      &quot;84.1_VEH_0.1_3&quot;      &quot;84.1_VEH_0.5_3&quot;     
+ [31] &quot;84.1_CX.5461_0.1_24&quot; &quot;84.1_CX.5461_0.5_24&quot; &quot;84.1_DOX_0.1_24&quot;    
+ [34] &quot;84.1_DOX_0.5_24&quot;     &quot;84.1_VEH_0.1_24&quot;     &quot;17.3_DOX_0.1_3&quot;     
+ [37] &quot;84.1_VEH_0.5_24&quot;     &quot;84.1_CX.5461_0.1_48&quot; &quot;84.1_CX.5461_0.5_48&quot;
+ [40] &quot;84.1_DOX_0.1_48&quot;     &quot;84.1_DOX_0.5_48&quot;     &quot;84.1_VEH_0.1_48&quot;    
+ [43] &quot;84.1_VEH_0.5_48&quot;     &quot;90.1_CX.5461_0.1_3&quot;  &quot;90.1_CX.5461_0.5_3&quot; 
+ [46] &quot;90.1_DOX_0.1_3&quot;      &quot;17.3_DOX_0.5_3&quot;      &quot;90.1_DOX_0.5_3&quot;     
+ [49] &quot;90.1_VEH_0.1_3&quot;      &quot;90.1_VEH_0.5_3&quot;      &quot;90.1_CX.5461_0.1_24&quot;
+ [52] &quot;90.1_CX.5461_0.5_24&quot; &quot;90.1_DOX_0.1_24&quot;     &quot;90.1_DOX_0.5_24&quot;    
+ [55] &quot;90.1_VEH_0.1_24&quot;     &quot;90.1_VEH_0.5_24&quot;     &quot;90.1_CX.5461_0.1_48&quot;
+ [58] &quot;17.3_VEH_0.1_3&quot;      &quot;90.1_CX.5461_0.5_48&quot; &quot;90.1_DOX_0.1_48&quot;    
+ [61] &quot;90.1_DOX_0.5_48&quot;     &quot;90.1_VEH_0.1_48&quot;     &quot;90.1_VEH_0.5_48&quot;    
+ [64] &quot;75.1_CX.5461_0.1_3&quot;  &quot;75.1_CX.5461_0.5_3&quot;  &quot;75.1_DOX_0.1_3&quot;     
+ [67] &quot;75.1_DOX_0.5_3&quot;      &quot;75.1_VEH_0.1_3&quot;      &quot;17.3_VEH_0.5_3&quot;     
+ [70] &quot;75.1_VEH_0.5_3&quot;      &quot;75.1_CX.5461_0.1_24&quot; &quot;75.1_CX.5461_0.5_24&quot;
+ [73] &quot;75.1_DOX_0.1_24&quot;     &quot;75.1_DOX_0.5_24&quot;     &quot;75.1_VEH_0.1_24&quot;    
+ [76] &quot;75.1_VEH_0.5_24&quot;     &quot;75.1_CX.5461_0.1_48&quot; &quot;75.1_CX.5461_0.5_48&quot;
+ [79] &quot;75.1_DOX_0.1_48&quot;     &quot;17.3_CX.5461_0.1_24&quot; &quot;75.1_DOX_0.5_48&quot;    
+ [82] &quot;75.1_VEH_0.1_48&quot;     &quot;75.1_VEH_0.5_48&quot;     &quot;78.1_CX.5461_0.1_3&quot; 
+ [85] &quot;78.1_CX.5461_0.5_3&quot;  &quot;78.1_DOX_0.1_3&quot;      &quot;78.1_DOX_0.5_3&quot;     
+ [88] &quot;78.1_VEH_0.1_3&quot;      &quot;78.1_VEH_0.5_3&quot;      &quot;78.1_CX.5461_0.1_24&quot;
+ [91] &quot;17.3_CX.5461_0.5_24&quot; &quot;78.1_CX.5461_0.5_24&quot; &quot;78.1_DOX_0.1_24&quot;    
+ [94] &quot;78.1_DOX_0.5_24&quot;     &quot;78.1_VEH_0.1_24&quot;     &quot;78.1_VEH_0.5_24&quot;    
+ [97] &quot;78.1_CX.5461_0.1_48&quot; &quot;78.1_CX.5461_0.5_48&quot; &quot;78.1_DOX_0.1_48&quot;    
+[100] &quot;78.1_DOX_0.5_48&quot;     &quot;78.1_VEH_0.1_48&quot;     &quot;17.3_DOX_0.1_24&quot;    
+[103] &quot;78.1_VEH_0.5_48&quot;     &quot;87.1_CX.5461_0.1_3&quot;  &quot;87.1_CX.5461_0.5_3&quot; 
+[106] &quot;87.1_DOX_0.1_3&quot;      &quot;87.1_DOX_0.5_3&quot;      &quot;87.1_VEH_0.1_3&quot;     
+[109] &quot;87.1_VEH_0.5_3&quot;      &quot;87.1_CX.5461_0.1_24&quot; &quot;87.1_CX.5461_0.5_24&quot;
+[112] &quot;87.1_DOX_0.1_24&quot;    </code></pre>
+<pre class="r"><code># Print first few rows to check format
+print(head(boxplot1[, 1:10]))</code></pre>
+<pre><code>     ENTREZID       SYMBOL                                 GENENAME
+1 1    653635       WASH7P        WASP family homolog 7, pseudogene
+2 2    729737    LOC729737                uncharacterized LOC729737
+3 3 102723897 LOC102723897 WAS protein family homolog 9, pseudogene
+4 4 100132287 LOC100132287             uncharacterized LOC100132287
+5 5 102465432         &lt;NA&gt;                                     &lt;NA&gt;
+6 6 100133331         &lt;NA&gt;                                     &lt;NA&gt;
+  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 87.1_DOX_0.5_24 87.1_VEH_0.1_24
+1           3.499737        3.777758        4.051060        3.631547
+2           4.018739        3.087263        2.799033        3.631547
+3           3.581464        3.765087        4.210151        3.707275
+4           3.229725        2.970710        1.422530        2.309608
+5           6.910839        6.896427        5.596078        5.581451
+6           3.044515        2.902929        1.971919        2.674101
+  87.1_VEH_0.5_24 87.1_CX.5461_0.1_48
+1        3.758155            3.982758
+2        4.399176            4.292059
+3        3.679166            4.047012
+4        2.553616            2.748309
+5        5.117157            5.156085
+6        2.861516            2.903876</code></pre>
+<pre class="r"><code># Filter data for the gene with Entrez ID: 55052
+gene_data &lt;- boxplot1[boxplot1$ENTREZID == 55052, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID 55052.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;Non response&quot;) +
+  labs(
+    title = &quot;Non response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="non-response-faap20" class="section level2">
+<h2><strong>📌 Non response (FAAP20)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID: 199990
+gene_data &lt;- boxplot1[boxplot1$ENTREZID == 199990, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID 199990.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;Non response&quot;) +
+  labs(
+    title = &quot;Non response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cx_dox-shared-late-response-mphosph9" class="section level2">
+<h2><strong>📌 CX_DOX shared late response (MPHOSPH9)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID: 10198
+gene_data &lt;- boxplot1[boxplot1$ENTREZID == 10198, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID 10198.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;Non response&quot;) +
+  labs(
+    title = &quot;Non response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1545,11 +2221,11 @@ other attached packages:
 [10] ggpubr_0.6.0           pheatmap_1.0.12        gprofiler2_0.2.3      
 [13] RColorBrewer_1.1-3     org.Hs.eg.db_3.18.0    AnnotationDbi_1.64.1  
 [16] IRanges_2.36.0         S4Vectors_0.40.1       Biobase_2.62.0        
-[19] BiocGenerics_0.48.1    clusterProfiler_4.10.1 lubridate_1.9.3       
-[22] forcats_1.0.0          stringr_1.5.1          dplyr_1.1.4           
-[25] purrr_1.0.2            readr_2.1.5            tidyr_1.3.1           
-[28] tibble_3.2.1           ggplot2_3.5.1          tidyverse_2.0.0       
-[31] workflowr_1.7.1       
+[19] BiocGenerics_0.48.1    clusterProfiler_4.10.1 reshape2_1.4.4        
+[22] lubridate_1.9.3        forcats_1.0.0          stringr_1.5.1         
+[25] dplyr_1.1.4            purrr_1.0.2            readr_2.1.5           
+[28] tidyr_1.3.1            tibble_3.2.1           ggplot2_3.5.1         
+[31] tidyverse_2.0.0        workflowr_1.7.1       
 
 loaded via a namespace (and not attached):
   [1] rstudioapi_0.17.1       jsonlite_1.8.9          magrittr_2.0.3         
@@ -1574,26 +2250,26 @@ loaded via a namespace (and not attached):
  [58] scatterpie_0.2.4        httpuv_1.6.15           glue_1.7.0             
  [61] callr_3.7.6             nlme_3.1-166            GOSemSim_2.28.1        
  [64] promises_1.3.0          grid_4.3.0              shadowtext_0.1.4       
- [67] getPass_0.2-4           reshape2_1.4.4          snow_0.4-4             
- [70] fgsea_1.28.0            generics_0.1.3          gtable_0.3.6           
- [73] tzdb_0.4.0              preprocessCore_1.64.0   data.table_1.14.10     
- [76] hms_1.1.3               car_3.1-3               tidygraph_1.3.1        
- [79] XVector_0.42.0          ggrepel_0.9.6           pillar_1.10.1          
- [82] yulab.utils_0.1.8       later_1.3.2             splines_4.3.0          
- [85] tweenr_2.0.3            treeio_1.26.0           lattice_0.22-5         
- [88] bit_4.0.5               tidyselect_1.2.1        GO.db_3.18.0           
- [91] Biostrings_2.70.1       knitr_1.49              git2r_0.35.0           
- [94] gridExtra_2.3           xfun_0.50               graphlayouts_1.2.0     
- [97] statmod_1.5.0           stringi_1.8.3           lazyeval_0.2.2         
-[100] ggfun_0.1.8             yaml_2.3.10             evaluate_1.0.3         
-[103] codetools_0.2-20        ggraph_2.2.1            qvalue_2.34.0          
-[106] BiocManager_1.30.25     affyio_1.72.0           ggplotify_0.1.2        
-[109] cli_3.6.1               munsell_0.5.1           processx_3.8.5         
-[112] jquerylib_0.1.4         GenomeInfoDb_1.38.8     png_0.1-8              
-[115] parallel_4.3.0          blob_1.2.4              DOSE_3.28.2            
-[118] bitops_1.0-7            viridisLite_0.4.2       tidytree_0.4.6         
-[121] scales_1.3.0            crayon_1.5.3            rlang_1.1.3            
-[124] cowplot_1.1.3           fastmatch_1.1-4         KEGGREST_1.42.0        </code></pre>
+ [67] getPass_0.2-4           snow_0.4-4              fgsea_1.28.0           
+ [70] generics_0.1.3          gtable_0.3.6            tzdb_0.4.0             
+ [73] preprocessCore_1.64.0   data.table_1.14.10      hms_1.1.3              
+ [76] car_3.1-3               tidygraph_1.3.1         XVector_0.42.0         
+ [79] ggrepel_0.9.6           pillar_1.10.1           yulab.utils_0.1.8      
+ [82] later_1.3.2             splines_4.3.0           tweenr_2.0.3           
+ [85] treeio_1.26.0           lattice_0.22-5          bit_4.0.5              
+ [88] tidyselect_1.2.1        GO.db_3.18.0            Biostrings_2.70.1      
+ [91] knitr_1.49              git2r_0.35.0            gridExtra_2.3          
+ [94] xfun_0.50               graphlayouts_1.2.0      statmod_1.5.0          
+ [97] stringi_1.8.3           lazyeval_0.2.2          ggfun_0.1.8            
+[100] yaml_2.3.10             evaluate_1.0.3          codetools_0.2-20       
+[103] ggraph_2.2.1            qvalue_2.34.0           BiocManager_1.30.25    
+[106] affyio_1.72.0           ggplotify_0.1.2         cli_3.6.1              
+[109] munsell_0.5.1           processx_3.8.5          jquerylib_0.1.4        
+[112] GenomeInfoDb_1.38.8     png_0.1-8               parallel_4.3.0         
+[115] blob_1.2.4              DOSE_3.28.2             bitops_1.0-7           
+[118] viridisLite_0.4.2       tidytree_0.4.6          scales_1.3.0           
+[121] crayon_1.5.3            rlang_1.1.3             cowplot_1.1.3          
+[124] fastmatch_1.1-4         KEGGREST_1.42.0        </code></pre>
 </div>
 </div>
 
