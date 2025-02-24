@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1804cc346155c4d2cd9a41b4ed3046737609b5e1targetblank1804cc3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb55709531c179d5260046632aa517bd5a94898adtargetblankb557095a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1804cc346155c4d2cd9a41b4ed3046737609b5e1" target="_blank">1804cc3</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b55709531c179d5260046632aa517bd5a94898ad" target="_blank">b557095</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1804cc346155c4d2cd9a41b4ed3046737609b5e1targetblank1804cc3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb55709531c179d5260046632aa517bd5a94898adtargetblankb557095a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1804cc346155c4d2cd9a41b4ed3046737609b5e1" target="_blank">1804cc3</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b55709531c179d5260046632aa517bd5a94898ad" target="_blank">b557095</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -596,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/b55709531c179d5260046632aa517bd5a94898ad/docs/Corrmotif_all.html" target="_blank">b557095</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+<td>
+Added CX_DOX shared late response (SVIP) boxplot
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/1cd333a3ea5597f1639f5d0e58bdc5270031b5c3/analysis/Corrmotif_all.Rmd" target="_blank">1cd333a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+<td>
+Added CX_DOX shared late response (SVIP) boxplot
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -2302,6 +2336,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b55709531c179d5260046632aa517bd5a94898ad/docs/figure/Corrmotif_all.Rmd/box3-1.png" target="_blank">b557095</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/e73d731caeb1fe0eb8f95488b5bcbd2d6049b253/docs/figure/Corrmotif_all.Rmd/box3-1.png" target="_blank">e73d731</a>
 </td>
 <td>
@@ -2443,7 +2488,531 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
-<p><img src="figure/Corrmotif_all.Rmd/box4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Corrmotif_all.Rmd/box5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dox-specific-response-espn" class="section level2">
+<h2><strong>📌 DOX-Specific Response (ESPN)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID:  83715
+gene_data &lt;- boxplot1[boxplot1$ENTREZID ==  83715, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID   
+83715.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;DOX-Specific Response&quot;) +
+  labs(
+    title = &quot;DOX-Specific Response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dox-specific-response-fbxo2" class="section level2">
+<h2><strong>📌 DOX-Specific Response (FBXO2)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID:  26232
+gene_data &lt;- boxplot1[boxplot1$ENTREZID ==  26232, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID   
+26232.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;DOX-Specific Response&quot;) +
+  labs(
+    title = &quot;DOX-Specific Response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="late-high-dose-dox-specific-response-ephx1"
+class="section level2">
+<h2><strong>📌 Late high dose DOX-specific response
+(EPHX1)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID:  2052
+gene_data &lt;- boxplot1[boxplot1$ENTREZID ==  2052, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID   
+2052.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;Late high dose DOX-specific response&quot;) +
+  labs(
+    title = &quot;Late high dose DOX-specific response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box8-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="late-high-dose-dox-specific-response-obscn"
+class="section level2">
+<h2><strong>📌 Late high dose DOX-specific response
+(OBSCN)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID:  84033
+gene_data &lt;- boxplot1[boxplot1$ENTREZID ==  84033, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID   
+84033.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;Late high dose DOX-specific response&quot;) +
+  labs(
+    title = &quot;Late high dose DOX-specific response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
