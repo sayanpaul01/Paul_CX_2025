@@ -41,7 +41,7 @@ Welcome to my research website.
 
 ## **Bayesian Clustering of Gene Expression with Corrmotif**
 
-- **[Corrmotif Model and Patterns](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all.html)**
+- **[Corrmotif Model and Patterns (all samples)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all.html)**
 
 
 
