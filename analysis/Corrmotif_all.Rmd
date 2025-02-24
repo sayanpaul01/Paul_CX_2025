@@ -2259,3 +2259,11 @@ ggplot(data_summary, aes(x = Timepoint, y = avg_logFC, group = Drug, color = Dru
   )
 ```
 
+## **📌 Save Corr-motif datasets for Gene Ontology analysis**
+```{r box20, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
+write.csv(data.frame(Entrez_ID = prob_all_1), "data/prob_all_1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_all_2), "data/prob_all_2.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_all_3), "data/prob_all_3.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_all_4), "data/prob_all_4.csv", row.names = FALSE)
+```
+
