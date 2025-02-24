@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec4ed3e0b60e059fc645507b7232e0d9ad89ef780targetblankc4ed3e0a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1804cc346155c4d2cd9a41b4ed3046737609b5e1targetblank1804cc3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c4ed3e0b60e059fc645507b7232e0d9ad89ef780" target="_blank">c4ed3e0</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1804cc346155c4d2cd9a41b4ed3046737609b5e1" target="_blank">1804cc3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec4ed3e0b60e059fc645507b7232e0d9ad89ef780targetblankc4ed3e0a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1804cc346155c4d2cd9a41b4ed3046737609b5e1targetblank1804cc3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c4ed3e0b60e059fc645507b7232e0d9ad89ef780" target="_blank">c4ed3e0</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1804cc346155c4d2cd9a41b4ed3046737609b5e1" target="_blank">1804cc3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -546,8 +549,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  data/boxplot1.csv
+Unstaged changes:
+    Modified:   analysis/Corrmotif_all.Rmd
 
 </code></pre>
 <p>
@@ -593,6 +596,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/e73d731caeb1fe0eb8f95488b5bcbd2d6049b253/docs/Corrmotif_all.html" target="_blank">e73d731</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1926,6 +1946,43 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/box1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-box1-1">
+Past versions of box1-1.png
+</button>
+</p>
+<div id="fig-box1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/e73d731caeb1fe0eb8f95488b5bcbd2d6049b253/docs/figure/Corrmotif_all.Rmd/box1-1.png" target="_blank">e73d731</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="non-response-faap20" class="section level2">
 <h2><strong>📌 Non response (FAAP20)</strong></h2>
@@ -2055,6 +2112,43 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/box2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-box2-1">
+Past versions of box2-1.png
+</button>
+</p>
+<div id="fig-box2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/e73d731caeb1fe0eb8f95488b5bcbd2d6049b253/docs/figure/Corrmotif_all.Rmd/box2-1.png" target="_blank">e73d731</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cx_dox-shared-late-response-mphosph9" class="section level2">
 <h2><strong>📌 CX_DOX shared late response (MPHOSPH9)</strong></h2>
@@ -2166,9 +2260,9 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
   facet_grid(Concentration ~ Time, labeller = label_both) +
   geom_point(aes(color = Indv), size = 2, alpha = 0.5,
              position = position_jitter(width = -0.3, height = 0)) +
-  ggtitle(&quot;Non response&quot;) +
+  ggtitle(&quot;CX_DOX shared late response&quot;) +
   labs(
-    title = &quot;Non response&quot;,
+    title = &quot;CX_DOX shared late response&quot;,
     x = &quot;Drugs&quot;,
     y = paste(gene_symbol, &quot; log2CPM&quot;)
   ) +
@@ -2184,6 +2278,172 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_all.Rmd/box3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-box3-1">
+Past versions of box3-1.png
+</button>
+</p>
+<div id="fig-box3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/e73d731caeb1fe0eb8f95488b5bcbd2d6049b253/docs/figure/Corrmotif_all.Rmd/box3-1.png" target="_blank">e73d731</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="cx_dox-shared-late-response-svip" class="section level2">
+<h2><strong>📌 CX_DOX shared late response (SVIP)</strong></h2>
+<pre class="r"><code># Load the dataset from the data folder
+# Load the dataset from the data folder
+
+# Filter data for the gene with Entrez ID: 258010
+gene_data &lt;- boxplot1[boxplot1$ENTREZID == 258010, ]
+
+# Check if gene_data is empty
+if(nrow(gene_data) == 0) {
+  stop(&quot;No data found for the selected gene ENTIREZID 258010.&quot;)
+}
+
+# Reshape data from wide to long format
+gene_data_long &lt;- melt(gene_data,
+                       id.vars = c(&quot;ENTREZID&quot;, &quot;SYMBOL&quot;, &quot;GENENAME&quot;),
+                       variable.name = &quot;Sample&quot;,
+                       value.name = &quot;log2CPM&quot;)
+
+# Print some sample names for debugging
+print(unique(gene_data_long$Sample))</code></pre>
+<pre><code>  [1]                     17.3_CX.5461_0.1_3  17.3_DOX_0.5_24    
+  [4] 87.1_DOX_0.5_24     87.1_VEH_0.1_24     87.1_VEH_0.5_24    
+  [7] 87.1_CX.5461_0.1_48 87.1_CX.5461_0.5_48 87.1_DOX_0.1_48    
+ [10] 87.1_DOX_0.5_48     87.1_VEH_0.1_48     87.1_VEH_0.5_48    
+ [13] 17.3_VEH_0.1_24     17.3_VEH_0.5_24     17.3_CX.5461_0.1_48
+ [16] 17.3_CX.5461_0.5_48 17.3_DOX_0.1_48     17.3_DOX_0.5_48    
+ [19] 17.3_VEH_0.1_48     17.3_VEH_0.5_48     84.1_CX.5461_0.1_3 
+ [22] 17.3_CX.5461_0.5_3  84.1_CX.5461_0.5_3  84.1_DOX_0.1_3     
+ [25] 84.1_DOX_0.5_3      84.1_VEH_0.1_3      84.1_VEH_0.5_3     
+ [28] 84.1_CX.5461_0.1_24 84.1_CX.5461_0.5_24 84.1_DOX_0.1_24    
+ [31] 84.1_DOX_0.5_24     84.1_VEH_0.1_24     17.3_DOX_0.1_3     
+ [34] 84.1_VEH_0.5_24     84.1_CX.5461_0.1_48 84.1_CX.5461_0.5_48
+ [37] 84.1_DOX_0.1_48     84.1_DOX_0.5_48     84.1_VEH_0.1_48    
+ [40] 84.1_VEH_0.5_48     90.1_CX.5461_0.1_3  90.1_CX.5461_0.5_3 
+ [43] 90.1_DOX_0.1_3      17.3_DOX_0.5_3      90.1_DOX_0.5_3     
+ [46] 90.1_VEH_0.1_3      90.1_VEH_0.5_3      90.1_CX.5461_0.1_24
+ [49] 90.1_CX.5461_0.5_24 90.1_DOX_0.1_24     90.1_DOX_0.5_24    
+ [52] 90.1_VEH_0.1_24     90.1_VEH_0.5_24     90.1_CX.5461_0.1_48
+ [55] 17.3_VEH_0.1_3      90.1_CX.5461_0.5_48 90.1_DOX_0.1_48    
+ [58] 90.1_DOX_0.5_48     90.1_VEH_0.1_48     90.1_VEH_0.5_48    
+ [61] 75.1_CX.5461_0.1_3  75.1_CX.5461_0.5_3  75.1_DOX_0.1_3     
+ [64] 75.1_DOX_0.5_3      75.1_VEH_0.1_3      17.3_VEH_0.5_3     
+ [67] 75.1_VEH_0.5_3      75.1_CX.5461_0.1_24 75.1_CX.5461_0.5_24
+ [70] 75.1_DOX_0.1_24     75.1_DOX_0.5_24     75.1_VEH_0.1_24    
+ [73] 75.1_VEH_0.5_24     75.1_CX.5461_0.1_48 75.1_CX.5461_0.5_48
+ [76] 75.1_DOX_0.1_48     17.3_CX.5461_0.1_24 75.1_DOX_0.5_48    
+ [79] 75.1_VEH_0.1_48     75.1_VEH_0.5_48     78.1_CX.5461_0.1_3 
+ [82] 78.1_CX.5461_0.5_3  78.1_DOX_0.1_3      78.1_DOX_0.5_3     
+ [85] 78.1_VEH_0.1_3      78.1_VEH_0.5_3      78.1_CX.5461_0.1_24
+ [88] 17.3_CX.5461_0.5_24 78.1_CX.5461_0.5_24 78.1_DOX_0.1_24    
+ [91] 78.1_DOX_0.5_24     78.1_VEH_0.1_24     78.1_VEH_0.5_24    
+ [94] 78.1_CX.5461_0.1_48 78.1_CX.5461_0.5_48 78.1_DOX_0.1_48    
+ [97] 78.1_DOX_0.5_48     78.1_VEH_0.1_48     17.3_DOX_0.1_24    
+[100] 78.1_VEH_0.5_48     87.1_CX.5461_0.1_3  87.1_CX.5461_0.5_3 
+[103] 87.1_DOX_0.1_3      87.1_DOX_0.5_3      87.1_VEH_0.1_3     
+[106] 87.1_VEH_0.5_3      87.1_CX.5461_0.1_24 87.1_CX.5461_0.5_24
+[109] 87.1_DOX_0.1_24    
+109 Levels:  17.3_CX.5461_0.1_3 17.3_DOX_0.5_24 ... 87.1_DOX_0.1_24</code></pre>
+<pre class="r"><code># Extract details from sample names
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Time = sub(&quot;.*_(\\d+)$&quot;, &quot;\\1&quot;, Sample),
+    Concentration = sub(&quot;.*_(0\\.\\d)_\\d+$&quot;, &quot;\\1&quot;, Sample),
+    Drug = sub(&quot;.*_(CX\\.5461|DOX|VEH)_.*&quot;, &quot;\\1&quot;, Sample),
+    Indv = sub(&quot;^([0-9]+\\.[0-9]+)_.*&quot;, &quot;\\1&quot;, Sample)  # Ensure correct pattern extraction
+  )
+
+# Print extracted `Indv` column for debugging
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;&quot;     &quot;17.3&quot; &quot;87.1&quot; &quot;84.1&quot; &quot;90.1&quot; &quot;75.1&quot; &quot;78.1&quot;</code></pre>
+<pre class="r"><code># Convert extracted columns to factors
+gene_data_long$Time &lt;- factor(gene_data_long$Time, levels = c(&quot;3&quot;, &quot;24&quot;, &quot;48&quot;))
+gene_data_long$Concentration &lt;- factor(gene_data_long$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
+
+# Ensure each concentration facet only shows relevant data
+gene_data_long &lt;- gene_data_long %&gt;%
+  group_by(Concentration) %&gt;%
+  filter(all(Concentration == &quot;0.1&quot;) | all(Concentration == &quot;0.5&quot;)) %&gt;%
+  ungroup()
+
+# Map individual IDs
+indv_mapping &lt;- c(&quot;75.1&quot; = &quot;1&quot;, &quot;78.1&quot; = &quot;2&quot;, &quot;87.1&quot; = &quot;3&quot;, &quot;17.3&quot; = &quot;4&quot;, &quot;84.1&quot; = &quot;5&quot;, &quot;90.1&quot; = &quot;6&quot;)
+
+# Ensure `Indv` values match the keys in `indv_mapping`
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(
+    Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], NA)
+  )
+
+# Print `Indv` column again to confirm mapping worked
+print(unique(gene_data_long$Indv))</code></pre>
+<pre><code>[1] &quot;4&quot; &quot;3&quot; &quot;5&quot; &quot;6&quot; &quot;1&quot; &quot;2&quot;</code></pre>
+<pre class="r"><code># Check for missing values and handle them
+gene_data_long &lt;- gene_data_long %&gt;%
+  mutate(Indv = ifelse(is.na(Indv), &quot;Unknown&quot;, Indv))  # Assign &quot;Unknown&quot; to unidentified individuals
+
+# Define drug colors
+drug_palette &lt;- c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;, &quot;VEH&quot; = &quot;green&quot;)
+
+# Extract the gene symbol for labeling
+gene_symbol &lt;- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(Concentration ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle(&quot;CX_DOX shared late response&quot;) +
+  labs(
+    title = &quot;CX_DOX shared late response&quot;,
+    x = &quot;Drugs&quot;,
+    y = paste(gene_symbol, &quot; log2CPM&quot;)
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = &quot;black&quot;),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_all.Rmd/box4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
