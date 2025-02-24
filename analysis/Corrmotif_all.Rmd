@@ -762,6 +762,7 @@ plotMotif<-function(fitted_cormotif,title="")
 ```{r load_libraries, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggplot2)
+library(tidyr)
 library(dplyr)
 library(reshape2)
 library(clusterProfiler)
@@ -1649,3 +1650,612 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text = element_text(size = 12, face = "bold")
   )
 ```
+
+## **📌 Corr-motif set Abs logFC boxplots**
+## **📌 Read and Process DEG Data**
+```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+Toptable_CX_0.1_3_df<- data.frame(CX_0.1_3)
+Toptable_CX_0.1_24_df<- data.frame(CX_0.1_24)
+Toptable_CX_0.1_48_df<- data.frame(CX_0.1_48)
+Toptable_CX_0.5_3_df<- data.frame(CX_0.5_3)
+Toptable_CX_0.5_24_df<- data.frame(CX_0.5_24)
+Toptable_CX_0.5_48_df<- data.frame(CX_0.5_48)
+Toptable_DOX_0.1_3_df<- data.frame(DOX_0.1_3)
+Toptable_DOX_0.1_24_df<- data.frame(DOX_0.1_24)
+Toptable_DOX_0.1_48_df<- data.frame(DOX_0.1_48)
+Toptable_DOX_0.5_3_df<- data.frame(DOX_0.5_3)
+Toptable_DOX_0.5_24_df<- data.frame(DOX_0.5_24)
+Toptable_DOX_0.5_48_df<- data.frame(DOX_0.5_48)
+```
+
+## **📌 Non response abs logFC boxplots**
+```{r box10, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set1
+non_response_entrez_ids <- prob_all_1
+
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for shared late response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% non_response_entrez_ids)
+
+# Filter and visualize data with exact same font size and bold styling for concentration and timepoints
+filtered_toptables %>%
+  mutate(absFC = abs(logFC)) %>%  # Compute absolute log fold change
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>% 
+  ggplot(aes(x = Drug, y = absFC)) +
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("|Log Fold Change|") +
+  ggtitle("|Log Fold| for Non-Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 CX_DOX shared late response abs logFC boxplots**
+```{r box11, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set2
+shared_late_response_entrez_ids <- prob_all_2
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for shared late response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% shared_late_response_entrez_ids)
+
+filtered_toptables %>%
+  mutate(absFC = abs(logFC)) %>%  # Compute absolute log fold change
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>%
+  ggplot(aes(x = Drug, y = absFC)) +
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("|Log Fold Change|") +
+  ggtitle("|Log Fold| for CX_DOX shared late response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 DOX Specific response abs logFC boxplots**
+```{r box12, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set3
+dox_specific_response_entrez_ids <- prob_all_3
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for DOX-specific response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% dox_specific_response_entrez_ids)
+
+filtered_toptables %>%
+  mutate(absFC = abs(logFC)) %>%  # Compute absolute log fold change
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>%
+  ggplot(aes(x = Drug, y = absFC)) +
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("|Log Fold Change|") +
+  ggtitle("|Log Fold| for DOX-Specific Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 Late high dose DOX-specific response abs logFC boxplots**
+```{r box13, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set4
+late_high_dose_dox_entrez_ids <- prob_all_4
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for late high dose DOX-specific response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% late_high_dose_dox_entrez_ids)
+
+filtered_toptables %>%
+  mutate(absFC = abs(logFC)) %>%  # Compute absolute log fold change
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>%
+  ggplot(aes(x = Drug, y = absFC)) +
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("|Log Fold Change|") +
+  ggtitle("|Log Fold| for Late High Dose DOX-Specific Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 Corr-motif set mean (Abs logFC) across timepoints**
+```{r box14, echo=TRUE, message=FALSE, warning=FALSE, fig.height=12, fig.width=10}
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Convert Entrez_ID in `all_toptables` to character for proper matching
+all_toptables <- all_toptables %>% mutate(Entrez_ID = as.character(Entrez_ID))
+
+# Define datasets for filtering (lists of Entrez IDs)
+data_sets <- list(
+  "Non Response" = prob_all_1,
+  "CX_DOX Shared\nLate Response" = prob_all_2,
+  "DOX-Specific Response" = prob_all_3,
+  "Late High Dose\nDOX-Specific Response" = prob_all_4
+)
+
+# Filter datasets and add labels
+data_combined <- bind_rows(lapply(names(data_sets), function(label) {
+  all_toptables %>%
+    filter(Entrez_ID %in% data_sets[[label]]) %>%  # Use list directly for filtering
+    mutate(Dataset = label)
+}))
+
+# Ensure `logFC` column exists before computing mean absolute logFC
+if (!"logFC" %in% colnames(data_combined)) {
+  stop("Column `logFC` is missing in `data_combined`. Ensure that `all_toptables` has `logFC`.")
+}
+
+# Compute mean absolute logFC grouped by Dataset, Drug, Concentration, and Timepoint
+data_summary <- data_combined %>%
+  mutate(abs_logFC = abs(logFC)) %>%  # Take absolute log fold change
+  group_by(Dataset, Drug, Concentration, Timepoint) %>%
+  dplyr::summarize(mean_abs_logFC = mean(abs_logFC, na.rm = TRUE), .groups = "drop") %>%
+  as.data.frame()
+
+# Convert factors for plotting
+data_summary <- data_summary %>%
+  mutate(
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("3 hours", "24 hours", "48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5)),
+    Dataset = factor(Dataset, levels = c("Non Response", "CX_DOX Shared\nLate Response", "DOX-Specific Response", "Late High Dose\nDOX-Specific Response"))
+  )
+
+# Define custom drug palette
+drug_palette <- c("CX.5461" = "blue", "DOX" = "red")
+
+# Plot the data for absolute logFC
+ggplot(data_summary, aes(x = Timepoint, y = mean_abs_logFC, group = Drug, color = Drug)) +
+  geom_point(size = 3) +
+  geom_line(size = 1.2) +
+  scale_color_manual(values = drug_palette) +
+  ylim(0, 2) +  # Adjust the Y-axis for better visualization
+  facet_grid(Dataset ~ Concentration) +
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Mean |Log Fold Change|",
+    title = "Average |Log Fold Change| Across Motifs and Concentrations",
+    color = "Drug"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    strip.text = element_text(size = 12, color = "black", face = "bold"),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+```
+
+## **📌 Corr-motif set logFC boxplots**
+
+## **📌 Non response logFC boxplots**
+```{r box15, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set1
+non_response_entrez_ids <- prob_all_1
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+
+# Filter and visualize data for shared late response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% non_response_entrez_ids)
+
+# Visualization of logFC for non-response genes
+filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>% 
+  ggplot(aes(x = Drug, y = logFC)) +  # Plot logFC directly
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("Log Fold Change") +  # Updated y-axis label
+  ggtitle("Log Fold Change for Non-Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 CX_DOX Shared Late Response logFC boxplots**
+```{r box16, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set2
+cx_dox_shared_entrez_ids <- prob_all_2
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for CX_DOX shared late response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% cx_dox_shared_entrez_ids)
+
+# Visualization of logFC for CX_DOX shared late response genes
+filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>% 
+  ggplot(aes(x = Drug, y = logFC)) +  # Plot logFC directly
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("Log Fold Change") +  # Updated y-axis label
+  ggtitle("Log Fold Change for CX_DOX Shared Late Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 DOX-Specific Response logFC boxplots**
+```{r box17, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set3
+dox_specific_entrez_ids <- prob_all_3
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for DOX-specific response genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% dox_specific_entrez_ids)
+
+# Visualization of logFC for DOX-specific response genes
+filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>% 
+  ggplot(aes(x = Drug, y = logFC)) +  # Plot logFC directly
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("Log Fold Change") +  # Updated y-axis label
+  ggtitle("Log Fold Change for DOX-Specific Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 Late High Dose DOX-Specific Response logFC boxplots**
+```{r box18, echo=TRUE, message=FALSE, warning=FALSE}
+# Extract Entrez_IDs from set4
+late_high_dose_dox_specific_entrez_ids <- prob_all_4
+
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Filter and visualize data for Late High Dose DOX-Specific Response Genes
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% late_high_dose_dox_specific_entrez_ids)
+
+# Visualization of logFC for Late High Dose DOX-Specific Response Genes
+filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # Factorize Drug with CX.5461 first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  ) %>% 
+  ggplot(aes(x = Drug, y = logFC)) +  # Plot logFC directly
+  geom_boxplot(aes(fill = Drug)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  # Updated color palette
+  guides(fill = guide_legend(title = "Treatment")) +
+  facet_grid(Concentration ~ Timepoint) +  # Facet by Concentration and Timepoint
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("Log Fold Change") +  # Updated y-axis label
+  ggtitle("Log Fold Change for Late High Dose DOX-Specific Response Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  # Set strip background to gray
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  # Unified styling for all facet labels
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 Corr-motif set mean logFC across timepoints**
+```{r box19, echo=TRUE, message=FALSE, warning=FALSE, fig.height=12, fig.width=10}
+# Combine all subset_toptables into a single data frame with additional metadata columns
+all_toptables <- bind_rows(
+  Toptable_CX_0.1_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  Toptable_CX_0.1_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  Toptable_CX_0.1_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  Toptable_CX_0.5_3_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  Toptable_CX_0.5_24_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  Toptable_CX_0.5_48_df %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  Toptable_DOX_0.1_3_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  Toptable_DOX_0.1_24_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  Toptable_DOX_0.1_48_df %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  Toptable_DOX_0.5_3_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  Toptable_DOX_0.5_24_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  Toptable_DOX_0.5_48_df %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# Convert Entrez_ID in `all_toptables` to character for proper matching
+all_toptables <- all_toptables %>% mutate(Entrez_ID = as.character(Entrez_ID))
+
+# Define datasets for filtering (lists of Entrez IDs)
+data_sets <- list(
+  "Non Response" = prob_all_1,
+  "CX_DOX Shared\nLate Response" = prob_all_2,
+  "DOX-Specific Response" = prob_all_3,
+  "Late High Dose\nDOX-Specific Response" = prob_all_4
+)
+
+# Filter datasets and add labels
+data_combined <- bind_rows(lapply(names(data_sets), function(label) {
+  all_toptables %>%
+    filter(Entrez_ID %in% data_sets[[label]]) %>%  # Use list directly for filtering
+    mutate(Dataset = label)
+}))
+
+# Ensure `logFC` column exists before computing mean
+if (!"logFC" %in% colnames(data_combined)) {
+  stop("Column `logFC` is missing in `data_combined`. Ensure that `all_toptables` has `logFC`.")
+}
+
+# Calculate the average logFC grouped by Dataset, Drug, Concentration, and Timepoint
+data_summary <- data_combined %>%
+  group_by(Dataset, Drug, Concentration, Timepoint) %>%
+  dplyr::summarize(avg_logFC = mean(logFC, na.rm = TRUE), .groups = "drop") %>%
+  as.data.frame()
+
+# Convert factors for plotting
+data_summary <- data_summary %>%
+  mutate(
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("3 hours", "24 hours", "48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5)),
+    Dataset = factor(Dataset, levels = c("Non Response", "CX_DOX Shared\nLate Response", "DOX-Specific Response", "Late High Dose\nDOX-Specific Response"))
+  )
+
+# Define custom drug palette
+drug_palette <- c("CX.5461" = "blue", "DOX" = "red")
+
+# Plot the data
+ggplot(data_summary, aes(x = Timepoint, y = avg_logFC, group = Drug, color = Drug)) +
+  geom_point(size = 3) +
+  geom_line(size = 1.2) +
+  scale_color_manual(values = drug_palette) +
+  ylim(-2, 2) +  # Set the Y-axis scale
+  facet_grid(Dataset ~ Concentration) +
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Mean Log Fold Change",
+    title = "Average Log Fold Change Across Motifs and Concentrations",
+    color = "Drug"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    strip.text = element_text(size = 12, color = "black", face = "bold"),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+```
+
