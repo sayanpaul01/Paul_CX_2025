@@ -43,7 +43,7 @@ Welcome to my research website.
 
 - **[Corrmotif Model and Patterns (all samples)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all.html)**
 
-
+- **[Function and pathway enrichment of Corrmotif Models (all samples)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all_GO.html)**
 
 ### 🔗 **Source Code**  
 
