@@ -1,5 +1,5 @@
 ---
-title: "Corrmotif Conc Analysis"
+title: "Corrmotif Time"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -768,7 +768,7 @@ library(gprofiler2)
 library(ggplot2)
 ```
 
-## **📌 Corrmotif Model 0.1 Micromolar**
+## **📌 Corrmotif Model CX 0.1 (3hr, 24hr and 48hr)**
 ## **📌 Load Corrmotif Data**
 ```{r load_data, echo=TRUE, results='hide', message=FALSE}
 # Read the Corrmotif Results
@@ -776,84 +776,66 @@ Corrmotif <- read.csv("data/Corrmotif/CX5461.csv")
 Corrmotif_df <- data.frame(Corrmotif)
 rownames(Corrmotif_df) <- Corrmotif_df$Gene
 
-# Filter for 0.1 Concentration Only
-exprs.corrmotif <- as.matrix(Corrmotif_df[, grep("0.1", colnames(Corrmotif_df))])
+# Filter for CX-5461 (0.1 µM) and Vehicle (0.1 µM) across 3h, 24h, and 48h
+exprs.corrmotif <- as.matrix(Corrmotif_df %>%                      dplyr::select(matches("CX_0.1_3|CX_0.1_24|CX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48")))
 
 
 # Read group and comparison IDs
 groupid <- read.csv("data/Corrmotif/groupid.csv")
-groupid_df <- data.frame(groupid[, grep("0.1", colnames(groupid))])
-
+groupid_df <- groupid %>%
+  dplyr::select(matches("CX_0.1_3|CX_0.1_24|CX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48"))
 
 compid <- read.csv("data/Corrmotif/Compid.csv")
-compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Cond2 %in% unique(as.numeric(groupid_df)), ]
+compid_df <- compid %>%
+  filter(Cond1 %in% unique(as.numeric(unlist(groupid_df))) &
+           Cond2 %in% unique(as.numeric(unlist(groupid_df))))
 ```
 
-## **📌 Corrmotif Model 0.1 Micromolar (K=1:8)**
-## **📌 Fit Corrmotif Model (K=1:8) (0.1 Micromolar)**
+## **📌 Corrmotif Model CX 0.1 (3hr, 24hr and 48hr) (K=1:8)**
+## **📌 Fit Corrmotif Model (K=1:8) (CX 0.1 (3hr, 24hr and 48hr))**
 ```{r Model, echo=TRUE, message=FALSE}
 set.seed(11111)
-# Fit Corrmotif Model (K = 1 to 8)
-set.seed(11111)
-motif.fitted <- cormotiffit(
-  exprs = exprs.corrmotif,
-  groupid = groupid_df,
-  compid = compid_df,
-  K = 1:8,
-  max.iter = 1000,
-  BIC = TRUE,
-  runtype = "logCPM"
-)
+motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
 
-# Display BIC values
+# View BIC scores
 motif.fitted$bic
 
-# Plot BIC and AIC scores
+# Plot Information Criteria (IC)
+plotIC(motif.fitted)
+```
+
+
+## **📌 Fit Corrmotif Model (K=2) (CX 0.1 (3hr, 24hr and 48hr))**
+```{r Model1, echo=TRUE, message=FALSE}
+motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=2, max.iter=1000, BIC=TRUE, runtype="logCPM")
+
+# View BIC scores
+motif.fitted$bic
+
+# Plot Information Criteria (IC)
 plotIC(motif.fitted)
 
-# Plot Corrmotif Patterns for K=1:8
+# Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
 plotMotif(motif.fitted)
 ```
 
-
-## **📌 Fit Corrmotif Model (K=3) (0.1 Micromolar)**
-```{r Model1, echo=TRUE, message=FALSE}
-set.seed(11111)
-motif.fitted_0.1 <- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=3, max.iter=1000, BIC=TRUE, runtype="logCPM")
-
-# View BIC scores
-motif.fitted_0.1$bic
-
-# Plot Information Criteria and Motif Patterns
-plotIC(motif.fitted_0.1)
-plotMotif(motif.fitted_0.1)
-```
-
-## **📌 Extract Gene Probabilities (0.1 Micromolar)**
+## **📌 Extract Gene Probabilities (CX 0.1 (3hr, 24hr and 48hr))**
 ```{r Prob, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
-gene_prob_tran_0.1 <- motif.fitted_0.1$bestmotif$p.post
+gene_prob_CX_0.1 <- motif.fitted$bestmotif$p.post
 
-rownames(gene_prob_tran_0.1) <- rownames(Corrmotif_df)
-
-# Define gene probability groups
-prob_1_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] < 0.5 & gene_prob_tran_0.1[,6]<0.5),])
-length(prob_1_0.1)
-
-prob_2_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] >0.5 & gene_prob_tran_0.1[,3] >0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
-length(prob_2_0.1)
+rownames(gene_prob_CX_0.1) <- rownames(Corrmotif_df)
 
 
-prob_3_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
-length(prob_3_0.1)
+prob_CX_1_0.1  <- rownames(gene_prob_CX_0.1[(gene_prob_CX_0.1[,1] <0.5 & gene_prob_CX_0.1[,2] <0.5 & gene_prob_CX_0.1[,3]<0.5),])
+length(prob_CX_1_0.1)
+
+prob_CX_2_0.1  <- rownames(gene_prob_CX_0.1[(gene_prob_CX_0.1[,1] <0.5 & gene_prob_CX_0.1[,2] >0.5 & gene_prob_CX_0.1[,3]>0.5),])
+length(prob_CX_2_0.1)
 ```
 
-## **📌 Save Corr-motif datasets for Gene Ontology analysis (0.1 Micromolar)**
-```{r box, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
-write.csv(data.frame(Entrez_ID = prob_1_0.1), "data/prob_1_0.1.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_2_0.1), "data/prob_2_0.1.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_3_0.1), "data/prob_3_0.1.csv", row.names = FALSE)
-```
 

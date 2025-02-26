@@ -1,0 +1,73 @@
+
+---
+title: "Corrmotif Analysis for CX-5461"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Load Required Libraries
+
+```{r}
+library(Cormotif)
+library(Rfast)
+library(dplyr)
+library(BiocParallel)
+library(gprofiler2)
+```
+
+## Load Dataset
+
+```{r}
+# Load the full dataset
+Corrmotif <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/Corrmotif/CX5461.csv")
+Corrmotif_df <- data.frame(Corrmotif)
+rownames(Corrmotif_df) <- Corrmotif_df$Gene
+```
+
+## Filter for 0.1 Concentration
+
+```{r}
+# Select only columns for 0.1 concentration
+exprs.corrmotif <- as.matrix(Corrmotif_df[, grep("0.1", colnames(Corrmotif_df))])
+
+# Load and filter groupid
+groupid <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/Corrmotif/groupid.csv")
+groupid_df <- data.frame(groupid[, grep("0.1", colnames(groupid))])
+
+# Load and filter Compid
+compid <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/Corrmotif/Compid.csv")
+compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Cond2 %in% unique(as.numeric(groupid_df)), ]
+```
+
+## Fit Corrmotif Model
+
+```{r}
+set.seed(11111)
+motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
+```
+
+## View Results
+
+```{r}
+# Display BIC scores
+motif.fitted$bic
+```
+
+## Plot Information Criteria
+
+```{r}
+plotIC(motif.fitted)
+```
+
+## Plot Motif Patterns
+
+```{r}
+plotMotif(motif.fitted)
+```
