@@ -838,4 +838,73 @@ prob_CX_2_0.1  <- rownames(gene_prob_CX_0.1[(gene_prob_CX_0.1[,1] <0.5 & gene_pr
 length(prob_CX_2_0.1)
 ```
 
+## **📌 Corrmotif Model CX 0.5 (3hr, 24hr and 48hr)**
+## **📌 Load Corrmotif Data**
+```{r load_data1, echo=TRUE, results='hide', message=FALSE}
+# Read the Corrmotif Results
+Corrmotif <- read.csv("data/Corrmotif/CX5461.csv")
+Corrmotif_df <- data.frame(Corrmotif)
+rownames(Corrmotif_df) <- Corrmotif_df$Gene
+
+# Filter for CX-5461 (0.5 µM) and Vehicle (0.5 µM) across 3h, 24h, and 48h
+exprs.corrmotif <- as.matrix(Corrmotif_df[, grep("CX_0.5_3|CX_0.5_24|CX_0.5_48|VEH_0.5_3|VEH_0.5_24|VEH_0.5_48", colnames(Corrmotif_df))])
+
+
+
+# Read group and comparison IDs
+groupid <- read.csv("data/Corrmotif/groupid.csv")
+groupid_df <- groupid %>%
+  dplyr::select(matches("CX_0.5_3|CX_0.5_24|CX_0.5_48|VEH_0.5_3|VEH_0.5_24|VEH_0.5_48", colnames(groupid)))
+
+
+compid <- read.csv("data/Corrmotif/Compid.csv")
+compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Cond2 %in% unique(as.numeric(groupid_df)), ]
+```
+
+## **📌 Corrmotif Model CX 0.5 (3hr, 24hr and 48hr) (K=1:8)**
+## **📌 Fit Corrmotif Model (K=1:8) (CX 0.5 (3hr, 24hr and 48hr))**
+```{r Model2, echo=TRUE, message=FALSE}
+set.seed(11111)
+motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
+
+# View BIC scores
+motif.fitted$bic
+
+# Plot Information Criteria (IC)
+plotIC(motif.fitted)
+```
+
+
+## **📌 Fit Corrmotif Model (K=2) (CX 0.5 (3hr, 24hr and 48hr))**
+```{r Model3, echo=TRUE, message=FALSE}
+motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=2, max.iter=1000, BIC=TRUE, runtype="logCPM")
+
+# View BIC scores
+motif.fitted$bic
+
+# Plot Information Criteria (IC)
+plotIC(motif.fitted)
+
+# Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
+plotMotif(motif.fitted)
+```
+
+## **📌 Extract Gene Probabilities (CX 0.1 (3hr, 24hr and 48hr))**
+```{r Prob2, echo=TRUE, message=FALSE}
+# Extract posterior probabilities for genes
+gene_prob_CX_0.5 <- motif.fitted$bestmotif$p.post
+
+rownames(gene_prob_CX_0.5) <- rownames(Corrmotif_df)
+
+
+prob_CX_1_0.5  <- rownames(gene_prob_CX_0.5[(gene_prob_CX_0.5[,1] <0.5 & gene_prob_CX_0.5[,2] <0.5 & gene_prob_CX_0.5[,3]<0.5),])
+length(prob_CX_1_0.5)
+
+prob_CX_2_0.5  <- rownames(gene_prob_CX_0.5[(gene_prob_CX_0.5[,1] <0.5 & gene_prob_CX_0.5[,2] >0.5 & gene_prob_CX_0.5[,3]>0.5),])
+length(prob_CX_2_0.5)
+```
 
