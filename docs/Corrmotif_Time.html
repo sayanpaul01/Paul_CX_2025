@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,21 +407,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -512,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb2a1c90c464bef1eacd7680c1e94d479f63ce044targetblankb2a1c90a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeaf50d4b35ca06c53a2e53f02e9212af2d062889atargetblankaf50d4ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b2a1c90c464bef1eacd7680c1e94d479f63ce044" target="_blank">b2a1c90</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/af50d4b35ca06c53a2e53f02e9212af2d062889a" target="_blank">af50d4b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb2a1c90c464bef1eacd7680c1e94d479f63ce044targetblankb2a1c90a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeaf50d4b35ca06c53a2e53f02e9212af2d062889atargetblankaf50d4ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b2a1c90c464bef1eacd7680c1e94d479f63ce044" target="_blank">b2a1c90</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/af50d4b35ca06c53a2e53f02e9212af2d062889a" target="_blank">af50d4b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,9 +545,6 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   analysis/Corrmotif_Time.Rmd
 
 </code></pre>
 <p>
@@ -596,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/analysis/Corrmotif_Time.Rmd" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/Corrmotif_Time.html" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1876,6 +1904,43 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot Information Criteria (IC)
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model5-1">
+Past versions of Model5-1.png
+</button>
+</p>
+<div id="fig-Model5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model5-1.png" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="fit-corrmotif-model-k2-dox-0.1-3hr-24hr-and-48hr"
 class="section level2">
@@ -1892,9 +1957,83 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot Information Criteria (IC)
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model6-1">
+Past versions of Model6-1.png
+</button>
+</p>
+<div id="fig-Model6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model6-1.png" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
 plotMotif(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model6-2">
+Past versions of Model6-2.png
+</button>
+</p>
+<div id="fig-Model6-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model6-2.png" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="extract-gene-probabilities-dox-0.1-3hr-24hr-and-48hr"
 class="section level2">
@@ -1965,6 +2104,43 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot Information Criteria (IC)
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model7-1">
+Past versions of Model7-1.png
+</button>
+</p>
+<div id="fig-Model7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model7-1.png" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="fit-corrmotif-model-k2-dox-0.5-3hr-24hr-and-48hr"
 class="section level2">
@@ -1981,9 +2157,83 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot Information Criteria (IC)
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model8-1">
+Past versions of Model8-1.png
+</button>
+</p>
+<div id="fig-Model8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model8-1.png" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
 plotMotif(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model8-2">
+Past versions of Model8-2.png
+</button>
+</p>
+<div id="fig-Model8-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model8-2.png" target="_blank">af50d4b</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="extract-gene-probabilities-dox-0.5-3hr-24hr-and-48hr"
 class="section level2">
@@ -2001,11 +2251,10 @@ length(prob_DOX_1_0.5)</code></pre>
 length(prob_DOX_2_0.5)</code></pre>
 <pre><code>[1] 6890</code></pre>
 </div>
-<div
-id="save-corr-motif-datasets-for-gene-ontology-analysis-0.1-micromolar"
+<div id="save-corr-motif-datasets-for-gene-ontology-analysis"
 class="section level2">
-<h2><strong>📌 Save Corr-motif datasets for Gene Ontology analysis (0.1
-Micromolar)</strong></h2>
+<h2><strong>📌 Save Corr-motif datasets for Gene Ontology
+analysis</strong></h2>
 <pre class="r"><code>write.csv(data.frame(Entrez_ID = prob_CX_1_0.1), &quot;data/prob_CX_1_0.1.csv&quot;, row.names = FALSE)
 write.csv(data.frame(Entrez_ID = prob_CX_2_0.1), &quot;data/prob_CX_2_0.1.csv&quot;, row.names = FALSE)
 write.csv(data.frame(Entrez_ID = prob_CX_1_0.5), &quot;data/prob_CX_1_0.5.csv&quot;, row.names = FALSE)
