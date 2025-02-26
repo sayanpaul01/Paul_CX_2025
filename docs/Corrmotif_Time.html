@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree19b072945f6f419377b0d71c85c3b9080fe8acbbtargetblank19b0729a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb2a1c90c464bef1eacd7680c1e94d479f63ce044targetblankb2a1c90a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/19b072945f6f419377b0d71c85c3b9080fe8acbb" target="_blank">19b0729</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b2a1c90c464bef1eacd7680c1e94d479f63ce044" target="_blank">b2a1c90</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree19b072945f6f419377b0d71c85c3b9080fe8acbbtargetblank19b0729a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb2a1c90c464bef1eacd7680c1e94d479f63ce044targetblankb2a1c90a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/19b072945f6f419377b0d71c85c3b9080fe8acbb" target="_blank">19b0729</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b2a1c90c464bef1eacd7680c1e94d479f63ce044" target="_blank">b2a1c90</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -596,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/analysis/Corrmotif_Time.Rmd" target="_blank">b2a1c90</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/Corrmotif_Time.html" target="_blank">b2a1c90</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1400,7 +1434,7 @@ class="section level2">
 <h2><strong>📌 Corrmotif Model CX 0.1 (3hr, 24hr and 48hr)</strong></h2>
 </div>
 <div id="load-corrmotif-data" class="section level2">
-<h2><strong>📌 Load Corrmotif Data</strong></h2>
+<h2>Load Corrmotif Data</h2>
 <pre class="r"><code># Read the Corrmotif Results
 Corrmotif &lt;- read.csv(&quot;data/Corrmotif/CX5461.csv&quot;)
 Corrmotif_df &lt;- data.frame(Corrmotif)
@@ -1424,11 +1458,6 @@ compid_df &lt;- compid %&gt;%
 class="section level2">
 <h2><strong>📌 Corrmotif Model CX 0.1 (3hr, 24hr and 48hr)
 (K=1:8)</strong></h2>
-</div>
-<div id="fit-corrmotif-model-k18-cx-0.1-3hr-24hr-and-48hr"
-class="section level2">
-<h2><strong>📌 Fit Corrmotif Model (K=1:8) (CX 0.1 (3hr, 24hr and
-48hr))</strong></h2>
 <pre class="r"><code>set.seed(11111)
 motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
@@ -1581,8 +1610,7 @@ sayanpaul01
 </div>
 <div id="extract-gene-probabilities-cx-0.1-3hr-24hr-and-48hr"
 class="section level2">
-<h2><strong>📌 Extract Gene Probabilities (CX 0.1 (3hr, 24hr and
-48hr))</strong></h2>
+<h2>Extract Gene Probabilities (CX 0.1 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code># Extract posterior probabilities for genes
 gene_prob_CX_0.1 &lt;- motif.fitted$bestmotif$p.post
 
@@ -1601,7 +1629,7 @@ class="section level2">
 <h2><strong>📌 Corrmotif Model CX 0.5 (3hr, 24hr and 48hr)</strong></h2>
 </div>
 <div id="load-corrmotif-data-1" class="section level2">
-<h2><strong>📌 Load Corrmotif Data</strong></h2>
+<h2>Load Corrmotif Data</h2>
 <pre class="r"><code># Read the Corrmotif Results
 Corrmotif &lt;- read.csv(&quot;data/Corrmotif/CX5461.csv&quot;)
 Corrmotif_df &lt;- data.frame(Corrmotif)
@@ -1628,8 +1656,7 @@ class="section level2">
 </div>
 <div id="fit-corrmotif-model-k18-cx-0.5-3hr-24hr-and-48hr"
 class="section level2">
-<h2><strong>📌 Fit Corrmotif Model (K=1:8) (CX 0.5 (3hr, 24hr and
-48hr))</strong></h2>
+<h2>Fit Corrmotif Model (K=1:8) (CX 0.5 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code>set.seed(11111)
 motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
@@ -1649,6 +1676,43 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot Information Criteria (IC)
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model2-1">
+Past versions of Model2-1.png
+</button>
+</p>
+<div id="fig-Model2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/figure/Corrmotif_Time.Rmd/Model2-1.png" target="_blank">b2a1c90</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="fit-corrmotif-model-k2-cx-0.5-3hr-24hr-and-48hr"
 class="section level2">
@@ -1665,14 +1729,87 @@ motif.fitted$bic</code></pre>
 <pre class="r"><code># Plot Information Criteria (IC)
 plotIC(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model3-1">
+Past versions of Model3-1.png
+</button>
+</p>
+<div id="fig-Model3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/figure/Corrmotif_Time.Rmd/Model3-1.png" target="_blank">b2a1c90</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
 plotMotif(motif.fitted)</code></pre>
 <p><img src="figure/Corrmotif_Time.Rmd/Model3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model3-2">
+Past versions of Model3-2.png
+</button>
+</p>
+<div id="fig-Model3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/figure/Corrmotif_Time.Rmd/Model3-2.png" target="_blank">b2a1c90</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="extract-gene-probabilities-cx-0.1-3hr-24hr-and-48hr-1"
+</div>
+</div>
+<div id="extract-gene-probabilities-cx-0.5-3hr-24hr-and-48hr"
 class="section level2">
-<h2><strong>📌 Extract Gene Probabilities (CX 0.1 (3hr, 24hr and
-48hr))</strong></h2>
+<h2>Extract Gene Probabilities (CX 0.5 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code># Extract posterior probabilities for genes
 gene_prob_CX_0.5 &lt;- motif.fitted$bestmotif$p.post
 
@@ -1685,6 +1822,198 @@ length(prob_CX_1_0.5)</code></pre>
 <pre class="r"><code>prob_CX_2_0.5  &lt;- rownames(gene_prob_CX_0.5[(gene_prob_CX_0.5[,1] &lt;0.5 &amp; gene_prob_CX_0.5[,2] &gt;0.5 &amp; gene_prob_CX_0.5[,3]&gt;0.5),])
 length(prob_CX_2_0.5)</code></pre>
 <pre><code>[1] 385</code></pre>
+</div>
+<div id="corrmotif-model-dox-0.1-3hr-24hr-and-48hr"
+class="section level2">
+<h2><strong>📌 Corrmotif Model DOX 0.1 (3hr, 24hr and
+48hr)</strong></h2>
+</div>
+<div id="load-corrmotif-data-2" class="section level2">
+<h2>Load Corrmotif Data</h2>
+<pre class="r"><code># Read the Corrmotif Results
+Corrmotif &lt;- read.csv(&quot;data/Corrmotif/CX5461.csv&quot;)
+Corrmotif_df &lt;- data.frame(Corrmotif)
+rownames(Corrmotif_df) &lt;- Corrmotif_df$Gene
+
+# Filter for DOX (0.1 µM) and Vehicle (0.1 µM) across 3h, 24h, and 48h
+exprs.corrmotif &lt;- as.matrix(Corrmotif_df[, grep(&quot;DOX_0.1_3|DOX_0.1_24|DOX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48&quot;, colnames(Corrmotif_df))])
+
+
+
+# Read group and comparison IDs
+groupid &lt;- read.csv(&quot;data/Corrmotif/groupid.csv&quot;)
+groupid_df &lt;- groupid %&gt;%
+  dplyr::select(matches(&quot;DOX_0.1_3|DOX_0.1_24|DOX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48&quot;, colnames(groupid)))
+
+
+compid &lt;- read.csv(&quot;data/Corrmotif/Compid.csv&quot;)
+compid_df &lt;- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) &amp; compid$Cond2 %in% unique(as.numeric(groupid_df)), ]</code></pre>
+</div>
+<div id="corrmotif-model-dox-0.1-3hr-24hr-and-48hr-k18"
+class="section level2">
+<h2><strong>📌 Corrmotif Model DOX 0.1 (3hr, 24hr and 48hr)
+(K=1:8)</strong></h2>
+</div>
+<div id="fit-corrmotif-model-k18-dox-0.1-3hr-24hr-and-48hr"
+class="section level2">
+<h2>Fit Corrmotif Model (K=1:8) (DOX 0.1 (3hr, 24hr and 48hr))</h2>
+<pre class="r"><code>set.seed(11111)
+motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=1:8, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
+
+# View BIC scores
+motif.fitted$bic</code></pre>
+<pre><code>     K      bic
+[1,] 1 172174.3
+[2,] 2 167341.3
+[3,] 3 167381.5
+[4,] 4 167421.7
+[5,] 5 167462.0
+[6,] 6 167506.2
+[7,] 7 167546.3
+[8,] 8 167586.2</code></pre>
+<pre class="r"><code># Plot Information Criteria (IC)
+plotIC(motif.fitted)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="fit-corrmotif-model-k2-dox-0.1-3hr-24hr-and-48hr"
+class="section level2">
+<h2><strong>📌 Fit Corrmotif Model (K=2) (DOX 0.1 (3hr, 24hr and
+48hr))</strong></h2>
+<pre class="r"><code>motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=2, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
+
+# View BIC scores
+motif.fitted$bic</code></pre>
+<pre><code>     K      bic
+[1,] 2 167341.3</code></pre>
+<pre class="r"><code># Plot Information Criteria (IC)
+plotIC(motif.fitted)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
+plotMotif(motif.fitted)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model6-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="extract-gene-probabilities-dox-0.1-3hr-24hr-and-48hr"
+class="section level2">
+<h2>Extract Gene Probabilities (DOX 0.1 (3hr, 24hr and 48hr))</h2>
+<pre class="r"><code># Extract posterior probabilities for genes
+gene_prob_DOX_0.1 &lt;- motif.fitted$bestmotif$p.post
+
+rownames(gene_prob_DOX_0.1) &lt;- rownames(Corrmotif_df)
+
+
+prob_DOX_1_0.1  &lt;- rownames(gene_prob_DOX_0.1[(gene_prob_DOX_0.1[,1] &lt;0.5 &amp; gene_prob_DOX_0.1[,2] &lt;0.5 &amp; gene_prob_DOX_0.1[,3]&lt;0.5),])
+length(prob_DOX_1_0.1)</code></pre>
+<pre><code>[1] 12179</code></pre>
+<pre class="r"><code>prob_DOX_2_0.1  &lt;- rownames(gene_prob_DOX_0.1[(gene_prob_DOX_0.1[,1] &lt;0.5 &amp; gene_prob_DOX_0.1[,2] &gt;0.5 &amp; gene_prob_DOX_0.1[,3]&gt;0.5),])
+length(prob_DOX_2_0.1)</code></pre>
+<pre><code>[1] 2099</code></pre>
+</div>
+<div id="corrmotif-model-dox-0.5-3hr-24hr-and-48hr"
+class="section level2">
+<h2><strong>📌 Corrmotif Model DOX 0.5 (3hr, 24hr and
+48hr)</strong></h2>
+</div>
+<div id="load-corrmotif-data-3" class="section level2">
+<h2>Load Corrmotif Data</h2>
+<pre class="r"><code># Read the Corrmotif Results
+Corrmotif &lt;- read.csv(&quot;data/Corrmotif/CX5461.csv&quot;)
+Corrmotif_df &lt;- data.frame(Corrmotif)
+rownames(Corrmotif_df) &lt;- Corrmotif_df$Gene
+
+# Filter for DOX (0.5 µM) and Vehicle (0.5 µM) across 3h, 24h, and 48h
+exprs.corrmotif &lt;- as.matrix(Corrmotif_df[, grep(&quot;DOX_0.5_3|DOX_0.5_24|DOX_0.5_48|VEH_0.5_3|VEH_0.5_24|VEH_0.5_48&quot;, colnames(Corrmotif_df))])
+
+
+
+# Read group and comparison IDs
+groupid &lt;- read.csv(&quot;data/Corrmotif/groupid.csv&quot;)
+groupid_df &lt;- groupid %&gt;%
+  dplyr::select(matches(&quot;DOX_0.5_3|DOX_0.5_24|DOX_0.5_48|VEH_0.5_3|VEH_0.5_24|VEH_0.5_48&quot;, colnames(groupid)))
+
+
+compid &lt;- read.csv(&quot;data/Corrmotif/Compid.csv&quot;)
+compid_df &lt;- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) &amp; compid$Cond2 %in% unique(as.numeric(groupid_df)), ]</code></pre>
+</div>
+<div id="corrmotif-model-dox-0.5-3hr-24hr-and-48hr-k18"
+class="section level2">
+<h2><strong>📌 Corrmotif Model DOX 0.5 (3hr, 24hr and 48hr)
+(K=1:8)</strong></h2>
+</div>
+<div id="fit-corrmotif-model-k18-dox-0.5-3hr-24hr-and-48hr"
+class="section level2">
+<h2>Fit Corrmotif Model (K=1:8) (DOX 0.5 (3hr, 24hr and 48hr))</h2>
+<pre class="r"><code>set.seed(11111)
+motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=1:8, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
+
+# View BIC scores
+motif.fitted$bic</code></pre>
+<pre><code>     K      bic
+[1,] 1 228116.5
+[2,] 2 222769.9
+[3,] 3 222778.8
+[4,] 4 222820.9
+[5,] 5 222861.1
+[6,] 6 222899.4
+[7,] 7 222941.4
+[8,] 8 222983.2</code></pre>
+<pre class="r"><code># Plot Information Criteria (IC)
+plotIC(motif.fitted)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="fit-corrmotif-model-k2-dox-0.5-3hr-24hr-and-48hr"
+class="section level2">
+<h2><strong>📌 Fit Corrmotif Model (K=2) (DOX 0.5 (3hr, 24hr and
+48hr))</strong></h2>
+<pre class="r"><code>motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+                            groupid=groupid_df, compid=compid_df,
+                            K=2, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
+
+# View BIC scores
+motif.fitted$bic</code></pre>
+<pre><code>     K      bic
+[1,] 2 222769.9</code></pre>
+<pre class="r"><code># Plot Information Criteria (IC)
+plotIC(motif.fitted)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
+plotMotif(motif.fitted)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model8-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="extract-gene-probabilities-dox-0.5-3hr-24hr-and-48hr"
+class="section level2">
+<h2>Extract Gene Probabilities (DOX 0.5 (3hr, 24hr and 48hr))</h2>
+<pre class="r"><code># Extract posterior probabilities for genes
+gene_prob_DOX_0.5 &lt;- motif.fitted$bestmotif$p.post
+
+rownames(gene_prob_DOX_0.5) &lt;- rownames(Corrmotif_df)
+
+
+prob_DOX_1_0.5  &lt;- rownames(gene_prob_DOX_0.5[(gene_prob_DOX_0.5[,1] &lt;0.5 &amp; gene_prob_DOX_0.5[,2] &lt;0.5 &amp; gene_prob_DOX_0.5[,3]&lt;0.5),])
+length(prob_DOX_1_0.5)</code></pre>
+<pre><code>[1] 7320</code></pre>
+<pre class="r"><code>prob_DOX_2_0.5  &lt;- rownames(gene_prob_DOX_0.5[(gene_prob_DOX_0.5[,1] &gt;0.02 &amp; gene_prob_DOX_0.5[,2] &gt;0.5 &amp; gene_prob_DOX_0.5[,3]&gt;0.5),])
+length(prob_DOX_2_0.5)</code></pre>
+<pre><code>[1] 6890</code></pre>
+</div>
+<div
+id="save-corr-motif-datasets-for-gene-ontology-analysis-0.1-micromolar"
+class="section level2">
+<h2><strong>📌 Save Corr-motif datasets for Gene Ontology analysis (0.1
+Micromolar)</strong></h2>
+<pre class="r"><code>write.csv(data.frame(Entrez_ID = prob_CX_1_0.1), &quot;data/prob_CX_1_0.1.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_CX_2_0.1), &quot;data/prob_CX_2_0.1.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_CX_1_0.5), &quot;data/prob_CX_1_0.5.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_CX_2_0.5), &quot;data/prob_CX_2_0.5.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_1_0.1), &quot;data/prob_DOX_1_0.1.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_2_0.1), &quot;data/prob_DOX_2_0.1.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_1_0.5), &quot;data/prob_DOX_1_0.5.csv&quot;, row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_2_0.5), &quot;data/prob_DOX_2_0.5.csv&quot;, row.names = FALSE)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
