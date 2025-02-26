@@ -46,7 +46,7 @@ Welcome to my research website.
 - **[Function and pathway enrichment of Corrmotif Models (all samples)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all_GO.html)**
 
 
-- **[Corrmotif Model and Patterns (Based On Concentrations)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc.html)**
+- **[Corrmotif Model and Patterns (0.1 micromolar)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc_0.1.html)**
 
 
 

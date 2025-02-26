@@ -1,5 +1,5 @@
 ---
-title: "Corrmotif Conc Analysis"
+title: "Corrmotif Conc Analysis 0.1"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -760,24 +760,15 @@ plotMotif<-function(fitted_cormotif,title="")
 
 ## **📌 Load Required Libraries**
 ```{r load_libraries, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
-library(tidyverse)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(reshape2)
-library(clusterProfiler)
-library(AnnotationDbi)
-library(org.Hs.eg.db)
-library(RColorBrewer)
-library(gprofiler2)
-library(pheatmap)
-library(ggpubr)
-library(corrplot)
 library(Cormotif)
 library(Rfast)
+library(dplyr)
 library(BiocParallel)
+library(gprofiler2)
+library(ggplot2)
 ```
 
+## **📌 Corrmotif Model 0.1 Micromolar**
 ## **📌 Load Corrmotif Data**
 ```{r load_data, echo=TRUE, results='hide', message=FALSE}
 # Read the Corrmotif Results
@@ -799,7 +790,7 @@ compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Co
 ```
 
 ## **📌 Corrmotif Model 0.1 Micromolar (K=1:8)**
-## **📌 Fit Corrmotif Model (K=1:8)**
+## **📌 Fit Corrmotif Model (K=1:8) (0.1 Micromolar)**
 ```{r Model, echo=TRUE, message=FALSE}
 set.seed(11111)
 # Fit Corrmotif Model (K = 1 to 8)
@@ -825,7 +816,7 @@ plotMotif(motif.fitted)
 ```
 
 
-## **📌 Fit Corrmotif Model (K=4)**
+## **📌 Fit Corrmotif Model (K=3) (0.1 Micromolar)**
 ```{r Model1, echo=TRUE, message=FALSE}
 set.seed(11111)
 motif.fitted_0.1 <- cormotiffit(exprs=exprs.corrmotif,
@@ -840,7 +831,7 @@ plotIC(motif.fitted_0.1)
 plotMotif(motif.fitted_0.1)
 ```
 
-## **📌 Extract Gene Probabilities**
+## **📌 Extract Gene Probabilities (0.1 Micromolar)**
 ```{r Prob, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
 gene_prob_tran_0.1 <- motif.fitted_0.1$bestmotif$p.post
@@ -848,15 +839,22 @@ gene_prob_tran_0.1 <- motif.fitted_0.1$bestmotif$p.post
 rownames(gene_prob_tran_0.1) <- rownames(Corrmotif_df)
 
 # Define gene probability groups
-prob_day_1_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] < 0.5 & gene_prob_tran_0.1[,6]<0.5),])
-length(prob_day_1_0.1)
+prob_1_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] < 0.5 & gene_prob_tran_0.1[,6]<0.5),])
+length(prob_1_0.1)
 
-prob_day_2_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] >0.5 & gene_prob_tran_0.1[,3] >0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
-length(prob_day_2_0.1)
+prob_2_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] >0.5 & gene_prob_tran_0.1[,3] >0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
+length(prob_2_0.1)
 
 
-prob_day_3_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
-length(prob_day_3_0.1)
+prob_3_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
+length(prob_3_0.1)
+```
+
+## **📌 Save Corr-motif datasets for Gene Ontology analysis (0.1 Micromolar)**
+```{r box, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
+write.csv(data.frame(Entrez_ID = prob_1_0.1), "data/prob_1_0.1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_2_0.1), "data/prob_2_0.1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_3_0.1), "data/prob_3_0.1.csv", row.names = FALSE)
 ```
 
 
