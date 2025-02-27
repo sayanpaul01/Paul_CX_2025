@@ -47,6 +47,8 @@ Welcome to my research website.
 
 - **[Corrmotif Model and Patterns (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc.html)**
 
+- **[Function and pathway enrichment of Corrmotif Models (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc_GO.html)**
+
 - **[Corrmotif Model and Patterns (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time.html)**
 
 
