@@ -779,7 +779,7 @@ library(BiocParallel)
 ```
 
 ## **📌 Load Corrmotif Data**
-```{r load_data, echo=TRUE, results='hide', message=FALSE}
+```{r load_data, echo=TRUE, message=FALSE}
 # Read the Corrmotif Results
 Corrmotif <- read.csv("data/Corrmotif/CX5461.csv")
 Corrmotif_df <- data.frame(Corrmotif)
@@ -793,7 +793,7 @@ compid_df <- read.csv("data/Corrmotif/Compid.csv")
 ```
 
 ## **📌 Fit Corrmotif Model (K=1:8)**
-```{r Model, echo=TRUE, message=FALSE}
+```{r Model, eval=FALSE,echo=TRUE, message=FALSE}
 set.seed(11111)
 # Fit Corrmotif Model (K = 1 to 8)
 set.seed(11111)
@@ -807,43 +807,27 @@ motif.fitted <- cormotiffit(
   runtype = "logCPM"
 )
 
-# Display BIC values
-motif.fitted$bic
-
-# Plot BIC and AIC scores
-plotIC(motif.fitted)
-
-# Plot Corrmotif Patterns for K=1:8
-plotMotif(motif.fitted)
+gene_prob_all <- motif.fitted$bestmotif$p.post
+rownames(gene_prob_all) <- rownames(Corrmotif_df)
+motif_prob <- motif.fitted$bestmotif$clustlike
+rownames(motif_prob) <- rownames(gene_prob_all)
+write.csv(motif_prob,"data/cormotif_probability_genelist_all.csv")
 ```
 
+## **📌 Plot motif**
+```{r Motif, echo=TRUE, message=FALSE}
+cormotif_all <- readRDS("data/Corrmotif/cormotif_all.RDS")
+cormotif_all$bic
 
-## **📌 Fit Corrmotif Model (K=4)**
-```{r Model1, echo=TRUE, message=FALSE}
-set.seed(11111)
-motif.fitted <- cormotiffit(
-  exprs = exprs.corrmotif,
-  groupid = groupid_df,
-  compid = compid_df,
-  K = 4,
-  max.iter = 1000,
-  BIC = TRUE,
-  runtype = "logCPM"
-)
+plotIC(cormotif_all)
 
-# Display BIC values
-motif.fitted$bic
-# Plot BIC and AIC scores
-plotIC(motif.fitted)
-
-# Plot Corrmotif Patterns for K=4
-plotMotif(motif.fitted)
+plotMotif(cormotif_all)
 ```
 
 ## **📌 Extract Gene Probabilities**
-```{r Prob, echo=TRUE, message=FALSE}
+```{r Prob, echo=TRUE,results='hide', message=FALSE}
 # Extract posterior probabilities for genes
-gene_prob_all <- motif.fitted$bestmotif$p.post
+gene_prob_all <- cormotif_all$bestmotif$p.post
 rownames(gene_prob_all) <- rownames(Corrmotif_df)
 
 # Define gene probability groups
