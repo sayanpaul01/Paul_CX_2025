@@ -1111,3 +1111,1793 @@ if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
+
+## **📌 0.5 Micromolar**
+## **📌 Read and Process Data**
+```{r load_DEGs2, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load the saved datasets
+prob_1_0.5 <- read.csv("data/prob_1_0.5.csv")$Entrez_ID
+prob_2_0.5 <- read.csv("data/prob_2_0.5.csv")$Entrez_ID
+prob_3_0.5 <- read.csv("data/prob_3_0.5.csv")$Entrez_ID
+prob_4_0.5 <- read.csv("data/prob_4_0.5.csv")$Entrez_ID
+prob_5_0.5 <- read.csv("data/prob_5_0.5.csv")$Entrez_ID
+
+
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+background<-as.character(CX_0.1_3$Entrez_ID)
+```
+
+## **📌 Non response (0.5 µM)**
+## **📌 GO Enrichment Clusterprofiler**
+```{r GO4, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+# Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP <- enrichGO(gene = prob_1_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "BP",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF <- enrichGO(gene = prob_1_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "MF",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC <- enrichGO(gene = prob_1_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "CC",
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble <- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
+  } else {
+    enrichment %>%
+      as_tibble() %>%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+
+# Combine all tibbles
+combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot <- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log(p-adjust)",
+         y = title,
+         title = paste("Top 20", title, "GO Terms")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
+plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
+plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
+
+# Combine the plots using patchwork
+combined_plot <- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot
+```
+
+
+## **📌 GO Enrichment g:Profiler**
+```{r gprofiler_GO4, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+
+# Load the gprofiler2 package
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
+gost_results <- gost(
+  query = prob_1_0.5,           # List of input genes (prob_all_1)
+  organism = "hsapiens",   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = "fdr", # Multiple testing correction
+  domain_scope = "custom", # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c("GO:BP", "GO:MF", "GO:CC") # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results <- tibble(
+    term_name = "No enriched terms",
+    p.adjust = NA,
+    source = "N/A",
+    Category = "N/A"
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df <- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df <- gost_results_df %>%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results <- gost_results_df %>%
+    filter(source == "GO:BP") %>%
+    mutate(Category = "Biological Process")
+
+  MF_results <- gost_results_df %>%
+    filter(source == "GO:MF") %>%
+    mutate(Category = "Molecular Function")
+
+  CC_results <- gost_results_df %>%
+    filter(source == "GO:CC") %>%
+    mutate(Category = "Cellular Component")
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP <- BP_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_MF <- MF_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_CC <- CC_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results <- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean <- combined_results %>%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results <- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(
+      x = "-log10(Adjusted p-value)",
+      y = title,
+      title = paste("Top 20", title, "GO Terms")
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 && combined_results$term_name == "No enriched terms") {
+  message("No enriched GO terms found for the input gene set.")
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP <- plot_gprofiler_results(top_BP, "Biological Process", "#2E86C1")
+  plot_MF <- plot_gprofiler_results(top_MF, "Molecular Function", "#28B463")
+  plot_CC <- plot_gprofiler_results(top_CC, "Cellular Component", "#D35400")
+
+  # Combine the plots using patchwork
+  combined_plot <- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}
+```
+
+## **📌 Pathway Enrichment**
+```{r pathway_enrichment4, echo=TRUE, message=FALSE, fig.width=15, fig.height=12}
+
+# Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)
+
+# Function for ClusterProfiler Reactome & KEGG Analysis
+process_clusterProfiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == "Reactome") {
+    enrichment <- enrichPathway(
+      gene = gene_set,
+      organism = "human",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  } else if (category == "KEGG") {
+    enrichment <- enrichKEGG(
+      gene = gene_set,
+      organism = "hsa",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste("No significant enrichment found for", category, "in ClusterProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- as_tibble(as.data.frame(enrichment)) %>%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %>%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(Adjusted p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome & KEGG Analysis
+process_gprofiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    user_threshold = 0.05,
+    correction_method = "fdr",
+    domain_scope = "custom",
+    custom_bg = background,
+    sources = category # Either "REAC" or "KEGG"
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste("No significant enrichment found for", category, "in gProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- enrichment$result %>%
+    as_tibble() %>%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %>%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome <- process_clusterProfiler(
+  gene_set = prob_1_0.5,
+  background = background,
+  category = "Reactome",
+  color = "#2E86C1",
+  y_title = "Reactome Pathways"
+)
+
+cluster_kegg <- process_clusterProfiler(
+  gene_set = prob_1_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#28B463",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) && !is.null(cluster_kegg)) {
+  cluster_combined <- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined <- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined <- cluster_kegg
+} else {
+  cluster_combined <- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome <- process_gprofiler(
+  gene_set = prob_1_0.5,
+  background = background,
+  category = "REAC",  # Corrected category for Reactome in gProfiler
+  color = "#D35400",
+  y_title = "Reactome Pathways"
+)
+
+gprofiler_kegg <- process_gprofiler(
+  gene_set = prob_1_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#F39C12",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined <- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_kegg
+} else {
+  gprofiler_combined <- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)
+if (!is.null(gprofiler_combined)) print(gprofiler_combined)
+```
+
+## **📌 DOX-only early-mid response (0.5 µM)**
+## **📌 GO Enrichment Clusterprofiler**
+```{r GO5, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+# Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP <- enrichGO(gene = prob_2_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "BP",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF <- enrichGO(gene = prob_2_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "MF",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC <- enrichGO(gene = prob_2_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "CC",
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble <- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
+  } else {
+    enrichment %>%
+      as_tibble() %>%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+
+# Combine all tibbles
+combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot <- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log(p-adjust)",
+         y = title,
+         title = paste("Top 20", title, "GO Terms")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
+plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
+plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
+
+# Combine the plots using patchwork
+combined_plot <- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot
+```
+
+
+## **📌 GO Enrichment g:Profiler**
+```{r gprofiler_GO5, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+
+# Load the gprofiler2 package
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
+gost_results <- gost(
+  query = prob_2_0.5,           # List of input genes (prob_all_1)
+  organism = "hsapiens",   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = "fdr", # Multiple testing correction
+  domain_scope = "custom", # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c("GO:BP", "GO:MF", "GO:CC") # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results <- tibble(
+    term_name = "No enriched terms",
+    p.adjust = NA,
+    source = "N/A",
+    Category = "N/A"
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df <- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df <- gost_results_df %>%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results <- gost_results_df %>%
+    filter(source == "GO:BP") %>%
+    mutate(Category = "Biological Process")
+
+  MF_results <- gost_results_df %>%
+    filter(source == "GO:MF") %>%
+    mutate(Category = "Molecular Function")
+
+  CC_results <- gost_results_df %>%
+    filter(source == "GO:CC") %>%
+    mutate(Category = "Cellular Component")
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP <- BP_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_MF <- MF_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_CC <- CC_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results <- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean <- combined_results %>%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results <- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(
+      x = "-log10(Adjusted p-value)",
+      y = title,
+      title = paste("Top 20", title, "GO Terms")
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 && combined_results$term_name == "No enriched terms") {
+  message("No enriched GO terms found for the input gene set.")
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP <- plot_gprofiler_results(top_BP, "Biological Process", "#2E86C1")
+  plot_MF <- plot_gprofiler_results(top_MF, "Molecular Function", "#28B463")
+  plot_CC <- plot_gprofiler_results(top_CC, "Cellular Component", "#D35400")
+
+  # Combine the plots using patchwork
+  combined_plot <- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}
+```
+
+## **📌 Pathway Enrichment**
+```{r pathway_enrichment5, echo=TRUE, message=FALSE, fig.width=15, fig.height=12}
+
+# Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)
+
+# Function for ClusterProfiler Reactome & KEGG Analysis
+process_clusterProfiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == "Reactome") {
+    enrichment <- enrichPathway(
+      gene = gene_set,
+      organism = "human",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  } else if (category == "KEGG") {
+    enrichment <- enrichKEGG(
+      gene = gene_set,
+      organism = "hsa",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste("No significant enrichment found for", category, "in ClusterProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- as_tibble(as.data.frame(enrichment)) %>%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %>%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(Adjusted p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome & KEGG Analysis
+process_gprofiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    user_threshold = 0.05,
+    correction_method = "fdr",
+    domain_scope = "custom",
+    custom_bg = background,
+    sources = category # Either "REAC" or "KEGG"
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste("No significant enrichment found for", category, "in gProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- enrichment$result %>%
+    as_tibble() %>%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %>%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome <- process_clusterProfiler(
+  gene_set = prob_2_0.5,
+  background = background,
+  category = "Reactome",
+  color = "#2E86C1",
+  y_title = "Reactome Pathways"
+)
+
+cluster_kegg <- process_clusterProfiler(
+  gene_set = prob_2_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#28B463",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) && !is.null(cluster_kegg)) {
+  cluster_combined <- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined <- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined <- cluster_kegg
+} else {
+  cluster_combined <- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome <- process_gprofiler(
+  gene_set = prob_2_0.5,
+  background = background,
+  category = "REAC",  # Corrected category for Reactome in gProfiler
+  color = "#D35400",
+  y_title = "Reactome Pathways"
+)
+
+gprofiler_kegg <- process_gprofiler(
+  gene_set = prob_2_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#F39C12",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined <- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_kegg
+} else {
+  gprofiler_combined <- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)
+if (!is.null(gprofiler_combined)) print(gprofiler_combined)
+```
+
+## **📌 DOX only mid-late response (0.5 µM)**
+## **📌 GO Enrichment Clusterprofiler**
+```{r GO6, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+# Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP <- enrichGO(gene = prob_3_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "BP",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF <- enrichGO(gene = prob_3_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "MF",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC <- enrichGO(gene = prob_3_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "CC",
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble <- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
+  } else {
+    enrichment %>%
+      as_tibble() %>%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+
+# Combine all tibbles
+combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot <- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log(p-adjust)",
+         y = title,
+         title = paste("Top 20", title, "GO Terms")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
+plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
+plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
+
+# Combine the plots using patchwork
+combined_plot <- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot
+```
+
+
+## **📌 GO Enrichment g:Profiler**
+```{r gprofiler_GO6, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+
+# Load the gprofiler2 package
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
+gost_results <- gost(
+  query = prob_3_0.5,           # List of input genes (prob_all_1)
+  organism = "hsapiens",   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = "fdr", # Multiple testing correction
+  domain_scope = "custom", # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c("GO:BP", "GO:MF", "GO:CC") # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results <- tibble(
+    term_name = "No enriched terms",
+    p.adjust = NA,
+    source = "N/A",
+    Category = "N/A"
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df <- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df <- gost_results_df %>%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results <- gost_results_df %>%
+    filter(source == "GO:BP") %>%
+    mutate(Category = "Biological Process")
+
+  MF_results <- gost_results_df %>%
+    filter(source == "GO:MF") %>%
+    mutate(Category = "Molecular Function")
+
+  CC_results <- gost_results_df %>%
+    filter(source == "GO:CC") %>%
+    mutate(Category = "Cellular Component")
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP <- BP_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_MF <- MF_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_CC <- CC_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results <- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean <- combined_results %>%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results <- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(
+      x = "-log10(Adjusted p-value)",
+      y = title,
+      title = paste("Top 20", title, "GO Terms")
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 && combined_results$term_name == "No enriched terms") {
+  message("No enriched GO terms found for the input gene set.")
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP <- plot_gprofiler_results(top_BP, "Biological Process", "#2E86C1")
+  plot_MF <- plot_gprofiler_results(top_MF, "Molecular Function", "#28B463")
+  plot_CC <- plot_gprofiler_results(top_CC, "Cellular Component", "#D35400")
+
+  # Combine the plots using patchwork
+  combined_plot <- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}
+```
+
+## **📌 Pathway Enrichment**
+```{r pathway_enrichment6, echo=TRUE, message=FALSE, fig.width=15, fig.height=12}
+
+# Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)
+
+# Function for ClusterProfiler Reactome & KEGG Analysis
+process_clusterProfiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == "Reactome") {
+    enrichment <- enrichPathway(
+      gene = gene_set,
+      organism = "human",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  } else if (category == "KEGG") {
+    enrichment <- enrichKEGG(
+      gene = gene_set,
+      organism = "hsa",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste("No significant enrichment found for", category, "in ClusterProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- as_tibble(as.data.frame(enrichment)) %>%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %>%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(Adjusted p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome & KEGG Analysis
+process_gprofiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    user_threshold = 0.05,
+    correction_method = "fdr",
+    domain_scope = "custom",
+    custom_bg = background,
+    sources = category # Either "REAC" or "KEGG"
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste("No significant enrichment found for", category, "in gProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- enrichment$result %>%
+    as_tibble() %>%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %>%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome <- process_clusterProfiler(
+  gene_set = prob_3_0.5,
+  background = background,
+  category = "Reactome",
+  color = "#2E86C1",
+  y_title = "Reactome Pathways"
+)
+
+cluster_kegg <- process_clusterProfiler(
+  gene_set = prob_3_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#28B463",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) && !is.null(cluster_kegg)) {
+  cluster_combined <- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined <- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined <- cluster_kegg
+} else {
+  cluster_combined <- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome <- process_gprofiler(
+  gene_set = prob_3_0.5,
+  background = background,
+  category = "REAC",  # Corrected category for Reactome in gProfiler
+  color = "#D35400",
+  y_title = "Reactome Pathways"
+)
+
+gprofiler_kegg <- process_gprofiler(
+  gene_set = prob_3_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#F39C12",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined <- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_kegg
+} else {
+  gprofiler_combined <- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)
+if (!is.null(gprofiler_combined)) print(gprofiler_combined)
+```
+
+## **📌 CX-only mid-late response (0.5 µM)**
+## **📌 GO Enrichment Clusterprofiler**
+```{r GO7, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+# Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP <- enrichGO(gene = prob_4_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "BP",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF <- enrichGO(gene = prob_4_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "MF",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC <- enrichGO(gene = prob_4_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "CC",
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble <- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
+  } else {
+    enrichment %>%
+      as_tibble() %>%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+
+# Combine all tibbles
+combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot <- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log(p-adjust)",
+         y = title,
+         title = paste("Top 20", title, "GO Terms")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
+plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
+plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
+
+# Combine the plots using patchwork
+combined_plot <- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot
+```
+
+
+## **📌 GO Enrichment g:Profiler**
+```{r gprofiler_GO7, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+
+# Load the gprofiler2 package
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
+gost_results <- gost(
+  query = prob_4_0.5,           # List of input genes (prob_all_1)
+  organism = "hsapiens",   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = "fdr", # Multiple testing correction
+  domain_scope = "custom", # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c("GO:BP", "GO:MF", "GO:CC") # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results <- tibble(
+    term_name = "No enriched terms",
+    p.adjust = NA,
+    source = "N/A",
+    Category = "N/A"
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df <- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df <- gost_results_df %>%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results <- gost_results_df %>%
+    filter(source == "GO:BP") %>%
+    mutate(Category = "Biological Process")
+
+  MF_results <- gost_results_df %>%
+    filter(source == "GO:MF") %>%
+    mutate(Category = "Molecular Function")
+
+  CC_results <- gost_results_df %>%
+    filter(source == "GO:CC") %>%
+    mutate(Category = "Cellular Component")
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP <- BP_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_MF <- MF_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_CC <- CC_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results <- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean <- combined_results %>%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results <- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(
+      x = "-log10(Adjusted p-value)",
+      y = title,
+      title = paste("Top 20", title, "GO Terms")
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 && combined_results$term_name == "No enriched terms") {
+  message("No enriched GO terms found for the input gene set.")
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP <- plot_gprofiler_results(top_BP, "Biological Process", "#2E86C1")
+  plot_MF <- plot_gprofiler_results(top_MF, "Molecular Function", "#28B463")
+  plot_CC <- plot_gprofiler_results(top_CC, "Cellular Component", "#D35400")
+
+  # Combine the plots using patchwork
+  combined_plot <- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}
+```
+
+## **📌 Pathway Enrichment**
+```{r pathway_enrichment7, echo=TRUE, message=FALSE, fig.width=15, fig.height=12}
+
+# Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)
+
+# Function for ClusterProfiler Reactome & KEGG Analysis
+process_clusterProfiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == "Reactome") {
+    enrichment <- enrichPathway(
+      gene = gene_set,
+      organism = "human",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  } else if (category == "KEGG") {
+    enrichment <- enrichKEGG(
+      gene = gene_set,
+      organism = "hsa",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste("No significant enrichment found for", category, "in ClusterProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- as_tibble(as.data.frame(enrichment)) %>%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %>%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(Adjusted p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome & KEGG Analysis
+process_gprofiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    user_threshold = 0.05,
+    correction_method = "fdr",
+    domain_scope = "custom",
+    custom_bg = background,
+    sources = category # Either "REAC" or "KEGG"
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste("No significant enrichment found for", category, "in gProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- enrichment$result %>%
+    as_tibble() %>%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %>%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome <- process_clusterProfiler(
+  gene_set = prob_4_0.5,
+  background = background,
+  category = "Reactome",
+  color = "#2E86C1",
+  y_title = "Reactome Pathways"
+)
+
+cluster_kegg <- process_clusterProfiler(
+  gene_set = prob_4_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#28B463",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) && !is.null(cluster_kegg)) {
+  cluster_combined <- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined <- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined <- cluster_kegg
+} else {
+  cluster_combined <- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome <- process_gprofiler(
+  gene_set = prob_4_0.5,
+  background = background,
+  category = "REAC",  # Corrected category for Reactome in gProfiler
+  color = "#D35400",
+  y_title = "Reactome Pathways"
+)
+
+gprofiler_kegg <- process_gprofiler(
+  gene_set = prob_4_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#F39C12",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined <- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_kegg
+} else {
+  gprofiler_combined <- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)
+if (!is.null(gprofiler_combined)) print(gprofiler_combined)
+```
+
+## **📌 CX-DOX mid-late response (0.5 µM)**
+## **📌 GO Enrichment Clusterprofiler**
+```{r GO8, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+# Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP <- enrichGO(gene = prob_5_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "BP",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF <- enrichGO(gene = prob_5_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "MF",
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC <- enrichGO(gene = prob_5_0.5,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = "ENTREZID",
+                             universe = background,
+                             ont = "CC",
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble <- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
+  } else {
+    enrichment %>%
+      as_tibble() %>%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+
+# Combine all tibbles
+combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot <- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log(p-adjust)",
+         y = title,
+         title = paste("Top 20", title, "GO Terms")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
+plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
+plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
+
+# Combine the plots using patchwork
+combined_plot <- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot
+```
+
+
+## **📌 GO Enrichment g:Profiler**
+```{r gprofiler_GO8, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+
+# Load the gprofiler2 package
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
+gost_results <- gost(
+  query = prob_5_0.5,           # List of input genes (prob_all_1)
+  organism = "hsapiens",   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = "fdr", # Multiple testing correction
+  domain_scope = "custom", # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c("GO:BP", "GO:MF", "GO:CC") # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results <- tibble(
+    term_name = "No enriched terms",
+    p.adjust = NA,
+    source = "N/A",
+    Category = "N/A"
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df <- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df <- gost_results_df %>%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results <- gost_results_df %>%
+    filter(source == "GO:BP") %>%
+    mutate(Category = "Biological Process")
+
+  MF_results <- gost_results_df %>%
+    filter(source == "GO:MF") %>%
+    mutate(Category = "Molecular Function")
+
+  CC_results <- gost_results_df %>%
+    filter(source == "GO:CC") %>%
+    mutate(Category = "Cellular Component")
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP <- BP_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_MF <- MF_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  top_CC <- CC_results %>%
+    arrange(p.adjust) %>%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results <- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean <- combined_results %>%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results <- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(
+      x = "-log10(Adjusted p-value)",
+      y = title,
+      title = paste("Top 20", title, "GO Terms")
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 && combined_results$term_name == "No enriched terms") {
+  message("No enriched GO terms found for the input gene set.")
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP <- plot_gprofiler_results(top_BP, "Biological Process", "#2E86C1")
+  plot_MF <- plot_gprofiler_results(top_MF, "Molecular Function", "#28B463")
+  plot_CC <- plot_gprofiler_results(top_CC, "Cellular Component", "#D35400")
+
+  # Combine the plots using patchwork
+  combined_plot <- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}
+```
+
+## **📌 Pathway Enrichment**
+```{r pathway_enrichment8, echo=TRUE, message=FALSE, fig.width=15, fig.height=12}
+
+# Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)
+
+# Function for ClusterProfiler Reactome & KEGG Analysis
+process_clusterProfiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == "Reactome") {
+    enrichment <- enrichPathway(
+      gene = gene_set,
+      organism = "human",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  } else if (category == "KEGG") {
+    enrichment <- enrichKEGG(
+      gene = gene_set,
+      organism = "hsa",
+      pvalueCutoff = 0.05,
+      pAdjustMethod = "BH",
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste("No significant enrichment found for", category, "in ClusterProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- as_tibble(as.data.frame(enrichment)) %>%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %>%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(Adjusted p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome & KEGG Analysis
+process_gprofiler <- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    user_threshold = 0.05,
+    correction_method = "fdr",
+    domain_scope = "custom",
+    custom_bg = background,
+    sources = category # Either "REAC" or "KEGG"
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste("No significant enrichment found for", category, "in gProfiler"))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble <- enrichment$result %>%
+    as_tibble() %>%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %>%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %>%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot <- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = "identity", fill = color) +
+    labs(x = "-log10(p-value)",
+         y = y_title,
+         title = paste("Enriched", category, "Pathways")) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = "bold", colour = "black"),
+      axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
+      axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
+      plot.title = element_text(size = 14, face = "bold", colour = "black")
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome <- process_clusterProfiler(
+  gene_set = prob_5_0.5,
+  background = background,
+  category = "Reactome",
+  color = "#2E86C1",
+  y_title = "Reactome Pathways"
+)
+
+cluster_kegg <- process_clusterProfiler(
+  gene_set = prob_5_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#28B463",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) && !is.null(cluster_kegg)) {
+  cluster_combined <- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined <- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined <- cluster_kegg
+} else {
+  cluster_combined <- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome <- process_gprofiler(
+  gene_set = prob_5_0.5,
+  background = background,
+  category = "REAC",  # Corrected category for Reactome in gProfiler
+  color = "#D35400",
+  y_title = "Reactome Pathways"
+)
+
+gprofiler_kegg <- process_gprofiler(
+  gene_set = prob_5_0.5,
+  background = background,
+  category = "KEGG",
+  color = "#F39C12",
+  y_title = "KEGG Pathways"
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined <- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined <- gprofiler_kegg
+} else {
+  gprofiler_combined <- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)
+if (!is.null(gprofiler_combined)) print(gprofiler_combined)
+```
