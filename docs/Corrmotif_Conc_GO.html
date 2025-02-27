@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Function and Pathway Enrichment Analysis of Corrmotifs (Concentration)</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CX5461_Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Function and Pathway Enrichment Analysis of
+Corrmotifs (Concentration)</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-02-27
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250129code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250129)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250129code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250129)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree2de67e6a82f82edbc78941b11ba72ed8aba9964etargetblank2de67e6a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/2de67e6a82f82edbc78941b11ba72ed8aba9964e" target="_blank">2de67e6</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree2de67e6a82f82edbc78941b11ba72ed8aba9964etargetblank2de67e6a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/2de67e6a82f82edbc78941b11ba72ed8aba9964e" target="_blank">2de67e6</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/Corrmotif_Conc_GO.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-required-libraries" class="section level2">
+<h2><strong>📌 Load Required Libraries</strong></h2>
+<pre class="r"><code>library(tidyverse) 
+library(ggfortify)
+library(ggplot2)
+library(cluster)
+library(edgeR)
+library(limma)
+library(Homo.sapiens)
+library(BiocParallel)
+library(qvalue)
+library(pheatmap)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(org.Hs.eg.db)
+library(RColorBrewer)
+library(readr)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(DOSE)
+
+# Load UCSC transcript database
+txdb &lt;- TxDb.Hsapiens.UCSC.hg38.knownGene</code></pre>
+</div>
+<div id="micromolar" class="section level2">
+<h2><strong>📌 0.1 Micromolar</strong></h2>
+</div>
+<div id="read-and-process-data" class="section level2">
+<h2><strong>📌 Read and Process Data</strong></h2>
+<pre class="r"><code># Load the saved datasets
+prob_1_0.1 &lt;- read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID
+prob_2_0.1 &lt;- read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID
+prob_3_0.1 &lt;- read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID
+
+CX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+background&lt;-as.character(CX_0.1_3$Entrez_ID)</code></pre>
+</div>
+<div id="non-response-0.1-µm" class="section level2">
+<h2><strong>📌 Non response (0.1 µM)</strong></h2>
+</div>
+<div id="go-enrichment-clusterprofiler" class="section level2">
+<h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
+<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP &lt;- enrichGO(gene = prob_1_0.1,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = &quot;ENTREZID&quot;,
+                             universe = background,
+                             ont = &quot;BP&quot;,
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF &lt;- enrichGO(gene = prob_1_0.1,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = &quot;ENTREZID&quot;,
+                             universe = background,
+                             ont = &quot;MF&quot;,
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC &lt;- enrichGO(gene = prob_1_0.1,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = &quot;ENTREZID&quot;,
+                             universe = background,
+                             ont = &quot;CC&quot;,
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble &lt;- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
+  } else {
+    enrichment %&gt;%
+      as_tibble() %&gt;%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+
+# Combine all tibbles
+combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot &lt;- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(x = &quot;-log(p-adjust)&quot;,
+         y = title,
+         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)</code></pre>
+<pre><code>Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.
+ℹ Please use the `linewidth` argument instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+<pre class="r"><code>plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
+
+# Combine the plots using patchwork
+combined_plot &lt;- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/GO1-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="go-enrichment-gprofiler" class="section level2">
+<h2><strong>📌 GO Enrichment g:Profiler</strong></h2>
+<pre class="r"><code># Load the gprofiler2 package
+library(gprofiler2)</code></pre>
+<pre><code>Warning: package &#39;gprofiler2&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(patchwork)</code></pre>
+<pre><code>Warning: package &#39;patchwork&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code># Perform GO enrichment analysis with gprofiler2
+gost_results &lt;- gost(
+  query = prob_1_0.1,           # List of input genes (prob_all_1)
+  organism = &quot;hsapiens&quot;,   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = &quot;fdr&quot;, # Multiple testing correction
+  domain_scope = &quot;custom&quot;, # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c(&quot;GO:BP&quot;, &quot;GO:MF&quot;, &quot;GO:CC&quot;) # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results &lt;- tibble(
+    term_name = &quot;No enriched terms&quot;,
+    p.adjust = NA,
+    source = &quot;N/A&quot;,
+    Category = &quot;N/A&quot;
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df &lt;- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df &lt;- gost_results_df %&gt;%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results &lt;- gost_results_df %&gt;%
+    filter(source == &quot;GO:BP&quot;) %&gt;%
+    mutate(Category = &quot;Biological Process&quot;)
+
+  MF_results &lt;- gost_results_df %&gt;%
+    filter(source == &quot;GO:MF&quot;) %&gt;%
+    mutate(Category = &quot;Molecular Function&quot;)
+
+  CC_results &lt;- gost_results_df %&gt;%
+    filter(source == &quot;GO:CC&quot;) %&gt;%
+    mutate(Category = &quot;Cellular Component&quot;)
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP &lt;- BP_results %&gt;%
+    arrange(p.adjust) %&gt;%
+    slice_head(n = 20)
+
+  top_MF &lt;- MF_results %&gt;%
+    arrange(p.adjust) %&gt;%
+    slice_head(n = 20)
+
+  top_CC &lt;- CC_results %&gt;%
+    arrange(p.adjust) %&gt;%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results &lt;- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean &lt;- combined_results %&gt;%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results &lt;- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(
+      x = &quot;-log10(Adjusted p-value)&quot;,
+      y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 &amp;&amp; combined_results$term_name == &quot;No enriched terms&quot;) {
+  message(&quot;No enriched GO terms found for the input gene set.&quot;)
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP &lt;- plot_gprofiler_results(top_BP, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
+  plot_MF &lt;- plot_gprofiler_results(top_MF, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+  plot_CC &lt;- plot_gprofiler_results(top_CC, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
+
+  # Combine the plots using patchwork
+  combined_plot &lt;- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/gprofiler_GO-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="pathway-enrichment" class="section level2">
+<h2><strong>📌 Pathway Enrichment</strong></h2>
+<pre class="r"><code># Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)</code></pre>
+<pre><code>Warning: package &#39;ReactomePA&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code># Function for ClusterProfiler Reactome &amp; KEGG Analysis
+process_clusterProfiler &lt;- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == &quot;Reactome&quot;) {
+    enrichment &lt;- enrichPathway(
+      gene = gene_set,
+      organism = &quot;human&quot;,
+      pvalueCutoff = 0.05,
+      pAdjustMethod = &quot;BH&quot;,
+      universe = background
+    )
+  } else if (category == &quot;KEGG&quot;) {
+    enrichment &lt;- enrichKEGG(
+      gene = gene_set,
+      organism = &quot;hsa&quot;,
+      pvalueCutoff = 0.05,
+      pAdjustMethod = &quot;BH&quot;,
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste(&quot;No significant enrichment found for&quot;, category, &quot;in ClusterProfiler&quot;))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble &lt;- as_tibble(as.data.frame(enrichment)) %&gt;%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %&gt;%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %&gt;%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot &lt;- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(x = &quot;-log10(Adjusted p-value)&quot;,
+         y = y_title,
+         title = paste(&quot;Enriched&quot;, category, &quot;Pathways&quot;)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;)
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome &amp; KEGG Analysis
+process_gprofiler &lt;- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment &lt;- gost(
+    query = gene_set,
+    organism = &quot;hsapiens&quot;,
+    user_threshold = 0.05,
+    correction_method = &quot;fdr&quot;,
+    domain_scope = &quot;custom&quot;,
+    custom_bg = background,
+    sources = category # Either &quot;REAC&quot; or &quot;KEGG&quot;
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste(&quot;No significant enrichment found for&quot;, category, &quot;in gProfiler&quot;))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble &lt;- enrichment$result %&gt;%
+    as_tibble() %&gt;%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %&gt;%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %&gt;%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot &lt;- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(x = &quot;-log10(p-value)&quot;,
+         y = y_title,
+         title = paste(&quot;Enriched&quot;, category, &quot;Pathways&quot;)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;)
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome &lt;- process_clusterProfiler(
+  gene_set = prob_1_0.1,
+  background = background,
+  category = &quot;Reactome&quot;,
+  color = &quot;#2E86C1&quot;,
+  y_title = &quot;Reactome Pathways&quot;
+)
+
+cluster_kegg &lt;- process_clusterProfiler(
+  gene_set = prob_1_0.1,
+  background = background,
+  category = &quot;KEGG&quot;,
+  color = &quot;#28B463&quot;,
+  y_title = &quot;KEGG Pathways&quot;
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) &amp;&amp; !is.null(cluster_kegg)) {
+  cluster_combined &lt;- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined &lt;- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined &lt;- cluster_kegg
+} else {
+  cluster_combined &lt;- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome &lt;- process_gprofiler(
+  gene_set = prob_1_0.1,
+  background = background,
+  category = &quot;REAC&quot;,  # Corrected category for Reactome in gProfiler
+  color = &quot;#D35400&quot;,
+  y_title = &quot;Reactome Pathways&quot;
+)
+
+gprofiler_kegg &lt;- process_gprofiler(
+  gene_set = prob_1_0.1,
+  background = background,
+  category = &quot;KEGG&quot;,
+  color = &quot;#F39C12&quot;,
+  y_title = &quot;KEGG Pathways&quot;
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) &amp;&amp; !is.null(gprofiler_kegg)) {
+  gprofiler_combined &lt;- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined &lt;- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined &lt;- gprofiler_kegg
+} else {
+  gprofiler_combined &lt;- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>if (!is.null(gprofiler_combined)) print(gprofiler_combined)</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment-2.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dox-only-mid-late-0.1-µm" class="section level2">
+<h2><strong>📌 DOX only mid-late (0.1 µM)</strong></h2>
+</div>
+<div id="go-enrichment-clusterprofiler-1" class="section level2">
+<h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
+<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
+go_enrichment_BP &lt;- enrichGO(gene = prob_2_0.1,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = &quot;ENTREZID&quot;,
+                             universe = background,
+                             ont = &quot;BP&quot;,
+                             pvalueCutoff = 0.05)
+
+go_enrichment_MF &lt;- enrichGO(gene = prob_2_0.1,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = &quot;ENTREZID&quot;,
+                             universe = background,
+                             ont = &quot;MF&quot;,
+                             pvalueCutoff = 0.05)
+
+go_enrichment_CC &lt;- enrichGO(gene = prob_2_0.1,
+                             OrgDb = org.Hs.eg.db,
+                             keyType = &quot;ENTREZID&quot;,
+                             universe = background,
+                             ont = &quot;CC&quot;,
+                             pvalueCutoff = 0.05)
+
+# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
+process_enrichment_tibble &lt;- function(enrichment, category) {
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
+  } else {
+    enrichment %&gt;%
+      as_tibble() %&gt;%
+      mutate(Category = category,
+             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
+      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
+      slice(1:20)                        # Select top 20 terms
+  }
+}
+
+BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+
+# Combine all tibbles
+combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
+# Function to generate enrichment plots
+process_enrichment_plot &lt;- function(tibble, title, color) {
+  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(x = &quot;-log(p-adjust)&quot;,
+         y = title,
+         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+    ) +
+    xlim(c(0, max(tibble$neglog) + 1))
+}
+
+# Generate separate plots
+plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
+plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
+
+# Combine the plots using patchwork
+combined_plot &lt;- plot_BP / plot_MF / plot_CC
+
+# Display the combined plot
+combined_plot</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/GO2-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="go-enrichment-gprofiler-1" class="section level2">
+<h2><strong>📌 GO Enrichment g:Profiler</strong></h2>
+<pre class="r"><code># Load the gprofiler2 package
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
+gost_results &lt;- gost(
+  query = prob_2_0.1,           # List of input genes (prob_all_1)
+  organism = &quot;hsapiens&quot;,   # Human organism
+  user_threshold = 0.05,   # Adjusted p-value cutoff
+  correction_method = &quot;fdr&quot;, # Multiple testing correction
+  domain_scope = &quot;custom&quot;, # Use custom background
+  custom_bg = background,    # Background set of genes
+  sources = c(&quot;GO:BP&quot;, &quot;GO:MF&quot;, &quot;GO:CC&quot;) # Analyze GO categories
+)
+
+# Check if enrichment results exist
+if (is.null(gost_results$result) || nrow(gost_results$result) == 0) {
+  # If no enriched terms, create a placeholder dataframe
+  combined_results &lt;- tibble(
+    term_name = &quot;No enriched terms&quot;,
+    p.adjust = NA,
+    source = &quot;N/A&quot;,
+    Category = &quot;N/A&quot;
+  )
+} else {
+  # Convert results to a data frame
+  gost_results_df &lt;- gost_results$result
+
+  # Add a column for adjusted p-value
+  gost_results_df &lt;- gost_results_df %&gt;%
+    rename(p.adjust = p_value)
+
+  # Separate results for BP, MF, and CC
+  BP_results &lt;- gost_results_df %&gt;%
+    filter(source == &quot;GO:BP&quot;) %&gt;%
+    mutate(Category = &quot;Biological Process&quot;)
+
+  MF_results &lt;- gost_results_df %&gt;%
+    filter(source == &quot;GO:MF&quot;) %&gt;%
+    mutate(Category = &quot;Molecular Function&quot;)
+
+  CC_results &lt;- gost_results_df %&gt;%
+    filter(source == &quot;GO:CC&quot;) %&gt;%
+    mutate(Category = &quot;Cellular Component&quot;)
+
+  # Select the top 20 terms by adjusted p-value for each category
+  top_BP &lt;- BP_results %&gt;%
+    arrange(p.adjust) %&gt;%
+    slice_head(n = 20)
+
+  top_MF &lt;- MF_results %&gt;%
+    arrange(p.adjust) %&gt;%
+    slice_head(n = 20)
+
+  top_CC &lt;- CC_results %&gt;%
+    arrange(p.adjust) %&gt;%
+    slice_head(n = 20)
+
+  # Combine all categories
+  combined_results &lt;- bind_rows(top_BP, top_MF, top_CC)
+}
+
+# Ensure all columns are atomic types for CSV export
+combined_results_clean &lt;- combined_results %&gt;%
+  mutate(across(everything(), ~ if (is.list(.)) sapply(., toString) else .))
+
+# Function for plotting top terms
+plot_gprofiler_results &lt;- function(data, title, color) {
+  ggplot(data, aes(x = -log10(p.adjust), y = reorder(term_name, -log10(p.adjust)))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(
+      x = &quot;-log10(Adjusted p-value)&quot;,
+      y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+    )
+}
+
+# Check if there are enrichment terms to plot
+if (nrow(combined_results) == 1 &amp;&amp; combined_results$term_name == &quot;No enriched terms&quot;) {
+  message(&quot;No enriched GO terms found for the input gene set.&quot;)
+} else {
+  # Plot the top 20 terms for each category
+  plot_BP &lt;- plot_gprofiler_results(top_BP, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
+  plot_MF &lt;- plot_gprofiler_results(top_MF, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+  plot_CC &lt;- plot_gprofiler_results(top_CC, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
+
+  # Combine the plots using patchwork
+  combined_plot &lt;- plot_BP / plot_MF / plot_CC
+
+  # Display the combined plot
+  combined_plot
+}</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/gprofiler_GO2-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="pathway-enrichment-1" class="section level2">
+<h2><strong>📌 Pathway Enrichment</strong></h2>
+<pre class="r"><code># Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db) # Required for enrichPathway
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+library(ReactomePA)
+
+# Function for ClusterProfiler Reactome &amp; KEGG Analysis
+process_clusterProfiler &lt;- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment based on the selected category
+  if (category == &quot;Reactome&quot;) {
+    enrichment &lt;- enrichPathway(
+      gene = gene_set,
+      organism = &quot;human&quot;,
+      pvalueCutoff = 0.05,
+      pAdjustMethod = &quot;BH&quot;,
+      universe = background
+    )
+  } else if (category == &quot;KEGG&quot;) {
+    enrichment &lt;- enrichKEGG(
+      gene = gene_set,
+      organism = &quot;hsa&quot;,
+      pvalueCutoff = 0.05,
+      pAdjustMethod = &quot;BH&quot;,
+      universe = background
+    )
+  }
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
+    message(paste(&quot;No significant enrichment found for&quot;, category, &quot;in ClusterProfiler&quot;))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble &lt;- as_tibble(as.data.frame(enrichment)) %&gt;%
+    mutate(Category = category,
+           neglog = -log10(p.adjust)) %&gt;%  # Compute -log10(p.adjust)
+    arrange(desc(neglog)) %&gt;%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot &lt;- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(x = &quot;-log10(Adjusted p-value)&quot;,
+         y = y_title,
+         title = paste(&quot;Enriched&quot;, category, &quot;Pathways&quot;)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;)
+    )
+  
+  return(plot)
+}
+
+# Function for gProfiler Reactome &amp; KEGG Analysis
+process_gprofiler &lt;- function(gene_set, background, category, color, y_title) {
+  # Perform enrichment using gprofiler2
+  enrichment &lt;- gost(
+    query = gene_set,
+    organism = &quot;hsapiens&quot;,
+    user_threshold = 0.05,
+    correction_method = &quot;fdr&quot;,
+    domain_scope = &quot;custom&quot;,
+    custom_bg = background,
+    sources = category # Either &quot;REAC&quot; or &quot;KEGG&quot;
+  )
+  
+  # Check if enrichment results exist
+  if (is.null(enrichment$result) || nrow(enrichment$result) == 0) {
+    message(paste(&quot;No significant enrichment found for&quot;, category, &quot;in gProfiler&quot;))
+    return(NULL)
+  }
+  
+  # Convert results to tibble and process top 20 terms
+  enrichment_tibble &lt;- enrichment$result %&gt;%
+    as_tibble() %&gt;%
+    mutate(Category = category,
+           neglog = -log10(p_value)) %&gt;%  # Compute -log10(p-value)
+    arrange(desc(neglog)) %&gt;%
+    slice_head(n = min(20, nrow(.)))  # Ensure safe slicing
+  
+  # Generate plot
+  plot &lt;- ggplot(enrichment_tibble, aes(x = neglog, y = reorder(term_name, neglog))) +
+    geom_bar(stat = &quot;identity&quot;, fill = color) +
+    labs(x = &quot;-log10(p-value)&quot;,
+         y = y_title,
+         title = paste(&quot;Enriched&quot;, category, &quot;Pathways&quot;)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
+      axis.text.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
+      plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;)
+    )
+  
+  return(plot)
+}
+
+# Perform analysis for Reactome and KEGG using ClusterProfiler
+cluster_reactome &lt;- process_clusterProfiler(
+  gene_set = prob_2_0.1,
+  background = background,
+  category = &quot;Reactome&quot;,
+  color = &quot;#2E86C1&quot;,
+  y_title = &quot;Reactome Pathways&quot;
+)
+
+cluster_kegg &lt;- process_clusterProfiler(
+  gene_set = prob_2_0.1,
+  background = background,
+  category = &quot;KEGG&quot;,
+  color = &quot;#28B463&quot;,
+  y_title = &quot;KEGG Pathways&quot;
+)
+
+# Combine Reactome and KEGG for ClusterProfiler
+if (!is.null(cluster_reactome) &amp;&amp; !is.null(cluster_kegg)) {
+  cluster_combined &lt;- cluster_reactome / cluster_kegg
+} else if (!is.null(cluster_reactome)) {
+  cluster_combined &lt;- cluster_reactome
+} else if (!is.null(cluster_kegg)) {
+  cluster_combined &lt;- cluster_kegg
+} else {
+  cluster_combined &lt;- NULL
+}
+
+# Perform analysis for Reactome and KEGG using GProfiler
+gprofiler_reactome &lt;- process_gprofiler(
+  gene_set = prob_2_0.1,
+  background = background,
+  category = &quot;REAC&quot;,  # Corrected category for Reactome in gProfiler
+  color = &quot;#D35400&quot;,
+  y_title = &quot;Reactome Pathways&quot;
+)
+
+gprofiler_kegg &lt;- process_gprofiler(
+  gene_set = prob_2_0.1,
+  background = background,
+  category = &quot;KEGG&quot;,
+  color = &quot;#F39C12&quot;,
+  y_title = &quot;KEGG Pathways&quot;
+)
+
+# Combine Reactome and KEGG for GProfiler
+if (!is.null(gprofiler_reactome) &amp;&amp; !is.null(gprofiler_kegg)) {
+  gprofiler_combined &lt;- gprofiler_reactome / gprofiler_kegg
+} else if (!is.null(gprofiler_reactome)) {
+  gprofiler_combined &lt;- gprofiler_reactome
+} else if (!is.null(gprofiler_kegg)) {
+  gprofiler_combined &lt;- gprofiler_kegg
+} else {
+  gprofiler_combined &lt;- NULL
+}
+
+# Display plots (if they are not NULL)
+if (!is.null(cluster_combined)) print(cluster_combined)</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment2-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>if (!is.null(gprofiler_combined)) print(gprofiler_combined)</code></pre>
+<p><img src="figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment2-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.0 (2023-04-21 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 11 x64 (build 22631)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] ReactomePA_1.46.0                       
+ [2] patchwork_1.3.0                         
+ [3] gprofiler2_0.2.3                        
+ [4] DOSE_3.28.2                             
+ [5] TxDb.Hsapiens.UCSC.hg38.knownGene_3.18.0
+ [6] RColorBrewer_1.1-3                      
+ [7] clusterProfiler_4.10.1                  
+ [8] pheatmap_1.0.12                         
+ [9] qvalue_2.34.0                           
+[10] BiocParallel_1.36.0                     
+[11] Homo.sapiens_1.3.1                      
+[12] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2 
+[13] org.Hs.eg.db_3.18.0                     
+[14] GO.db_3.18.0                            
+[15] OrganismDbi_1.44.0                      
+[16] GenomicFeatures_1.54.4                  
+[17] GenomicRanges_1.54.1                    
+[18] GenomeInfoDb_1.38.8                     
+[19] AnnotationDbi_1.64.1                    
+[20] IRanges_2.36.0                          
+[21] S4Vectors_0.40.1                        
+[22] Biobase_2.62.0                          
+[23] BiocGenerics_0.48.1                     
+[24] edgeR_4.0.1                             
+[25] limma_3.58.1                            
+[26] cluster_2.1.6                           
+[27] ggfortify_0.4.17                        
+[28] lubridate_1.9.3                         
+[29] forcats_1.0.0                           
+[30] stringr_1.5.1                           
+[31] dplyr_1.1.4                             
+[32] purrr_1.0.2                             
+[33] readr_2.1.5                             
+[34] tidyr_1.3.1                             
+[35] tibble_3.2.1                            
+[36] ggplot2_3.5.1                           
+[37] tidyverse_2.0.0                         
+
+loaded via a namespace (and not attached):
+  [1] splines_4.3.0               later_1.3.2                
+  [3] BiocIO_1.12.0               bitops_1.0-7               
+  [5] ggplotify_0.1.2             filelock_1.0.3             
+  [7] polyclip_1.10-7             graph_1.80.0               
+  [9] XML_3.99-0.17               lifecycle_1.0.4            
+ [11] rprojroot_2.0.4             lattice_0.22-5             
+ [13] MASS_7.3-60                 magrittr_2.0.3             
+ [15] plotly_4.10.4               sass_0.4.9                 
+ [17] rmarkdown_2.29              jquerylib_0.1.4            
+ [19] yaml_2.3.10                 httpuv_1.6.15              
+ [21] cowplot_1.1.3               DBI_1.2.3                  
+ [23] abind_1.4-8                 zlibbioc_1.48.0            
+ [25] ggraph_2.2.1                RCurl_1.98-1.13            
+ [27] yulab.utils_0.1.8           tweenr_2.0.3               
+ [29] rappdirs_0.3.3              git2r_0.35.0               
+ [31] GenomeInfoDbData_1.2.11     enrichplot_1.22.0          
+ [33] ggrepel_0.9.6               tidytree_0.4.6             
+ [35] reactome.db_1.86.2          codetools_0.2-20           
+ [37] DelayedArray_0.28.0         xml2_1.3.6                 
+ [39] ggforce_0.4.2               tidyselect_1.2.1           
+ [41] aplot_0.2.3                 farver_2.1.2               
+ [43] viridis_0.6.5               matrixStats_1.4.1          
+ [45] BiocFileCache_2.10.2        GenomicAlignments_1.38.2   
+ [47] jsonlite_1.8.9              tidygraph_1.3.1            
+ [49] tools_4.3.0                 progress_1.2.3             
+ [51] treeio_1.26.0               Rcpp_1.0.12                
+ [53] glue_1.7.0                  gridExtra_2.3              
+ [55] SparseArray_1.2.4           xfun_0.50                  
+ [57] MatrixGenerics_1.14.0       withr_3.0.2                
+ [59] BiocManager_1.30.25         fastmap_1.1.1              
+ [61] digest_0.6.34               timechange_0.3.0           
+ [63] R6_2.5.1                    gridGraphics_0.5-1         
+ [65] colorspace_2.1-0            biomaRt_2.58.2             
+ [67] RSQLite_2.3.3               generics_0.1.3             
+ [69] data.table_1.14.10          rtracklayer_1.62.0         
+ [71] htmlwidgets_1.6.4           prettyunits_1.2.0          
+ [73] graphlayouts_1.2.0          httr_1.4.7                 
+ [75] S4Arrays_1.2.1              scatterpie_0.2.4           
+ [77] graphite_1.48.0             pkgconfig_2.0.3            
+ [79] gtable_0.3.6                blob_1.2.4                 
+ [81] workflowr_1.7.1             XVector_0.42.0             
+ [83] shadowtext_0.1.4            htmltools_0.5.8.1          
+ [85] fgsea_1.28.0                RBGL_1.78.0                
+ [87] scales_1.3.0                png_0.1-8                  
+ [89] ggfun_0.1.8                 knitr_1.49                 
+ [91] rstudioapi_0.17.1           tzdb_0.4.0                 
+ [93] reshape2_1.4.4              rjson_0.2.23               
+ [95] nlme_3.1-166                curl_6.0.1                 
+ [97] cachem_1.0.8                parallel_4.3.0             
+ [99] HDO.db_0.99.1               restfulr_0.0.15            
+[101] pillar_1.10.1               grid_4.3.0                 
+[103] vctrs_0.6.5                 promises_1.3.0             
+[105] dbplyr_2.5.0                evaluate_1.0.3             
+[107] cli_3.6.1                   locfit_1.5-9.8             
+[109] compiler_4.3.0              Rsamtools_2.18.0           
+[111] rlang_1.1.3                 crayon_1.5.3               
+[113] labeling_0.4.3              plyr_1.8.9                 
+[115] fs_1.6.3                    stringi_1.8.3              
+[117] viridisLite_0.4.2           munsell_0.5.1              
+[119] Biostrings_2.70.1           lazyeval_0.2.2             
+[121] GOSemSim_2.28.1             Matrix_1.6-1.1             
+[123] hms_1.1.3                   bit64_4.0.5                
+[125] KEGGREST_1.42.0             statmod_1.5.0              
+[127] SummarizedExperiment_1.32.0 igraph_2.1.1               
+[129] memoise_2.0.1               bslib_0.8.0                
+[131] ggtree_3.10.1               fastmatch_1.1-4            
+[133] bit_4.0.5                   gson_0.1.0                 
+[135] ape_5.8                    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
