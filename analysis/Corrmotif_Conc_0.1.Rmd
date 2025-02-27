@@ -842,12 +842,12 @@ rownames(gene_prob_tran_0.1) <- rownames(Corrmotif_df)
 prob_1_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] < 0.5 & gene_prob_tran_0.1[,6]<0.5),])
 length(prob_1_0.1)
 
-prob_2_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] >0.5 & gene_prob_tran_0.1[,3] >0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
+prob_2_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
 length(prob_2_0.1)
 
-
-prob_3_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] <0.5 & gene_prob_tran_0.1[,3] <0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
+prob_3_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_prob_tran_0.1[,2] >0.5 & gene_prob_tran_0.1[,3] >0.5 & gene_prob_tran_0.1[,4] <0.5 & gene_prob_tran_0.1[,5] > 0.5 & gene_prob_tran_0.1[,6]>0.5),])
 length(prob_3_0.1)
+
 ```
 
 ## **📌 Save Corr-motif datasets for Gene Ontology analysis (0.1 Micromolar)**
