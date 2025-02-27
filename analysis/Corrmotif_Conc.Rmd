@@ -843,6 +843,35 @@ prob_3_0.1  <- rownames(gene_prob_tran_0.1[(gene_prob_tran_0.1[,1] <0.5 & gene_p
 length(prob_3_0.1)
 ```
 
+## **📌 Distribution of Gene Clusters Identified by Corrmotif (0.1 micromolar)**
+```{r pie-chart_0.1, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load necessary library
+library(ggplot2)
+
+# Data
+data <- data.frame(
+  Category = c("Non response (0.1 µM)", "CX-DOX mid-late response (0.1 µM)", "DOX only mid-late (0.1 µM)"),
+  Value = c(12308, 415, 1551)
+)
+
+# Define custom colors
+custom_colors <- c("Non response (0.1 µM)" = "#FF9999",
+                   "DOX only mid-late (0.1 µM)" = "#99FF99",
+                   "CX-DOX mid-late response (0.1 µM)" = "#66B2FF")
+
+# Create pie chart
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = Value),
+            position = position_stack(vjust = 0.5),
+            size = 4, color = "black") +
+  labs(title = "Pie Chart (0.1 micromolar Corrmotif)", x = NULL, y = NULL) +
+  theme_void() +
+  scale_fill_manual(values = custom_colors)
+```
+
 ## **📌 Save Corr-motif datasets for Gene Ontology analysis (0.1 Micromolar)**
 ```{r box, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
 write.csv(data.frame(Entrez_ID = prob_1_0.1), "data/prob_1_0.1.csv", row.names = FALSE)
@@ -928,6 +957,35 @@ length(prob_4_0.5)
 
 prob_5_0.5  <- rownames(gene_prob_tran_0.5[(gene_prob_tran_0.5[,1] <0.5 & gene_prob_tran_0.5[,2] >0.5 & gene_prob_tran_0.5[,3] >0.5 & gene_prob_tran_0.5[,4] >=0.02 & gene_prob_tran_0.5[,4] <0.5 & gene_prob_tran_0.5[,5] > 0.5 & gene_prob_tran_0.5[,6]>0.5),])
 length(prob_5_0.5)
+```
+## **📌 Distribution of Gene Clusters Identified by Corrmotif (0.5 micromolar)**
+```{r pie-chart_0.5, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load necessary library
+library(ggplot2)
+
+# Data
+data <- data.frame(
+  Category = c("Non response (0.5)", "DOX-only early-mid response (0.5 µM)", "DOX only mid-late response (0.5 µM)", "CX-only mid-late response (0.5 µM)", "CX-DOX mid-late response (0.5 µM)"),
+  Value = c(7134,179,6450,141,221)
+)
+
+# Add values to category names (to be displayed in the legend)
+data$Category <- paste0(data$Category, " (", data$Value, ")")
+
+# Define custom colors with updated category names
+custom_colors <- setNames(
+  c("#FF9999", "#FF66CC", "#66B2FF", "#99FF99", "#FFD700"),
+  data$Category  # Ensures color names match updated categories
+)
+
+# Create pie chart without number labels inside
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  labs(title = "Pie Chart (0.5 micromolar Corrmotif)", x = NULL, y = NULL) +
+  theme_void() +
+  scale_fill_manual(values = custom_colors)
 ```
 
 ## **📌 Save Corr-motif datasets for Gene Ontology analysis (0.5 Micromolar)**
