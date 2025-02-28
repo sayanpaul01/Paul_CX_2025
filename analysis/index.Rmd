@@ -35,8 +35,9 @@ Welcome to my research website.
 - **[Overlap of DEGs](https://sayanpaul01.github.io/CX5461_Project/Overlap_DEGs.html)**
 
 - **[Function and Pathway Enrichment of DEGs](https://sayanpaul01.github.io/CX5461_Project/GO_KEGG_DEG.html)** 
-
 - **[Overlap of GO Terms across drugs, concentrations, and timepoints](https://sayanpaul01.github.io/CX5461_Project/Overlap_GO_DEG.html)**
+
+- **[Genes in AC toxicity-associated loci response to CX5461 and DOX](https://sayanpaul01.github.io/CX5461_Project/Actox.html)**
 
 
 ## **Bayesian Clustering of Gene Expression with Corrmotif**
@@ -52,6 +53,14 @@ Welcome to my research website.
 - **[Corrmotif Model and Patterns (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time.html)**
 
 - **[Function and pathway enrichment of Corrmotif Models (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time_GO.html)**
+
+
+
+
+
+
+
+
 
 ### 🔗 **Source Code**  
 
