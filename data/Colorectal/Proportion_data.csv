@@ -1,0 +1,25 @@
+Set,Timepoint,Category,Count,Percentage
+CX_DOX Shared Late Response,24hr,DEG,50,10.24590164
+CX_DOX Shared Late Response,24hr,Non-DEG,438,89.75409836
+CX_DOX Shared Late Response,6hr,DEG,0,0
+CX_DOX Shared Late Response,6hr,Non-DEG,488,100
+CX_DOX Shared Late Response,72hr,DEG,146,29.91803279
+CX_DOX Shared Late Response,72hr,Non-DEG,342,70.08196721
+DOX-Specific Response,24hr,DEG,60,3.908794788
+DOX-Specific Response,24hr,Non-DEG,1475,96.09120521
+DOX-Specific Response,6hr,DEG,0,0
+DOX-Specific Response,6hr,Non-DEG,1535,100
+DOX-Specific Response,72hr,DEG,119,7.752442997
+DOX-Specific Response,72hr,Non-DEG,1416,92.247557
+Late High Dose DOX-Specific Response,24hr,DEG,84,1.688442211
+Late High Dose DOX-Specific Response,24hr,Non-DEG,4891,98.31155779
+Late High Dose DOX-Specific Response,6hr,DEG,0,0
+Late High Dose DOX-Specific Response,6hr,Non-DEG,4975,100
+Late High Dose DOX-Specific Response,72hr,DEG,169,3.396984925
+Late High Dose DOX-Specific Response,72hr,Non-DEG,4806,96.60301508
+Non Response,24hr,DEG,96,1.35021097
+Non Response,24hr,Non-DEG,7014,98.64978903
+Non Response,6hr,DEG,1,0.014064698
+Non Response,6hr,Non-DEG,7109,99.9859353
+Non Response,72hr,DEG,224,3.150492264
+Non Response,72hr,Non-DEG,6886,96.84950774

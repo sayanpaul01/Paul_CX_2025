@@ -1,0 +1,168 @@
+---
+title: "Colorectal cancer dataset comparison"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 Proportion of Colorectal cancer DE genes in Corrmotif clusters**
+
+## **📌 Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(org.Hs.eg.db)
+library(clusterProfiler)
+library(biomaRt)
+```
+
+## **📌 Load Data**
+```{r load_File Paths, echo=TRUE,results='hide',message=FALSE}
+# Define correct timepoints
+timepoints <- c("6hr", "24hr", "72hr")
+
+# Initialize an empty dataframe to store chi-square results
+all_chi_results <- data.frame()
+
+# Loop through each timepoint and perform Chi-square test
+for (time in timepoints) {
+  
+  # Load proportion data for the given timepoint
+  file_path <- paste0("data/Colorectal/Proportion_data_", time, ".csv")
+  
+  # Check if the file exists before reading
+  if (!file.exists(file_path)) {
+    cat("\n🚨 Warning: File does not exist:", file_path, "\nSkipping this timepoint...\n")
+    next  # Skip this iteration if the file is missing
+  }
+  
+  proportion_data <- read.csv(file_path)
+  
+  # Extract counts for Non-Response group
+  non_response_counts <- proportion_data %>%
+    filter(Set == "Non Response") %>%
+    dplyr::select(DEG, `Non.DEG`) %>%
+    unlist(use.names = FALSE)  # Convert to numeric vector
+  
+  # Debugging: Print Non-Response counts
+  cat("\nNon-Response Counts for", time, ":\n")
+  print(non_response_counts)
+  
+  # Initialize a list to store chi-square test results for this timepoint
+  chi_results <- list()
+  
+  # Perform chi-square test for each response group
+  for (group in unique(proportion_data$Set)) {
+    if (group == "Non Response") next  # Skip Non Response group
+    
+    # Extract counts for the current response group
+    group_counts <- proportion_data %>%
+      filter(Set == group) %>%
+      dplyr::select(DEG, `Non.DEG`) %>%
+      unlist(use.names = FALSE)  # Convert to numeric vector
+    
+    # Ensure valid counts for chi-square test
+    if (length(group_counts) < 2) group_counts <- c(group_counts, 0)
+    if (length(non_response_counts) < 2) non_response_counts <- c(non_response_counts, 0)
+    
+    # Create contingency table
+    contingency_table <- matrix(c(
+      group_counts[1], group_counts[2],  # Current response group counts
+      non_response_counts[1], non_response_counts[2]  # Non-Response counts
+    ), nrow = 2, byrow = TRUE)
+    
+    # Debugging: Print contingency table
+    cat("\nProcessing Group:", group, "at", time, "\n")
+    cat("Contingency Table:\n")
+    print(contingency_table)
+    
+    # Perform chi-square test
+    test_result <- chisq.test(contingency_table)
+    p_value <- test_result$p.value
+    significance <- ifelse(p_value < 0.05, "*", "")  # Mark * for p < 0.05
+    
+    # Store results
+    chi_results[[group]] <- data.frame(
+      Set = group,
+      Timepoint = time,
+      Chi2 = test_result$statistic,
+      p_value = p_value,
+      Significance = significance
+    )
+  }
+  
+  # Combine results for this timepoint into a single dataframe
+  chi_results <- do.call(rbind, chi_results)
+  
+  # Append to the overall results dataframe
+  all_chi_results <- rbind(all_chi_results, chi_results)
+}
+
+# Save final chi-square results
+write.csv(all_chi_results, "data/Colorectal//Chi_Square_Results_All.csv", row.names = FALSE)
+
+```
+
+## **📌 Proportion of DE genes across response groups**
+```{r load_data_tissue, echo=TRUE,results='hide', message=FALSE, fig.width=14,fig.height=8}
+
+# Load the saved datasets
+prob_all_1 <- read.csv("data/prob_all_1.csv")$Entrez_ID
+prob_all_2 <- read.csv("data/prob_all_2.csv")$Entrez_ID
+prob_all_3 <- read.csv("data/prob_all_3.csv")$Entrez_ID
+prob_all_4 <- read.csv("data/prob_all_4.csv")$Entrez_ID
+
+# Example Response Groups Data (Replace with actual data)
+response_groups <- list(
+  "Non Response" = prob_all_1, # Replace 'prob_all_1', 'prob_all_2', etc. with your actual response group dataframes
+  "CX_DOX Shared Late Response" = prob_all_2,
+  "DOX-Specific Response" = prob_all_3,
+  "Late High Dose DOX-Specific Response" = prob_all_4
+)
+
+# Load the proportion data again for visualization
+proportion_data <-read.csv("data/Colorectal/Proportion_data.csv")
+# Merge chi-square results into proportion data for plotting
+proportion_data <- proportion_data %>%
+  left_join(all_chi_results %>% dplyr::select(Set, Timepoint, Significance), by = c("Set", "Timepoint"))
+
+# Convert to factors for ordered display
+proportion_data$Set <- factor(proportion_data$Set, levels = c(
+  "Non Response",
+  "CX_DOX Shared Late Response",
+  "DOX-Specific Response",
+  "Late High Dose DOX-Specific Response"
+))
+proportion_data$Timepoint <- factor(proportion_data$Timepoint, levels = timepoints)
+
+# Plot proportions with significance stars
+ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  facet_wrap(~Timepoint, scales = "fixed") +
+  scale_fill_manual(values = c("DEG" = "#e41a1c", "Non-DEG" = "#377eb8")) +
+  geom_text(
+    data = proportion_data %>% filter(Significance == "*") %>% distinct(Set, Timepoint, Significance),
+    aes(x = Set, y = 105, label = Significance),
+    inherit.aes = FALSE,
+    size = 6,
+    color = "black",
+    hjust = 0.5
+  ) +
+  labs(
+    title = "Proportion of Colorectal cancer DEGs and Non-DEGs\nAcross Response Groups (6hr, 24hr, 72hr)",
+    x = "Response Groups",
+    y = "Percentage",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```

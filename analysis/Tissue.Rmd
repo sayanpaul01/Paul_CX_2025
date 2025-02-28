@@ -246,7 +246,7 @@ ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
     "Non-Heart-specific Genes" = "#377eb8"   # Blue
   )) +
   labs(
-    title = "Proportion of Heart-Specific and Non-Heart-Specific Genes Across Response Sets",
+    title = "Proportion of Heart and Non-Heart-Specific Genes Across Response Sets",
     x = "Response Sets",
     y = "Percentage of Genes",
     fill = "Gene Category"
