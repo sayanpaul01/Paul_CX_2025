@@ -58,7 +58,7 @@ Welcome to my research website.
 
 ## **Tissue Specificity Analysis**
 
-- **[Tissue Specificity analysis)](https://sayanpaul01.github.io/CX5461_Project/Tissue.html)**
+- **[Tissue Specificity analysis](https://sayanpaul01.github.io/CX5461_Project/Tissue.html)**
 
 
 
