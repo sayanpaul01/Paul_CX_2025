@@ -416,10 +416,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreea592024fdba82f304deb1daf1d1b7d617a1a2d0etargetblanka592024a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5e10f743b2ccd57feb9ba6cbe4f67af3827f6112targetblank5e10f74a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/a592024fdba82f304deb1daf1d1b7d617a1a2d0e" target="_blank">a592024</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5e10f743b2ccd57feb9ba6cbe4f67af3827f6112" target="_blank">5e10f74</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreea592024fdba82f304deb1daf1d1b7d617a1a2d0etargetblanka592024a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5e10f743b2ccd57feb9ba6cbe4f67af3827f6112targetblank5e10f74a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/a592024fdba82f304deb1daf1d1b7d617a1a2d0e" target="_blank">a592024</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5e10f743b2ccd57feb9ba6cbe4f67af3827f6112" target="_blank">5e10f74</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,15 +548,10 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  analysis/Tissue.Rmd
-    Untracked:  data/Human_Heart_Genes.csv
-    Untracked:  data/Tissue_Gtex.csv
-    Untracked:  data/count.csv
+    Ignored:    analysis/figure/
 
 Unstaged changes:
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/Tissue.Rmd
 
 </code></pre>
 <p>
@@ -571,13 +566,81 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/Tissue.Rmd</code>) and HTML
+(<code>docs/Tissue.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/cf2940840cc495cff92a381a19b0eb2816d2af74/analysis/Tissue.Rmd" target="_blank">cf29408</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/cf2940840cc495cff92a381a19b0eb2816d2af74/docs/Tissue.html" target="_blank">cf29408</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+<td>
+Commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
+</div>
+<div id="tissue-specificity-analysis-correlation-heatmap"
+class="section level2">
+<h2><strong>📌 Tissue specificity analysis (Correlation
+Heatmap)</strong></h2>
 </div>
 <div id="load-required-libraries" class="section level2">
 <h2><strong>📌 Load Required Libraries</strong></h2>
@@ -692,6 +755,43 @@ pheatmap(pearson_corr,
          color = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(100), 
          display_numbers = TRUE)</code></pre>
 <p><img src="figure/Tissue.Rmd/Genes%20of%20Interest-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Genes-of-Interest-1">
+Past versions of "Genes of Interest-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Genes-of-Interest-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/cf2940840cc495cff92a381a19b0eb2816d2af74/docs/figure/Tissue.Rmd/Genes of Interest-1.png" target="_blank">cf29408</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Spearman correlation heatmap
 pheatmap(spearman_corr, 
          cluster_rows = FALSE, 
@@ -700,6 +800,203 @@ pheatmap(spearman_corr,
          color = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(100), 
          display_numbers = TRUE)</code></pre>
 <p><img src="figure/Tissue.Rmd/Genes%20of%20Interest-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Genes-of-Interest-2">
+Past versions of "Genes of Interest-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Genes-of-Interest-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/cf2940840cc495cff92a381a19b0eb2816d2af74/docs/figure/Tissue.Rmd/Genes of Interest-2.png" target="_blank">cf29408</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tissue-specific-gene-proportions-in-corrmotif-clusters"
+class="section level2">
+<h2><strong>📌 Tissue specific gene proportions in corrmotif
+clusters</strong></h2>
+</div>
+<div id="load-datasets" class="section level2">
+<h2><strong>📌 Load Datasets</strong></h2>
+<pre class="r"><code># Load your Heart_genes dataset
+heart_genes &lt;- read.csv(&quot;data/Human_Heart_Genes.csv&quot;, stringsAsFactors = FALSE)
+
+# Convert Gene names to Entrez IDs in heart_genes
+heart_genes$Entrez_ID &lt;- mapIds(
+  org.Hs.eg.db, 
+  keys = heart_genes$Gene, 
+  column = &quot;ENTREZID&quot;, 
+  keytype = &quot;SYMBOL&quot;, 
+  multiVals = &quot;first&quot;
+)
+
+# Create a vector of Entrez IDs specific to the heart
+heart_entrez_ids &lt;- na.omit(heart_genes$Entrez_ID)
+
+
+# Load the saved datasets
+prob_all_1 &lt;- read.csv(&quot;data/prob_all_1.csv&quot;)$Entrez_ID
+prob_all_2 &lt;- read.csv(&quot;data/prob_all_2.csv&quot;)$Entrez_ID
+prob_all_3 &lt;- read.csv(&quot;data/prob_all_3.csv&quot;)$Entrez_ID
+prob_all_4 &lt;- read.csv(&quot;data/prob_all_4.csv&quot;)$Entrez_ID</code></pre>
+</div>
+<div id="tissue-specific-gene-proportions-analysis"
+class="section level2">
+<h2><strong>📌 Tissue specific gene proportions analysis</strong></h2>
+<pre class="r"><code># Example Response Groups Data (Replace with actual data)
+response_groups &lt;- list(
+  &quot;Non Response&quot; = prob_all_1, # Replace &#39;prob_all_1&#39;, &#39;prob_all_2&#39;, etc. with your actual response group dataframes
+  &quot;CX_DOX Shared Late Response&quot; = prob_all_2,
+  &quot;DOX-Specific Response&quot; = prob_all_3,
+  &quot;Late High Dose DOX-Specific Response&quot; = prob_all_4
+)
+
+# Combine all response groups into a single dataframe
+response_groups_df &lt;- bind_rows(
+  lapply(response_groups, function(ids) data.frame(Entrez_ID = ids)),
+  .id = &quot;Set&quot;
+)
+
+# Categorize genes into Heart-specific and Non-Heart-specific
+response_groups_df &lt;- response_groups_df %&gt;%
+  mutate(
+    Category = ifelse(Entrez_ID %in% heart_entrez_ids, &quot;Heart-specific Genes&quot;, &quot;Non-Heart-specific Genes&quot;)
+  )
+
+# Calculate counts for Heart-specific and Non-Heart-specific genes in each response group
+proportion_data &lt;- response_groups_df %&gt;%
+  group_by(Set, Category) %&gt;%
+  summarize(Count = n(), .groups = &quot;drop&quot;)
+
+# Reference counts for &quot;Non Response&quot;
+non_response_counts &lt;- proportion_data %&gt;%
+  filter(Set == &quot;Non Response&quot;) %&gt;%
+  dplyr::select(Category, Count) %&gt;%
+  {setNames(.$Count, .$Category)} # Create named vector for &quot;Non Response&quot; counts
+
+# Perform Chi-square test for selected response groups compared to &quot;Non Response&quot;
+chi_results &lt;- proportion_data %&gt;%
+  filter(Set != &quot;Non Response&quot;) %&gt;% # Exclude &quot;Non Response&quot;
+  group_by(Set) %&gt;%
+  summarize(
+    p_value = {
+      # Extract counts for the current response group
+      group_counts &lt;- Count[Category %in% c(&quot;Heart-specific Genes&quot;, &quot;Non-Heart-specific Genes&quot;)]
+      # Ensure there are no missing categories, fill with 0 if missing
+      if (length(group_counts) &lt; 2) group_counts &lt;- c(group_counts, 0)
+      # Create contingency table
+      contingency_table &lt;- matrix(c(
+        group_counts[1], group_counts[2],
+        non_response_counts[&quot;Heart-specific Genes&quot;], non_response_counts[&quot;Non-Heart-specific Genes&quot;]
+      ), nrow = 2)
+      # Print the contingency table for debugging
+      print(paste(&quot;Set:&quot;, unique(Set)))
+      print(&quot;Contingency Table:&quot;)
+      print(contingency_table)
+      # Perform chi-square test
+      if (all(contingency_table &gt;= 0 &amp; is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(Significance = ifelse(!is.na(p_value) &amp; p_value &lt; 0.05, &quot;*&quot;, &quot;&quot;))</code></pre>
+<pre><code>[1] &quot;Set: CX_DOX Shared Late Response&quot;
+[1] &quot;Contingency Table:&quot;
+     [,1] [,2]
+[1,]    2  123
+[2,]  412 6908
+[1] &quot;Set: DOX-Specific Response&quot;
+[1] &quot;Contingency Table:&quot;
+     [,1] [,2]
+[1,]   62  123
+[2,] 1469 6908
+[1] &quot;Set: Late High Dose DOX-Specific Response&quot;
+[1] &quot;Contingency Table:&quot;
+     [,1] [,2]
+[1,]  159  123
+[2,] 4715 6908</code></pre>
+<pre class="r"><code># Merge chi-square results back into the proportion data
+proportion_data &lt;- proportion_data %&gt;%
+  left_join(chi_results %&gt;% dplyr::select(Set, p_value, Significance), by = &quot;Set&quot;)
+
+# Calculate proportions for plotting
+proportion_data &lt;- proportion_data %&gt;%
+  group_by(Set) %&gt;%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Define the correct order for response groups
+response_order &lt;- c(
+  &quot;Non Response&quot;,
+  &quot;CX_DOX Shared Late Response&quot;,
+  &quot;DOX-Specific Response&quot;,
+  &quot;Late High Dose DOX-Specific Response&quot;
+)
+proportion_data$Set &lt;- factor(proportion_data$Set, levels = response_order)
+
+# Create the proportion plot with significance stars
+ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  geom_text(
+    data = proportion_data %&gt;% distinct(Set, Significance), # Add stars for significant groups
+    aes(x = Set, y = 105, label = Significance), # Position stars above the bars
+    inherit.aes = FALSE,
+    size = 6,
+    color = &quot;black&quot;,
+    hjust = 0.5
+  ) +
+  scale_fill_manual(values = c(
+    &quot;Heart-specific Genes&quot; = &quot;#4daf4a&quot;,  # Green
+    &quot;Non-Heart-specific Genes&quot; = &quot;#377eb8&quot;   # Blue
+  )) +
+  labs(
+    title = &quot;Proportion of Heart-Specific and Non-Heart-Specific Genes Across Response Sets&quot;,
+    x = &quot;Response Sets&quot;,
+    y = &quot;Percentage of Genes&quot;,
+    fill = &quot;Gene Category&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = &quot;black&quot;),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;),
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.5) # Add border
+  )</code></pre>
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_text()`).</code></pre>
+<p><img src="figure/Tissue.Rmd/Prop-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -743,40 +1040,41 @@ loaded via a namespace (and not attached):
  [10] memoise_2.0.1           RCurl_1.98-1.13         ggtree_3.10.1          
  [13] htmltools_0.5.8.1       progress_1.2.3          curl_6.0.1             
  [16] gridGraphics_0.5-1      sass_0.4.9              bslib_0.8.0            
- [19] plyr_1.8.9              cachem_1.0.8            igraph_2.1.1           
- [22] lifecycle_1.0.4         pkgconfig_2.0.3         Matrix_1.6-1.1         
- [25] R6_2.5.1                fastmap_1.1.1           gson_0.1.0             
- [28] GenomeInfoDbData_1.2.11 digest_0.6.34           aplot_0.2.3            
- [31] enrichplot_1.22.0       colorspace_2.1-0        patchwork_1.3.0        
- [34] rprojroot_2.0.4         RSQLite_2.3.3           filelock_1.0.3         
- [37] httr_1.4.7              polyclip_1.10-7         compiler_4.3.0         
- [40] bit64_4.0.5             withr_3.0.2             BiocParallel_1.36.0    
- [43] viridis_0.6.5           DBI_1.2.3               ggforce_0.4.2          
- [46] MASS_7.3-60             rappdirs_0.3.3          HDO.db_0.99.1          
- [49] tools_4.3.0             ape_5.8                 scatterpie_0.2.4       
- [52] httpuv_1.6.15           glue_1.7.0              nlme_3.1-166           
- [55] GOSemSim_2.28.1         promises_1.3.0          grid_4.3.0             
- [58] shadowtext_0.1.4        reshape2_1.4.4          fgsea_1.28.0           
- [61] generics_0.1.3          gtable_0.3.6            data.table_1.14.10     
- [64] hms_1.1.3               xml2_1.3.6              tidygraph_1.3.1        
- [67] XVector_0.42.0          ggrepel_0.9.6           pillar_1.10.1          
- [70] stringr_1.5.1           yulab.utils_0.1.8       later_1.3.2            
- [73] splines_4.3.0           tweenr_2.0.3            BiocFileCache_2.10.2   
- [76] treeio_1.26.0           lattice_0.22-5          bit_4.0.5              
- [79] tidyselect_1.2.1        GO.db_3.18.0            Biostrings_2.70.1      
- [82] knitr_1.49              git2r_0.35.0            gridExtra_2.3          
- [85] xfun_0.50               graphlayouts_1.2.0      stringi_1.8.3          
- [88] workflowr_1.7.1         lazyeval_0.2.2          ggfun_0.1.8            
- [91] yaml_2.3.10             evaluate_1.0.3          codetools_0.2-20       
- [94] ggraph_2.2.1            tibble_3.2.1            qvalue_2.34.0          
- [97] ggplotify_0.1.2         cli_3.6.1               munsell_0.5.1          
-[100] jquerylib_0.1.4         Rcpp_1.0.12             GenomeInfoDb_1.38.8    
-[103] dbplyr_2.5.0            png_0.1-8               XML_3.99-0.17          
-[106] parallel_4.3.0          blob_1.2.4              prettyunits_1.2.0      
-[109] DOSE_3.28.2             bitops_1.0-7            viridisLite_0.4.2      
-[112] tidytree_0.4.6          scales_1.3.0            purrr_1.0.2            
-[115] crayon_1.5.3            rlang_1.1.3             cowplot_1.1.3          
-[118] fastmatch_1.1-4         KEGGREST_1.42.0        </code></pre>
+ [19] plyr_1.8.9              cachem_1.0.8            whisker_0.4.1          
+ [22] igraph_2.1.1            lifecycle_1.0.4         pkgconfig_2.0.3        
+ [25] Matrix_1.6-1.1          R6_2.5.1                fastmap_1.1.1          
+ [28] gson_0.1.0              GenomeInfoDbData_1.2.11 digest_0.6.34          
+ [31] aplot_0.2.3             enrichplot_1.22.0       colorspace_2.1-0       
+ [34] patchwork_1.3.0         rprojroot_2.0.4         RSQLite_2.3.3          
+ [37] labeling_0.4.3          filelock_1.0.3          httr_1.4.7             
+ [40] polyclip_1.10-7         compiler_4.3.0          bit64_4.0.5            
+ [43] withr_3.0.2             BiocParallel_1.36.0     viridis_0.6.5          
+ [46] DBI_1.2.3               ggforce_0.4.2           MASS_7.3-60            
+ [49] rappdirs_0.3.3          HDO.db_0.99.1           tools_4.3.0            
+ [52] ape_5.8                 scatterpie_0.2.4        httpuv_1.6.15          
+ [55] glue_1.7.0              nlme_3.1-166            GOSemSim_2.28.1        
+ [58] promises_1.3.0          grid_4.3.0              shadowtext_0.1.4       
+ [61] reshape2_1.4.4          fgsea_1.28.0            generics_0.1.3         
+ [64] gtable_0.3.6            data.table_1.14.10      hms_1.1.3              
+ [67] xml2_1.3.6              tidygraph_1.3.1         XVector_0.42.0         
+ [70] ggrepel_0.9.6           pillar_1.10.1           stringr_1.5.1          
+ [73] yulab.utils_0.1.8       later_1.3.2             splines_4.3.0          
+ [76] tweenr_2.0.3            BiocFileCache_2.10.2    treeio_1.26.0          
+ [79] lattice_0.22-5          bit_4.0.5               tidyselect_1.2.1       
+ [82] GO.db_3.18.0            Biostrings_2.70.1       knitr_1.49             
+ [85] git2r_0.35.0            gridExtra_2.3           xfun_0.50              
+ [88] graphlayouts_1.2.0      stringi_1.8.3           workflowr_1.7.1        
+ [91] lazyeval_0.2.2          ggfun_0.1.8             yaml_2.3.10            
+ [94] evaluate_1.0.3          codetools_0.2-20        ggraph_2.2.1           
+ [97] tibble_3.2.1            qvalue_2.34.0           ggplotify_0.1.2        
+[100] cli_3.6.1               munsell_0.5.1           jquerylib_0.1.4        
+[103] Rcpp_1.0.12             GenomeInfoDb_1.38.8     dbplyr_2.5.0           
+[106] png_0.1-8               XML_3.99-0.17           parallel_4.3.0         
+[109] blob_1.2.4              prettyunits_1.2.0       DOSE_3.28.2            
+[112] bitops_1.0-7            viridisLite_0.4.2       tidytree_0.4.6         
+[115] scales_1.3.0            purrr_1.0.2             crayon_1.5.3           
+[118] rlang_1.1.3             cowplot_1.1.3           fastmatch_1.1-4        
+[121] KEGGREST_1.42.0        </code></pre>
 </div>
 </div>
 

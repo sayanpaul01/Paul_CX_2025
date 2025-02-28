@@ -4,6 +4,7 @@ output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
 ---
+## **📌 Tissue specificity analysis (Correlation Heatmap)**
 
 ## **📌 Load Required Libraries**
 ```{r load_libraries, echo=TRUE, message=FALSE}
@@ -120,5 +121,144 @@ pheatmap(spearman_corr,
 ```
 
 
+## **📌 Tissue specific gene proportions in corrmotif clusters**
+
+## **📌 Load Datasets**
+```{r load_data_tissue, echo=TRUE,results='hide', message=FALSE}
+
+# Load your Heart_genes dataset
+heart_genes <- read.csv("data/Human_Heart_Genes.csv", stringsAsFactors = FALSE)
+
+# Convert Gene names to Entrez IDs in heart_genes
+heart_genes$Entrez_ID <- mapIds(
+  org.Hs.eg.db, 
+  keys = heart_genes$Gene, 
+  column = "ENTREZID", 
+  keytype = "SYMBOL", 
+  multiVals = "first"
+)
+
+# Create a vector of Entrez IDs specific to the heart
+heart_entrez_ids <- na.omit(heart_genes$Entrez_ID)
 
 
+# Load the saved datasets
+prob_all_1 <- read.csv("data/prob_all_1.csv")$Entrez_ID
+prob_all_2 <- read.csv("data/prob_all_2.csv")$Entrez_ID
+prob_all_3 <- read.csv("data/prob_all_3.csv")$Entrez_ID
+prob_all_4 <- read.csv("data/prob_all_4.csv")$Entrez_ID
+```
+
+## **📌 Tissue specific gene proportions analysis**
+```{r Prop, echo=TRUE, message=FALSE}
+# Example Response Groups Data (Replace with actual data)
+response_groups <- list(
+  "Non Response" = prob_all_1, # Replace 'prob_all_1', 'prob_all_2', etc. with your actual response group dataframes
+  "CX_DOX Shared Late Response" = prob_all_2,
+  "DOX-Specific Response" = prob_all_3,
+  "Late High Dose DOX-Specific Response" = prob_all_4
+)
+
+# Combine all response groups into a single dataframe
+response_groups_df <- bind_rows(
+  lapply(response_groups, function(ids) data.frame(Entrez_ID = ids)),
+  .id = "Set"
+)
+
+# Categorize genes into Heart-specific and Non-Heart-specific
+response_groups_df <- response_groups_df %>%
+  mutate(
+    Category = ifelse(Entrez_ID %in% heart_entrez_ids, "Heart-specific Genes", "Non-Heart-specific Genes")
+  )
+
+# Calculate counts for Heart-specific and Non-Heart-specific genes in each response group
+proportion_data <- response_groups_df %>%
+  group_by(Set, Category) %>%
+  summarize(Count = n(), .groups = "drop")
+
+# Reference counts for "Non Response"
+non_response_counts <- proportion_data %>%
+  filter(Set == "Non Response") %>%
+  dplyr::select(Category, Count) %>%
+  {setNames(.$Count, .$Category)} # Create named vector for "Non Response" counts
+
+# Perform Chi-square test for selected response groups compared to "Non Response"
+chi_results <- proportion_data %>%
+  filter(Set != "Non Response") %>% # Exclude "Non Response"
+  group_by(Set) %>%
+  summarize(
+    p_value = {
+      # Extract counts for the current response group
+      group_counts <- Count[Category %in% c("Heart-specific Genes", "Non-Heart-specific Genes")]
+      # Ensure there are no missing categories, fill with 0 if missing
+      if (length(group_counts) < 2) group_counts <- c(group_counts, 0)
+      # Create contingency table
+      contingency_table <- matrix(c(
+        group_counts[1], group_counts[2],
+        non_response_counts["Heart-specific Genes"], non_response_counts["Non-Heart-specific Genes"]
+      ), nrow = 2)
+      # Print the contingency table for debugging
+      print(paste("Set:", unique(Set)))
+      print("Contingency Table:")
+      print(contingency_table)
+      # Perform chi-square test
+      if (all(contingency_table >= 0 & is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+
+# Merge chi-square results back into the proportion data
+proportion_data <- proportion_data %>%
+  left_join(chi_results %>% dplyr::select(Set, p_value, Significance), by = "Set")
+
+# Calculate proportions for plotting
+proportion_data <- proportion_data %>%
+  group_by(Set) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Define the correct order for response groups
+response_order <- c(
+  "Non Response",
+  "CX_DOX Shared Late Response",
+  "DOX-Specific Response",
+  "Late High Dose DOX-Specific Response"
+)
+proportion_data$Set <- factor(proportion_data$Set, levels = response_order)
+
+# Create the proportion plot with significance stars
+ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(
+    data = proportion_data %>% distinct(Set, Significance), # Add stars for significant groups
+    aes(x = Set, y = 105, label = Significance), # Position stars above the bars
+    inherit.aes = FALSE,
+    size = 6,
+    color = "black",
+    hjust = 0.5
+  ) +
+  scale_fill_manual(values = c(
+    "Heart-specific Genes" = "#4daf4a",  # Green
+    "Non-Heart-specific Genes" = "#377eb8"   # Blue
+  )) +
+  labs(
+    title = "Proportion of Heart-Specific and Non-Heart-Specific Genes Across Response Sets",
+    x = "Response Sets",
+    y = "Percentage of Genes",
+    fill = "Gene Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.5) # Add border
+  )
+```
