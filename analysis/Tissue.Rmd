@@ -1,0 +1,124 @@
+---
+title: "Tissue"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(org.Hs.eg.db)
+library(clusterProfiler)
+library(biomaRt)
+```
+
+## **📌 Load Data**
+```{r load_File Paths, echo=TRUE,results='hide',message=FALSE}
+# Read the CSV file into R
+file_path <- "data/count.csv"
+df <- read.csv(file_path, check.names = FALSE)
+
+# Remove 'x' from column headers
+colnames(df) <- gsub("^x", "", colnames(df))
+
+# View the updated dataframe
+head(df)
+
+# View updated column names
+colnames(df)
+
+
+# Step 1: Calculate IPSC_CM
+# Select columns with 'VEH' in their names
+veh_columns <- grep("VEH", colnames(df), value = TRUE)
+
+# Calculate the average logCPM across VEH samples
+df$IPSC_CM <- rowMeans(df[, veh_columns], na.rm = TRUE)
+
+# Create a new dataframe with ENTREZID, SYMBOL, and IPSC_CM
+veh_avg_df <- df[, c("Entrez_ID","IPSC_CM")]
+
+# Step 2: Read the Tissue_Gtex dataset
+Tissue_Gtex <- read.csv("data/Tissue_Gtex.csv")
+
+# Step 3: Convert Ensembl IDs to Entrez IDs using biomaRt
+mart <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+
+# Extract Entrez IDs for the Ensembl IDs in the gene.id column
+gene_ids <- Tissue_Gtex$gene.id
+conversion <- getBM(
+  attributes = c("ensembl_gene_id", "entrezgene_id"),
+  filters = "ensembl_gene_id",
+  values = gene_ids,
+  mart = mart
+)
+
+# Merge Entrez IDs back into Tissue_Gtex
+Tissue_Gtex <- merge(Tissue_Gtex, conversion, by.x = "gene.id", by.y = "ensembl_gene_id", all.x = TRUE)
+
+# Rename the column for consistency
+colnames(Tissue_Gtex)[colnames(Tissue_Gtex) == "entrezgene_id"] <- "Entrez_ID"
+
+# Step 4: Read the veh_avg_df dataframe
+veh_avg_df <- df[, c("Entrez_ID", "IPSC_CM")]
+
+# Step 5: Merge veh_avg_df with Tissue_Gtex by Entrez_ID
+# Ensure column types match
+veh_avg_df$Entrez_ID <- as.character(veh_avg_df$Entrez_ID)
+Tissue_Gtex$Entrez_ID <- as.character(Tissue_Gtex$Entrez_ID)
+
+# Perform the merge
+merged_df <- merge(veh_avg_df, Tissue_Gtex, by = "Entrez_ID", all.x = TRUE)
+
+# Step 6: Remove rows with NA values
+cleaned_df <- na.omit(merged_df) 
+```
+
+## **📌 Correlation heatmap (Tissue specificity)**
+```{r Genes of Interest, echo=TRUE, message=FALSE, fig.height=8, fig.width=10}
+# Filter relevant tissue columns
+tissue_cols <- colnames(cleaned_df)[which(colnames(cleaned_df) %in% c(
+  "IPSC_CM", "Adrenal.Gland", "Spleen", "Heart...Atrial", "Pancreas","Artery","Breast",
+  "small.Intestine","Colon","Nerve...Tibial","Esophagus","Muscle...Skeletal",
+  "Thyroid","Heart..Ventricle", "Stomach", "Uterus","Vagina", "Skin", "Ovary", "Liver", "Lung", "Brain", "Pituitary", "Testis", 
+  "Prostate", "Salivary.Gland"))]
+
+data_subset <- cleaned_df[, tissue_cols]
+
+# Compute Pearson and Spearman correlations
+pearson_corr <- cor(data_subset, method = "pearson", use = "complete.obs")
+spearman_corr <- cor(data_subset, method = "spearman", use = "complete.obs")
+
+# Reorder tissues by highest correlation with IPSC_CM
+order_pearson <- order(pearson_corr["IPSC_CM", ], decreasing = TRUE)
+order_spearman <- order(spearman_corr["IPSC_CM", ], decreasing = TRUE)
+
+pearson_corr <- pearson_corr[order_pearson, order_pearson]
+spearman_corr <- spearman_corr[order_spearman, order_spearman]
+
+# Plot heatmaps
+library(pheatmap)
+
+# Pearson correlation heatmap
+pheatmap(pearson_corr, 
+         cluster_rows = FALSE, 
+         cluster_cols = FALSE, 
+         main = "Pearson Correlation Heatmap", 
+         color = colorRampPalette(c("blue", "white", "red"))(100), 
+         display_numbers = TRUE)
+
+# Spearman correlation heatmap
+pheatmap(spearman_corr, 
+         cluster_rows = FALSE, 
+         cluster_cols = FALSE, 
+         main = "Spearman Correlation Heatmap", 
+         color = colorRampPalette(c("blue", "white", "red"))(100), 
+         display_numbers = TRUE)
+```
+
+
+
+
