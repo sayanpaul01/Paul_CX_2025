@@ -150,7 +150,7 @@ prob_all_4 <- read.csv("data/prob_all_4.csv")$Entrez_ID
 ```
 
 ## **📌 Tissue specific gene proportions analysis**
-```{r Prop, echo=TRUE, message=FALSE}
+```{r Prop, echo=TRUE, message=FALSE, fig.height=8, fig.width=12}
 # Example Response Groups Data (Replace with actual data)
 response_groups <- list(
   "Non Response" = prob_all_1, # Replace 'prob_all_1', 'prob_all_2', etc. with your actual response group dataframes
