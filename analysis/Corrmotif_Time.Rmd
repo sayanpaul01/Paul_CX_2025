@@ -792,40 +792,35 @@ compid_df <- compid %>%
 ```
 
 ## **📌 Corrmotif Model CX 0.1 (3hr, 24hr and 48hr) (K=1:8)**
-```{r Model, echo=TRUE, message=FALSE}
+```{r Model_CX_0.1_1, eval=FALSE,echo=TRUE, message=FALSE}
 set.seed(11111)
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_CX_0.1 <- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
 
-# View BIC scores
-motif.fitted$bic
-
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+gene_prob_CX_0.1 <- motif.fitted_CX_0.1$bestmotif$p.post
+rownames(gene_prob_CX_0.1) <- rownames(Corrmotif_df)
+motif_prob_CX_0.1 <- motif.fitted_CX_0.1$bestmotif$clustlike
+rownames(motif_prob_CX_0.1) <- rownames(gene_prob_CX_0.1)
+write.csv(motif_prob_CX_0.1,"data/motif_prob_CX_0.1.csv")
 ```
 
+## **📌 Plot motif CX 0.1 (3hr, 24hr and 48hr)**
+```{r Model_CX_0.1, echo=TRUE, message=FALSE}
+cormotif_CX_0.1 <- readRDS("data/Corrmotif/cormotif_CX_0.1.RDS")
 
-## **📌 Fit Corrmotif Model (K=2) (CX 0.1 (3hr, 24hr and 48hr))**
-```{r Model1, echo=TRUE, message=FALSE}
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype="logCPM")
+cormotif_CX_0.1$bic
 
-# View BIC scores
-motif.fitted$bic
+plotIC(cormotif_CX_0.1)
 
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+plotMotif(cormotif_CX_0.1)
 
-# Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)
 ```
 
 ## Extract Gene Probabilities (CX 0.1 (3hr, 24hr and 48hr))
 ```{r Prob, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
-gene_prob_CX_0.1 <- motif.fitted$bestmotif$p.post
+gene_prob_CX_0.1 <- cormotif_CX_0.1$bestmotif$p.post
 
 rownames(gene_prob_CX_0.1) <- rownames(Corrmotif_df)
 
@@ -836,6 +831,7 @@ length(prob_CX_1_0.1)
 prob_CX_2_0.1  <- rownames(gene_prob_CX_0.1[(gene_prob_CX_0.1[,1] <0.5 & gene_prob_CX_0.1[,2] >0.5 & gene_prob_CX_0.1[,3]>0.5),])
 length(prob_CX_2_0.1)
 ```
+
 
 ## **📌 Corrmotif Model CX 0.5 (3hr, 24hr and 48hr)**
 ## Load Corrmotif Data
@@ -862,40 +858,34 @@ compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Co
 
 ## **📌 Corrmotif Model CX 0.5 (3hr, 24hr and 48hr) (K=1:8)**
 ## Fit Corrmotif Model (K=1:8) (CX 0.5 (3hr, 24hr and 48hr))
-```{r Model2, echo=TRUE, message=FALSE}
+```{r Model2, eval=FALSE, echo=TRUE, message=FALSE}
 set.seed(11111)
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_CX_0.5 <- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
 
-# View BIC scores
-motif.fitted$bic
-
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+gene_prob_CX_0.5 <- motif.fitted_CX_0.5$bestmotif$p.post
+rownames(gene_prob_CX_0.5) <- rownames(Corrmotif_df)
+motif_prob_CX_0.5 <- motif.fitted_CX_0.5$bestmotif$clustlike
+rownames(motif_prob_CX_0.5) <- rownames(gene_prob_CX_0.5)
+write.csv(motif_prob_CX_0.5,"data/motif_prob_CX_0.5.csv")
 ```
 
+## **📌 Plot motif CX 0.5 (3hr, 24hr and 48hr)**
+```{r Model_CX_0.5, echo=TRUE, message=FALSE}
+cormotif_CX_0.5 <- readRDS("data/Corrmotif/cormotif_CX_0.5.RDS")
 
-## **📌 Fit Corrmotif Model (K=2) (CX 0.5 (3hr, 24hr and 48hr))**
-```{r Model3, echo=TRUE, message=FALSE}
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype="logCPM")
+cormotif_CX_0.5$bic
 
-# View BIC scores
-motif.fitted$bic
+plotIC(cormotif_CX_0.5)
 
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
-
-# Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)
+plotMotif(cormotif_CX_0.5)
 ```
 
 ## Extract Gene Probabilities (CX 0.5 (3hr, 24hr and 48hr))
 ```{r Prob4, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
-gene_prob_CX_0.5 <- motif.fitted$bestmotif$p.post
+gene_prob_CX_0.5 <- cormotif_CX_0.5$bestmotif$p.post
 
 rownames(gene_prob_CX_0.5) <- rownames(Corrmotif_df)
 
@@ -910,7 +900,7 @@ length(prob_CX_2_0.5)
 
 ## **📌 Corrmotif Model DOX 0.1 (3hr, 24hr and 48hr)**
 ## Load Corrmotif Data
-```{r load_data4, echo=TRUE, results='hide', message=FALSE}
+```{r load_data_DOX 0.1, echo=TRUE, results='hide', message=FALSE}
 # Read the Corrmotif Results
 Corrmotif <- read.csv("data/Corrmotif/CX5461.csv")
 Corrmotif_df <- data.frame(Corrmotif)
@@ -919,54 +909,45 @@ rownames(Corrmotif_df) <- Corrmotif_df$Gene
 # Filter for DOX (0.1 µM) and Vehicle (0.1 µM) across 3h, 24h, and 48h
 exprs.corrmotif <- as.matrix(Corrmotif_df[, grep("DOX_0.1_3|DOX_0.1_24|DOX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48", colnames(Corrmotif_df))])
 
-
-
 # Read group and comparison IDs
 groupid <- read.csv("data/Corrmotif/groupid.csv")
 groupid_df <- groupid %>%
   dplyr::select(matches("DOX_0.1_3|DOX_0.1_24|DOX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48", colnames(groupid)))
-
 
 compid <- read.csv("data/Corrmotif/Compid.csv")
 compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Cond2 %in% unique(as.numeric(groupid_df)), ]
 ```
 
 ## **📌 Corrmotif Model DOX 0.1 (3hr, 24hr and 48hr) (K=1:8)**
-## Fit Corrmotif Model (K=1:8) (DOX 0.1 (3hr, 24hr and 48hr))
-```{r Model5, echo=TRUE, message=FALSE}
+```{r Model, eval=FALSE,echo=TRUE, message=FALSE}
 set.seed(11111)
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_DOX_0.1 <- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
 
-# View BIC scores
-motif.fitted$bic
-
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+gene_prob_DOX_0.1 <- motif.fitted_DOX_0.1$bestmotif$p.post
+rownames(gene_prob_DOX_0.1) <- rownames(Corrmotif_df)
+motif_prob_DOX_0.1 <- motif.fitted_DOX_0.1$bestmotif$clustlike
+rownames(motif_prob_DOX_0.1) <- rownames(gene_prob_DOX_0.1)
+write.csv(motif_prob_DOX_0.1,"data/motif_prob_DOX_0.1.csv")
 ```
 
+## **📌 Plot motif DOX 0.1 (3hr, 24hr and 48hr)**
+```{r Model_DOX_0.1, echo=TRUE, message=FALSE}
+cormotif_DOX_0.1 <- readRDS("data/Corrmotif/cormotif_DOX_0.1.RDS")
 
-## **📌 Fit Corrmotif Model (K=2) (DOX 0.1 (3hr, 24hr and 48hr))**
-```{r Model6, echo=TRUE, message=FALSE}
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype="logCPM")
+cormotif_DOX_0.1$bic
 
-# View BIC scores
-motif.fitted$bic
+plotIC(cormotif_DOX_0.1)
 
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+plotMotif(cormotif_DOX_0.1)
 
-# Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)
 ```
 
 ## Extract Gene Probabilities (DOX 0.1 (3hr, 24hr and 48hr))
 ```{r Prob10, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
-gene_prob_DOX_0.1 <- motif.fitted$bestmotif$p.post
+gene_prob_DOX_0.1 <- cormotif_DOX_0.1$bestmotif$p.post
 
 rownames(gene_prob_DOX_0.1) <- rownames(Corrmotif_df)
 
@@ -977,7 +958,6 @@ length(prob_DOX_1_0.1)
 prob_DOX_2_0.1  <- rownames(gene_prob_DOX_0.1[(gene_prob_DOX_0.1[,1] <0.5 & gene_prob_DOX_0.1[,2] >0.5 & gene_prob_DOX_0.1[,3]>0.5),])
 length(prob_DOX_2_0.1)
 ```
-
 
 ## **📌 Corrmotif Model DOX 0.5 (3hr, 24hr and 48hr)**
 ## Load Corrmotif Data
@@ -1004,40 +984,35 @@ compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Co
 
 ## **📌 Corrmotif Model DOX 0.5 (3hr, 24hr and 48hr) (K=1:8)**
 ## Fit Corrmotif Model (K=1:8) (DOX 0.5 (3hr, 24hr and 48hr))
-```{r Model7, echo=TRUE, message=FALSE}
+```{r Model7, eval=FALSE, echo=TRUE, message=FALSE}
 set.seed(11111)
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_DOX_0.5 <- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype="logCPM")
 
-# View BIC scores
-motif.fitted$bic
-
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+gene_prob_DOX_0.5 <- motif.fitted_DOX_0.5$bestmotif$p.post
+rownames(gene_prob_DOX_0.5) <- rownames(Corrmotif_df)
+motif_prob_DOX_0.5 <- motif.fitted_DOX_0.5$bestmotif$clustlike
+rownames(motif_prob_DOX_0.5) <- rownames(gene_prob_DOX_0.5)
+write.csv(motif_prob_DOX_0.5,"data/motif_prob_DOX_0.5.csv")
 ```
 
+## **📌 Plot motif DOX 0.1 (3hr, 24hr and 48hr)**
+```{r Model_DOX_0.5, echo=TRUE, message=FALSE}
+cormotif_DOX_0.5 <- readRDS("data/Corrmotif/cormotif_DOX_0.5.RDS")
 
-## **📌 Fit Corrmotif Model (K=2) (DOX 0.5 (3hr, 24hr and 48hr))**
-```{r Model8, echo=TRUE, message=FALSE}
-motif.fitted <- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype="logCPM")
+cormotif_DOX_0.5$bic
 
-# View BIC scores
-motif.fitted$bic
+plotIC(cormotif_DOX_0.5)
 
-# Plot Information Criteria (IC)
-plotIC(motif.fitted)
+plotMotif(cormotif_DOX_0.5)
 
-# Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)
 ```
 
 ## Extract Gene Probabilities (DOX 0.5 (3hr, 24hr and 48hr))
-```{r Prob5, echo=TRUE, message=FALSE}
+```{r Prob_0.5, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
-gene_prob_DOX_0.5 <- motif.fitted$bestmotif$p.post
+gene_prob_DOX_0.5 <- cormotif_DOX_0.5$bestmotif$p.post
 
 rownames(gene_prob_DOX_0.5) <- rownames(Corrmotif_df)
 
@@ -1047,17 +1022,4 @@ length(prob_DOX_1_0.5)
 
 prob_DOX_2_0.5  <- rownames(gene_prob_DOX_0.5[(gene_prob_DOX_0.5[,1] >0.02 & gene_prob_DOX_0.5[,2] >0.5 & gene_prob_DOX_0.5[,3]>0.5),])
 length(prob_DOX_2_0.5)
-```
-
-
-## **📌 Save Corr-motif datasets for Gene Ontology analysis**
-```{r box, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
-write.csv(data.frame(Entrez_ID = prob_CX_1_0.1), "data/prob_CX_1_0.1.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_CX_2_0.1), "data/prob_CX_2_0.1.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_CX_1_0.5), "data/prob_CX_1_0.5.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_CX_2_0.5), "data/prob_CX_2_0.5.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_1_0.1), "data/prob_DOX_1_0.1.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_2_0.1), "data/prob_DOX_2_0.1.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_1_0.5), "data/prob_DOX_1_0.5.csv", row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_2_0.5), "data/prob_DOX_2_0.5.csv", row.names = FALSE)
 ```

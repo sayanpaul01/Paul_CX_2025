@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -378,13 +378,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-26
+<strong>Last updated:</strong> 2025-02-28
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeaf50d4b35ca06c53a2e53f02e9212af2d062889atargetblankaf50d4ba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree11895c86304482bbc6ddce68330ce754319c4bfbtargetblank11895c8a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/af50d4b35ca06c53a2e53f02e9212af2d062889a" target="_blank">af50d4b</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/11895c86304482bbc6ddce68330ce754319c4bfb" target="_blank">11895c8</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeaf50d4b35ca06c53a2e53f02e9212af2d062889atargetblankaf50d4ba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree11895c86304482bbc6ddce68330ce754319c4bfbtargetblank11895c8a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/af50d4b35ca06c53a2e53f02e9212af2d062889a" target="_blank">af50d4b</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/11895c86304482bbc6ddce68330ce754319c4bfb" target="_blank">11895c8</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -545,6 +548,15 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/Corrmotif/cormotif_CX_0.1.RDS
+    Untracked:  data/Corrmotif/cormotif_CX_0.5.RDS
+    Untracked:  data/Corrmotif/cormotif_DOX_0.1.RDS
+    Untracked:  data/Corrmotif/cormotif_DOX_0.5.RDS
+
+Unstaged changes:
+    Modified:   analysis/Corrmotif_Time.Rmd
 
 </code></pre>
 <p>
@@ -590,6 +602,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/3fdb15ca7f53bb81434050ed188ee37eaee504e9/docs/Corrmotif_Time.html" target="_blank">3fdb15c</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-26
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1487,12 +1516,21 @@ class="section level2">
 <h2><strong>📌 Corrmotif Model CX 0.1 (3hr, 24hr and 48hr)
 (K=1:8)</strong></h2>
 <pre class="r"><code>set.seed(11111)
-motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_CX_0.1 &lt;- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
 
-# View BIC scores
-motif.fitted$bic</code></pre>
+gene_prob_CX_0.1 &lt;- motif.fitted_CX_0.1$bestmotif$p.post
+rownames(gene_prob_CX_0.1) &lt;- rownames(Corrmotif_df)
+motif_prob_CX_0.1 &lt;- motif.fitted_CX_0.1$bestmotif$clustlike
+rownames(motif_prob_CX_0.1) &lt;- rownames(gene_prob_CX_0.1)
+write.csv(motif_prob_CX_0.1,&quot;data/motif_prob_CX_0.1.csv&quot;)</code></pre>
+</div>
+<div id="plot-motif-cx-0.1-3hr-24hr-and-48hr" class="section level2">
+<h2><strong>📌 Plot motif CX 0.1 (3hr, 24hr and 48hr)</strong></h2>
+<pre class="r"><code>cormotif_CX_0.1 &lt;- readRDS(&quot;data/Corrmotif/cormotif_CX_0.1.RDS&quot;)
+
+cormotif_CX_0.1$bic</code></pre>
 <pre><code>     K      bic
 [1,] 1 119522.2
 [2,] 2 117415.3
@@ -1500,147 +1538,18 @@ motif.fitted$bic</code></pre>
 [4,] 4 117495.8
 [5,] 5 117536.1
 [6,] 6 117576.4
-[7,] 7 117620.5
-[8,] 8 117660.4</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model-1">
-Past versions of Model-1.png
-</button>
-</p>
-<div id="fig-Model-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/f84821f0421d3805726f2ccfce5b5ca2275c6756/docs/figure/Corrmotif_Time.Rmd/Model-1.png" target="_blank">f84821f</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="fit-corrmotif-model-k2-cx-0.1-3hr-24hr-and-48hr"
-class="section level2">
-<h2><strong>📌 Fit Corrmotif Model (K=2) (CX 0.1 (3hr, 24hr and
-48hr))</strong></h2>
-<pre class="r"><code>motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
-
-# View BIC scores
-motif.fitted$bic</code></pre>
-<pre><code>     K      bic
-[1,] 2 117415.3</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model1-1">
-Past versions of Model1-1.png
-</button>
-</p>
-<div id="fig-Model1-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/f84821f0421d3805726f2ccfce5b5ca2275c6756/docs/figure/Corrmotif_Time.Rmd/Model1-1.png" target="_blank">f84821f</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model1-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model1-2">
-Past versions of Model1-2.png
-</button>
-</p>
-<div id="fig-Model1-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/f84821f0421d3805726f2ccfce5b5ca2275c6756/docs/figure/Corrmotif_Time.Rmd/Model1-2.png" target="_blank">f84821f</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+[7,] 7 117620.6
+[8,] 8 117660.9</code></pre>
+<pre class="r"><code>plotIC(cormotif_CX_0.1)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_CX_0.1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotMotif(cormotif_CX_0.1)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_CX_0.1-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="extract-gene-probabilities-cx-0.1-3hr-24hr-and-48hr"
 class="section level2">
 <h2>Extract Gene Probabilities (CX 0.1 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code># Extract posterior probabilities for genes
-gene_prob_CX_0.1 &lt;- motif.fitted$bestmotif$p.post
+gene_prob_CX_0.1 &lt;- cormotif_CX_0.1$bestmotif$p.post
 
 rownames(gene_prob_CX_0.1) &lt;- rownames(Corrmotif_df)
 
@@ -1686,12 +1595,21 @@ class="section level2">
 class="section level2">
 <h2>Fit Corrmotif Model (K=1:8) (CX 0.5 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code>set.seed(11111)
-motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_CX_0.5 &lt;- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
 
-# View BIC scores
-motif.fitted$bic</code></pre>
+gene_prob_CX_0.5 &lt;- motif.fitted_CX_0.5$bestmotif$p.post
+rownames(gene_prob_CX_0.5) &lt;- rownames(Corrmotif_df)
+motif_prob_CX_0.5 &lt;- motif.fitted_CX_0.5$bestmotif$clustlike
+rownames(motif_prob_CX_0.5) &lt;- rownames(gene_prob_CX_0.5)
+write.csv(motif_prob_CX_0.5,&quot;data/motif_prob_CX_0.5.csv&quot;)</code></pre>
+</div>
+<div id="plot-motif-cx-0.5-3hr-24hr-and-48hr" class="section level2">
+<h2><strong>📌 Plot motif CX 0.5 (3hr, 24hr and 48hr)</strong></h2>
+<pre class="r"><code>cormotif_CX_0.5 &lt;- readRDS(&quot;data/Corrmotif/cormotif_CX_0.5.RDS&quot;)
+
+cormotif_CX_0.5$bic</code></pre>
 <pre><code>     K      bic
 [1,] 1 124024.3
 [2,] 2 121807.6
@@ -1701,145 +1619,16 @@ motif.fitted$bic</code></pre>
 [6,] 6 121968.6
 [7,] 7 122012.9
 [8,] 8 122053.1</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model2-1">
-Past versions of Model2-1.png
-</button>
-</p>
-<div id="fig-Model2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/figure/Corrmotif_Time.Rmd/Model2-1.png" target="_blank">b2a1c90</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="fit-corrmotif-model-k2-cx-0.5-3hr-24hr-and-48hr"
-class="section level2">
-<h2><strong>📌 Fit Corrmotif Model (K=2) (CX 0.5 (3hr, 24hr and
-48hr))</strong></h2>
-<pre class="r"><code>motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
-
-# View BIC scores
-motif.fitted$bic</code></pre>
-<pre><code>     K      bic
-[1,] 2 121807.6</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model3-1">
-Past versions of Model3-1.png
-</button>
-</p>
-<div id="fig-Model3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/figure/Corrmotif_Time.Rmd/Model3-1.png" target="_blank">b2a1c90</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model3-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model3-2">
-Past versions of Model3-2.png
-</button>
-</p>
-<div id="fig-Model3-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b2a1c90c464bef1eacd7680c1e94d479f63ce044/docs/figure/Corrmotif_Time.Rmd/Model3-2.png" target="_blank">b2a1c90</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<pre class="r"><code>plotIC(cormotif_CX_0.5)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_CX_0.5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotMotif(cormotif_CX_0.5)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_CX_0.5-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="extract-gene-probabilities-cx-0.5-3hr-24hr-and-48hr"
 class="section level2">
 <h2>Extract Gene Probabilities (CX 0.5 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code># Extract posterior probabilities for genes
-gene_prob_CX_0.5 &lt;- motif.fitted$bestmotif$p.post
+gene_prob_CX_0.5 &lt;- cormotif_CX_0.5$bestmotif$p.post
 
 rownames(gene_prob_CX_0.5) &lt;- rownames(Corrmotif_df)
 
@@ -1866,13 +1655,10 @@ rownames(Corrmotif_df) &lt;- Corrmotif_df$Gene
 # Filter for DOX (0.1 µM) and Vehicle (0.1 µM) across 3h, 24h, and 48h
 exprs.corrmotif &lt;- as.matrix(Corrmotif_df[, grep(&quot;DOX_0.1_3|DOX_0.1_24|DOX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48&quot;, colnames(Corrmotif_df))])
 
-
-
 # Read group and comparison IDs
 groupid &lt;- read.csv(&quot;data/Corrmotif/groupid.csv&quot;)
 groupid_df &lt;- groupid %&gt;%
   dplyr::select(matches(&quot;DOX_0.1_3|DOX_0.1_24|DOX_0.1_48|VEH_0.1_3|VEH_0.1_24|VEH_0.1_48&quot;, colnames(groupid)))
-
 
 compid &lt;- read.csv(&quot;data/Corrmotif/Compid.csv&quot;)
 compid_df &lt;- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) &amp; compid$Cond2 %in% unique(as.numeric(groupid_df)), ]</code></pre>
@@ -1881,165 +1667,41 @@ compid_df &lt;- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) &amp; co
 class="section level2">
 <h2><strong>📌 Corrmotif Model DOX 0.1 (3hr, 24hr and 48hr)
 (K=1:8)</strong></h2>
-</div>
-<div id="fit-corrmotif-model-k18-dox-0.1-3hr-24hr-and-48hr"
-class="section level2">
-<h2>Fit Corrmotif Model (K=1:8) (DOX 0.1 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code>set.seed(11111)
-motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_DOX_0.1 &lt;- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
 
-# View BIC scores
-motif.fitted$bic</code></pre>
+gene_prob_DOX_0.1 &lt;- motif.fitted_DOX_0.1$bestmotif$p.post
+rownames(gene_prob_DOX_0.1) &lt;- rownames(Corrmotif_df)
+motif_prob_DOX_0.1 &lt;- motif.fitted_DOX_0.1$bestmotif$clustlike
+rownames(motif_prob_DOX_0.1) &lt;- rownames(gene_prob_DOX_0.1)
+write.csv(motif_prob_DOX_0.1,&quot;data/motif_prob_DOX_0.1.csv&quot;)</code></pre>
+</div>
+<div id="plot-motif-dox-0.1-3hr-24hr-and-48hr" class="section level2">
+<h2><strong>📌 Plot motif DOX 0.1 (3hr, 24hr and 48hr)</strong></h2>
+<pre class="r"><code>cormotif_DOX_0.1 &lt;- readRDS(&quot;data/Corrmotif/cormotif_DOX_0.1.RDS&quot;)
+
+cormotif_DOX_0.1$bic</code></pre>
 <pre><code>     K      bic
 [1,] 1 172174.3
 [2,] 2 167341.3
-[3,] 3 167381.5
-[4,] 4 167421.7
+[3,] 3 167385.4
+[4,] 4 167421.8
 [5,] 5 167462.0
-[6,] 6 167506.2
-[7,] 7 167546.3
-[8,] 8 167586.2</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model5-1">
-Past versions of Model5-1.png
-</button>
-</p>
-<div id="fig-Model5-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model5-1.png" target="_blank">af50d4b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="fit-corrmotif-model-k2-dox-0.1-3hr-24hr-and-48hr"
-class="section level2">
-<h2><strong>📌 Fit Corrmotif Model (K=2) (DOX 0.1 (3hr, 24hr and
-48hr))</strong></h2>
-<pre class="r"><code>motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
-
-# View BIC scores
-motif.fitted$bic</code></pre>
-<pre><code>     K      bic
-[1,] 2 167341.3</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model6-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model6-1">
-Past versions of Model6-1.png
-</button>
-</p>
-<div id="fig-Model6-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model6-1.png" target="_blank">af50d4b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model6-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model6-2">
-Past versions of Model6-2.png
-</button>
-</p>
-<div id="fig-Model6-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model6-2.png" target="_blank">af50d4b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+[6,] 6 167502.3
+[7,] 7 167542.5
+[8,] 8 167582.8</code></pre>
+<pre class="r"><code>plotIC(cormotif_DOX_0.1)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_DOX_0.1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotMotif(cormotif_DOX_0.1)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_DOX_0.1-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="extract-gene-probabilities-dox-0.1-3hr-24hr-and-48hr"
 class="section level2">
 <h2>Extract Gene Probabilities (DOX 0.1 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code># Extract posterior probabilities for genes
-gene_prob_DOX_0.1 &lt;- motif.fitted$bestmotif$p.post
+gene_prob_DOX_0.1 &lt;- cormotif_DOX_0.1$bestmotif$p.post
 
 rownames(gene_prob_DOX_0.1) &lt;- rownames(Corrmotif_df)
 
@@ -2086,160 +1748,40 @@ class="section level2">
 class="section level2">
 <h2>Fit Corrmotif Model (K=1:8) (DOX 0.5 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code>set.seed(11111)
-motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
+motif.fitted_DOX_0.5 &lt;- cormotiffit(exprs=exprs.corrmotif,
                             groupid=groupid_df, compid=compid_df,
                             K=1:8, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
 
-# View BIC scores
-motif.fitted$bic</code></pre>
+gene_prob_DOX_0.5 &lt;- motif.fitted_DOX_0.5$bestmotif$p.post
+rownames(gene_prob_DOX_0.5) &lt;- rownames(Corrmotif_df)
+motif_prob_DOX_0.5 &lt;- motif.fitted_DOX_0.5$bestmotif$clustlike
+rownames(motif_prob_DOX_0.5) &lt;- rownames(gene_prob_DOX_0.5)
+write.csv(motif_prob_DOX_0.5,&quot;data/motif_prob_DOX_0.5.csv&quot;)</code></pre>
+</div>
+<div id="plot-motif-dox-0.1-3hr-24hr-and-48hr-1" class="section level2">
+<h2><strong>📌 Plot motif DOX 0.1 (3hr, 24hr and 48hr)</strong></h2>
+<pre class="r"><code>cormotif_DOX_0.5 &lt;- readRDS(&quot;data/Corrmotif/cormotif_DOX_0.5.RDS&quot;)
+
+cormotif_DOX_0.5$bic</code></pre>
 <pre><code>     K      bic
 [1,] 1 228116.5
 [2,] 2 222769.9
 [3,] 3 222778.8
 [4,] 4 222820.9
-[5,] 5 222861.1
-[6,] 6 222899.4
-[7,] 7 222941.4
-[8,] 8 222983.2</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model7-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model7-1">
-Past versions of Model7-1.png
-</button>
-</p>
-<div id="fig-Model7-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model7-1.png" target="_blank">af50d4b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="fit-corrmotif-model-k2-dox-0.5-3hr-24hr-and-48hr"
-class="section level2">
-<h2><strong>📌 Fit Corrmotif Model (K=2) (DOX 0.5 (3hr, 24hr and
-48hr))</strong></h2>
-<pre class="r"><code>motif.fitted &lt;- cormotiffit(exprs=exprs.corrmotif,
-                            groupid=groupid_df, compid=compid_df,
-                            K=2, max.iter=1000, BIC=TRUE, runtype=&quot;logCPM&quot;)
-
-# View BIC scores
-motif.fitted$bic</code></pre>
-<pre><code>     K      bic
-[1,] 2 222769.9</code></pre>
-<pre class="r"><code># Plot Information Criteria (IC)
-plotIC(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model8-1">
-Past versions of Model8-1.png
-</button>
-</p>
-<div id="fig-Model8-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model8-1.png" target="_blank">af50d4b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Plot Motif Pattern (X-axis = Timepoints: 3h, 24h, 48h)
-plotMotif(motif.fitted)</code></pre>
-<p><img src="figure/Corrmotif_Time.Rmd/Model8-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Model8-2">
-Past versions of Model8-2.png
-</button>
-</p>
-<div id="fig-Model8-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/af50d4b35ca06c53a2e53f02e9212af2d062889a/docs/figure/Corrmotif_Time.Rmd/Model8-2.png" target="_blank">af50d4b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-02-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+[5,] 5 222861.0
+[6,] 6 222901.2
+[7,] 7 222943.0
+[8,] 8 222981.5</code></pre>
+<pre class="r"><code>plotIC(cormotif_DOX_0.5)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_DOX_0.5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotMotif(cormotif_DOX_0.5)</code></pre>
+<p><img src="figure/Corrmotif_Time.Rmd/Model_DOX_0.5-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="extract-gene-probabilities-dox-0.5-3hr-24hr-and-48hr"
 class="section level2">
 <h2>Extract Gene Probabilities (DOX 0.5 (3hr, 24hr and 48hr))</h2>
 <pre class="r"><code># Extract posterior probabilities for genes
-gene_prob_DOX_0.5 &lt;- motif.fitted$bestmotif$p.post
+gene_prob_DOX_0.5 &lt;- cormotif_DOX_0.5$bestmotif$p.post
 
 rownames(gene_prob_DOX_0.5) &lt;- rownames(Corrmotif_df)
 
@@ -2250,19 +1792,6 @@ length(prob_DOX_1_0.5)</code></pre>
 <pre class="r"><code>prob_DOX_2_0.5  &lt;- rownames(gene_prob_DOX_0.5[(gene_prob_DOX_0.5[,1] &gt;0.02 &amp; gene_prob_DOX_0.5[,2] &gt;0.5 &amp; gene_prob_DOX_0.5[,3]&gt;0.5),])
 length(prob_DOX_2_0.5)</code></pre>
 <pre><code>[1] 6890</code></pre>
-</div>
-<div id="save-corr-motif-datasets-for-gene-ontology-analysis"
-class="section level2">
-<h2><strong>📌 Save Corr-motif datasets for Gene Ontology
-analysis</strong></h2>
-<pre class="r"><code>write.csv(data.frame(Entrez_ID = prob_CX_1_0.1), &quot;data/prob_CX_1_0.1.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_CX_2_0.1), &quot;data/prob_CX_2_0.1.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_CX_1_0.5), &quot;data/prob_CX_1_0.5.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_CX_2_0.5), &quot;data/prob_CX_2_0.5.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_1_0.1), &quot;data/prob_DOX_1_0.1.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_2_0.1), &quot;data/prob_DOX_2_0.1.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_1_0.5), &quot;data/prob_DOX_1_0.5.csv&quot;, row.names = FALSE)
-write.csv(data.frame(Entrez_ID = prob_DOX_2_0.5), &quot;data/prob_DOX_2_0.5.csv&quot;, row.names = FALSE)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2307,20 +1836,20 @@ loaded via a namespace (and not attached):
 [13] pkgconfig_2.0.3       data.table_1.14.10    lifecycle_1.0.4      
 [16] compiler_4.3.0        stringr_1.5.1         git2r_0.35.0         
 [19] statmod_1.5.0         munsell_0.5.1         getPass_0.2-4        
-[22] codetools_0.2-20      httpuv_1.6.15         snow_0.4-4           
-[25] htmltools_0.5.8.1     sass_0.4.9            yaml_2.3.10          
-[28] lazyeval_0.2.2        preprocessCore_1.64.0 plotly_4.10.4        
-[31] tidyr_1.3.1           later_1.3.2           pillar_1.10.1        
-[34] jquerylib_0.1.4       whisker_0.4.1         cachem_1.0.8         
-[37] tidyselect_1.2.1      digest_0.6.34         stringi_1.8.3        
-[40] purrr_1.0.2           rprojroot_2.0.4       fastmap_1.1.1        
-[43] grid_4.3.0            colorspace_2.1-0      cli_3.6.1            
-[46] magrittr_2.0.3        withr_3.0.2           scales_1.3.0         
-[49] promises_1.3.0        rmarkdown_2.29        httr_1.4.7           
-[52] affyio_1.72.0         evaluate_1.0.3        knitr_1.49           
-[55] viridisLite_0.4.2     rlang_1.1.3           glue_1.7.0           
-[58] BiocManager_1.30.25   rstudioapi_0.17.1     jsonlite_1.8.9       
-[61] R6_2.5.1              fs_1.6.3              zlibbioc_1.48.0      </code></pre>
+[22] codetools_0.2-20      httpuv_1.6.15         htmltools_0.5.8.1    
+[25] sass_0.4.9            yaml_2.3.10           lazyeval_0.2.2       
+[28] preprocessCore_1.64.0 plotly_4.10.4         tidyr_1.3.1          
+[31] later_1.3.2           pillar_1.10.1         jquerylib_0.1.4      
+[34] whisker_0.4.1         cachem_1.0.8          tidyselect_1.2.1     
+[37] digest_0.6.34         stringi_1.8.3         purrr_1.0.2          
+[40] rprojroot_2.0.4       fastmap_1.1.1         grid_4.3.0           
+[43] colorspace_2.1-0      cli_3.6.1             magrittr_2.0.3       
+[46] withr_3.0.2           scales_1.3.0          promises_1.3.0       
+[49] rmarkdown_2.29        httr_1.4.7            affyio_1.72.0        
+[52] evaluate_1.0.3        knitr_1.49            viridisLite_0.4.2    
+[55] rlang_1.1.3           glue_1.7.0            BiocManager_1.30.25  
+[58] rstudioapi_0.17.1     jsonlite_1.8.9        R6_2.5.1             
+[61] fs_1.6.3              zlibbioc_1.48.0      </code></pre>
 </div>
 </div>
 
