@@ -51,6 +51,7 @@ Welcome to my research website.
 
 - **[Corrmotif Model and Patterns (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time.html)**
 
+- **[Function and pathway enrichment of Corrmotif Models (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time_GO.html)**
 
 ### 🔗 **Source Code**  
 
