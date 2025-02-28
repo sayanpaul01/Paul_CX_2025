@@ -421,10 +421,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree79d4e2d06337c696571a49f85f54a13e1d996ef9targetblank79d4e2da">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree115fedc890fbb68f9b976c07fbdcb6b6d3022792targetblank115fedca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/79d4e2d06337c696571a49f85f54a13e1d996ef9" target="_blank">79d4e2d</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/115fedc890fbb68f9b976c07fbdcb6b6d3022792" target="_blank">115fedc</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree79d4e2d06337c696571a49f85f54a13e1d996ef9targetblank79d4e2da"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree115fedc890fbb68f9b976c07fbdcb6b6d3022792targetblank115fedca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/79d4e2d06337c696571a49f85f54a13e1d996ef9" target="_blank">79d4e2d</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/115fedc890fbb68f9b976c07fbdcb6b6d3022792" target="_blank">115fedc</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -554,8 +554,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  analysis/Actox.Rmd
+Unstaged changes:
+    Modified:   analysis/Actox.Rmd
 
 </code></pre>
 <p>
@@ -570,10 +570,73 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/Actox.Rmd</code>) and HTML
+(<code>docs/Actox.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/a73142a48af5883d1c5f45a84921942bc89da37a/analysis/Actox.Rmd" target="_blank">a73142a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/a73142a48af5883d1c5f45a84921942bc89da37a/docs/Actox.html" target="_blank">a73142a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+<td>
+Commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -673,8 +736,9 @@ subset_toptable12 &lt;- DOX_0.5_48[DOX_0.5_48$Entrez_ID %in% Entrez_IDs, c(&quot
 </div>
 <div id="add-metadata-and-combine-all-subsets" class="section level2">
 <h2><strong>📌 Add metadata and combine all subsets</strong></h2>
-<div id="create-a-matrix-and-heatmap" class="section level3">
-<h3><strong>📌Create a matrix and heatmap</strong></h3>
+</div>
+<div id="create-a-matrix-and-heatmap" class="section level2">
+<h2><strong>📌Create a matrix and heatmap</strong></h2>
 <pre class="r"><code># Assuming your dataframe is named data
 # Add a column for significance stars
 final_data &lt;- final_data %&gt;%
@@ -730,6 +794,43 @@ heatmap &lt;- Heatmap(logFC_matrix, name = &quot;logFC&quot;, top_annotation = h
 # Draw the heatmap
 draw(heatmap, heatmap_legend_side = &quot;right&quot;, annotation_legend_side = &quot;right&quot;)</code></pre>
 <p><img src="figure/Actox.Rmd/Data_prep-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Data_prep-1">
+Past versions of Data_prep-1.png
+</button>
+</p>
+<div id="fig-Data_prep-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/a73142a48af5883d1c5f45a84921942bc89da37a/docs/figure/Actox.Rmd/Data_prep-1.png" target="_blank">a73142a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -790,17 +891,17 @@ loaded via a namespace (and not attached):
 [46] yaml_2.3.10             doParallel_1.0.17       codetools_0.2-20       
 [49] lattice_0.22-5          plyr_1.8.9              withr_3.0.2            
 [52] KEGGREST_1.42.0         evaluate_1.0.3          xml2_1.3.6             
-[55] Biostrings_2.70.1       pillar_1.10.1           foreach_1.5.2          
-[58] generics_0.1.3          RCurl_1.98-1.13         rprojroot_2.0.4        
-[61] hms_1.1.3               munsell_0.5.1           glue_1.7.0             
-[64] tools_4.3.0             locfit_1.5-9.8          fs_1.6.3               
-[67] Cairo_1.6-2             colorspace_2.1-0        GenomeInfoDbData_1.2.11
-[70] cli_3.6.1               workflowr_1.7.1         viridisLite_0.4.2      
-[73] svglite_2.1.3           gtable_0.3.6            sass_0.4.9             
-[76] digest_0.6.34           rjson_0.2.23            memoise_2.0.1          
-[79] htmltools_0.5.8.1       lifecycle_1.0.4         httr_1.4.7             
-[82] GlobalOptions_0.1.2     statmod_1.5.0           bit64_4.0.5            </code></pre>
-</div>
+[55] Biostrings_2.70.1       pillar_1.10.1           whisker_0.4.1          
+[58] foreach_1.5.2           generics_0.1.3          RCurl_1.98-1.13        
+[61] rprojroot_2.0.4         hms_1.1.3               munsell_0.5.1          
+[64] glue_1.7.0              tools_4.3.0             locfit_1.5-9.8         
+[67] fs_1.6.3                Cairo_1.6-2             colorspace_2.1-0       
+[70] GenomeInfoDbData_1.2.11 cli_3.6.1               workflowr_1.7.1        
+[73] viridisLite_0.4.2       svglite_2.1.3           gtable_0.3.6           
+[76] sass_0.4.9              digest_0.6.34           rjson_0.2.23           
+[79] memoise_2.0.1           htmltools_0.5.8.1       lifecycle_1.0.4        
+[82] httr_1.4.7              GlobalOptions_0.1.2     statmod_1.5.0          
+[85] bit64_4.0.5            </code></pre>
 </div>
 </div>
 

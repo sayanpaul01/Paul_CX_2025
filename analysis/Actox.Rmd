@@ -117,7 +117,7 @@ final_data <- dplyr::select(combined_data, Entrez_ID, Gene, logFC, adj.P.Val, Dr
 ```
 
 
-### **📌Create a matrix and heatmap**
+## **📌Create a matrix and heatmap**
 ```{r Data_prep, echo=TRUE, message=FALSE, fig.height=10, fig.width=10}
 # Assuming your dataframe is named data
 # Add a column for significance stars
