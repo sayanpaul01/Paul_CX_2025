@@ -817,6 +817,36 @@ plotMotif(cormotif_CX_0.1)
 
 ```
 
+## **📌 Distribution of Gene Clusters Identified by Corrmotif (CX 0.1 (3hr, 24hr and 48hr))**
+```{r pie-chart_CX_0.1, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load necessary libraries
+library(ggplot2)
+
+# Data
+data <- data.frame(
+  Category = c("CX_low_non response", "CX_low_mid_late_response"),
+  Value = c(13938, 341)
+)
+
+# Add values to category names (to be displayed in the legend)
+data$Category <- paste0(data$Category, " (", data$Value, ")")
+
+# Define custom colors with updated category names
+custom_colors <- setNames(
+  c("#66B2FF", "#99FF99"),
+  data$Category  # Ensures color names match updated categories
+)
+
+# Create pie chart without number labels inside
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  labs(title = "Pie Chart (CX 0.1 micromolar)", x = NULL, y = NULL) +
+  theme_void() +
+  scale_fill_manual(values = custom_colors)  # Corrected color mapping
+```
+
 ## Extract Gene Probabilities (CX 0.1 (3hr, 24hr and 48hr))
 ```{r Prob, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
@@ -857,7 +887,6 @@ compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Co
 ```
 
 ## **📌 Corrmotif Model CX 0.5 (3hr, 24hr and 48hr) (K=1:8)**
-## Fit Corrmotif Model (K=1:8) (CX 0.5 (3hr, 24hr and 48hr))
 ```{r Model2, eval=FALSE, echo=TRUE, message=FALSE}
 set.seed(11111)
 motif.fitted_CX_0.5 <- cormotiffit(exprs=exprs.corrmotif,
@@ -880,6 +909,36 @@ cormotif_CX_0.5$bic
 plotIC(cormotif_CX_0.5)
 
 plotMotif(cormotif_CX_0.5)
+```
+
+## **📌 Distribution of Gene Clusters Identified by Corrmotif (CX 0.5 (3hr, 24hr and 48hr))**
+```{r pie-chart_CX_0.5, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load necessary libraries
+library(ggplot2)
+
+# Data
+data <- data.frame(
+  Category = c("CX_high_non response", "CX_high_mid_late_response"),
+  Value = c(13892, 385)
+)
+
+# Add values to category names (to be displayed in the legend)
+data$Category <- paste0(data$Category, " (", data$Value, ")")
+
+# Define custom colors with updated category names
+custom_colors <- setNames(
+  c("#66B2FF", "#99FF99"),
+  data$Category  # Ensures color names match updated categories
+)
+
+# Create pie chart without number labels inside
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  labs(title = "Pie Chart (CX 0.5 micromolar)", x = NULL, y = NULL) +
+  theme_void() +
+  scale_fill_manual(values = custom_colors)  # Corrected color mapping
 ```
 
 ## Extract Gene Probabilities (CX 0.5 (3hr, 24hr and 48hr))
@@ -944,6 +1003,36 @@ plotMotif(cormotif_DOX_0.1)
 
 ```
 
+## **📌 Distribution of Gene Clusters Identified by Corrmotif (DOX 0.1 (3hr, 24hr and 48hr))**
+```{r pie-chart_DOX_0.1, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load necessary libraries
+library(ggplot2)
+
+# Data
+data <- data.frame(
+  Category = c("DOX_low_non response", "DOX_low_mid_late_response"),
+  Value = c(12179, 2099)
+)
+
+# Add values to category names (to be displayed in the legend)
+data$Category <- paste0(data$Category, " (", data$Value, ")")
+
+# Define custom colors with updated category names
+custom_colors <- setNames(
+  c("#66B2FF", "#99FF99"),
+  data$Category  # Ensures color names match updated categories
+)
+
+# Create pie chart without number labels inside
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  labs(title = "Pie Chart (DOX 0.1 micromolar)", x = NULL, y = NULL) +
+  theme_void() +
+  scale_fill_manual(values = custom_colors)  # Corrected color mapping
+```
+
 ## Extract Gene Probabilities (DOX 0.1 (3hr, 24hr and 48hr))
 ```{r Prob10, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
@@ -983,7 +1072,6 @@ compid_df <- compid[compid$Cond1 %in% unique(as.numeric(groupid_df)) & compid$Co
 ```
 
 ## **📌 Corrmotif Model DOX 0.5 (3hr, 24hr and 48hr) (K=1:8)**
-## Fit Corrmotif Model (K=1:8) (DOX 0.5 (3hr, 24hr and 48hr))
 ```{r Model7, eval=FALSE, echo=TRUE, message=FALSE}
 set.seed(11111)
 motif.fitted_DOX_0.5 <- cormotiffit(exprs=exprs.corrmotif,
@@ -1009,6 +1097,36 @@ plotMotif(cormotif_DOX_0.5)
 
 ```
 
+## **📌 Distribution of Gene Clusters Identified by Corrmotif (DOX 0.5 (3hr, 24hr and 48hr))**
+```{r pie-chart_DOX_0.5, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load necessary libraries
+library(ggplot2)
+
+# Data
+data <- data.frame(
+  Category = c("DOX_high_non response", "DOX_high_mid_late_response"),
+  Value = c(7320, 6890)
+)
+
+# Add values to category names (to be displayed in the legend)
+data$Category <- paste0(data$Category, " (", data$Value, ")")
+
+# Define custom colors with updated category names
+custom_colors <- setNames(
+  c("#66B2FF", "#99FF99"),
+  data$Category  # Ensures color names match updated categories
+)
+
+# Create pie chart without number labels inside
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  labs(title = "Pie Chart (DOX 0.5 micromolar)", x = NULL, y = NULL) +
+  theme_void() +
+  scale_fill_manual(values = custom_colors)  # Corrected color mapping
+```
+
 ## Extract Gene Probabilities (DOX 0.5 (3hr, 24hr and 48hr))
 ```{r Prob_0.5, echo=TRUE, message=FALSE}
 # Extract posterior probabilities for genes
@@ -1022,4 +1140,17 @@ length(prob_DOX_1_0.5)
 
 prob_DOX_2_0.5  <- rownames(gene_prob_DOX_0.5[(gene_prob_DOX_0.5[,1] >0.02 & gene_prob_DOX_0.5[,2] >0.5 & gene_prob_DOX_0.5[,3]>0.5),])
 length(prob_DOX_2_0.5)
+```
+
+
+## **📌 Save Corr-motif datasets for Gene Ontology analysis**
+```{r box_final, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
+write.csv(data.frame(Entrez_ID = prob_CX_1_0.1), "data/prob_CX_1_0.1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_CX_2_0.1), "data/prob_CX_2_0.1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_CX_1_0.5), "data/prob_CX_1_0.5.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_CX_2_0.5), "data/prob_CX_2_0.5.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_1_0.1), "data/prob_DOX_1_0.1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_2_0.1), "data/prob_DOX_2_0.1.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_1_0.5), "data/prob_DOX_1_0.5.csv", row.names = FALSE)
+write.csv(data.frame(Entrez_ID = prob_DOX_2_0.5), "data/prob_DOX_2_0.5.csv", row.names = FALSE)
 ```
