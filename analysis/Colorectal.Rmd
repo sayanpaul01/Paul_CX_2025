@@ -166,3 +166,476 @@ ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
     strip.text = element_text(size = 12, face = "bold")
   )
 ```
+
+## **📌 Proportion of colorectal cancer genes in CX and DOX DEGs**
+
+## **📌 Read and Process Data**
+```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Extract Significant DEGs
+DEG1 <- as.character(CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05])
+DEG2 <- as.character(CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05])
+DEG3 <- as.character(CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05])
+DEG4 <- as.character(CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05])
+DEG5 <- as.character(CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05])
+DEG6 <- as.character(CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05])
+DEG7 <- as.character(DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05])
+DEG8 <- as.character(DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05])
+DEG9 <- as.character(DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05])
+DEG10 <- as.character(DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05])
+DEG11 <- as.character(DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05])
+DEG12 <- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05])
+```
+
+## **📌 Proportion of colorectal cancer genes in CX and DOX DEGs datasets**
+```{r proportion1, echo=TRUE,results='hide', message=FALSE, fig.width=14,fig.height=8}
+
+data_6hr <- read.csv("data/Colorectal/6hr.csv", stringsAsFactors = FALSE)
+data_24hr <- read.csv("data/Colorectal/24hr.csv", stringsAsFactors = FALSE)
+data_72hr <- read.csv("data/Colorectal/72hr.csv", stringsAsFactors = FALSE)
+
+# Map gene symbols to Entrez IDs using org.Hs.eg.db
+data_6hr <- data_6hr %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+data_24hr <- data_24hr %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+data_72hr <- data_72hr %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# Define CX-5461 DEG lists
+CX_DEGs <- list(
+  "CX_0.1_3" = DEG1, "CX_0.1_24" = DEG2, "CX_0.1_48" = DEG3,
+  "CX_0.5_3" = DEG4, "CX_0.5_24" = DEG5, "CX_0.5_48" = DEG6
+)
+
+# Define DOX DEG lists
+DOX_DEGs <- list(
+  "DOX_0.1_3" = DEG7, "DOX_0.1_24" = DEG8, "DOX_0.1_48" = DEG9,
+  "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
+)
+
+# Extract Entrez_IDs from cancer gene datasets for 6hr, 24hr, and 72hr
+lit_genes <- list(
+  "6hr" = na.omit(data_6hr$Entrez_ID),
+  "24hr" = na.omit(data_24hr$Entrez_ID),
+  "72hr" = na.omit(data_72hr$Entrez_ID)
+)
+
+# Combine CX-5461 DEGs into a dataframe with a "Drug" column
+CX_DEGs_df <- bind_rows(
+  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "CX-5461")),
+  .id = "Sample"
+)
+
+# Combine DOX DEGs into a dataframe with a "Drug" column
+DOX_DEGs_df <- bind_rows(
+  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "DOX")),
+  .id = "Sample"
+)
+
+# Merge CX-5461 and DOX datasets
+DEGs_df <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+
+# Match Entrez_IDs with DEGs from 6hr, 24hr, and 72hr datasets
+DEGs_df <- DEGs_df %>%
+  mutate(
+    Category_6hr = ifelse(Entrez_ID %in% lit_genes[["6hr"]], "Yes", "No"),
+    Category_24hr = ifelse(Entrez_ID %in% lit_genes[["24hr"]], "Yes", "No"),
+    Category_72hr = ifelse(Entrez_ID %in% lit_genes[["72hr"]], "Yes", "No")
+  )
+
+# Convert to long format for ggplot
+proportion_data <- DEGs_df %>%
+  pivot_longer(cols = starts_with("Category"), names_to = "Timepoint", values_to = "Category") %>%
+  group_by(Sample, Drug, Timepoint, Category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Sample, Drug, Timepoint) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **Fix: Normalize Percentages to Sum Exactly 100%**
+proportion_data <- proportion_data %>%
+  group_by(Sample, Timepoint) %>%
+  mutate(Percentage = round(Percentage, 2)) %>%  # Round each percentage
+  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %>%  # Compute rounding difference
+  mutate(Percentage = ifelse(Category == "No", Percentage + Adjustment, Percentage)) %>%  # Apply adjustment to "No"
+  mutate(Percentage = ifelse(Percentage < 0, 0, Percentage)) %>%  # Prevent negatives
+  mutate(Percentage = ifelse(Percentage > 100, 100, Percentage)) %>%  # Prevent values > 100
+  ungroup() %>%  # Remove grouping to avoid select() errors
+  replace_na(list(Percentage = 0))  # Ensure no NA values
+
+# **Ensure "Yes" is at the Bottom and "No" is at the Top**
+proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
+
+# Define correct factor orders for samples and timepoints
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order)
+
+proportion_data$Timepoint <- factor(
+  proportion_data$Timepoint,
+  levels = c("Category_6hr", "Category_24hr", "Category_72hr"),
+  labels = c("6hr", "24hr", "72hr")
+)
+
+# **Generate Combined Proportion Plot for CX-5461 and DOX**
+ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  facet_wrap(~Timepoint, scales = "fixed") +  # Facet by Timepoint (6hr, 24hr, 72hr)
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 100)) +  # Y-axis as percentage
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red) at Bottom, No (Blue) on Top
+  labs(
+    title = "Proportion of Human Colorectal Cancer Genes in CX-5461 and DOX DEGs",
+    x = "Samples (CX-5461 and DOX)",
+    y = "Percentage",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),  # Updated for ggplot2 3.4.0+
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+
+```
+
+## **📌 Correlation of colorectal cancer genes with CX and DOX expressed genes**
+## **📌 6hr**
+```{r Data_prep, echo=TRUE, message=FALSE, fig.height=8,fig.width=12}
+# Import the CSV file
+data_6hr_logFC <- read.csv("data/Colorectal/6hrlogFC.csv", stringsAsFactors = FALSE)
+
+# Map gene symbols to Entrez IDs using org.Hs.eg.db
+data_6hr_logFC <- data_6hr_logFC %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# Merge datasets on Entrez_ID for CX and DOX at both concentrations (3 hours)
+merged_CX_0.1 <- merge(data_6hr_logFC, CX_0.1_3, by = "Entrez_ID")
+merged_CX_0.5 <- merge(data_6hr_logFC, CX_0.5_3, by = "Entrez_ID")
+merged_DOX_0.1 <- merge(data_6hr_logFC, DOX_0.1_3, by = "Entrez_ID")
+merged_DOX_0.5 <- merge(data_6hr_logFC, DOX_0.5_3, by = "Entrez_ID")
+
+# Remove NA values
+merged_CX_0.1 <- na.omit(merged_CX_0.1)
+merged_CX_0.5 <- na.omit(merged_CX_0.5)
+merged_DOX_0.1 <- na.omit(merged_DOX_0.1)
+merged_DOX_0.5 <- na.omit(merged_DOX_0.5)
+
+# Rename columns explicitly to avoid conflicts
+colnames(merged_CX_0.1) <- colnames(merged_CX_0.5) <-
+  colnames(merged_DOX_0.1) <- colnames(merged_DOX_0.5) <-
+  c("Entrez_ID", "Symbol_6hr", "logFC_6hr", "logFC_Drug", "AveExpr_Drug", "t_Drug", "P.Value_Drug", "adj.P.Val_Drug", "B_Drug")
+
+# Add drug and concentration labels for faceting
+merged_CX_0.1$Drug <- "CX (3hr)"
+merged_CX_0.5$Drug <- "CX (3hr)"
+merged_DOX_0.1$Drug <- "DOX (3hr)"
+merged_DOX_0.5$Drug <- "DOX (3hr)"
+
+merged_CX_0.1$Concentration <- "0.1 µM"
+merged_CX_0.5$Concentration <- "0.5 µM"
+merged_DOX_0.1$Concentration <- "0.1 µM"
+merged_DOX_0.5$Concentration <- "0.5 µM"
+
+# Combine all datasets into a single data frame
+merged_data <- rbind(
+  merged_CX_0.1[, c("Entrez_ID", "logFC_Drug", "logFC_6hr", "Concentration", "Drug")],
+  merged_CX_0.5[, c("Entrez_ID", "logFC_Drug", "logFC_6hr", "Concentration", "Drug")],
+  merged_DOX_0.1[, c("Entrez_ID", "logFC_Drug", "logFC_6hr", "Concentration", "Drug")],
+  merged_DOX_0.5[, c("Entrez_ID", "logFC_Drug", "logFC_6hr", "Concentration", "Drug")]
+)
+
+# Calculate correlations for each facet
+cor_CX_0.1 <- cor.test(merged_CX_0.1$logFC_Drug, merged_CX_0.1$logFC_6hr, method = "pearson")
+cor_CX_0.5 <- cor.test(merged_CX_0.5$logFC_Drug, merged_CX_0.5$logFC_6hr, method = "pearson")
+cor_DOX_0.1 <- cor.test(merged_DOX_0.1$logFC_Drug, merged_DOX_0.1$logFC_6hr, method = "pearson")
+cor_DOX_0.5 <- cor.test(merged_DOX_0.5$logFC_Drug, merged_DOX_0.5$logFC_6hr, method = "pearson")
+
+# Data frame for r and p-values annotations
+correlation_data <- data.frame(
+  Drug = rep(c("CX (3hr)", "DOX (3hr)"), each = 2),
+  Concentration = rep(c("0.1 µM", "0.5 µM"), times = 2),
+  x = max(merged_data$logFC_Drug, na.rm = TRUE) * 0.75,  # Adjusted placement for better fit
+  y = max(merged_data$logFC_6hr, na.rm = TRUE) * 0.85,
+  label = c(
+    paste0("r = ", round(cor_CX_0.1$estimate, 3), "\np = ", signif(cor_CX_0.1$p.value, 3)),
+    paste0("r = ", round(cor_CX_0.5$estimate, 3), "\np = ", signif(cor_CX_0.5$p.value, 3)),
+    paste0("r = ", round(cor_DOX_0.1$estimate, 3), "\np = ", signif(cor_DOX_0.1$p.value, 3)),
+    paste0("r = ", round(cor_DOX_0.5$estimate, 3), "\np = ", signif(cor_DOX_0.5$p.value, 3))
+  )
+)
+
+# Create scatter plot with facets for concentration (vertically) and drug (horizontally)
+scatter_plot <- ggplot(merged_data, aes(x = logFC_Drug, y = logFC_6hr)) +
+  geom_point(alpha = 0.6, color = "black") +  # Black scatter points
+  geom_smooth(method = "lm", color = "black", se = FALSE) +  # Black regression line
+  labs(
+    title = "Correlation between Drug (3hr) and Colorectal 6hr logFC",
+    x = "logFC (Drug_3hr)",
+    y = "logFC (Colorectal 6hr)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+
+    # Outer box around the entire facet plot
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2),
+
+    # Black box around each facet title
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1.5),
+    strip.text = element_text(size = 12, face = "bold", color = "black")
+  ) +
+
+  # Facet by drug (horizontally) and concentration (vertically)
+  facet_grid(Concentration ~ Drug) +
+
+  # Add r and p-value in the upper-right corner of each facet with better fitting font size
+  geom_text(data = correlation_data,
+            aes(x = x, y = y, label = label),
+            inherit.aes = FALSE, size = 3, fontface = "bold")  # Reduced font size for better fit
+
+# Display plot
+print(scatter_plot)
+```
+
+## **📌 24hr**
+```{r Data_prep_24, echo=TRUE, message=FALSE, fig.height=8,fig.width=12}
+# Import the CSV file
+data_24hr_logFC <- read.csv("data/Colorectal/24hrlogFC.csv", stringsAsFactors = FALSE)
+
+# Map gene symbols to Entrez IDs using org.Hs.eg.db
+data_24hr_logFC <- data_24hr_logFC %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# Merge datasets on Entrez_ID for CX and DOX at both concentrations (24 hours)
+merged_CX_0.1_24 <- merge(data_24hr_logFC, CX_0.1_24, by = "Entrez_ID")
+merged_CX_0.5_24 <- merge(data_24hr_logFC, CX_0.5_24, by = "Entrez_ID")
+merged_DOX_0.1_24 <- merge(data_24hr_logFC, DOX_0.1_24, by = "Entrez_ID")
+merged_DOX_0.5_24 <- merge(data_24hr_logFC, DOX_0.5_24, by = "Entrez_ID")
+
+# Remove NA values
+merged_CX_0.1_24 <- na.omit(merged_CX_0.1_24)
+merged_CX_0.5_24 <- na.omit(merged_CX_0.5_24)
+merged_DOX_0.1_24 <- na.omit(merged_DOX_0.1_24)
+merged_DOX_0.5_24 <- na.omit(merged_DOX_0.5_24)
+
+# Rename columns explicitly to avoid conflicts
+colnames(merged_CX_0.1_24) <- colnames(merged_CX_0.5_24) <-
+  colnames(merged_DOX_0.1_24) <- colnames(merged_DOX_0.5_24) <-
+  c("Entrez_ID", "Symbol_24hr", "logFC_24hr", "logFC_Drug", "AveExpr_Drug", "t_Drug", "P.Value_Drug", "adj.P.Val_Drug", "B_Drug")
+
+# Add drug and concentration labels for faceting
+merged_CX_0.1_24$Drug <- "CX (24hr)"
+merged_CX_0.5_24$Drug <- "CX (24hr)"
+merged_DOX_0.1_24$Drug <- "DOX (24hr)"
+merged_DOX_0.5_24$Drug <- "DOX (24hr)"
+
+merged_CX_0.1_24$Concentration <- "0.1 µM"
+merged_CX_0.5_24$Concentration <- "0.5 µM"
+merged_DOX_0.1_24$Concentration <- "0.1 µM"
+merged_DOX_0.5_24$Concentration <- "0.5 µM"
+
+# Combine all datasets into a single data frame
+merged_data_24hr <- rbind(
+  merged_CX_0.1_24[, c("Entrez_ID", "logFC_Drug", "logFC_24hr", "Concentration", "Drug")],
+  merged_CX_0.5_24[, c("Entrez_ID", "logFC_Drug", "logFC_24hr", "Concentration", "Drug")],
+  merged_DOX_0.1_24[, c("Entrez_ID", "logFC_Drug", "logFC_24hr", "Concentration", "Drug")],
+  merged_DOX_0.5_24[, c("Entrez_ID", "logFC_Drug", "logFC_24hr", "Concentration", "Drug")]
+)
+
+# Calculate correlations for each facet
+cor_CX_0.1_24 <- cor.test(merged_CX_0.1_24$logFC_Drug, merged_CX_0.1_24$logFC_24hr, method = "pearson")
+cor_CX_0.5_24 <- cor.test(merged_CX_0.5_24$logFC_Drug, merged_CX_0.5_24$logFC_24hr, method = "pearson")
+cor_DOX_0.1_24 <- cor.test(merged_DOX_0.1_24$logFC_Drug, merged_DOX_0.1_24$logFC_24hr, method = "pearson")
+cor_DOX_0.5_24 <- cor.test(merged_DOX_0.5_24$logFC_Drug, merged_DOX_0.5_24$logFC_24hr, method = "pearson")
+
+# Data frame for r and p-values annotations
+correlation_data_24hr <- data.frame(
+  Drug = rep(c("CX (24hr)", "DOX (24hr)"), each = 2),
+  Concentration = rep(c("0.1 µM", "0.5 µM"), times = 2),
+  x = max(merged_data_24hr$logFC_Drug, na.rm = TRUE) * 0.75,  # Adjusted placement for better fit
+  y = max(merged_data_24hr$logFC_24hr, na.rm = TRUE) * 0.85,
+  label = c(
+    paste0("r = ", round(cor_CX_0.1_24$estimate, 3), "\np = ", signif(cor_CX_0.1_24$p.value, 3)),
+    paste0("r = ", round(cor_CX_0.5_24$estimate, 3), "\np = ", signif(cor_CX_0.5_24$p.value, 3)),
+    paste0("r = ", round(cor_DOX_0.1_24$estimate, 3), "\np = ", signif(cor_DOX_0.1_24$p.value, 3)),
+    paste0("r = ", round(cor_DOX_0.5_24$estimate, 3), "\np = ", signif(cor_DOX_0.5_24$p.value, 3))
+  )
+)
+
+# Create scatter plot with facets for concentration (vertically) and drug (horizontally)
+scatter_plot_24hr <- ggplot(merged_data_24hr, aes(x = logFC_Drug, y = logFC_24hr)) +
+  geom_point(alpha = 0.6, color = "black") +  # Black scatter points
+  geom_smooth(method = "lm", color = "black", se = FALSE) +  # Black regression line
+  labs(
+    title = "Correlation between Drug (24hr) and Colorectal 24hr logFC",
+    x = "logFC (Drug_24hr)",
+    y = "logFC (Colorectal 24hr)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+
+    # Outer box around the entire facet plot
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2),
+
+    # Black box around each facet title
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1.5),
+    strip.text = element_text(size = 12, face = "bold", color = "black")
+  ) +
+
+  # Facet by drug (horizontally) and concentration (vertically)
+  facet_grid(Concentration ~ Drug) +
+
+  # Add r and p-value in the upper-right corner of each facet with better fitting font size
+  geom_text(data = correlation_data_24hr,
+            aes(x = x, y = y, label = label),
+            inherit.aes = FALSE, size = 3, fontface = "bold")  # Reduced font size for better fit
+
+# Display plot
+print(scatter_plot_24hr)
+```
+
+## **📌 72hr**
+```{r Data_prep_72, echo=TRUE, message=FALSE, fig.height=8,fig.width=12}
+# Import the CSV file
+data_72hr_logFC <- read.csv("data/Colorectal/72hrlogFC.csv", stringsAsFactors = FALSE)
+
+# Map gene symbols to Entrez IDs using org.Hs.eg.db
+data_72hr_logFC <- data_72hr_logFC %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# Merge datasets on Entrez_ID for CX and DOX at both concentrations (48 hours)
+merged_CX_0.1_48 <- merge(data_72hr_logFC, CX_0.1_48, by = "Entrez_ID")
+merged_CX_0.5_48 <- merge(data_72hr_logFC, CX_0.5_48, by = "Entrez_ID")
+merged_DOX_0.1_48 <- merge(data_72hr_logFC, DOX_0.1_48, by = "Entrez_ID")
+merged_DOX_0.5_48 <- merge(data_72hr_logFC, DOX_0.5_48, by = "Entrez_ID")
+
+# Remove NA values
+merged_CX_0.1_48 <- na.omit(merged_CX_0.1_48)
+merged_CX_0.5_48 <- na.omit(merged_CX_0.5_48)
+merged_DOX_0.1_48 <- na.omit(merged_DOX_0.1_48)
+merged_DOX_0.5_48 <- na.omit(merged_DOX_0.5_48)
+
+# Rename columns explicitly to avoid conflicts
+colnames(merged_CX_0.1_48) <- colnames(merged_CX_0.5_48) <-
+  colnames(merged_DOX_0.1_48) <- colnames(merged_DOX_0.5_48) <-
+  c("Entrez_ID", "Symbol_72hr", "logFC_72hr", "logFC_Drug", "AveExpr_Drug", "t_Drug", "P.Value_Drug", "adj.P.Val_Drug", "B_Drug")
+
+# Add drug and concentration labels for faceting
+merged_CX_0.1_48$Drug <- "CX (48hr)"
+merged_CX_0.5_48$Drug <- "CX (48hr)"
+merged_DOX_0.1_48$Drug <- "DOX (48hr)"
+merged_DOX_0.5_48$Drug <- "DOX (48hr)"
+
+merged_CX_0.1_48$Concentration <- "0.1 µM"
+merged_CX_0.5_48$Concentration <- "0.5 µM"
+merged_DOX_0.1_48$Concentration <- "0.1 µM"
+merged_DOX_0.5_48$Concentration <- "0.5 µM"
+
+# Combine all datasets into a single data frame
+merged_data_48hr <- rbind(
+  merged_CX_0.1_48[, c("Entrez_ID", "logFC_Drug", "logFC_72hr", "Concentration", "Drug")],
+  merged_CX_0.5_48[, c("Entrez_ID", "logFC_Drug", "logFC_72hr", "Concentration", "Drug")],
+  merged_DOX_0.1_48[, c("Entrez_ID", "logFC_Drug", "logFC_72hr", "Concentration", "Drug")],
+  merged_DOX_0.5_48[, c("Entrez_ID", "logFC_Drug", "logFC_72hr", "Concentration", "Drug")]
+)
+
+# Calculate correlations for each facet
+cor_CX_0.1_48 <- cor.test(merged_CX_0.1_48$logFC_Drug, merged_CX_0.1_48$logFC_72hr, method = "pearson")
+cor_CX_0.5_48 <- cor.test(merged_CX_0.5_48$logFC_Drug, merged_CX_0.5_48$logFC_72hr, method = "pearson")
+cor_DOX_0.1_48 <- cor.test(merged_DOX_0.1_48$logFC_Drug, merged_DOX_0.1_48$logFC_72hr, method = "pearson")
+cor_DOX_0.5_48 <- cor.test(merged_DOX_0.5_48$logFC_Drug, merged_DOX_0.5_48$logFC_72hr, method = "pearson")
+
+# Data frame for r and p-values annotations
+correlation_data_48hr <- data.frame(
+  Drug = rep(c("CX (48hr)", "DOX (48hr)"), each = 2),
+  Concentration = rep(c("0.1 µM", "0.5 µM"), times = 2),
+  x = max(merged_data_48hr$logFC_Drug, na.rm = TRUE) * 0.75,  # Adjusted placement for better fit
+  y = max(merged_data_48hr$logFC_72hr, na.rm = TRUE) * 0.85,
+  label = c(
+    paste0("r = ", round(cor_CX_0.1_48$estimate, 3), "\np = ", signif(cor_CX_0.1_48$p.value, 3)),
+    paste0("r = ", round(cor_CX_0.5_48$estimate, 3), "\np = ", signif(cor_CX_0.5_48$p.value, 3)),
+    paste0("r = ", round(cor_DOX_0.1_48$estimate, 3), "\np = ", signif(cor_DOX_0.1_48$p.value, 3)),
+    paste0("r = ", round(cor_DOX_0.5_48$estimate, 3), "\np = ", signif(cor_DOX_0.5_48$p.value, 3))
+  )
+)
+
+# Create scatter plot with facets for concentration (vertically) and drug (horizontally)
+scatter_plot_48hr <- ggplot(merged_data_48hr, aes(x = logFC_Drug, y = logFC_72hr)) +
+  geom_point(alpha = 0.6, color = "black") +  # Black scatter points
+  geom_smooth(method = "lm", color = "black", se = FALSE) +  # Black regression line
+  labs(
+    title = "Correlation between Drug (48hr) and Colorectal 72hr logFC",
+    x = "logFC (Drug_48hr)",
+    y = "logFC (Colorectal 72hr)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+
+    # Outer box around the entire facet plot
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2),
+
+    # Black box around each facet title
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1.5),
+    strip.text = element_text(size = 12, face = "bold", color = "black")
+  ) +
+
+  # Facet by drug (horizontally) and concentration (vertically)
+  facet_grid(Concentration ~ Drug) +
+
+  # Add r and p-value in the upper-right corner of each facet with better fitting font size
+  geom_text(data = correlation_data_48hr,
+            aes(x = x, y = y, label = label),
+            inherit.aes = FALSE, size = 3, fontface = "bold")  # Reduced font size for better fit
+
+# Display plot
+print(scatter_plot_48hr)
+```
+
