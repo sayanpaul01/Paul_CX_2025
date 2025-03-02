@@ -1,5 +1,5 @@
 ---
-title: "Cardiac and TOP2 Genes - Log2CPM Boxplots"
+title: "Cardiac, TOP2 and DNA damage Genes"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -169,7 +169,7 @@ for (gene in top2_genes) {
 }
 ```
 
-## **📌 Generate Boxplots for DNA Damage Genes**
+## **📌 Generate Boxplots for TP53 Genes**
 ```{r DNA Damage, echo=TRUE,message=FALSE}
 for (gene in dna_damage_genes) {
   data_info <- process_gene_data(gene)
@@ -379,5 +379,145 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
   )
 ```
 
+
+## **📌 P53 target genes Proportion**
+
+## **📌 P53 target genes Proportion with Chi-Square Test**
+```{r P53_target_Proportion1, echo=TRUE, message=FALSE, warning=FALSE}
+# Read DNA Damage Genes List
+P53_Target <- read.csv("data/P53_Target.csv", stringsAsFactors = FALSE)
+
+# Map gene symbols to Entrez IDs using org.Hs.eg.db
+P53_Target <- P53_Target %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# Extract valid Entrez_IDs
+P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
+
+# Define CX-5461 DEG lists
+CX_DEGs <- list(
+  "CX_0.1_3" = DEG1, "CX_0.1_24" = DEG2, "CX_0.1_48" = DEG3,
+  "CX_0.5_3" = DEG4, "CX_0.5_24" = DEG5, "CX_0.5_48" = DEG6
+)
+
+# Define DOX DEG lists
+DOX_DEGs <- list(
+  "DOX_0.1_3" = DEG7, "DOX_0.1_24" = DEG8, "DOX_0.1_48" = DEG9,
+  "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
+)
+
+# Combine CX-5461 DEGs into a dataframe with a "Drug" column
+CX_DEGs_df <- bind_rows(
+  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "CX-5461")),
+  .id = "Sample"
+)
+
+# Combine DOX DEGs into a dataframe with a "Drug" column
+DOX_DEGs_df <- bind_rows(
+  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "DOX")),
+  .id = "Sample"
+)
+
+# Merge CX-5461 and DOX datasets
+DEGs_df <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+
+# Check if genes are in DNA Damage list
+DEGs_df <- DEGs_df %>%
+  mutate(Category = ifelse(Entrez_ID %in% P53_Target_genes, "Yes", "No"))
+
+# Count DNA damage genes in each sample
+proportion_data <- DEGs_df %>%
+  group_by(Sample, Drug, Category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Sample, Drug) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Normalize Percentages to Sum Exactly 100%
+proportion_data <- proportion_data %>%
+  group_by(Sample) %>%
+  mutate(Percentage = round(Percentage, 2)) %>%
+  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %>%
+  mutate(Percentage = ifelse(Category == "No", Percentage + Adjustment, Percentage)) %>%
+  mutate(Percentage = pmax(pmin(Percentage, 100), 0)) %>%
+  ungroup() %>%
+  replace_na(list(Percentage = 0))
+
+# ✅ **Ensure "Yes" is at the Top and "No" at the Bottom**
+proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
+
+# **Ensure Correct X-Axis Order (3 → 24 → 48)**
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+
+# **Perform Chi-Square Test for CX vs DOX Pairs**
+chi_square_results <- data.frame(Sample = character(), P_Value = numeric(), Significant = character(), stringsAsFactors = FALSE)
+
+for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
+  cx_sample <- sample_order[i]
+  dox_sample <- sample_order[i + 6]  
+  
+  cx_data <- filter(proportion_data, Sample == cx_sample)
+  dox_data <- filter(proportion_data, Sample == dox_sample)
+  
+  # Construct contingency table
+  contingency_table <- matrix(
+    c(sum(cx_data$Count[cx_data$Category == "Yes"], na.rm = TRUE),
+      sum(cx_data$Count[cx_data$Category == "No"], na.rm = TRUE),
+      sum(dox_data$Count[dox_data$Category == "Yes"], na.rm = TRUE),
+      sum(dox_data$Count[dox_data$Category == "No"], na.rm = TRUE)),
+    nrow = 2, byrow = TRUE
+  )
+  
+  # Run Chi-Square Test (only if there are nonzero values)
+  if (all(contingency_table > 0)) {
+    test_result <- chisq.test(contingency_table)
+    p_value <- test_result$p.value
+    
+    # ✅ Assign * only if CX is enriched compared to DOX
+    if (p_value < 0.05 && 
+        cx_data$Percentage[cx_data$Category == "Yes"] > dox_data$Percentage[dox_data$Category == "Yes"]) {
+      chi_square_results <- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value, Significant = "*"))
+    }
+  }
+}
+
+# **Merge Chi-Square Results WITHOUT Modifying Order**
+proportion_data <- left_join(proportion_data, chi_square_results, by = "Sample")
+
+proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+
+# **Generate Proportion Plot for CX-5461 and DOX**
+ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  geom_text(data = subset(proportion_data, Significant == "*"),
+            aes(x = Sample, y = max(Percentage, na.rm = TRUE) + 2, label = "*"),  # ✅ Fix applied here
+            size = 6, color = "black", fontface = "bold") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly for better spacing
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
+  labs(
+    title = "Proportion of P53 target Genes in\nCX-5461 and DOX DEGs with Significance",
+    x = "Samples (CX-5461 and DOX)",
+    y = "Percentage",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
 
 
