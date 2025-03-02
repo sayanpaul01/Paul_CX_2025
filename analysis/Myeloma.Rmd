@@ -1,0 +1,511 @@
+---
+title: "Myeloma dataset comparison"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 Proportion of Myeloma DE genes in Corrmotif clusters**
+
+## **📌 Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(org.Hs.eg.db)
+library(clusterProfiler)
+library(biomaRt)
+library(gprofiler2)
+library(AnnotationDbi)
+```
+
+## **📌 Load Data**
+```{r load_File Paths, echo=TRUE,results='hide',message=FALSE}
+# Read the file
+file_path <- "data/Myeloma/Myeloma.csv"
+Myeloma <- read.csv(file_path, header = TRUE)
+
+
+# Extract mouse gene symbols
+mouse_genes <- Myeloma$Symbol
+
+# Map mouse gene symbols to human homologs
+homologs <- gorth(query = mouse_genes,
+                  source_organism = "mmusculus",
+                  target_organism = "hsapiens")
+
+
+Myeloma_new<- data.frame(homologs$ortholog_name)
+
+
+# Map gene symbols to Entrez IDs using org.Hs.eg.db
+Myeloma_new <- Myeloma_new %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = homologs.ortholog_name,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+```
+
+## **📌 Proportion of DE genes across response groups**
+```{r load_data_tissue, echo=TRUE,results='hide', message=FALSE, fig.width=14,fig.height=8}
+
+# Load the saved datasets
+prob_all_1 <- read.csv("data/prob_all_1.csv")$Entrez_ID
+prob_all_2 <- read.csv("data/prob_all_2.csv")$Entrez_ID
+prob_all_3 <- read.csv("data/prob_all_3.csv")$Entrez_ID
+prob_all_4 <- read.csv("data/prob_all_4.csv")$Entrez_ID
+
+# Example Response Groups Data (Replace with actual data)
+response_groups <- list(
+  "Non Response" = prob_all_1, # Replace 'prob_all_1', 'prob_all_2', etc. with your actual response group dataframes
+  "CX_DOX Shared Late Response" = prob_all_2,
+  "DOX-Specific Response" = prob_all_3,
+  "Late High Dose DOX-Specific Response" = prob_all_4
+)
+
+# Combine response groups into a single dataframe
+response_groups_df <- bind_rows(
+  lapply(response_groups, function(ids) {
+    data.frame(Entrez_ID = ids)
+  }),
+  .id = "Set"
+)
+
+# Step 2: Match Overlap Genes with Response Groups
+# Classify genes as DEG (match) or Non-DEG (no match)
+response_groups_df <- response_groups_df %>%
+  mutate(
+    DEG_Status = ifelse(Entrez_ID %in% Myeloma_new$Entrez_ID, "DEG", "Non-DEG")
+  )
+
+# Step 3: Calculate Proportions
+proportion_data <- response_groups_df %>%
+  group_by(Set, DEG_Status) %>%
+  summarize(Count = n(), .groups = "drop") %>%
+  group_by(Set) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# Step 4: Perform Chi-Square Tests (Refactored Version)
+# Get counts for the Non Response group
+non_response_counts <- proportion_data %>%
+  filter(Set == "Non Response") %>%
+  dplyr::select(DEG_Status, Count) %>%
+  {setNames(.$Count, .$DEG_Status)}  # Create named vector for Non Response counts
+
+# Perform chi-square test for selected response groups
+chi_results <- proportion_data %>%
+  filter(Set != "Non Response") %>% # Exclude "Non Response"
+  group_by(Set) %>%
+  summarize(
+    p_value = {
+      # Extract counts for the current response group
+      group_counts <- Count[DEG_Status %in% c("DEG", "Non-DEG")]
+      # Ensure there are no missing categories, fill with 0 if missing
+      if (!"DEG" %in% DEG_Status) group_counts <- c(group_counts, 0)
+      if (!"Non-DEG" %in% DEG_Status) group_counts <- c(0, group_counts)
+      # Create contingency table
+      contingency_table <- matrix(c(
+        group_counts[1], group_counts[2],
+        non_response_counts["DEG"], non_response_counts["Non-DEG"]
+      ), nrow = 2, byrow = TRUE)
+      # Debugging: Print the contingency table
+      print(paste("Set:", unique(Set)))
+      print("Contingency Table:")
+      print(contingency_table)
+      # Perform chi-square test
+      if (all(contingency_table >= 0 & is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+
+# Step 5: Merge Results and Plot Proportions
+# Merge chi-square results back into proportion data
+proportion_data <- proportion_data %>%
+  left_join(chi_results %>% dplyr::select(Set, Significance), by = "Set")
+
+# Define the correct order for response groups
+response_order <- c(
+  "Non Response",
+  "CX_DOX Shared Late Response",
+  "DOX-Specific Response",
+  "Late High Dose DOX-Specific Response"
+)
+proportion_data$Set <- factor(proportion_data$Set, levels = response_order)
+
+# Plot proportions with significance stars
+ggplot(proportion_data, aes(x = Set, y = Percentage, fill = DEG_Status)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(
+    data = proportion_data %>% distinct(Set, Significance),
+    aes(x = Set, y = 105, label = Significance), # Position stars above bars
+    inherit.aes = FALSE,
+    size = 6,
+    color = "black",
+    hjust = 0.5
+  ) +
+  scale_fill_manual(values = c("DEG" = "#e41a1c", "Non-DEG" = "#377eb8")) +
+  labs(
+    title = "Proportion of DEGs and Non-DEGs Across Response Groups (Myeloma Study)",
+    x = "Response Groups",
+    y = "Percentage",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2)
+  )
+```
+
+## **📌 Proportion of Myeloma genes in CX and DOX DEGs**
+
+## **📌 Read and Process Data**
+```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Extract Significant DEGs
+DEG1 <- as.character(CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05])
+DEG2 <- as.character(CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05])
+DEG3 <- as.character(CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05])
+DEG4 <- as.character(CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05])
+DEG5 <- as.character(CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05])
+DEG6 <- as.character(CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05])
+DEG7 <- as.character(DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05])
+DEG8 <- as.character(DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05])
+DEG9 <- as.character(DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05])
+DEG10 <- as.character(DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05])
+DEG11 <- as.character(DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05])
+DEG12 <- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05])
+```
+
+## **📌 Proportion of Myeloma genes in CX and DOX DEGs datasets**
+```{r proportion1, echo=TRUE,results='hide', message=FALSE, fig.width=14,fig.height=8}
+
+# Define CX-5461 DEG lists
+CX_DEGs <- list(
+  "CX_0.1_3" = DEG1, "CX_0.1_24" = DEG2, "CX_0.1_48" = DEG3,
+  "CX_0.5_3" = DEG4, "CX_0.5_24" = DEG5, "CX_0.5_48" = DEG6
+)
+
+# Define DOX DEG lists
+DOX_DEGs <- list(
+  "DOX_0.1_3" = DEG7, "DOX_0.1_24" = DEG8, "DOX_0.1_48" = DEG9,
+  "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
+)
+
+# Load Myeloma_new dataset (Use `Entrez_ID` for matching)
+Myeloma_genes <- na.omit(Myeloma_new$Entrez_ID)  # Keep only Entrez_IDs
+
+# **Process CX-5461 Samples**
+CX_DEGs_df <- bind_rows(
+  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Sample_Type = "CX-5461")),
+  .id = "Sample"
+) %>%
+  mutate(Category = ifelse(Entrez_ID %in% Myeloma_genes, "Yes", "No")) %>%
+  group_by(Sample, Sample_Type, Category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Sample, Sample_Type) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **Process DOX Samples**
+DOX_DEGs_df <- bind_rows(
+  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Sample_Type = "DOX")),
+  .id = "Sample"
+) %>%
+  mutate(Category = ifelse(Entrez_ID %in% Myeloma_genes, "Yes", "No")) %>%
+  group_by(Sample, Sample_Type, Category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Sample, Sample_Type) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **Merge CX and DOX Dataframes**
+proportion_data <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+
+# **Ensure "Yes" is at the Bottom and "No" is at the Top**
+proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
+
+# Define correct order for samples
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order)
+
+# Save proportion data
+write.csv(proportion_data, "C:/Work/Postdoc_UTMB/CX-5461 Project/Transcriptome literatures/lit2/Proportion_CX_DOX_Myeloma_fixed.csv", row.names = FALSE)
+
+# **Generate Proportion Plot for CX-5461 and DOX Separately**
+ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  facet_wrap(~Sample_Type, scales = "free_x") +  # Separate CX-5461 and DOX
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 100)) +  # Y-axis as percentage
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red) at Bottom, No (Blue) on Top
+  labs(
+    title = "Proportion of Myeloma Genes in CX-5461 and DOX DEGs",
+    x = "Samples (CX-5461 and DOX)",
+    y = "Percentage",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),  # Updated for ggplot2 3.4.0+
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 Correlation of Myeloma genes with CX and DOX expressed genes**
+## **📌 Correlation of Myeloma genes with CX expressed genes**
+```{r Data_prep, echo=TRUE, message=FALSE, fig.height=8,fig.width=12}
+# **Step 1: Map Gene Symbols to Entrez IDs using org.Hs.eg.db**
+Myeloma <- Myeloma %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# **Step 2: Convert Entrez_ID to character to avoid merge issues**
+Myeloma$Entrez_ID <- as.character(Myeloma$Entrez_ID)
+
+CX_0.1_3$Entrez_ID <- as.character(CX_0.1_3$Entrez_ID)
+CX_0.5_3$Entrez_ID <- as.character(CX_0.5_3$Entrez_ID)
+CX_0.1_24$Entrez_ID <- as.character(CX_0.1_24$Entrez_ID)
+CX_0.5_24$Entrez_ID <- as.character(CX_0.5_24$Entrez_ID)
+CX_0.1_48$Entrez_ID <- as.character(CX_0.1_48$Entrez_ID)
+CX_0.5_48$Entrez_ID <- as.character(CX_0.5_48$Entrez_ID)
+
+# **Step 3: Merge Myeloma dataset with CX at different concentrations & timepoints**
+merged_CX_0.1_3 <- merge(Myeloma, CX_0.1_3, by = "Entrez_ID")
+merged_CX_0.5_3 <- merge(Myeloma, CX_0.5_3, by = "Entrez_ID")
+merged_CX_0.1_24 <- merge(Myeloma, CX_0.1_24, by = "Entrez_ID")
+merged_CX_0.5_24 <- merge(Myeloma, CX_0.5_24, by = "Entrez_ID")
+merged_CX_0.1_48 <- merge(Myeloma, CX_0.1_48, by = "Entrez_ID")
+merged_CX_0.5_48 <- merge(Myeloma, CX_0.5_48, by = "Entrez_ID")
+
+# **Step 4: Remove NA values**
+merged_CX_0.1_3 <- na.omit(merged_CX_0.1_3)
+merged_CX_0.5_3 <- na.omit(merged_CX_0.5_3)
+merged_CX_0.1_24 <- na.omit(merged_CX_0.1_24)
+merged_CX_0.5_24 <- na.omit(merged_CX_0.5_24)
+merged_CX_0.1_48 <- na.omit(merged_CX_0.1_48)
+merged_CX_0.5_48 <- na.omit(merged_CX_0.5_48)
+
+# **Step 5: Rename columns to avoid conflicts**
+colnames(merged_CX_0.1_3) <- colnames(merged_CX_0.5_3) <-
+  colnames(merged_CX_0.1_24) <- colnames(merged_CX_0.5_24) <-
+  colnames(merged_CX_0.1_48) <- colnames(merged_CX_0.5_48) <-
+  c("Entrez_ID", "Symbol_Myeloma", "logFC_Myeloma", "logFC_CX", "AveExpr_CX", "t_CX", "P.Value_CX", "adj.P.Val_CX", "B_CX")
+
+# **Step 6: Add timepoint and concentration labels for faceting**
+merged_CX_0.1_3$Timepoint <- "3hr"
+merged_CX_0.5_3$Timepoint <- "3hr"
+merged_CX_0.1_24$Timepoint <- "24hr"
+merged_CX_0.5_24$Timepoint <- "24hr"
+merged_CX_0.1_48$Timepoint <- "48hr"
+merged_CX_0.5_48$Timepoint <- "48hr"
+
+merged_CX_0.1_3$Concentration <- "0.1 µM"
+merged_CX_0.5_3$Concentration <- "0.5 µM"
+merged_CX_0.1_24$Concentration <- "0.1 µM"
+merged_CX_0.5_24$Concentration <- "0.5 µM"
+merged_CX_0.1_48$Concentration <- "0.1 µM"
+merged_CX_0.5_48$Concentration <- "0.5 µM"
+
+# **Step 7: Combine all datasets into a single data frame**
+merged_data_Myeloma <- rbind(
+  merged_CX_0.1_3[, c("Entrez_ID", "logFC_CX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_CX_0.5_3[, c("Entrez_ID", "logFC_CX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_CX_0.1_24[, c("Entrez_ID", "logFC_CX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_CX_0.5_24[, c("Entrez_ID", "logFC_CX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_CX_0.1_48[, c("Entrez_ID", "logFC_CX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_CX_0.5_48[, c("Entrez_ID", "logFC_CX", "logFC_Myeloma", "Timepoint", "Concentration")]
+)
+
+# **Ensure timepoints are in correct order**
+merged_data_Myeloma$Timepoint <- factor(merged_data_Myeloma$Timepoint, levels = c("3hr", "24hr", "48hr"))
+
+# **Step 8: Compute correlations for each facet**
+correlations <- merged_data_Myeloma %>%
+  group_by(Concentration, Timepoint) %>%
+  summarise(
+    r_value = cor(logFC_CX, logFC_Myeloma, method = "pearson"),
+    p_value = cor.test(logFC_CX, logFC_Myeloma, method = "pearson")$p.value,
+    .groups = "drop"
+  )
+
+# **Step 9: Create correlation annotation data**
+correlation_data <- correlations %>%
+  mutate(
+    x = 1.5,  # Adjusted to fit within fixed axis range (-5 to 2)
+    y = max(merged_data_Myeloma$logFC_Myeloma, na.rm = TRUE) * 0.85,
+    label = paste0("r = ", round(r_value, 3), "\np = ", signif(p_value, 3))
+  )
+
+# **Step 10: Create styled scatter plot with fixed X-axis range and ordered timepoints**
+scatter_plot_Myeloma <- ggplot(merged_data_Myeloma, aes(x = logFC_CX, y = logFC_Myeloma)) +
+  geom_point(alpha = 0.6, color = "black") +
+  geom_smooth(method = "lm", color = "black", se = FALSE) +
+  scale_x_continuous(limits = c(-5, 2)) +  # Fixed X-axis range
+  labs(
+    title = "Correlation between CX and Myeloma logFC",
+    x = "logFC (CX)",
+    y = "logFC (Myeloma)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2),  # Outer border
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1.5),
+    strip.text = element_text(size = 12, face = "bold", color = "black")
+  ) +
+  facet_grid(Timepoint ~ Concentration, scales = "fixed") +  # Ensures correct timepoint order
+  geom_text(data = correlation_data,
+            aes(x = x, y = y, label = label),
+            inherit.aes = FALSE, size = 3, fontface = "bold")
+
+# **Step 11: Display the plot**
+print(scatter_plot_Myeloma)
+```
+
+## **📌 Correlation of Myeloma genes with DOX expressed genes**
+```{r Data_DOX, echo=TRUE, message=FALSE, fig.height=8,fig.width=12}
+# **Step 1: Map Gene Symbols to Entrez IDs using org.Hs.eg.db**
+Myeloma <- Myeloma %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# **Step 2: Convert Entrez_ID to character to avoid merge issues**
+Myeloma$Entrez_ID <- as.character(Myeloma$Entrez_ID)
+
+DOX_0.1_3$Entrez_ID <- as.character(DOX_0.1_3$Entrez_ID)
+DOX_0.5_3$Entrez_ID <- as.character(DOX_0.5_3$Entrez_ID)
+DOX_0.1_24$Entrez_ID <- as.character(DOX_0.1_24$Entrez_ID)
+DOX_0.5_24$Entrez_ID <- as.character(DOX_0.5_24$Entrez_ID)
+DOX_0.1_48$Entrez_ID <- as.character(DOX_0.1_48$Entrez_ID)
+DOX_0.5_48$Entrez_ID <- as.character(DOX_0.5_48$Entrez_ID)
+
+# **Step 3: Merge Myeloma dataset with DOX at different concentrations & timepoints**
+merged_DOX_0.1_3 <- merge(Myeloma, DOX_0.1_3, by = "Entrez_ID")
+merged_DOX_0.5_3 <- merge(Myeloma, DOX_0.5_3, by = "Entrez_ID")
+merged_DOX_0.1_24 <- merge(Myeloma, DOX_0.1_24, by = "Entrez_ID")
+merged_DOX_0.5_24 <- merge(Myeloma, DOX_0.5_24, by = "Entrez_ID")
+merged_DOX_0.1_48 <- merge(Myeloma, DOX_0.1_48, by = "Entrez_ID")
+merged_DOX_0.5_48 <- merge(Myeloma, DOX_0.5_48, by = "Entrez_ID")
+
+# **Step 4: Remove NA values**
+merged_DOX_0.1_3 <- na.omit(merged_DOX_0.1_3)
+merged_DOX_0.5_3 <- na.omit(merged_DOX_0.5_3)
+merged_DOX_0.1_24 <- na.omit(merged_DOX_0.1_24)
+merged_DOX_0.5_24 <- na.omit(merged_DOX_0.5_24)
+merged_DOX_0.1_48 <- na.omit(merged_DOX_0.1_48)
+merged_DOX_0.5_48 <- na.omit(merged_DOX_0.5_48)
+
+# **Step 5: Rename columns to avoid conflicts**
+colnames(merged_DOX_0.1_3) <- colnames(merged_DOX_0.5_3) <-
+  colnames(merged_DOX_0.1_24) <- colnames(merged_DOX_0.5_24) <-
+  colnames(merged_DOX_0.1_48) <- colnames(merged_DOX_0.5_48) <-
+  c("Entrez_ID", "Symbol_Myeloma", "logFC_Myeloma", "logFC_DOX", "AveExpr_DOX", "t_DOX", "P.Value_DOX", "adj.P.Val_DOX", "B_DOX")
+
+# **Step 6: Add timepoint and concentration labels for faceting**
+merged_DOX_0.1_3$Timepoint <- "3hr"
+merged_DOX_0.5_3$Timepoint <- "3hr"
+merged_DOX_0.1_24$Timepoint <- "24hr"
+merged_DOX_0.5_24$Timepoint <- "24hr"
+merged_DOX_0.1_48$Timepoint <- "48hr"
+merged_DOX_0.5_48$Timepoint <- "48hr"
+
+merged_DOX_0.1_3$Concentration <- "0.1 µM"
+merged_DOX_0.5_3$Concentration <- "0.5 µM"
+merged_DOX_0.1_24$Concentration <- "0.1 µM"
+merged_DOX_0.5_24$Concentration <- "0.5 µM"
+merged_DOX_0.1_48$Concentration <- "0.1 µM"
+merged_DOX_0.5_48$Concentration <- "0.5 µM"
+
+# **Step 7: Combine all datasets into a single data frame**
+merged_data_DOX <- rbind(
+  merged_DOX_0.1_3[, c("Entrez_ID", "logFC_DOX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_DOX_0.5_3[, c("Entrez_ID", "logFC_DOX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_DOX_0.1_24[, c("Entrez_ID", "logFC_DOX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_DOX_0.5_24[, c("Entrez_ID", "logFC_DOX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_DOX_0.1_48[, c("Entrez_ID", "logFC_DOX", "logFC_Myeloma", "Timepoint", "Concentration")],
+  merged_DOX_0.5_48[, c("Entrez_ID", "logFC_DOX", "logFC_Myeloma", "Timepoint", "Concentration")]
+)
+
+# **Ensure timepoints are in correct order**
+merged_data_DOX$Timepoint <- factor(merged_data_DOX$Timepoint, levels = c("3hr", "24hr", "48hr"))
+
+# **Step 8: Compute correlations for each facet**
+correlations <- merged_data_DOX %>%
+  group_by(Concentration, Timepoint) %>%
+  summarise(
+    r_value = cor(logFC_DOX, logFC_Myeloma, method = "pearson"),
+    p_value = cor.test(logFC_DOX, logFC_Myeloma, method = "pearson")$p.value,
+    .groups = "drop"
+  )
+
+# **Step 9: Create correlation annotation data**
+correlation_data <- correlations %>%
+  mutate(
+    x = 1.5,  # Adjusted to fit within fixed axis range (-5 to 2)
+    y = max(merged_data_DOX$logFC_Myeloma, na.rm = TRUE) * 0.85,
+    label = paste0("r = ", round(r_value, 3), "\np = ", signif(p_value, 3))
+  )
+
+# **Step 10: Create styled scatter plot with fixed X-axis range and ordered timepoints**
+scatter_plot_DOX <- ggplot(merged_data_DOX, aes(x = logFC_DOX, y = logFC_Myeloma)) +
+  geom_point(alpha = 0.6, color = "black") +
+  geom_smooth(method = "lm", color = "black", se = FALSE) +
+  scale_x_continuous(limits = c(-5, 2)) +  # Fixed X-axis range
+  labs(
+    title = "Correlation between DOX and Myeloma logFC",
+    x = "logFC (DOX)",
+    y = "logFC (Myeloma)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2),
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1.5),
+    strip.text = element_text(size = 12, face = "bold", color = "black")
+  ) +
+  facet_grid(Timepoint ~ Concentration, scales = "fixed") +
+  geom_text(data = correlation_data,
+            aes(x = x, y = y, label = label),
+            inherit.aes = FALSE, size = 3, fontface = "bold")
+
+# **Step 11: Display the plot**
+print(scatter_plot_DOX)
+```
+
+
