@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree6787f4ebe083b7dfd7f9aa934222255360b60d71targetblank6787f4ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb899d4c2ddc969bf68d432895a791e48654e83c5targetblankb899d4ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/6787f4ebe083b7dfd7f9aa934222255360b60d71" target="_blank">6787f4e</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b899d4c2ddc969bf68d432895a791e48654e83c5" target="_blank">b899d4c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree6787f4ebe083b7dfd7f9aa934222255360b60d71targetblank6787f4ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb899d4c2ddc969bf68d432895a791e48654e83c5targetblankb899d4ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/6787f4ebe083b7dfd7f9aa934222255360b60d71" target="_blank">6787f4e</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b899d4c2ddc969bf68d432895a791e48654e83c5" target="_blank">b899d4c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,9 +548,6 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  data/P53_Target.csv
 
 Unstaged changes:
     Modified:   analysis/Cardiac_and_TOP2_Genes.Rmd
@@ -600,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b899d4c2ddc969bf68d432895a791e48654e83c5/analysis/Cardiac_and_TOP2_Genes.Rmd" target="_blank">b899d4c</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-02
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/b899d4c2ddc969bf68d432895a791e48654e83c5/docs/Cardiac_and_TOP2_Genes.html" target="_blank">b899d4c</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-02
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -968,7 +999,9 @@ colnames(boxplot1) &lt;- trimws(gsub(&quot;^X&quot;, &quot;&quot;, colnames(boxp
 top2_genes &lt;- c(&quot;TOP2A&quot;, &quot;TOP2B&quot;)
 cardiac_genes &lt;- c(&quot;ACTN2&quot;, &quot;CALR&quot;, &quot;MYBPC3&quot;, &quot;MYH6&quot;, &quot;MYH7&quot;, 
                    &quot;MYL2&quot;, &quot;RYR2&quot;, &quot;SCN5A&quot;, &quot;TNNI3&quot;, &quot;TNNT2&quot;, &quot;TTN&quot;)
-dna_damage_genes &lt;- c(&quot;TP53&quot;)  # Using correct gene symbol TP53</code></pre>
+dna_damage_genes &lt;- c(&quot;TP53&quot;)  # Using correct gene symbol TP53
+dna_repair_genes &lt;- c(&quot;H2AZ1&quot;, &quot;UBE2T&quot;, &quot;MMS22L&quot;)
+p53_target_genes &lt;- c(&quot;IER5&quot;, &quot;HHAT&quot;, &quot;EPS8L2&quot;)</code></pre>
 </div>
 <div id="read-and-process-degs-data" class="section level2">
 <h2><strong>📌 Read and Process DEGs Data</strong></h2>
@@ -1808,7 +1841,7 @@ sayanpaul01
 </table>
 </div>
 </div>
-<p>##<strong>📌 DNA Damage Proportion</strong></p>
+<p>##<strong>📌 DNA Damage Repair Genes Proportion</strong></p>
 </div>
 <div id="read-and-process-deg-data" class="section level2">
 <h2><strong>📌 Read and Process DEG Data</strong></h2>
@@ -2055,6 +2088,29 @@ sayanpaul01
 </div>
 </div>
 </div>
+<div id="generate-boxplots-for-dna-damage-repair-genes"
+class="section level2">
+<h2><strong>📌 Generate Boxplots for DNA Damage Repair
+Genes</strong></h2>
+<pre class="r"><code>for (gene in dna_repair_genes) {
+  data_info &lt;- process_gene_data(gene)
+  p &lt;- ggplot(data_info$long_data, aes(x = Condition, y = log2CPM, fill = Drug)) +
+    geom_boxplot(outlier.shape = NA) +
+    scale_fill_manual(values = c(&quot;CX&quot; = &quot;#0000FF&quot;, &quot;DOX&quot; = &quot;#e6d800&quot;, &quot;VEH&quot; = &quot;#FF00FF&quot;)) +
+    geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = 0.2, height = 0)) +
+    geom_text(data = data_info$significance_labels, aes(x = Condition, y = max_log2CPM + 0.5, label = Significance),
+              inherit.aes = FALSE, size = 6, color = &quot;black&quot;) +
+    ggtitle(paste(&quot;Log2CPM Expression of&quot;, gene)) +
+    labs(x = &quot;Treatment&quot;, y = &quot;log2CPM&quot;) +
+    theme_bw() +
+    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+          axis.title = element_text(size = 15, color = &quot;black&quot;),
+          axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 90, hjust = 1))
+  
+  print(p)
+}</code></pre>
+<p><img src="figure/Cardiac_and_TOP2_Genes.Rmd/DNA%20Damage%20Repair-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/Cardiac_and_TOP2_Genes.Rmd/DNA%20Damage%20Repair-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/Cardiac_and_TOP2_Genes.Rmd/DNA%20Damage%20Repair-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 <div id="p53-target-genes-proportion" class="section level2">
 <h2><strong>📌 P53 target genes Proportion</strong></h2>
 </div>
@@ -2197,6 +2253,64 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
 <p><img src="figure/Cardiac_and_TOP2_Genes.Rmd/P53_target_Proportion1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-P53_target_Proportion1-1">
+Past versions of P53_target_Proportion1-1.png
+</button>
+</p>
+<div id="fig-P53_target_Proportion1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b899d4c2ddc969bf68d432895a791e48654e83c5/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53_target_Proportion1-1.png" target="_blank">b899d4c</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="generate-boxplots-for-p53-target-genes" class="section level2">
+<h2><strong>📌 Generate Boxplots for P53 Target Genes</strong></h2>
+<pre class="r"><code>for (gene in p53_target_genes) {
+  data_info &lt;- process_gene_data(gene)
+  p &lt;- ggplot(data_info$long_data, aes(x = Condition, y = log2CPM, fill = Drug)) +
+    geom_boxplot(outlier.shape = NA) +
+    scale_fill_manual(values = c(&quot;CX&quot; = &quot;#0000FF&quot;, &quot;DOX&quot; = &quot;#e6d800&quot;, &quot;VEH&quot; = &quot;#FF00FF&quot;)) +
+    geom_point(aes(color = Indv), size = 2, alpha = 0.5, position = position_jitter(width = 0.2, height = 0)) +
+    geom_text(data = data_info$significance_labels, aes(x = Condition, y = max_log2CPM + 0.5, label = Significance),
+              inherit.aes = FALSE, size = 6, color = &quot;black&quot;) +
+    ggtitle(paste(&quot;Log2CPM Expression of&quot;, gene)) +
+    labs(x = &quot;Treatment&quot;, y = &quot;log2CPM&quot;) +
+    theme_bw() +
+    theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+          axis.title = element_text(size = 15, color = &quot;black&quot;),
+          axis.text.x = element_text(size = 10, color = &quot;black&quot;, angle = 90, hjust = 1))
+  
+  print(p)
+}</code></pre>
+<p><img src="figure/Cardiac_and_TOP2_Genes.Rmd/P53%20Target%20Genes-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/Cardiac_and_TOP2_Genes.Rmd/P53%20Target%20Genes-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/Cardiac_and_TOP2_Genes.Rmd/P53%20Target%20Genes-3.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
