@@ -63,9 +63,9 @@ Welcome to my research website.
 
 ## **Literature data comparisons**
 
-- **[Colorectal Cancer datasets](https://sayanpaul01.github.io/CX5461_Project/Colorectal.html)**
+- **[Colorectal Cancer dataset](https://sayanpaul01.github.io/CX5461_Project/Colorectal.html)**
 
-
+- **[Myeloma dataset](https://sayanpaul01.github.io/CX5461_Project/Myeloma.html)**
 
 
 ### 🔗 **Source Code**  
