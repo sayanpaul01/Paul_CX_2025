@@ -1,0 +1,142 @@
+---
+title: "Correlation between CX and DOX logFC"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 Correlation between CX and DOX logFC**
+
+## **📌 Load Required Libraries**
+```{r load_libraries, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+```
+
+## **📌 Correlation Scatter plot**
+```{r load_File Paths, echo=TRUE,message=FALSE, fig.height=6,fig.width=10}
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Extract Significant DEGs
+DEG1 <- as.character(CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val < 0.05])
+DEG2 <- as.character(CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val < 0.05])
+DEG3 <- as.character(CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val < 0.05])
+DEG4 <- as.character(CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val < 0.05])
+DEG5 <- as.character(CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val < 0.05])
+DEG6 <- as.character(CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val < 0.05])
+DEG7 <- as.character(DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val < 0.05])
+DEG8 <- as.character(DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val < 0.05])
+DEG9 <- as.character(DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05])
+DEG10 <- as.character(DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05])
+DEG11 <- as.character(DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05])
+DEG12 <- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05])
+
+# Ensure Entrez_ID is a character across all datasets
+datasets <- list(CX_0.1_3, CX_0.1_24, CX_0.1_48, CX_0.5_3, CX_0.5_24, CX_0.5_48, 
+                 DOX_0.1_3, DOX_0.1_24, DOX_0.1_48, DOX_0.5_3, DOX_0.5_24, DOX_0.5_48)
+
+for (i in seq_along(datasets)) {
+  datasets[[i]]$Entrez_ID <- as.character(datasets[[i]]$Entrez_ID)
+}
+
+# Define dataset pairs for correlation analysis
+dataset_pairs <- list(
+  list("CX_0.1_3", CX_0.1_3, "DOX_0.1_3", DOX_0.1_3, "3 hours", "0.1 micromolar"),
+  list("CX_0.1_24", CX_0.1_24, "DOX_0.1_24", DOX_0.1_24, "24 hours", "0.1 micromolar"),
+  list("CX_0.1_48", CX_0.1_48, "DOX_0.1_48", DOX_0.1_48, "48 hours", "0.1 micromolar"),
+  list("CX_0.5_3", CX_0.5_3, "DOX_0.5_3", DOX_0.5_3, "3 hours", "0.5 micromolar"),
+  list("CX_0.5_24", CX_0.5_24, "DOX_0.5_24", DOX_0.5_24, "24 hours", "0.5 micromolar"),
+  list("CX_0.5_48", CX_0.5_48, "DOX_0.5_48", DOX_0.5_48, "48 hours", "0.5 micromolar")
+)
+
+# Create an empty list to store merged data
+merged_data_list <- list()
+
+# Loop through dataset pairs and merge based on Entrez_ID
+for (pair in dataset_pairs) {
+  cx_name <- pair[[1]]
+  cx_data <- pair[[2]]
+  dox_name <- pair[[3]]
+  dox_data <- pair[[4]]
+  timepoint <- pair[[5]]
+  concentration <- pair[[6]]
+  
+  merged_data <- merge(cx_data, dox_data, by = "Entrez_ID", suffixes = c("_CX", "_DOX"))
+  merged_data$Timepoint <- timepoint
+  merged_data$Concentration <- concentration
+  
+  merged_data_list[[paste(cx_name, dox_name, sep = "_vs_")]] <- merged_data
+}
+
+# Combine all merged datasets into a single dataframe
+combined_data <- do.call(rbind, merged_data_list)
+
+# Select necessary columns and rename them
+combined_data <- combined_data %>%
+  dplyr::select(Entrez_ID, logFC_CX = logFC_CX, logFC_DOX = logFC_DOX, Timepoint, Concentration)
+
+# Ensure timepoints and concentrations are in the correct order
+combined_data$Timepoint <- factor(combined_data$Timepoint, levels = c("3 hours", "24 hours", "48 hours"))
+combined_data$Concentration <- factor(combined_data$Concentration, levels = c("0.1 micromolar", "0.5 micromolar"))
+
+# **Step 1: Compute global min and max for y-axis scale**
+y_min <- min(combined_data$logFC_DOX, na.rm = TRUE)
+y_max <- max(combined_data$logFC_DOX, na.rm = TRUE)
+
+# **Step 2: Compute correlations for each dataset with exact p-values**
+correlations <- combined_data %>%
+  group_by(Concentration, Timepoint) %>%
+  summarise(
+    r_value = cor(logFC_CX, logFC_DOX, method = "pearson"),
+    p_value = cor.test(logFC_CX, logFC_DOX, method = "pearson")$p.value,
+    .groups = "drop"
+  )
+
+# **Step 3: Display only r-value and whether p < 0.05 or p > 0.05**
+correlations <- correlations %>%
+  mutate(
+    significance = ifelse(p_value < 0.05, "p < 0.05", "p > 0.05"),  # Mark significant comparisons
+    label = paste0("r = ", round(r_value, 3), "\n", significance)
+  )
+
+# **Step 4: Create scatter plots faceted by timepoints and concentration**
+scatter_plot <- ggplot(combined_data, aes(x = logFC_CX, y = logFC_DOX)) +
+  geom_point(alpha = 0.6, color = "black") +  # Black scatter points
+  geom_smooth(method = "lm", color = "black", se = FALSE) +  # Black regression line
+  scale_y_continuous(limits = c(y_min, y_max)) +  # Fixed Y-axis across all facets
+  labs(
+    title = "Correlation between CX and DOX logFC",
+    x = "logFC (CX)",
+    y = "logFC (DOX)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2),
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1.5),
+    strip.text = element_text(size = 12, face = "bold", color = "black")
+  ) +
+  facet_grid(Timepoint ~ Concentration, scales = "fixed") +  # Ensure same y-axis scale for all facets
+  geom_text(data = correlations,
+            aes(x = 1.5, y = y_max * 0.9, label = label),
+            inherit.aes = FALSE, size = 3, fontface = "bold")
+
+# **Step 5: Display the plot**
+print(scatter_plot)
+```
+
+
