@@ -1154,3 +1154,742 @@ write.csv(data.frame(Entrez_ID = prob_DOX_2_0.1), "data/prob_DOX_2_0.1.csv", row
 write.csv(data.frame(Entrez_ID = prob_DOX_1_0.5), "data/prob_DOX_1_0.5.csv", row.names = FALSE)
 write.csv(data.frame(Entrez_ID = prob_DOX_2_0.5), "data/prob_DOX_2_0.5.csv", row.names = FALSE)
 ```
+
+
+## **📌 Absolute logFC Boxplot (CX response groups) **
+```{r abs logFC, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=8}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_CX_1_0.1 <- as.character(read.csv("data/prob_CX_1_0.1.csv")$Entrez_ID)
+prob_CX_2_0.1 <- as.character(read.csv("data/prob_CX_2_0.1.csv")$Entrez_ID)
+prob_CX_1_0.5 <- as.character(read.csv("data/prob_CX_1_0.5.csv")$Entrez_ID)
+prob_CX_2_0.5 <- as.character(read.csv("data/prob_CX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (CX 0.1 & CX 0.5 Micromolar)
+CX_0.1_3  <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+
+CX_0.5_3  <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+# Combine Data for CX 0.1 micromolar
+CX_toptables_0.1 <- bind_rows(
+  CX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.1 micromolar")
+)
+
+# Combine Data for CX 0.5 micromolar
+CX_toptables_0.5 <- bind_rows(
+  CX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.5 micromolar")
+)
+
+# Assign Response Groups for CX 0.1
+CX_toptables_0.1 <- CX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.1 ~ "CX_low_non response",
+      Entrez_ID %in% prob_CX_2_0.1 ~ "CX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Assign Response Groups for CX 0.5
+CX_toptables_0.5 <- CX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.5 ~ "CX_high_non response",
+      Entrez_ID %in% prob_CX_2_0.5 ~ "CX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+CX_toptables_0.1$Category <- "CX_0.1 micromolar"
+CX_toptables_0.5$Category <- "CX_0.5 micromolar"
+
+CX_toptables <- bind_rows(CX_toptables_0.1, CX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+CX_toptables$Timepoint <- factor(CX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+CX_toptables$Response_Group <- factor(CX_toptables$Response_Group, levels = c(
+  "CX_low_non response", "CX_low_mid_late_response",
+  "CX_high_non response", "CX_high_mid_late_response"
+))
+
+# **Plot Faceted Boxplot (Each Response Group Separate)**
+ggplot(CX_toptables, aes(x = Timepoint, y = absFC, fill = Category)) +
+  geom_boxplot() +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "|Log Fold Change|",
+    title = "|Log Fold Change| boxplots across response groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_fill_manual(values = c("CX_0.1 micromolar" = "blue", "CX_0.5 micromolar" = "red"))
+```
+
+
+## **📌 Absolute logFC Boxplot (DOX response groups) **
+```{r abs logFC DOX, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=8}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_DOX_1_0.1 <- as.character(read.csv("data/prob_DOX_1_0.1.csv")$Entrez_ID)
+prob_DOX_2_0.1 <- as.character(read.csv("data/prob_DOX_2_0.1.csv")$Entrez_ID)
+prob_DOX_1_0.5 <- as.character(read.csv("data/prob_DOX_1_0.5.csv")$Entrez_ID)
+prob_DOX_2_0.5 <- as.character(read.csv("data/prob_DOX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (DOX 0.1 & DOX 0.5 Micromolar)
+DOX_0.1_3  <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+
+DOX_0.5_3  <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Combine Data for DOX 0.1 micromolar
+DOX_toptables_0.1 <- bind_rows(
+  DOX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.1 micromolar")
+)
+
+# Combine Data for DOX 0.5 micromolar
+DOX_toptables_0.5 <- bind_rows(
+  DOX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.5 micromolar")
+)
+
+# Assign Response Groups for DOX 0.1
+DOX_toptables_0.1 <- DOX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.1 ~ "DOX_low_non response",
+      Entrez_ID %in% prob_DOX_2_0.1 ~ "DOX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Assign Response Groups for DOX 0.5
+DOX_toptables_0.5 <- DOX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.5 ~ "DOX_high_non response",
+      Entrez_ID %in% prob_DOX_2_0.5 ~ "DOX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+DOX_toptables_0.1$Category <- "DOX_0.1 micromolar"
+DOX_toptables_0.5$Category <- "DOX_0.5 micromolar"
+
+DOX_toptables <- bind_rows(DOX_toptables_0.1, DOX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+DOX_toptables$Timepoint <- factor(DOX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+DOX_toptables$Response_Group <- factor(DOX_toptables$Response_Group, levels = c(
+  "DOX_low_non response", "DOX_low_mid_late_response",
+  "DOX_high_non response", "DOX_high_mid_late_response"
+))
+
+# **Plot Faceted Boxplot (Each Response Group Separate)**
+ggplot(DOX_toptables, aes(x = Timepoint, y = absFC, fill = Category)) +
+  geom_boxplot() +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "|Log Fold Change|",
+    title = "|Log Fold Change| boxplots across DOX response groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_fill_manual(values = c("DOX_0.1 micromolar" = "blue", "DOX_0.5 micromolar" = "red"))
+```
+
+## **📌 logFC Boxplot (CX response groups) **
+```{r logFC CX, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=8}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_CX_1_0.1 <- as.character(read.csv("data/prob_CX_1_0.1.csv")$Entrez_ID)
+prob_CX_2_0.1 <- as.character(read.csv("data/prob_CX_2_0.1.csv")$Entrez_ID)
+prob_CX_1_0.5 <- as.character(read.csv("data/prob_CX_1_0.5.csv")$Entrez_ID)
+prob_CX_2_0.5 <- as.character(read.csv("data/prob_CX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (CX 0.1 & CX 0.5 Micromolar)
+CX_0.1_3  <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+
+CX_0.5_3  <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+# Combine Data for CX 0.1 micromolar
+CX_toptables_0.1 <- bind_rows(
+  CX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.1 micromolar")
+)
+
+# Combine Data for CX 0.5 micromolar
+CX_toptables_0.5 <- bind_rows(
+  CX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.5 micromolar")
+)
+
+# Assign Response Groups for CX 0.1
+CX_toptables_0.1 <- CX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.1 ~ "CX_low_non response",
+      Entrez_ID %in% prob_CX_2_0.1 ~ "CX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Assign Response Groups for CX 0.5
+CX_toptables_0.5 <- CX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.5 ~ "CX_high_non response",
+      Entrez_ID %in% prob_CX_2_0.5 ~ "CX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+CX_toptables_0.1$Category <- "CX_0.1 micromolar"
+CX_toptables_0.5$Category <- "CX_0.5 micromolar"
+
+CX_toptables <- bind_rows(CX_toptables_0.1, CX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+CX_toptables$Timepoint <- factor(CX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+CX_toptables$Response_Group <- factor(CX_toptables$Response_Group, levels = c(
+  "CX_low_non response", "CX_low_mid_late_response",
+  "CX_high_non response", "CX_high_mid_late_response"
+))
+
+# **Plot Faceted Boxplot (Using LogFC)**
+ggplot(CX_toptables, aes(x = Timepoint, y = logFC, fill = Category)) +
+  geom_boxplot() +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Log Fold Change",
+    title = "Log Fold Change Boxplots Across CX Response Groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_fill_manual(values = c("CX_0.1 micromolar" = "blue", "CX_0.5 micromolar" = "red"))
+```
+
+## **📌 logFC Boxplot (DOX response groups) **
+```{r logFC DOX, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=8}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_DOX_1_0.1 <- as.character(read.csv("data/prob_DOX_1_0.1.csv")$Entrez_ID)
+prob_DOX_2_0.1 <- as.character(read.csv("data/prob_DOX_2_0.1.csv")$Entrez_ID)
+prob_DOX_1_0.5 <- as.character(read.csv("data/prob_DOX_1_0.5.csv")$Entrez_ID)
+prob_DOX_2_0.5 <- as.character(read.csv("data/prob_DOX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (DOX 0.1 & DOX 0.5 Micromolar)
+DOX_0.1_3  <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+
+DOX_0.5_3  <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Combine Data for DOX 0.1 micromolar
+DOX_toptables_0.1 <- bind_rows(
+  DOX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.1 micromolar")
+)
+
+# Combine Data for DOX 0.5 micromolar
+DOX_toptables_0.5 <- bind_rows(
+  DOX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.5 micromolar")
+)
+
+# Assign Response Groups for DOX 0.1
+DOX_toptables_0.1 <- DOX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.1 ~ "DOX_low_non response",
+      Entrez_ID %in% prob_DOX_2_0.1 ~ "DOX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Assign Response Groups for DOX 0.5
+DOX_toptables_0.5 <- DOX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.5 ~ "DOX_high_non response",
+      Entrez_ID %in% prob_DOX_2_0.5 ~ "DOX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+DOX_toptables_0.1$Category <- "DOX_0.1 micromolar"
+DOX_toptables_0.5$Category <- "DOX_0.5 micromolar"
+
+DOX_toptables <- bind_rows(DOX_toptables_0.1, DOX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+DOX_toptables$Timepoint <- factor(DOX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+DOX_toptables$Response_Group <- factor(DOX_toptables$Response_Group, levels = c(
+  "DOX_low_non response", "DOX_low_mid_late_response",
+  "DOX_high_non response", "DOX_high_mid_late_response"
+))
+
+# **Plot Faceted Boxplot (Using LogFC)**
+ggplot(DOX_toptables, aes(x = Timepoint, y = logFC, fill = Category)) +
+  geom_boxplot() +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Log Fold Change",
+    title = "Log Fold Change Boxplots Across DOX Response Groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_fill_manual(values = c("DOX_0.1 micromolar" = "blue", "DOX_0.5 micromolar" = "red"))
+```
+
+## **📌 Mean (Abs logFC) across timepoints (CX response groups) **
+```{r Mean CX, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8,fig.height=6}
+# Load required libraries
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_CX_1_0.1 <- as.character(read.csv("data/prob_CX_1_0.1.csv")$Entrez_ID)
+prob_CX_2_0.1 <- as.character(read.csv("data/prob_CX_2_0.1.csv")$Entrez_ID)
+prob_CX_1_0.5 <- as.character(read.csv("data/prob_CX_1_0.5.csv")$Entrez_ID)
+prob_CX_2_0.5 <- as.character(read.csv("data/prob_CX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (CX 0.1 & CX 0.5 Micromolar)
+CX_0.1_3  <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+
+CX_0.5_3  <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+# Combine Data for CX 0.1 micromolar
+CX_toptables_0.1 <- bind_rows(
+  CX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.1 micromolar")
+)
+
+# Combine Data for CX 0.5 micromolar
+CX_toptables_0.5 <- bind_rows(
+  CX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.5 micromolar")
+)
+
+# Assign Response Groups for CX 0.1
+CX_toptables_0.1 <- CX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.1 ~ "CX_low_non response",
+      Entrez_ID %in% prob_CX_2_0.1 ~ "CX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Assign Response Groups for CX 0.5
+CX_toptables_0.5 <- CX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.5 ~ "CX_high_non response",
+      Entrez_ID %in% prob_CX_2_0.5 ~ "CX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+CX_toptables_0.1$Category <- "CX_0.1 micromolar"
+CX_toptables_0.5$Category <- "CX_0.5 micromolar"
+
+CX_toptables <- bind_rows(CX_toptables_0.1, CX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+CX_toptables$Timepoint <- factor(CX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+CX_toptables$Response_Group <- factor(CX_toptables$Response_Group, levels = c(
+  "CX_low_non response", "CX_low_mid_late_response",
+  "CX_high_non response", "CX_high_mid_late_response"
+))
+
+# Calculate Mean Absolute logFC per Response Group, Timepoint, and Concentration
+mean_absFC <- CX_toptables %>%
+  group_by(Response_Group, Timepoint, Category) %>%
+  summarise(mean_absFC = mean(absFC, na.rm = TRUE), .groups = "drop")
+
+# **Plot Mean Absolute logFC Line Plot (Y-limit: 0 to 2)**
+ggplot(mean_absFC, aes(x = Timepoint, y = mean_absFC, color = Category, group = Category)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Mean |Log Fold Change|",
+    title = "Mean |logFC| Across CX Response Groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_color_manual(values = c("CX_0.1 micromolar" = "blue", "CX_0.5 micromolar" = "red")) +
+  ylim(0, 2)  # Set Y-axis limits from 0 to 2
+```
+
+
+## **📌 Mean (Abs logFC) across timepoints (DOX response groups) **
+```{r Mean DOX, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8,fig.height=6}
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_DOX_1_0.1 <- as.character(read.csv("data/prob_DOX_1_0.1.csv")$Entrez_ID)
+prob_DOX_2_0.1 <- as.character(read.csv("data/prob_DOX_2_0.1.csv")$Entrez_ID)
+prob_DOX_1_0.5 <- as.character(read.csv("data/prob_DOX_1_0.5.csv")$Entrez_ID)
+prob_DOX_2_0.5 <- as.character(read.csv("data/prob_DOX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (DOX 0.1 & DOX 0.5 Micromolar)
+DOX_0.1_3  <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+
+DOX_0.5_3  <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Combine Data for DOX 0.1 micromolar
+DOX_toptables_0.1 <- bind_rows(
+  DOX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.1 micromolar")
+)
+
+# Combine Data for DOX 0.5 micromolar
+DOX_toptables_0.5 <- bind_rows(
+  DOX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.5 micromolar")
+)
+
+# Assign Response Groups for DOX 0.1
+DOX_toptables_0.1 <- DOX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.1 ~ "DOX_low_non response",
+      Entrez_ID %in% prob_DOX_2_0.1 ~ "DOX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Assign Response Groups for DOX 0.5
+DOX_toptables_0.5 <- DOX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.5 ~ "DOX_high_non response",
+      Entrez_ID %in% prob_DOX_2_0.5 ~ "DOX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group)) %>%
+  mutate(absFC = abs(logFC))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+DOX_toptables_0.1$Category <- "DOX_0.1 micromolar"
+DOX_toptables_0.5$Category <- "DOX_0.5 micromolar"
+
+DOX_toptables <- bind_rows(DOX_toptables_0.1, DOX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+DOX_toptables$Timepoint <- factor(DOX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+DOX_toptables$Response_Group <- factor(DOX_toptables$Response_Group, levels = c(
+  "DOX_low_non response", "DOX_low_mid_late_response",
+  "DOX_high_non response", "DOX_high_mid_late_response"
+))
+
+# Calculate Mean Absolute logFC per Response Group, Timepoint, and Concentration
+mean_absFC <- DOX_toptables %>%
+  group_by(Response_Group, Timepoint, Category) %>%
+  summarise(mean_absFC = mean(absFC, na.rm = TRUE), .groups = "drop")
+
+# **Plot Mean Absolute logFC Line Plot (Y-limit: 0 to 2)**
+ggplot(mean_absFC, aes(x = Timepoint, y = mean_absFC, color = Category, group = Category)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Mean |Log Fold Change|",
+    title = "Mean |logFC| Across DOX Response Groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_color_manual(values = c("DOX_0.1 micromolar" = "blue", "DOX_0.5 micromolar" = "red")) +
+  ylim(0, 2)  # Set Y-axis limits from 0 to 2
+```
+
+
+## **📌 Mean logFC across timepoints (CX response groups) **
+```{r Mean CX2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8,fig.height=6}
+# Load required libraries
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_CX_1_0.1 <- as.character(read.csv("data/prob_CX_1_0.1.csv")$Entrez_ID)
+prob_CX_2_0.1 <- as.character(read.csv("data/prob_CX_2_0.1.csv")$Entrez_ID)
+prob_CX_1_0.5 <- as.character(read.csv("data/prob_CX_1_0.5.csv")$Entrez_ID)
+prob_CX_2_0.5 <- as.character(read.csv("data/prob_CX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (CX 0.1 & CX 0.5 Micromolar)
+CX_0.1_3  <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+
+CX_0.5_3  <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+# Combine Data for CX 0.1 micromolar
+CX_toptables_0.1 <- bind_rows(
+  CX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.1 micromolar"),
+  CX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.1 micromolar")
+)
+
+# Combine Data for CX 0.5 micromolar
+CX_toptables_0.5 <- bind_rows(
+  CX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "CX_0.5 micromolar"),
+  CX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "CX_0.5 micromolar")
+)
+
+# Assign Response Groups for CX 0.1
+CX_toptables_0.1 <- CX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.1 ~ "CX_low_non response",
+      Entrez_ID %in% prob_CX_2_0.1 ~ "CX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Assign Response Groups for CX 0.5
+CX_toptables_0.5 <- CX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_CX_1_0.5 ~ "CX_high_non response",
+      Entrez_ID %in% prob_CX_2_0.5 ~ "CX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Merge Both Concentrations Separately (Keeping them Separate)
+CX_toptables_0.1$Category <- "CX_0.1 micromolar"
+CX_toptables_0.5$Category <- "CX_0.5 micromolar"
+
+CX_toptables <- bind_rows(CX_toptables_0.1, CX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+CX_toptables$Timepoint <- factor(CX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+CX_toptables$Response_Group <- factor(CX_toptables$Response_Group, levels = c(
+  "CX_low_non response", "CX_low_mid_late_response",
+  "CX_high_non response", "CX_high_mid_late_response"
+))
+
+# Calculate Mean LogFC per Response Group, Timepoint, and Concentration
+mean_logFC <- CX_toptables %>%
+  group_by(Response_Group, Timepoint, Category) %>%
+  summarise(mean_logFC = mean(logFC, na.rm = TRUE), .groups = "drop")
+
+# **Plot Mean LogFC Line Plot (Y-limit: -2 to 2)**
+ggplot(mean_logFC, aes(x = Timepoint, y = mean_logFC, color = Category, group = Category)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Mean logFC",
+    title = "Mean logFC across CX response groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_color_manual(values = c("CX_0.1 micromolar" = "blue", "CX_0.5 micromolar" = "red")) +
+  ylim(-2, 2)  # Set Y-axis limits from -2 to 2
+```
+
+## **📌 Mean logFC across timepoints (DOX response groups) **
+```{r Mean DOX2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8,fig.height=6}
+
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+
+# Load Response Groups from CSV Files
+prob_DOX_1_0.1 <- as.character(read.csv("data/prob_DOX_1_0.1.csv")$Entrez_ID)
+prob_DOX_2_0.1 <- as.character(read.csv("data/prob_DOX_2_0.1.csv")$Entrez_ID)
+prob_DOX_1_0.5 <- as.character(read.csv("data/prob_DOX_1_0.5.csv")$Entrez_ID)
+prob_DOX_2_0.5 <- as.character(read.csv("data/prob_DOX_2_0.5.csv")$Entrez_ID)
+
+# Load Datasets (DOX 0.1 & DOX 0.5 Micromolar)
+DOX_0.1_3  <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+
+DOX_0.5_3  <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# Combine Data for DOX 0.1 micromolar
+DOX_toptables_0.1 <- bind_rows(
+  DOX_0.1_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.1 micromolar"),
+  DOX_0.1_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.1 micromolar")
+)
+
+# Combine Data for DOX 0.5 micromolar
+DOX_toptables_0.5 <- bind_rows(
+  DOX_0.5_3  %>% mutate(Timepoint = "3hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_24 %>% mutate(Timepoint = "24hr", Concentration = "DOX_0.5 micromolar"),
+  DOX_0.5_48 %>% mutate(Timepoint = "48hr", Concentration = "DOX_0.5 micromolar")
+)
+
+# Assign Response Groups for DOX 0.1
+DOX_toptables_0.1 <- DOX_toptables_0.1 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.1 ~ "DOX_low_non response",
+      Entrez_ID %in% prob_DOX_2_0.1 ~ "DOX_low_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Assign Response Groups for DOX 0.5
+DOX_toptables_0.5 <- DOX_toptables_0.5 %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_DOX_1_0.5 ~ "DOX_high_non response",
+      Entrez_ID %in% prob_DOX_2_0.5 ~ "DOX_high_mid_late_response",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# Merge Both Concentrations (Keeping them Separate)
+DOX_toptables_0.1$Category <- "DOX_0.1 micromolar"
+DOX_toptables_0.5$Category <- "DOX_0.5 micromolar"
+
+DOX_toptables <- bind_rows(DOX_toptables_0.1, DOX_toptables_0.5)
+
+# Convert Factors for Proper Ordering
+DOX_toptables$Timepoint <- factor(DOX_toptables$Timepoint, levels = c("3hr", "24hr", "48hr"))
+DOX_toptables$Response_Group <- factor(DOX_toptables$Response_Group, levels = c(
+  "DOX_low_non response", "DOX_low_mid_late_response",
+  "DOX_high_non response", "DOX_high_mid_late_response"
+))
+
+# Calculate Mean LogFC per Response Group, Timepoint, and Concentration
+mean_logFC <- DOX_toptables %>%
+  group_by(Response_Group, Timepoint, Category) %>%
+  summarise(mean_logFC = mean(logFC, na.rm = TRUE), .groups = "drop")
+
+# **Plot Mean LogFC Line Plot (Y-limit: -2 to 2)**
+ggplot(mean_logFC, aes(x = Timepoint, y = mean_logFC, color = Category, group = Category)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  facet_wrap(~ Response_Group, ncol = 2) +  # Two columns, ensuring a 2x2 grid
+  theme_bw() +
+  labs(
+    x = "Timepoints",
+    y = "Mean logFC",
+    title = "Mean logFC across DOX response groups"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    strip.text = element_text(size = 12, face = "bold")  # Formatting facet labels
+  ) +
+  scale_color_manual(values = c("DOX_0.1 micromolar" = "blue", "DOX_0.5 micromolar" = "red")) +
+  ylim(-2, 2)  # Set Y-axis limits from -2 to 2
+```
