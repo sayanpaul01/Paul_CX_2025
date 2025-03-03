@@ -34,6 +34,8 @@ Welcome to my research website.
 
 - **[Overlap of DEGs](https://sayanpaul01.github.io/CX5461_Project/Overlap_DEGs.html)**
 
+- **[Correlation between CX and DOX logFC](https://sayanpaul01.github.io/CX5461_Project/CX_DOX.html)**
+
 - **[Function and Pathway Enrichment of DEGs](https://sayanpaul01.github.io/CX5461_Project/GO_KEGG_DEG.html)** 
 
 - **[Overlap of GO Terms across drugs, concentrations, and timepoints](https://sayanpaul01.github.io/CX5461_Project/Overlap_GO_DEG.html)**
