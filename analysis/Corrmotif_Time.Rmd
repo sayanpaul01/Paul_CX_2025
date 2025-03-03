@@ -1236,7 +1236,7 @@ ggplot(CX_toptables, aes(x = Timepoint, y = absFC, fill = Category)) +
   labs(
     x = "Timepoints",
     y = "|Log Fold Change|",
-    title = "|Log Fold Change| boxplots across response groups"
+    title = "|Log Fold Change| boxplots across CX response groups"
   ) +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
