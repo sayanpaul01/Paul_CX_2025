@@ -1,0 +1,70 @@
+---
+title: "Corrmotif overlap"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+## **📌 Overlap of GO functions between Corrmotif all and corrmotif Conc.**
+```{r 0verlap, echo=TRUE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
+
+library(UpSetR)
+library(dplyr)
+library(tools)  # Required for file name processing
+
+# Set the folder path
+folder_path <- "data/all_GO"
+
+# Get a list of all CSV files in the folder
+csv_files <- list.files(folder_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Loop through each file and assign it as a variable in the global environment
+for (file in csv_files) {
+  # Generate a valid R variable name from the file name (remove extension and replace spaces)
+  file_name <- tools::file_path_sans_ext(basename(file))
+  file_name <- gsub(" ", "_", file_name)  # Replace spaces with underscores
+  file_name <- make.names(file_name)  # Ensure the name is valid in R
+  
+  # Assign the CSV file as a variable in the environment
+  assign(file_name, read.csv(file, stringsAsFactors = FALSE))
+}
+
+# Define datasets (lists of Entrez Gene IDs)
+sets <- list(
+  "Non response all" = prob_all_1$ID,
+  "CX_DOX shared late response all" = prob_all_2$ID,
+  "Dox specific response all" = prob_all_3$ID,
+  "Late high dose DOX specific response all" = prob_all_4$ID,
+  
+  "Non response (0.1)" = prob_1_0.1$ID,
+  "DOX only mid-late (0.1)" = prob_2_0.1$ID,
+  "CX_DOX mid-late (0.1)" = prob_3_0.1$ID,
+  
+  "Non response (0.5)" = prob_1_0.5$ID,
+  "DOX only early-mid (0.5)" = prob_2_0.5$ID,
+  "DOX only mid-late (0.5)" = prob_3_0.5$ID,
+  "CX only mid-late (0.5)" = prob_4_0.5$ID,
+  "CX_DOX mid-late (0.5)" = prob_5_0.5$ID
+)
+
+# Create a binary matrix for UpSet plot
+all_genes <- unique(unlist(sets))  # Get all unique Entrez Gene IDs
+binary_matrix <- data.frame(Gene_ID = all_genes)  # Initialize DataFrame
+
+# Convert gene lists into a presence/absence matrix (1 = present, 0 = absent)
+for (set_name in names(sets)) {
+  binary_matrix[[set_name]] <- as.integer(all_genes %in% sets[[set_name]])
+}
+
+# Remove Gene_ID column as UpSetR only needs the binary matrix
+binary_matrix <- binary_matrix[, -1]
+
+upset(binary_matrix,
+      sets = names(sets),
+      order.by = "freq",
+      sets.bar.color = "#56B4E9",  # Blue bars for set sizes
+      mainbar.y.label = "Number of Shared Functions",
+      sets.x.label = "GO terms per set",
+      text.scale = 1.2,
+      nintersects = 30)
+```
+

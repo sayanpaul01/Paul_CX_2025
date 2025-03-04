@@ -1,0 +1,2 @@
+"ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count","Category"
+"GO:0009084","glutamine family amino acid biosynthetic process","13/4114","14/12185",7.03750618755311e-06,0.0381784710674756,0.0366913348915269,"2752/29920/2746/5832/4942/1201/162417/5831/2744/435/65263/445/2747",13,"BP"
