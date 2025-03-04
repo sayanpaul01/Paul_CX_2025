@@ -119,3 +119,121 @@ for (set_name in names(unique_go_terms)) {
 mapped_unique_go_terms
 ```
 
+## **📌 Overlap of GO functions between DEGs and corrmotif timepoints**
+```{r 0verlap2, echo=TRUE, message=FALSE, warning=FALSE, fig.height=8, fig.width=12}
+
+library(UpSetR)
+library(dplyr)
+library(tools)
+library(GO.db)
+
+# Set the folder path
+folder_path <- "data/GO_time"
+
+# Get a list of all CSV files in the folder
+csv_files <- list.files(folder_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Loop through each file and assign it as a variable in the global environment
+for (file in csv_files) {
+  # Generate a valid R variable name from the file name (remove extension and replace spaces)
+  file_name <- tools::file_path_sans_ext(basename(file))
+  file_name <- gsub(" ", "_", file_name)  # Replace spaces with underscores
+  file_name <- make.names(file_name)  # Ensure the name is valid in R
+  
+  # Assign the CSV file as a variable in the environment
+  assign(file_name, read.csv(file, stringsAsFactors = FALSE))
+}
+
+sets <- list(
+  "CX_0.1_24" = CX_0.1_24_GO$ID,
+  "CX_0.1_48" = CX_0.1_48_GO$ID,
+  "CX_0.5_3" = CX_0.5_3_GO$ID,
+  "CX_0.5_24" = CX_0.5_24_GO$ID,
+  "CX_0.5_48" = CX_0.5_48_GO$ID,
+  "DOX_0.1_3" = DOX_0.1_3_GO$ID,
+  "DOX_0.1_24" = DOX_0.1_24_GO$ID,
+  "DOX_0.1_48" = DOX_0.1_48_GO$ID,
+  "DOX_0.5_3" = DOX_0.5_3_GO$ID,
+  "DOX_0.5_24" = DOX_0.5_24_GO$ID,
+  "DOX_0.5_48" = DOX_0.5_48_GO$ID,
+  "CX_low_non_response" = prob_CX_1_0.1_GO$ID,
+  "CX_low_mid_late_response" = prob_CX_2_0.1_GO$ID,
+  "CX_high_non_response" = prob_CX_1_0.5_GO$ID,
+  "CX_high_mid_late_response" = prob_CX_2_0.5_GO$ID,
+  "DOX_low_non_response" = prob_DOX_1_0.1_GO$ID,
+  "DOX_low_mid_late_response" = prob_DOX_2_0.1_GO$ID,
+  "DOX_high_non_response" = prob_DOX_1_0.5_GO$ID,
+  "DOX_high_response" = prob_DOX_2_0.5_GO$ID
+)
+
+# Create a binary matrix for UpSet plot
+all_genes <- unique(unlist(sets))  # Get all unique Entrez Gene IDs
+binary_matrix <- data.frame(Gene_ID = all_genes)  # Initialize DataFrame
+
+# Convert gene lists into a presence/absence matrix (1 = present, 0 = absent)
+for (set_name in names(sets)) {
+  binary_matrix[[set_name]] <- as.integer(all_genes %in% sets[[set_name]])
+}
+
+# Remove Gene_ID column as UpSetR only needs the binary matrix
+binary_matrix <- binary_matrix[, -1]
+
+upset(binary_matrix,
+      sets = names(sets),
+      order.by = "freq",
+      sets.bar.color = "#56B4E9",  # Blue bars for set sizes
+      mainbar.y.label = "Number of Shared Functions",
+      sets.x.label = "GO terms per set",
+      text.scale = 1.2,
+      nintersects = 30)
+```
+
+## **📌 Identify Unique GO Terms for Each Response Group**
+```{r Unique GO Terms2, echo=TRUE, message=FALSE}
+# Create a list to store unique GO terms per category
+unique_go_terms <- list()
+
+# Loop through each set to find unique GO terms
+for (set_name in names(sets)) {
+  # Get the GO terms for the current set
+  current_go_terms <- sets[[set_name]]
+  
+  # Find GO terms that appear **only** in this set and not in others
+  unique_terms <- current_go_terms[!(current_go_terms %in% unlist(sets[names(sets) != set_name]))]
+  
+  # Store in the list if there are any unique terms
+  if (length(unique_terms) > 0) {
+    unique_go_terms[[set_name]] <- unique_terms
+  }
+}
+
+# Display unique GO terms for each category
+unique_go_terms
+```
+
+## **📌 Map GO IDs to Function Names Using GO.db**
+```{r MAP GO Terms2, echo=TRUE, message=FALSE}
+map_go_terms_local <- function(go_ids) {
+  go_names <- unlist(mget(go_ids, GOTERM, ifnotfound = NA))  # Retrieve function names
+  go_descriptions <- sapply(go_names, function(x) if (!is.na(x)) Term(x) else NA)
+  
+  # Create a dataframe
+  go_mapping <- data.frame(GO_ID = go_ids, Function = go_descriptions, stringsAsFactors = FALSE)
+  
+  # Remove NAs (unrecognized GO IDs)
+  go_mapping <- go_mapping[!is.na(go_mapping$Function), ]
+  
+  return(go_mapping)
+}
+mapped_unique_go_terms <- list()
+
+for (set_name in names(unique_go_terms)) {
+  if (length(unique_go_terms[[set_name]]) > 0) {
+    go_data <- map_go_terms_local(unique_go_terms[[set_name]])
+    mapped_unique_go_terms[[set_name]] <- go_data
+  }
+}
+
+# Display mapped GO terms
+mapped_unique_go_terms
+```

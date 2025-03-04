@@ -1,0 +1,7 @@
+"ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count","Category"
+"GO:1900034","regulation of cellular response to heat","1/2","16/12185",0.00262456315432524,0.010498252617301,NA,"51278",1,"Biological Process"
+"GO:0034605","cellular response to heat","1/2","51/12185",0.00835377177896801,0.016707543557936,NA,"51278",1,"Biological Process"
+"GO:0009408","response to heat","1/2","79/12185",0.0129252568535364,0.0172336758047152,NA,"51278",1,"Biological Process"
+"GO:0009266","response to temperature stimulus","1/2","124/12185",0.020250159569409,0.020250159569409,NA,"51278",1,"Biological Process"
+"GO:0001228","DNA-binding transcription activator activity, RNA polymerase II-specific","1/2","292/12494",0.0461980495534999,0.0468233140605159,NA,"4899",1,"Molecular Function"
+"GO:0001216","DNA-binding transcription activator activity","1/2","296/12494",0.0468233140605159,0.0468233140605159,NA,"4899",1,"Molecular Function"
