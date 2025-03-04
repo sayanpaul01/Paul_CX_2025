@@ -185,7 +185,7 @@ upset(binary_matrix,
       mainbar.y.label = "Number of Shared Functions",
       sets.x.label = "GO terms per set",
       text.scale = 1.2,
-      nintersects = 30)
+      nintersects = 50)
 ```
 
 ## **📌 Identify Unique GO Terms for Each Response Group**
