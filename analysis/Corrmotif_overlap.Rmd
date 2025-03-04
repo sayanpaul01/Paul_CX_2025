@@ -9,7 +9,8 @@ editor_options:
 
 library(UpSetR)
 library(dplyr)
-library(tools)  # Required for file name processing
+library(tools)
+library(biomaRt) 
 
 # Set the folder path
 folder_path <- "data/all_GO"
@@ -66,5 +67,28 @@ upset(binary_matrix,
       sets.x.label = "GO terms per set",
       text.scale = 1.2,
       nintersects = 30)
+```
+
+## **📌 Identify Unique GO Terms for Each Response Group**
+```{r Unique GO Terms, echo=TRUE, message=FALSE}
+# Create a list to store unique GO terms per category
+unique_go_terms <- list()
+
+# Loop through each set to find unique GO terms
+for (set_name in names(sets)) {
+  # Get the GO terms for the current set
+  current_go_terms <- sets[[set_name]]
+  
+  # Find GO terms that appear **only** in this set and not in others
+  unique_terms <- current_go_terms[!(current_go_terms %in% unlist(sets[names(sets) != set_name]))]
+  
+  # Store in the list if there are any unique terms
+  if (length(unique_terms) > 0) {
+    unique_go_terms[[set_name]] <- unique_terms
+  }
+}
+
+# Display unique GO terms for each category
+unique_go_terms
 ```
 
