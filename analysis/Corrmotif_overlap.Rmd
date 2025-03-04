@@ -10,7 +10,7 @@ editor_options:
 library(UpSetR)
 library(dplyr)
 library(tools)
-library(biomaRt) 
+library(GO.db)
 
 # Set the folder path
 folder_path <- "data/all_GO"
@@ -90,5 +90,32 @@ for (set_name in names(sets)) {
 
 # Display unique GO terms for each category
 unique_go_terms
+```
+
+## **📌 Map GO IDs to Function Names Using GO.db**
+```{r MAP GO Terms, echo=TRUE, message=FALSE}
+map_go_terms_local <- function(go_ids) {
+  go_names <- unlist(mget(go_ids, GOTERM, ifnotfound = NA))  # Retrieve function names
+  go_descriptions <- sapply(go_names, function(x) if (!is.na(x)) Term(x) else NA)
+  
+  # Create a dataframe
+  go_mapping <- data.frame(GO_ID = go_ids, Function = go_descriptions, stringsAsFactors = FALSE)
+  
+  # Remove NAs (unrecognized GO IDs)
+  go_mapping <- go_mapping[!is.na(go_mapping$Function), ]
+  
+  return(go_mapping)
+}
+mapped_unique_go_terms <- list()
+
+for (set_name in names(unique_go_terms)) {
+  if (length(unique_go_terms[[set_name]]) > 0) {
+    go_data <- map_go_terms_local(unique_go_terms[[set_name]])
+    mapped_unique_go_terms[[set_name]] <- go_data
+  }
+}
+
+# Display mapped GO terms
+mapped_unique_go_terms
 ```
 

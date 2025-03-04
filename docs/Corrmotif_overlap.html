@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree2e1090ad7f9019919501464c15ca48eb533b4188targetblank2e1090aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree56e1527e2bafdcf8961406466d74b2890e9aa04ftargetblank56e1527a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/2e1090ad7f9019919501464c15ca48eb533b4188" target="_blank">2e1090a</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/56e1527e2bafdcf8961406466d74b2890e9aa04f" target="_blank">56e1527</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree2e1090ad7f9019919501464c15ca48eb533b4188targetblank2e1090aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree56e1527e2bafdcf8961406466d74b2890e9aa04ftargetblank56e1527a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/2e1090ad7f9019919501464c15ca48eb533b4188" target="_blank">2e1090a</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/56e1527e2bafdcf8961406466d74b2890e9aa04f" target="_blank">56e1527</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,9 +548,6 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  data/Corr_Conc/
 
 Unstaged changes:
     Modified:   analysis/Corrmotif_overlap.Rmd
@@ -604,6 +601,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/56e1527e2bafdcf8961406466d74b2890e9aa04f/analysis/Corrmotif_overlap.Rmd" target="_blank">56e1527</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/56e1527e2bafdcf8961406466d74b2890e9aa04f/docs/Corrmotif_overlap.html" target="_blank">56e1527</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/63ae929740c542c542320c42ac26e7d93dbe842e/analysis/Corrmotif_overlap.Rmd" target="_blank">63ae929</a>
 </td>
 <td>
@@ -648,7 +679,7 @@ corrmotif Conc.</strong></h2>
 <pre class="r"><code>library(UpSetR)
 library(dplyr)
 library(tools)
-library(biomaRt) 
+library(GO.db)
 
 # Set the folder path
 folder_path &lt;- &quot;data/all_GO&quot;
@@ -814,6 +845,343 @@ $`CX_DOX mid-late (0.5)`
  [1] &quot;GO:0048146&quot; &quot;GO:0030865&quot; &quot;GO:0051493&quot; &quot;GO:0051782&quot; &quot;GO:0090399&quot;
  [6] &quot;GO:2000279&quot; &quot;GO:0030010&quot; &quot;GO:1901875&quot; &quot;GO:0032147&quot; &quot;GO:0031398&quot;
 [11] &quot;GO:0007163&quot; &quot;GO:0051972&quot; &quot;GO:0000235&quot; &quot;GO:0005818&quot; &quot;GO:0101019&quot;</code></pre>
+</div>
+<div id="map-go-ids-to-function-names-using-go.db"
+class="section level2">
+<h2><strong>📌 Map GO IDs to Function Names Using GO.db</strong></h2>
+<pre class="r"><code>map_go_terms_local &lt;- function(go_ids) {
+  go_names &lt;- unlist(mget(go_ids, GOTERM, ifnotfound = NA))  # Retrieve function names
+  go_descriptions &lt;- sapply(go_names, function(x) if (!is.na(x)) Term(x) else NA)
+  
+  # Create a dataframe
+  go_mapping &lt;- data.frame(GO_ID = go_ids, Function = go_descriptions, stringsAsFactors = FALSE)
+  
+  # Remove NAs (unrecognized GO IDs)
+  go_mapping &lt;- go_mapping[!is.na(go_mapping$Function), ]
+  
+  return(go_mapping)
+}
+mapped_unique_go_terms &lt;- list()
+
+for (set_name in names(unique_go_terms)) {
+  if (length(unique_go_terms[[set_name]]) &gt; 0) {
+    go_data &lt;- map_go_terms_local(unique_go_terms[[set_name]])
+    mapped_unique_go_terms[[set_name]] &lt;- go_data
+  }
+}</code></pre>
+<pre><code>Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;
+Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;S4&#39;</code></pre>
+<pre class="r"><code># Display mapped GO terms
+mapped_unique_go_terms</code></pre>
+<pre><code>$`Non response all`
+                GO_ID                          Function
+GO:0071339 GO:0071339                      MLL1 complex
+GO:1990204 GO:1990204            oxidoreductase complex
+GO:0101031 GO:0101031 protein folding chaperone complex
+GO:0070469 GO:0070469                       respirasome
+GO:0070971 GO:0070971   endoplasmic reticulum exit site
+GO:0044665 GO:0044665                    MLL1/2 complex
+
+$`CX_DOX shared late response all`
+                GO_ID                                 Function
+GO:0009132 GO:0009132 nucleoside diphosphate metabolic process
+GO:0097421 GO:0097421                       liver regeneration
+GO:0140719 GO:0140719   constitutive heterochromatin formation
+GO:0140299 GO:0140299           small molecule sensor activity
+GO:0035064 GO:0035064               methylated histone binding
+GO:0140034 GO:0140034    methylation-dependent protein binding
+GO:1990498 GO:1990498              mitotic spindle microtubule
+GO:0005682 GO:0005682                                 U5 snRNP
+GO:0030532 GO:0030532  small nuclear ribonucleoprotein complex
+
+$`Dox specific response all`
+                GO_ID                    Function
+GO:0045177 GO:0045177         apical part of cell
+GO:0016323 GO:0016323 basolateral plasma membrane
+GO:0009925 GO:0009925       basal plasma membrane
+
+$`Non response (0.1)`
+                GO_ID                                             Function
+GO:0034470 GO:0034470                                     ncRNA processing
+GO:0042254 GO:0042254                                  ribosome biogenesis
+GO:0022613 GO:0022613                 ribonucleoprotein complex biogenesis
+GO:0140053 GO:0140053                        mitochondrial gene expression
+GO:0006413 GO:0006413                             translational initiation
+GO:0006364 GO:0006364                                      rRNA processing
+GO:0032543 GO:0032543                            mitochondrial translation
+GO:0048193 GO:0048193                              Golgi vesicle transport
+GO:0033108 GO:0033108     mitochondrial respiratory chain complex assembly
+GO:0016072 GO:0016072                               rRNA metabolic process
+GO:0008135 GO:0008135             translation factor activity, RNA binding
+GO:0090079 GO:0090079 translation regulator activity, nucleic acid binding
+GO:0030684 GO:0030684                                          preribosome
+GO:0005759 GO:0005759                                 mitochondrial matrix
+GO:0098800 GO:0098800         inner mitochondrial membrane protein complex
+GO:0098803 GO:0098803                            respiratory chain complex
+GO:0010494 GO:0010494                           cytoplasmic stress granule
+GO:0000313 GO:0000313                                  organellar ribosome
+GO:0005761 GO:0005761                               mitochondrial ribosome
+GO:0035770 GO:0035770                            ribonucleoprotein granule
+
+$`DOX only mid-late (0.1)`
+                GO_ID
+GO:0009162 GO:0009162
+GO:0009130 GO:0009130
+GO:0006999 GO:0006999
+GO:0006221 GO:0006221
+GO:0007096 GO:0007096
+GO:0045859 GO:0045859
+GO:0006978 GO:0006978
+GO:0009129 GO:0009129
+GO:0046785 GO:0046785
+GO:0002562 GO:0002562
+GO:0016444 GO:0016444
+GO:0042772 GO:0042772
+GO:0010458 GO:0010458
+GO:0071900 GO:0071900
+GO:0051292 GO:0051292
+GO:0006289 GO:0006289
+GO:0008584 GO:0008584
+GO:0008406 GO:0008406
+GO:0046546 GO:0046546
+GO:0045739 GO:0045739
+GO:0045137 GO:0045137
+GO:0043549 GO:0043549
+GO:0009124 GO:0009124
+GO:0048144 GO:0048144
+GO:0008301 GO:0008301
+GO:0017056 GO:0017056
+GO:0000803 GO:0000803
+GO:0043240 GO:0043240
+                                                                                                                  Function
+GO:0009162                                                             deoxyribonucleoside monophosphate metabolic process
+GO:0009130                                                        pyrimidine nucleoside monophosphate biosynthetic process
+GO:0006999                                                                                       nuclear pore organization
+GO:0006221                                                                      pyrimidine nucleotide biosynthetic process
+GO:0007096                                                                                 regulation of exit from mitosis
+GO:0045859                                                                           regulation of protein kinase activity
+GO:0006978 DNA damage response, signal transduction by p53 class mediator resulting in transcription of p21 class mediator
+GO:0009129                                                           pyrimidine nucleoside monophosphate metabolic process
+GO:0046785                                                                                      microtubule polymerization
+GO:0002562                    somatic diversification of immune receptors via germline recombination within a single locus
+GO:0016444                                                                                  somatic cell DNA recombination
+GO:0042772                                             DNA damage response, signal transduction resulting in transcription
+GO:0010458                                                                                               exit from mitosis
+GO:0071900                                                          regulation of protein serine/threonine kinase activity
+GO:0051292                                                                                   nuclear pore complex assembly
+GO:0006289                                                                                      nucleotide-excision repair
+GO:0008584                                                                                          male gonad development
+GO:0008406                                                                                               gonad development
+GO:0046546                                                              development of primary male sexual characteristics
+GO:0045739                                                                               positive regulation of DNA repair
+GO:0045137                                                                   development of primary sexual characteristics
+GO:0043549                                                                                   regulation of kinase activity
+GO:0009124                                                                   nucleoside monophosphate biosynthetic process
+GO:0048144                                                                                        fibroblast proliferation
+GO:0008301                                                                                            DNA binding, bending
+GO:0017056                                                                          structural constituent of nuclear pore
+GO:0000803                                                                                                  sex chromosome
+GO:0043240                                                                                 Fanconi anaemia nuclear complex
+
+$`CX_DOX mid-late (0.1)`
+                GO_ID                                          Function
+GO:0005402 GO:0005402 carbohydrate:monoatomic cation symporter activity
+
+$`DOX only early-mid (0.5)`
+                GO_ID
+GO:0140297 GO:0140297
+GO:0061629 GO:0061629
+GO:0090575 GO:0090575
+GO:0005667 GO:0005667
+GO:0097550 GO:0097550
+GO:0005669 GO:0005669
+                                                                      Function
+GO:0140297                            DNA-binding transcription factor binding
+GO:0061629 RNA polymerase II-specific DNA-binding transcription factor binding
+GO:0090575                   RNA polymerase II transcription regulator complex
+GO:0005667                                     transcription regulator complex
+GO:0097550                                 transcription preinitiation complex
+GO:0005669                                  transcription factor TFIID complex
+
+$`DOX only mid-late (0.5)`
+                GO_ID                                     Function
+GO:0007186 GO:0007186 G protein-coupled receptor signaling pathway
+GO:0048738 GO:0048738            cardiac muscle tissue development
+GO:0014706 GO:0014706           striated muscle tissue development
+GO:0099084 GO:0099084     postsynaptic specialization organization
+GO:0099173 GO:0099173                     postsynapse organization
+GO:0045598 GO:0045598       regulation of fat cell differentiation
+GO:0046486 GO:0046486               glycerolipid metabolic process
+GO:0003013 GO:0003013                   circulatory system process
+GO:0045444 GO:0045444                     fat cell differentiation
+GO:0046620 GO:0046620                   regulation of organ growth
+GO:0016236 GO:0016236                               macroautophagy
+
+$`CX only mid-late (0.5)`
+                GO_ID                                       Function
+GO:0048599 GO:0048599                             oocyte development
+GO:0090305 GO:0090305    nucleic acid phosphodiester bond hydrolysis
+GO:0009994 GO:0009994                         oocyte differentiation
+GO:2000243 GO:2000243    positive regulation of reproductive process
+GO:0018105 GO:0018105                peptidyl-serine phosphorylation
+GO:0018209 GO:0018209                   peptidyl-serine modification
+GO:0035561 GO:0035561                regulation of chromatin binding
+GO:0090657 GO:0090657                     telomeric loop disassembly
+GO:0048477 GO:0048477                                      oogenesis
+GO:0071732 GO:0071732              cellular response to nitric oxide
+GO:0006264 GO:0006264                  mitochondrial DNA replication
+GO:0000722 GO:0000722         telomere maintenance via recombination
+GO:0071731 GO:0071731                       response to nitric oxide
+GO:1902170 GO:1902170 cellular response to reactive nitrogen species
+GO:0004518 GO:0004518                              nuclease activity
+GO:0019205 GO:0019205 nucleobase-containing compound kinase activity
+
+$`CX_DOX mid-late (0.5)`
+                GO_ID
+GO:0048146 GO:0048146
+GO:0030865 GO:0030865
+GO:0051493 GO:0051493
+GO:0051782 GO:0051782
+GO:0090399 GO:0090399
+GO:2000279 GO:2000279
+GO:0030010 GO:0030010
+GO:1901875 GO:1901875
+GO:0032147 GO:0032147
+GO:0031398 GO:0031398
+GO:0007163 GO:0007163
+GO:0051972 GO:0051972
+GO:0000235 GO:0000235
+GO:0005818 GO:0005818
+GO:0101019 GO:0101019
+                                                                 Function
+GO:0048146                positive regulation of fibroblast proliferation
+GO:0030865                             cortical cytoskeleton organization
+GO:0051493                        regulation of cytoskeleton organization
+GO:0051782                           negative regulation of cell division
+GO:0090399                                         replicative senescence
+GO:2000279                negative regulation of DNA biosynthetic process
+GO:0030010                                 establishment of cell polarity
+GO:1901875 positive regulation of post-translational protein modification
+GO:0032147                          activation of protein kinase activity
+GO:0031398                  positive regulation of protein ubiquitination
+GO:0007163                  establishment or maintenance of cell polarity
+GO:0051972                              regulation of telomerase activity
+GO:0000235                                             astral microtubule
+GO:0005818                                                          aster
+GO:0101019                              nucleolar exosome (RNase complex)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -841,41 +1209,37 @@ time zone: America/Chicago
 tzcode source: internal
 
 attached base packages:
-[1] tools     stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] stats4    tools     stats     graphics  grDevices utils     datasets 
+[8] methods   base     
 
 other attached packages:
-[1] biomaRt_2.58.2 dplyr_1.1.4    UpSetR_1.4.0  
+[1] GO.db_3.18.0         AnnotationDbi_1.64.1 IRanges_2.36.0      
+[4] S4Vectors_0.40.1     Biobase_2.62.0       BiocGenerics_0.48.1 
+[7] dplyr_1.1.4          UpSetR_1.4.0        
 
 loaded via a namespace (and not attached):
  [1] KEGGREST_1.42.0         gtable_0.3.6            xfun_0.50              
- [4] bslib_0.8.0             ggplot2_3.5.1           Biobase_2.62.0         
- [7] vctrs_0.6.5             bitops_1.0-7            generics_0.1.3         
-[10] curl_6.0.1              stats4_4.3.0            tibble_3.2.1           
-[13] AnnotationDbi_1.64.1    RSQLite_2.3.3           blob_1.2.4             
-[16] pkgconfig_2.0.3         dbplyr_2.5.0            S4Vectors_0.40.1       
-[19] lifecycle_1.0.4         GenomeInfoDbData_1.2.11 farver_2.1.2           
-[22] compiler_4.3.0          stringr_1.5.1           git2r_0.35.0           
-[25] progress_1.2.3          Biostrings_2.70.1       munsell_0.5.1          
-[28] httpuv_1.6.15           GenomeInfoDb_1.38.8     htmltools_0.5.8.1      
-[31] sass_0.4.9              RCurl_1.98-1.13         yaml_2.3.10            
-[34] later_1.3.2             pillar_1.10.1           crayon_1.5.3           
-[37] jquerylib_0.1.4         whisker_0.4.1           cachem_1.0.8           
-[40] tidyselect_1.2.1        digest_0.6.34           stringi_1.8.3          
-[43] labeling_0.4.3          rprojroot_2.0.4         fastmap_1.1.1          
-[46] grid_4.3.0              colorspace_2.1-0        cli_3.6.1              
-[49] magrittr_2.0.3          XML_3.99-0.17           withr_3.0.2            
-[52] rappdirs_0.3.3          filelock_1.0.3          prettyunits_1.2.0      
-[55] scales_1.3.0            promises_1.3.0          bit64_4.0.5            
-[58] rmarkdown_2.29          XVector_0.42.0          httr_1.4.7             
-[61] bit_4.0.5               gridExtra_2.3           workflowr_1.7.1        
-[64] hms_1.1.3               png_0.1-8               memoise_2.0.1          
-[67] evaluate_1.0.3          knitr_1.49              IRanges_2.36.0         
-[70] BiocFileCache_2.10.2    rlang_1.1.3             Rcpp_1.0.12            
-[73] glue_1.7.0              DBI_1.2.3               xml2_1.3.6             
-[76] BiocGenerics_0.48.1     rstudioapi_0.17.1       jsonlite_1.8.9         
-[79] R6_2.5.1                plyr_1.8.9              fs_1.6.3               
-[82] zlibbioc_1.48.0        </code></pre>
+ [4] bslib_0.8.0             ggplot2_3.5.1           vctrs_0.6.5            
+ [7] bitops_1.0-7            generics_0.1.3          tibble_3.2.1           
+[10] RSQLite_2.3.3           blob_1.2.4              pkgconfig_2.0.3        
+[13] lifecycle_1.0.4         GenomeInfoDbData_1.2.11 farver_2.1.2           
+[16] compiler_4.3.0          stringr_1.5.1           git2r_0.35.0           
+[19] Biostrings_2.70.1       munsell_0.5.1           httpuv_1.6.15          
+[22] GenomeInfoDb_1.38.8     htmltools_0.5.8.1       sass_0.4.9             
+[25] RCurl_1.98-1.13         yaml_2.3.10             later_1.3.2            
+[28] pillar_1.10.1           crayon_1.5.3            jquerylib_0.1.4        
+[31] whisker_0.4.1           cachem_1.0.8            tidyselect_1.2.1       
+[34] digest_0.6.34           stringi_1.8.3           labeling_0.4.3         
+[37] rprojroot_2.0.4         fastmap_1.1.1           grid_4.3.0             
+[40] colorspace_2.1-0        cli_3.6.1               magrittr_2.0.3         
+[43] withr_3.0.2             scales_1.3.0            promises_1.3.0         
+[46] bit64_4.0.5             rmarkdown_2.29          XVector_0.42.0         
+[49] httr_1.4.7              bit_4.0.5               gridExtra_2.3          
+[52] workflowr_1.7.1         png_0.1-8               memoise_2.0.1          
+[55] evaluate_1.0.3          knitr_1.49              rlang_1.1.3            
+[58] Rcpp_1.0.12             glue_1.7.0              DBI_1.2.3              
+[61] rstudioapi_0.17.1       jsonlite_1.8.9          R6_2.5.1               
+[64] plyr_1.8.9              fs_1.6.3                zlibbioc_1.48.0        </code></pre>
 </div>
 </div>
 
