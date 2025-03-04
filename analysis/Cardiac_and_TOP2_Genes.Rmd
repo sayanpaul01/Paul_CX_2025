@@ -37,7 +37,7 @@ top2_genes <- c("TOP2A", "TOP2B")
 cardiac_genes <- c("ACTN2", "CALR", "MYBPC3", "MYH6", "MYH7", 
                    "MYL2", "RYR2", "SCN5A", "TNNI3", "TNNT2", "TTN")
 dna_damage_genes <- c("TP53")  # Using correct gene symbol TP53
-dna_repair_genes <- c("H2AZ1", "UBE2T", "MMS22L")
+dna_repair_genes <- c("H2AZ1", "UBE2T", "MMS22L","PIAS3")
 p53_target_genes <- c("IER5", "HHAT", "EPS8L2")
 
 ```
