@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree8a5f0e62f2c869e311a4f1b74875c7b52b72cfe4targetblank8a5f0e6a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb179eba8264934b9d3462c17e85fedf920f45e05targetblankb179ebaa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/8a5f0e62f2c869e311a4f1b74875c7b52b72cfe4" target="_blank">8a5f0e6</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b179eba8264934b9d3462c17e85fedf920f45e05" target="_blank">b179eba</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree8a5f0e62f2c869e311a4f1b74875c7b52b72cfe4targetblank8a5f0e6a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeb179eba8264934b9d3462c17e85fedf920f45e05targetblankb179ebaa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/8a5f0e62f2c869e311a4f1b74875c7b52b72cfe4" target="_blank">8a5f0e6</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/b179eba8264934b9d3462c17e85fedf920f45e05" target="_blank">b179eba</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -597,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b179eba8264934b9d3462c17e85fedf920f45e05/analysis/Cardiac_and_TOP2_Genes.Rmd" target="_blank">b179eba</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/b179eba8264934b9d3462c17e85fedf920f45e05/docs/Cardiac_and_TOP2_Genes.html" target="_blank">b179eba</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1929,13 +1963,20 @@ DEG12 &lt;- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val &lt; 0.05]</code></pre>
 class="section level2">
 <h2><strong>📌 DNA Damage Repair Proportion with Chi-Square
 Test</strong></h2>
-<pre class="r"><code># Load DNA Damage Genes List
-DNA_damage &lt;- read.csv(&quot;data/DNA_Damage.csv&quot;, stringsAsFactors = FALSE)
-DNA_damage$Entrez_ID &lt;- mapIds(org.Hs.eg.db,
-                               keys = DNA_damage$Symbol,
-                               column = &quot;ENTREZID&quot;,
-                               keytype = &quot;SYMBOL&quot;,
-                               multiVals = &quot;first&quot;)
+<pre class="r"><code># Read DNA Damage Genes List
+DNA_damage &lt;- read.csv(&quot;C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/DNA damage/DNA_Damage.csv&quot;, stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+DNA_damage &lt;- DNA_damage %&gt;%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = &quot;ENTREZID&quot;,
+                            keytype = &quot;SYMBOL&quot;,
+                            multiVals = &quot;first&quot;))
+
+# Extract DNA damage gene Entrez IDs
+DNA_damage_genes &lt;- na.omit(DNA_damage$Entrez_ID)
+total_DNA_damage_genes &lt;- length(DNA_damage_genes)  # Total number of DNA damage genes
 
 # Define CX-5461 DEG lists
 CX_DEGs &lt;- list(
@@ -1949,72 +1990,57 @@ DOX_DEGs &lt;- list(
   &quot;DOX_0.5_3&quot; = DEG10, &quot;DOX_0.5_24&quot; = DEG11, &quot;DOX_0.5_48&quot; = DEG12
 )
 
-# Extract Entrez_IDs from DNA Damage gene dataset
-DNA_damage_genes &lt;- na.omit(DNA_damage$Entrez_ID)
+# Function to calculate the presence of DNA damage genes in DEGs
+calculate_proportion &lt;- function(deg_list, drug_name) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    DNA_Damage_DEGs = sapply(deg_list, function(ids) sum(ids %in% DNA_damage_genes)),  # DEGs present in DNA damage set
+    Non_DNA_Damage_DEGs = sapply(deg_list, function(ids) total_DNA_damage_genes - sum(ids %in% DNA_damage_genes))  # Remaining DNA damage genes
+  ) %&gt;%
+    mutate(
+      Yes_Proportion = (DNA_Damage_DEGs / total_DNA_damage_genes) * 100,  # Percentage of DEGs in DNA damage genes
+      No_Proportion = (Non_DNA_Damage_DEGs / total_DNA_damage_genes) * 100  # Remaining DNA damage genes as No
+    )
+}
 
-# Combine CX-5461 DEGs into a dataframe with a &quot;Drug&quot; column
-CX_DEGs_df &lt;- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = &quot;CX-5461&quot;)),
-  .id = &quot;Sample&quot;
-)
+# Calculate proportions for CX-5461 and DOX
+CX_proportion &lt;- calculate_proportion(CX_DEGs, &quot;CX-5461&quot;)
+DOX_proportion &lt;- calculate_proportion(DOX_DEGs, &quot;DOX&quot;)
 
-# Combine DOX DEGs into a dataframe with a &quot;Drug&quot; column
-DOX_DEGs_df &lt;- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = &quot;DOX&quot;)),
-  .id = &quot;Sample&quot;
-)
+# Combine data
+proportion_data &lt;- bind_rows(CX_proportion, DOX_proportion)
 
-# Merge CX-5461 and DOX datasets
-DEGs_df &lt;- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+# Convert to long format for stacked bar plot
+proportion_long &lt;- proportion_data %&gt;%
+  select(Sample, Drug, Yes_Proportion, No_Proportion) %&gt;%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = &quot;Category&quot;, values_to = &quot;Percentage&quot;) %&gt;%
+  mutate(Category = ifelse(Category == &quot;Yes_Proportion&quot;, &quot;Yes&quot;, &quot;No&quot;))
 
-# Check if genes are in DNA Damage list
-DEGs_df &lt;- DEGs_df %&gt;%
-  mutate(Category = ifelse(Entrez_ID %in% DNA_damage_genes, &quot;Yes&quot;, &quot;No&quot;))
-
-# Count DNA damage genes in each sample
-proportion_data &lt;- DEGs_df %&gt;%
-  group_by(Sample, Drug, Category) %&gt;%
-  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
-  group_by(Sample, Drug) %&gt;%
-  mutate(Percentage = (Count / sum(Count)) * 100)
-
-# Normalize Percentages to Sum Exactly 100%
-proportion_data &lt;- proportion_data %&gt;%
-  group_by(Sample) %&gt;%
-  mutate(Percentage = round(Percentage, 2)) %&gt;%
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %&gt;%
-  mutate(Percentage = ifelse(Category == &quot;No&quot;, Percentage + Adjustment, Percentage)) %&gt;%
-  mutate(Percentage = ifelse(Percentage &lt; 0, 0, Percentage)) %&gt;%
-  mutate(Percentage = ifelse(Percentage &gt; 100, 100, Percentage)) %&gt;%
-  ungroup() %&gt;%
-  replace_na(list(Percentage = 0))
-
-# Ensure &quot;Yes&quot; is at the Bottom and &quot;No&quot; is at the Top
-proportion_data$Category &lt;- factor(proportion_data$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
-
-# **🔹 Maintain Correct X-Axis Order (3 → 24 → 48)**
+# **Ensure correct order of samples on X-axis**
 sample_order &lt;- c(
-  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, 
-  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
-  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, 
-  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 )
-proportion_data$Sample &lt;- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+proportion_long$Sample &lt;- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
-# **Perform Chi-Square Test for CX vs DOX Pairs**
+# **Fix: Ensure &quot;Yes&quot; is on top and &quot;No&quot; is at the bottom in stacked bars**
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))  # Ensures &quot;Yes&quot; on top, &quot;No&quot; at bottom
+
+# **Perform Chi-Square Test for CX vs DOX at each timepoint**
 chi_square_results &lt;- data.frame(Sample = character(), P_Value = numeric())
 
 for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
   cx_sample &lt;- sample_order[i]
-  dox_sample &lt;- sample_order[i + 6]  # Correctly pairs CX_0.1_3 with DOX_0.1_3, etc.
+  dox_sample &lt;- sample_order[i + 6]  # Matches CX_0.1_3 with DOX_0.1_3, etc.
   
   cx_data &lt;- filter(proportion_data, Sample == cx_sample)
   dox_data &lt;- filter(proportion_data, Sample == dox_sample)
   
   # Construct contingency table for Chi-Square test
   contingency_table &lt;- matrix(
-    c(sum(cx_data$Count[cx_data$Category == &quot;Yes&quot;]), sum(cx_data$Count[cx_data$Category == &quot;No&quot;]),
-      sum(dox_data$Count[dox_data$Category == &quot;Yes&quot;]), sum(dox_data$Count[dox_data$Category == &quot;No&quot;])),
+    c(cx_data$DNA_Damage_DEGs, cx_data$Non_DNA_Damage_DEGs,
+      dox_data$DNA_Damage_DEGs, dox_data$Non_DNA_Damage_DEGs),
     nrow = 2, byrow = TRUE
   )
   
@@ -2026,27 +2052,41 @@ for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
   chi_square_results &lt;- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value))
 }
 
-# Identify significant CX samples (p &lt; 0.05)
+# Add significance stars
 chi_square_results$Significant &lt;- ifelse(chi_square_results$P_Value &lt; 0.05, &quot;*&quot;, &quot;&quot;)
 
-# **🔹 Merge Chi-Square Results WITHOUT Modifying Order**
-proportion_data &lt;- left_join(proportion_data, chi_square_results, by = &quot;Sample&quot;)
+# Merge Chi-Square results
+proportion_long &lt;- left_join(proportion_long, chi_square_results, by = &quot;Sample&quot;)
 
-# **Reapply Factor Order to Prevent Changes**
-proportion_data$Sample &lt;- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)</code></pre>
+# **Save output**
+write.csv(proportion_long, &quot;C:/Work/Postdoc_UTMB/CX-5461 Project/Transcriptome literatures/lit2/Proportion_Stacked_DNA_Damage_DEGs_with_ChiSquare.csv&quot;, row.names = FALSE)
+
+
+# Define correct factor orders for samples
+sample_order &lt;- c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+)
+
+# Reapply factor levels for correct order in both proportion_data and proportion_long
+proportion_data$Sample &lt;- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+proportion_long$Sample &lt;- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
+
+# **Fix: Ensure &quot;Yes&quot; is on top and &quot;No&quot; is at the bottom in stacked bars**
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))</code></pre>
 </div>
 <div id="dna-damage-repair-proportion-plot" class="section level2">
 <h2><strong>📌 DNA Damage Repair Proportion Plot</strong></h2>
-<pre class="r"><code># **Generate Proportion Plot for CX-5461 and DOX**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
-  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
-  geom_text(data = subset(proportion_data, Significant == &quot;*&quot;),
-            aes(x = Sample, y = 102, label = &quot;*&quot;),
+<pre class="r"><code># **Generate Stacked Bar Plot with Correct X-Axis Order**
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +  # Stacked bars
+  geom_text(data = subset(proportion_long, Significant == &quot;*&quot;),
+            aes(x = Sample, y = 102, label = &quot;*&quot;),  # Position stars slightly above 100%
             size = 6, color = &quot;black&quot;, fontface = &quot;bold&quot;) +
-  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
-  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly
+  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +  # Yes (Red), No (Blue)
   labs(
-    title = &quot;Proportion of DNA Damage Repair Genes in\nCX-5461 and DOX DEGs with Significance&quot;,
+    title = &quot;Proportion of CX-5461 and DOX DEGs in\nDNA Damage Repair Genes with Significance&quot;,
     x = &quot;Samples (CX-5461 and DOX)&quot;,
     y = &quot;Percentage&quot;,
     fill = &quot;Category&quot;
@@ -2258,6 +2298,43 @@ sayanpaul01
 </div>
 </div>
 <p><img src="figure/Cardiac_and_TOP2_Genes.Rmd/DNA%20Damage%20Repair-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-DNA-Damage-Repair-4">
+Past versions of "DNA Damage Repair-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-DNA-Damage-Repair-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b179eba8264934b9d3462c17e85fedf920f45e05/docs/figure/Cardiac_and_TOP2_Genes.Rmd/DNA Damage Repair-4.png" target="_blank">b179eba</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="p53-target-genes-proportion" class="section level2">
 <h2><strong>📌 P53 target genes Proportion</strong></h2>
@@ -2266,10 +2343,16 @@ sayanpaul01
 class="section level2">
 <h2><strong>📌 P53 target genes Proportion with Chi-Square
 Test</strong></h2>
-<pre class="r"><code># Read DNA Damage Genes List
+<pre class="r"><code># Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# Read P53 Target Genes List
 P53_Target &lt;- read.csv(&quot;data/P53_Target.csv&quot;, stringsAsFactors = FALSE)
 
-# Map gene symbols to Entrez IDs using org.Hs.eg.db
+# Convert gene symbols to Entrez IDs
 P53_Target &lt;- P53_Target %&gt;%
   mutate(Entrez_ID = mapIds(org.Hs.eg.db,
                             keys = Symbol,
@@ -2279,113 +2362,114 @@ P53_Target &lt;- P53_Target %&gt;%
 
 # Extract valid Entrez_IDs
 P53_Target_genes &lt;- na.omit(P53_Target$Entrez_ID)
+total_P53_Target_genes &lt;- length(P53_Target_genes)  # Total number of P53 target genes
 
-# Define CX-5461 DEG lists
+# Function to calculate the presence of P53 target genes in DEGs
+calculate_proportion &lt;- function(deg_list, drug_name) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    P53_Target_DEGs = sapply(deg_list, function(ids) sum(ids %in% P53_Target_genes)),  # DEGs present in P53 target set
+    Non_P53_Target_DEGs = sapply(deg_list, function(ids) total_P53_Target_genes - sum(ids %in% P53_Target_genes))  # Remaining P53 target genes
+  ) %&gt;%
+    mutate(
+      Yes_Proportion = (P53_Target_DEGs / total_P53_Target_genes) * 100,  # Percentage of DEGs in P53 target genes
+      No_Proportion = (Non_P53_Target_DEGs / total_P53_Target_genes) * 100  # Remaining P53 target genes as No
+    )
+}
+
+# Define CX-5461 and DOX DEG lists
 CX_DEGs &lt;- list(
   &quot;CX_0.1_3&quot; = DEG1, &quot;CX_0.1_24&quot; = DEG2, &quot;CX_0.1_48&quot; = DEG3,
   &quot;CX_0.5_3&quot; = DEG4, &quot;CX_0.5_24&quot; = DEG5, &quot;CX_0.5_48&quot; = DEG6
 )
 
-# Define DOX DEG lists
 DOX_DEGs &lt;- list(
   &quot;DOX_0.1_3&quot; = DEG7, &quot;DOX_0.1_24&quot; = DEG8, &quot;DOX_0.1_48&quot; = DEG9,
   &quot;DOX_0.5_3&quot; = DEG10, &quot;DOX_0.5_24&quot; = DEG11, &quot;DOX_0.5_48&quot; = DEG12
 )
 
-# Combine CX-5461 DEGs into a dataframe with a &quot;Drug&quot; column
-CX_DEGs_df &lt;- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = &quot;CX-5461&quot;)),
-  .id = &quot;Sample&quot;
-)
+# Calculate proportions for CX-5461 and DOX
+CX_proportion &lt;- calculate_proportion(CX_DEGs, &quot;CX-5461&quot;)
+DOX_proportion &lt;- calculate_proportion(DOX_DEGs, &quot;DOX&quot;)
 
-# Combine DOX DEGs into a dataframe with a &quot;Drug&quot; column
-DOX_DEGs_df &lt;- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = &quot;DOX&quot;)),
-  .id = &quot;Sample&quot;
-)
+# Combine data
+proportion_data &lt;- bind_rows(CX_proportion, DOX_proportion)
 
-# Merge CX-5461 and DOX datasets
-DEGs_df &lt;- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+# Convert to long format for stacked bar plot
+proportion_long &lt;- proportion_data %&gt;%
+  select(Sample, Drug, Yes_Proportion, No_Proportion) %&gt;%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = &quot;Category&quot;, values_to = &quot;Percentage&quot;) %&gt;%
+  mutate(Category = ifelse(Category == &quot;Yes_Proportion&quot;, &quot;Yes&quot;, &quot;No&quot;))
 
-# Check if genes are in DNA Damage list
-DEGs_df &lt;- DEGs_df %&gt;%
-  mutate(Category = ifelse(Entrez_ID %in% P53_Target_genes, &quot;Yes&quot;, &quot;No&quot;))
-
-# Count DNA damage genes in each sample
-proportion_data &lt;- DEGs_df %&gt;%
-  group_by(Sample, Drug, Category) %&gt;%
-  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
-  group_by(Sample, Drug) %&gt;%
-  mutate(Percentage = (Count / sum(Count)) * 100)
-
-# Normalize Percentages to Sum Exactly 100%
-proportion_data &lt;- proportion_data %&gt;%
-  group_by(Sample) %&gt;%
-  mutate(Percentage = round(Percentage, 2)) %&gt;%
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %&gt;%
-  mutate(Percentage = ifelse(Category == &quot;No&quot;, Percentage + Adjustment, Percentage)) %&gt;%
-  mutate(Percentage = pmax(pmin(Percentage, 100), 0)) %&gt;%
-  ungroup() %&gt;%
-  replace_na(list(Percentage = 0))
-
-# ✅ **Ensure &quot;Yes&quot; is at the Top and &quot;No&quot; at the Bottom**
-proportion_data$Category &lt;- factor(proportion_data$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
-
-# **Ensure Correct X-Axis Order (3 → 24 → 48)**
+# **Ensure correct order of samples on X-axis**
 sample_order &lt;- c(
-  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
-  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
-  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
-  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 )
+proportion_long$Sample &lt;- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
-# **Perform Chi-Square Test for CX vs DOX Pairs**
-chi_square_results &lt;- data.frame(Sample = character(), P_Value = numeric(), Significant = character(), stringsAsFactors = FALSE)
+# **Ensure &quot;Yes&quot; is on top and &quot;No&quot; is at the bottom in stacked bars**
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
+
+# **Perform Chi-Square Test for CX vs DOX at each timepoint**
+chi_square_results &lt;- data.frame(Sample = character(), P_Value = numeric())
 
 for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
   cx_sample &lt;- sample_order[i]
-  dox_sample &lt;- sample_order[i + 6]  
+  dox_sample &lt;- sample_order[i + 6]  # Matches CX_0.1_3 with DOX_0.1_3, etc.
   
   cx_data &lt;- filter(proportion_data, Sample == cx_sample)
   dox_data &lt;- filter(proportion_data, Sample == dox_sample)
   
-  # Construct contingency table
+  # Construct contingency table for Chi-Square test
   contingency_table &lt;- matrix(
-    c(sum(cx_data$Count[cx_data$Category == &quot;Yes&quot;], na.rm = TRUE),
-      sum(cx_data$Count[cx_data$Category == &quot;No&quot;], na.rm = TRUE),
-      sum(dox_data$Count[dox_data$Category == &quot;Yes&quot;], na.rm = TRUE),
-      sum(dox_data$Count[dox_data$Category == &quot;No&quot;], na.rm = TRUE)),
+    c(cx_data$P53_Target_DEGs, cx_data$Non_P53_Target_DEGs,
+      dox_data$P53_Target_DEGs, dox_data$Non_P53_Target_DEGs),
     nrow = 2, byrow = TRUE
   )
   
-  # Run Chi-Square Test (only if there are nonzero values)
-  if (all(contingency_table &gt; 0)) {
-    test_result &lt;- chisq.test(contingency_table)
-    p_value &lt;- test_result$p.value
-    
-    # ✅ Assign * only if CX is enriched compared to DOX
-    if (p_value &lt; 0.05 &amp;&amp; 
-        cx_data$Percentage[cx_data$Category == &quot;Yes&quot;] &gt; dox_data$Percentage[dox_data$Category == &quot;Yes&quot;]) {
-      chi_square_results &lt;- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value, Significant = &quot;*&quot;))
-    }
-  }
+  # Run Chi-Square Test
+  test_result &lt;- chisq.test(contingency_table)
+  p_value &lt;- test_result$p.value
+  
+  # Store results
+  chi_square_results &lt;- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value))
 }
 
-# **Merge Chi-Square Results WITHOUT Modifying Order**
-proportion_data &lt;- left_join(proportion_data, chi_square_results, by = &quot;Sample&quot;)
+# Add significance stars
+chi_square_results$Significant &lt;- ifelse(chi_square_results$P_Value &lt; 0.05, &quot;*&quot;, &quot;&quot;)
 
+# Merge Chi-Square results
+proportion_long &lt;- left_join(proportion_long, chi_square_results, by = &quot;Sample&quot;)
+
+# **Save output**
+write.csv(proportion_long, &quot;C:/Work/Postdoc_UTMB/CX-5461 Project/Transcriptome literatures/lit2/Proportion_Stacked_P53_Target_DEGs_with_ChiSquare.csv&quot;, row.names = FALSE)
+
+# Define correct factor orders for samples
+sample_order &lt;- c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+)
+
+# Reapply factor levels for correct order in both proportion_data and proportion_long
 proportion_data$Sample &lt;- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+proportion_long$Sample &lt;- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
-# **Generate Proportion Plot for CX-5461 and DOX**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+# **Fix: Ensure &quot;Yes&quot; is on top and &quot;No&quot; is at the bottom in stacked bars**
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
+
+
+# **Generate Stacked Bar Plot with Correct X-Axis Order**
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
   geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +  # Stacked bars
-  geom_text(data = subset(proportion_data, Significant == &quot;*&quot;),
-            aes(x = Sample, y = max(Percentage, na.rm = TRUE) + 2, label = &quot;*&quot;),  # ✅ Fix applied here
+  geom_text(data = subset(proportion_long, Significant == &quot;*&quot;),
+            aes(x = Sample, y = 102, label = &quot;*&quot;),  # Position stars slightly above 100%
             size = 6, color = &quot;black&quot;, fontface = &quot;bold&quot;) +
-  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly for better spacing
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly
   scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +  # Yes (Red), No (Blue)
   labs(
-    title = &quot;Proportion of P53 target Genes in\nCX-5461 and DOX DEGs with Significance&quot;,
+    title = &quot;Proportion of CX-5461 and DOX DEGs in\n P53 Target Genes with Significance&quot;,
     x = &quot;Samples (CX-5461 and DOX)&quot;,
     y = &quot;Percentage&quot;,
     fill = &quot;Category&quot;
@@ -2393,7 +2477,6 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
-    axis.title = element_text(size = 15, color = &quot;black&quot;),
     axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
     legend.title = element_blank(),
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),
@@ -2483,6 +2566,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b179eba8264934b9d3462c17e85fedf920f45e05/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53 Target Genes-1.png" target="_blank">b179eba</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/04b721c5960eeb144f48be02a96a77afd8d17dce/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53 Target Genes-1.png" target="_blank">04b721c</a>
 </td>
 <td>
@@ -2521,6 +2615,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b179eba8264934b9d3462c17e85fedf920f45e05/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53 Target Genes-2.png" target="_blank">b179eba</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/04b721c5960eeb144f48be02a96a77afd8d17dce/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53 Target Genes-2.png" target="_blank">04b721c</a>
 </td>
 <td>
@@ -2557,6 +2662,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b179eba8264934b9d3462c17e85fedf920f45e05/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53 Target Genes-3.png" target="_blank">b179eba</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/04b721c5960eeb144f48be02a96a77afd8d17dce/docs/figure/Cardiac_and_TOP2_Genes.Rmd/P53 Target Genes-3.png" target="_blank">04b721c</a>

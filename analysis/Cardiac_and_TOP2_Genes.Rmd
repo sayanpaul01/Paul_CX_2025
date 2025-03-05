@@ -246,13 +246,20 @@ DEG12 <- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
 
 ## **📌 DNA Damage Repair Proportion with Chi-Square Test**
 ```{r DNA_Damage_Proportion, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
-# Load DNA Damage Genes List
-DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
-DNA_damage$Entrez_ID <- mapIds(org.Hs.eg.db,
-                               keys = DNA_damage$Symbol,
-                               column = "ENTREZID",
-                               keytype = "SYMBOL",
-                               multiVals = "first")
+# Read DNA Damage Genes List
+DNA_damage <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/DNA damage/DNA_Damage.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+DNA_damage <- DNA_damage %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+# Extract DNA damage gene Entrez IDs
+DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+total_DNA_damage_genes <- length(DNA_damage_genes)  # Total number of DNA damage genes
 
 # Define CX-5461 DEG lists
 CX_DEGs <- list(
@@ -266,72 +273,57 @@ DOX_DEGs <- list(
   "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
 )
 
-# Extract Entrez_IDs from DNA Damage gene dataset
-DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+# Function to calculate the presence of DNA damage genes in DEGs
+calculate_proportion <- function(deg_list, drug_name) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    DNA_Damage_DEGs = sapply(deg_list, function(ids) sum(ids %in% DNA_damage_genes)),  # DEGs present in DNA damage set
+    Non_DNA_Damage_DEGs = sapply(deg_list, function(ids) total_DNA_damage_genes - sum(ids %in% DNA_damage_genes))  # Remaining DNA damage genes
+  ) %>%
+    mutate(
+      Yes_Proportion = (DNA_Damage_DEGs / total_DNA_damage_genes) * 100,  # Percentage of DEGs in DNA damage genes
+      No_Proportion = (Non_DNA_Damage_DEGs / total_DNA_damage_genes) * 100  # Remaining DNA damage genes as No
+    )
+}
 
-# Combine CX-5461 DEGs into a dataframe with a "Drug" column
-CX_DEGs_df <- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "CX-5461")),
-  .id = "Sample"
-)
+# Calculate proportions for CX-5461 and DOX
+CX_proportion <- calculate_proportion(CX_DEGs, "CX-5461")
+DOX_proportion <- calculate_proportion(DOX_DEGs, "DOX")
 
-# Combine DOX DEGs into a dataframe with a "Drug" column
-DOX_DEGs_df <- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "DOX")),
-  .id = "Sample"
-)
+# Combine data
+proportion_data <- bind_rows(CX_proportion, DOX_proportion)
 
-# Merge CX-5461 and DOX datasets
-DEGs_df <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+# Convert to long format for stacked bar plot
+proportion_long <- proportion_data %>%
+  select(Sample, Drug, Yes_Proportion, No_Proportion) %>%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = "Category", values_to = "Percentage") %>%
+  mutate(Category = ifelse(Category == "Yes_Proportion", "Yes", "No"))
 
-# Check if genes are in DNA Damage list
-DEGs_df <- DEGs_df %>%
-  mutate(Category = ifelse(Entrez_ID %in% DNA_damage_genes, "Yes", "No"))
-
-# Count DNA damage genes in each sample
-proportion_data <- DEGs_df %>%
-  group_by(Sample, Drug, Category) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  group_by(Sample, Drug) %>%
-  mutate(Percentage = (Count / sum(Count)) * 100)
-
-# Normalize Percentages to Sum Exactly 100%
-proportion_data <- proportion_data %>%
-  group_by(Sample) %>%
-  mutate(Percentage = round(Percentage, 2)) %>%
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %>%
-  mutate(Percentage = ifelse(Category == "No", Percentage + Adjustment, Percentage)) %>%
-  mutate(Percentage = ifelse(Percentage < 0, 0, Percentage)) %>%
-  mutate(Percentage = ifelse(Percentage > 100, 100, Percentage)) %>%
-  ungroup() %>%
-  replace_na(list(Percentage = 0))
-
-# Ensure "Yes" is at the Bottom and "No" is at the Top
-proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
-
-# **🔹 Maintain Correct X-Axis Order (3 → 24 → 48)**
+# **Ensure correct order of samples on X-axis**
 sample_order <- c(
-  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", 
-  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
-  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", 
-  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
 )
-proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+proportion_long$Sample <- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
-# **Perform Chi-Square Test for CX vs DOX Pairs**
+# **Fix: Ensure "Yes" is on top and "No" is at the bottom in stacked bars**
+proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))  # Ensures "Yes" on top, "No" at bottom
+
+# **Perform Chi-Square Test for CX vs DOX at each timepoint**
 chi_square_results <- data.frame(Sample = character(), P_Value = numeric())
 
 for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
   cx_sample <- sample_order[i]
-  dox_sample <- sample_order[i + 6]  # Correctly pairs CX_0.1_3 with DOX_0.1_3, etc.
+  dox_sample <- sample_order[i + 6]  # Matches CX_0.1_3 with DOX_0.1_3, etc.
   
   cx_data <- filter(proportion_data, Sample == cx_sample)
   dox_data <- filter(proportion_data, Sample == dox_sample)
   
   # Construct contingency table for Chi-Square test
   contingency_table <- matrix(
-    c(sum(cx_data$Count[cx_data$Category == "Yes"]), sum(cx_data$Count[cx_data$Category == "No"]),
-      sum(dox_data$Count[dox_data$Category == "Yes"]), sum(dox_data$Count[dox_data$Category == "No"])),
+    c(cx_data$DNA_Damage_DEGs, cx_data$Non_DNA_Damage_DEGs,
+      dox_data$DNA_Damage_DEGs, dox_data$Non_DNA_Damage_DEGs),
     nrow = 2, byrow = TRUE
   )
   
@@ -343,30 +335,44 @@ for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
   chi_square_results <- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value))
 }
 
-# Identify significant CX samples (p < 0.05)
+# Add significance stars
 chi_square_results$Significant <- ifelse(chi_square_results$P_Value < 0.05, "*", "")
 
-# **🔹 Merge Chi-Square Results WITHOUT Modifying Order**
-proportion_data <- left_join(proportion_data, chi_square_results, by = "Sample")
+# Merge Chi-Square results
+proportion_long <- left_join(proportion_long, chi_square_results, by = "Sample")
 
-# **Reapply Factor Order to Prevent Changes**
+# **Save output**
+write.csv(proportion_long, "C:/Work/Postdoc_UTMB/CX-5461 Project/Transcriptome literatures/lit2/Proportion_Stacked_DNA_Damage_DEGs_with_ChiSquare.csv", row.names = FALSE)
+
+
+# Define correct factor orders for samples
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+
+# Reapply factor levels for correct order in both proportion_data and proportion_long
 proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+proportion_long$Sample <- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
+
+# **Fix: Ensure "Yes" is on top and "No" is at the bottom in stacked bars**
+proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))
 ```
 
 
 ## **📌 DNA Damage Repair Proportion Plot**
 ```{r ggplot, echo=TRUE, message=FALSE}
 
-# **Generate Proportion Plot for CX-5461 and DOX**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
-  geom_bar(stat = "identity", position = "stack") +
-  geom_text(data = subset(proportion_data, Significant == "*"),
-            aes(x = Sample, y = 102, label = "*"),
+# **Generate Stacked Bar Plot with Correct X-Axis Order**
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  geom_text(data = subset(proportion_long, Significant == "*"),
+            aes(x = Sample, y = 102, label = "*"),  # Position stars slightly above 100%
             size = 6, color = "black", fontface = "bold") +
-  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
-  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
   labs(
-    title = "Proportion of DNA Damage Repair Genes in\nCX-5461 and DOX DEGs with Significance",
+    title = "Proportion of CX-5461 and DOX DEGs in\nDNA Damage Repair Genes with Significance",
     x = "Samples (CX-5461 and DOX)",
     y = "Percentage",
     fill = "Category"
@@ -409,10 +415,16 @@ for (gene in dna_repair_genes) {
 
 ## **📌 P53 target genes Proportion with Chi-Square Test**
 ```{r P53_target_Proportion1, echo=TRUE, message=FALSE, warning=FALSE}
-# Read DNA Damage Genes List
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# Read P53 Target Genes List
 P53_Target <- read.csv("data/P53_Target.csv", stringsAsFactors = FALSE)
 
-# Map gene symbols to Entrez IDs using org.Hs.eg.db
+# Convert gene symbols to Entrez IDs
 P53_Target <- P53_Target %>%
   mutate(Entrez_ID = mapIds(org.Hs.eg.db,
                             keys = Symbol,
@@ -422,113 +434,114 @@ P53_Target <- P53_Target %>%
 
 # Extract valid Entrez_IDs
 P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
+total_P53_Target_genes <- length(P53_Target_genes)  # Total number of P53 target genes
 
-# Define CX-5461 DEG lists
+# Function to calculate the presence of P53 target genes in DEGs
+calculate_proportion <- function(deg_list, drug_name) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    P53_Target_DEGs = sapply(deg_list, function(ids) sum(ids %in% P53_Target_genes)),  # DEGs present in P53 target set
+    Non_P53_Target_DEGs = sapply(deg_list, function(ids) total_P53_Target_genes - sum(ids %in% P53_Target_genes))  # Remaining P53 target genes
+  ) %>%
+    mutate(
+      Yes_Proportion = (P53_Target_DEGs / total_P53_Target_genes) * 100,  # Percentage of DEGs in P53 target genes
+      No_Proportion = (Non_P53_Target_DEGs / total_P53_Target_genes) * 100  # Remaining P53 target genes as No
+    )
+}
+
+# Define CX-5461 and DOX DEG lists
 CX_DEGs <- list(
   "CX_0.1_3" = DEG1, "CX_0.1_24" = DEG2, "CX_0.1_48" = DEG3,
   "CX_0.5_3" = DEG4, "CX_0.5_24" = DEG5, "CX_0.5_48" = DEG6
 )
 
-# Define DOX DEG lists
 DOX_DEGs <- list(
   "DOX_0.1_3" = DEG7, "DOX_0.1_24" = DEG8, "DOX_0.1_48" = DEG9,
   "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
 )
 
-# Combine CX-5461 DEGs into a dataframe with a "Drug" column
-CX_DEGs_df <- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "CX-5461")),
-  .id = "Sample"
-)
+# Calculate proportions for CX-5461 and DOX
+CX_proportion <- calculate_proportion(CX_DEGs, "CX-5461")
+DOX_proportion <- calculate_proportion(DOX_DEGs, "DOX")
 
-# Combine DOX DEGs into a dataframe with a "Drug" column
-DOX_DEGs_df <- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = "DOX")),
-  .id = "Sample"
-)
+# Combine data
+proportion_data <- bind_rows(CX_proportion, DOX_proportion)
 
-# Merge CX-5461 and DOX datasets
-DEGs_df <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+# Convert to long format for stacked bar plot
+proportion_long <- proportion_data %>%
+  select(Sample, Drug, Yes_Proportion, No_Proportion) %>%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = "Category", values_to = "Percentage") %>%
+  mutate(Category = ifelse(Category == "Yes_Proportion", "Yes", "No"))
 
-# Check if genes are in DNA Damage list
-DEGs_df <- DEGs_df %>%
-  mutate(Category = ifelse(Entrez_ID %in% P53_Target_genes, "Yes", "No"))
-
-# Count DNA damage genes in each sample
-proportion_data <- DEGs_df %>%
-  group_by(Sample, Drug, Category) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  group_by(Sample, Drug) %>%
-  mutate(Percentage = (Count / sum(Count)) * 100)
-
-# Normalize Percentages to Sum Exactly 100%
-proportion_data <- proportion_data %>%
-  group_by(Sample) %>%
-  mutate(Percentage = round(Percentage, 2)) %>%
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %>%
-  mutate(Percentage = ifelse(Category == "No", Percentage + Adjustment, Percentage)) %>%
-  mutate(Percentage = pmax(pmin(Percentage, 100), 0)) %>%
-  ungroup() %>%
-  replace_na(list(Percentage = 0))
-
-# ✅ **Ensure "Yes" is at the Top and "No" at the Bottom**
-proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
-
-# **Ensure Correct X-Axis Order (3 → 24 → 48)**
+# **Ensure correct order of samples on X-axis**
 sample_order <- c(
-  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
-  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
-  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
-  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
 )
+proportion_long$Sample <- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
-# **Perform Chi-Square Test for CX vs DOX Pairs**
-chi_square_results <- data.frame(Sample = character(), P_Value = numeric(), Significant = character(), stringsAsFactors = FALSE)
+# **Ensure "Yes" is on top and "No" is at the bottom in stacked bars**
+proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))
+
+# **Perform Chi-Square Test for CX vs DOX at each timepoint**
+chi_square_results <- data.frame(Sample = character(), P_Value = numeric())
 
 for (i in seq(1, 6)) {  # Pairwise comparison (CX vs DOX)
   cx_sample <- sample_order[i]
-  dox_sample <- sample_order[i + 6]  
+  dox_sample <- sample_order[i + 6]  # Matches CX_0.1_3 with DOX_0.1_3, etc.
   
   cx_data <- filter(proportion_data, Sample == cx_sample)
   dox_data <- filter(proportion_data, Sample == dox_sample)
   
-  # Construct contingency table
+  # Construct contingency table for Chi-Square test
   contingency_table <- matrix(
-    c(sum(cx_data$Count[cx_data$Category == "Yes"], na.rm = TRUE),
-      sum(cx_data$Count[cx_data$Category == "No"], na.rm = TRUE),
-      sum(dox_data$Count[dox_data$Category == "Yes"], na.rm = TRUE),
-      sum(dox_data$Count[dox_data$Category == "No"], na.rm = TRUE)),
+    c(cx_data$P53_Target_DEGs, cx_data$Non_P53_Target_DEGs,
+      dox_data$P53_Target_DEGs, dox_data$Non_P53_Target_DEGs),
     nrow = 2, byrow = TRUE
   )
   
-  # Run Chi-Square Test (only if there are nonzero values)
-  if (all(contingency_table > 0)) {
-    test_result <- chisq.test(contingency_table)
-    p_value <- test_result$p.value
-    
-    # ✅ Assign * only if CX is enriched compared to DOX
-    if (p_value < 0.05 && 
-        cx_data$Percentage[cx_data$Category == "Yes"] > dox_data$Percentage[dox_data$Category == "Yes"]) {
-      chi_square_results <- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value, Significant = "*"))
-    }
-  }
+  # Run Chi-Square Test
+  test_result <- chisq.test(contingency_table)
+  p_value <- test_result$p.value
+  
+  # Store results
+  chi_square_results <- rbind(chi_square_results, data.frame(Sample = cx_sample, P_Value = p_value))
 }
 
-# **Merge Chi-Square Results WITHOUT Modifying Order**
-proportion_data <- left_join(proportion_data, chi_square_results, by = "Sample")
+# Add significance stars
+chi_square_results$Significant <- ifelse(chi_square_results$P_Value < 0.05, "*", "")
 
+# Merge Chi-Square results
+proportion_long <- left_join(proportion_long, chi_square_results, by = "Sample")
+
+# **Save output**
+write.csv(proportion_long, "C:/Work/Postdoc_UTMB/CX-5461 Project/Transcriptome literatures/lit2/Proportion_Stacked_P53_Target_DEGs_with_ChiSquare.csv", row.names = FALSE)
+
+# Define correct factor orders for samples
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+
+# Reapply factor levels for correct order in both proportion_data and proportion_long
 proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order, ordered = TRUE)
+proportion_long$Sample <- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
-# **Generate Proportion Plot for CX-5461 and DOX**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+# **Fix: Ensure "Yes" is on top and "No" is at the bottom in stacked bars**
+proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))
+
+
+# **Generate Stacked Bar Plot with Correct X-Axis Order**
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
   geom_bar(stat = "identity", position = "stack") +  # Stacked bars
-  geom_text(data = subset(proportion_data, Significant == "*"),
-            aes(x = Sample, y = max(Percentage, na.rm = TRUE) + 2, label = "*"),  # ✅ Fix applied here
+  geom_text(data = subset(proportion_long, Significant == "*"),
+            aes(x = Sample, y = 102, label = "*"),  # Position stars slightly above 100%
             size = 6, color = "black", fontface = "bold") +
-  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly for better spacing
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +  # Increase Y-axis slightly
   scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
   labs(
-    title = "Proportion of P53 target Genes in\nCX-5461 and DOX DEGs with Significance",
+    title = "Proportion of CX-5461 and DOX DEGs in\n P53 Target Genes with Significance",
     x = "Samples (CX-5461 and DOX)",
     y = "Percentage",
     fill = "Category"
@@ -536,7 +549,6 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
-    axis.title = element_text(size = 15, color = "black"),
     axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
     legend.title = element_blank(),
     panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
