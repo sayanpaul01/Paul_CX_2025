@@ -167,10 +167,10 @@ ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
   )
 ```
 
-## **📌 Proportion of colorectal cancer genes in CX and DOX DEGs**
+## **📌 Proportion of CX and DOX DEGs in colorectal cancer genes**
 
 ## **📌 Read and Process Data**
-```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+```{r load_DEGs, echo=TRUE, message=FALSE, warning=FALSE, fig.width=12}
 # Load necessary libraries
 library(dplyr)
 library(ggplot2)
