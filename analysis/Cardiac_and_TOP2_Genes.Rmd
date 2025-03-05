@@ -247,7 +247,7 @@ DEG12 <- DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05]
 ## **📌 DNA Damage Repair Proportion with Chi-Square Test**
 ```{r DNA_Damage_Proportion, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 # Read DNA Damage Genes List
-DNA_damage <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/DNA damage/DNA_Damage.csv", stringsAsFactors = FALSE)
+DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
 
 # Convert gene symbols to Entrez IDs
 DNA_damage <- DNA_damage %>%
@@ -386,6 +386,185 @@ ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
     panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
     strip.background = element_blank(),
     strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 DNA Damage Repair abs logFC distribution**
+```{r abslogFC DNA damage, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+library(rstatix)
+
+# Read DNA Damage Response Gene List
+DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+DNA_damage <- DNA_damage %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+
+all_toptables <- bind_rows(
+  CX_0.1_3 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  CX_0.1_24 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  CX_0.1_48 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  CX_0.5_3 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  CX_0.5_24 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  CX_0.5_48 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  DOX_0.1_3 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  DOX_0.1_24 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  DOX_0.1_48 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  DOX_0.5_3 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  DOX_0.5_24 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  DOX_0.5_48 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% DNA_damage_genes) %>%
+  mutate(abs_logFC = abs(logFC))
+
+filtered_toptables <- filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # CX first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), 
+                       labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), 
+                           labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  )
+
+wilcox_results <- filtered_toptables %>%
+  group_by(Timepoint, Concentration) %>%
+  wilcox_test(abs_logFC ~ Drug) %>%
+  adjust_pvalue(method = "bonferroni") %>%
+  mutate(significance = ifelse(p < 0.05, "*", "")) 
+
+star_positions <- filtered_toptables %>%
+  group_by(Timepoint, Concentration, Drug) %>%
+  summarise(y_pos = max(abs_logFC, na.rm = TRUE) + 0.2, .groups = "drop") %>%
+  group_by(Timepoint, Concentration) %>%
+  summarise(y_pos = max(y_pos), .groups = "drop")
+
+wilcox_results_plot <- wilcox_results %>%
+  left_join(star_positions, by = c("Timepoint", "Concentration")) %>%
+  mutate(x_position = 1.5)  # Place stars in the middle between CX & DOX
+
+ggplot(filtered_toptables, aes(x = Drug, y = abs_logFC, fill = Drug)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  
+  facet_grid(Concentration ~ Timepoint) +  
+  geom_text(
+    data = wilcox_results_plot, 
+    aes(x = x_position, y = y_pos, label = significance), 
+    size = 6, fontface = "bold", color = "black", inherit.aes = FALSE
+  ) +
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("|Log Fold Change|") +  
+  ggtitle("|Log Fold Change| for DNA Damage Repair Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 DNA Damage Repair logFC distribution**
+```{r logFC DNA damage, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+library(car)  # For Levene's Test
+
+# Read DNA Damage Response Gene List
+DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+DNA_damage <- DNA_damage %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+
+all_toptables <- bind_rows(
+  CX_0.1_3 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  CX_0.1_24 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  CX_0.1_48 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  CX_0.5_3 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  CX_0.5_24 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  CX_0.5_48 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  DOX_0.1_3 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  DOX_0.1_24 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  DOX_0.1_48 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  DOX_0.5_3 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  DOX_0.5_24 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  DOX_0.5_48 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% DNA_damage_genes)
+
+filtered_toptables <- filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # CX first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), 
+                       labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), 
+                           labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  )
+
+levene_results <- filtered_toptables %>%
+  group_by(Timepoint, Concentration) %>%
+  summarise(p_value = leveneTest(logFC ~ Drug, data = .)$`Pr(>F)`[1], .groups = "drop") %>%
+  mutate(significance = ifelse(p_value < 0.05, "*", ""))  # Use p < 0.05 threshold for stars
+
+# **🔹 Determine Y-axis position for Stars**
+star_positions <- filtered_toptables %>%
+  group_by(Timepoint, Concentration, Drug) %>%
+  summarise(y_pos = max(logFC, na.rm = TRUE) + 0.5, .groups = "drop") %>%
+  group_by(Timepoint, Concentration) %>%
+  summarise(y_pos = max(y_pos), .groups = "drop")
+
+# **🔹 Merge Levene test results with Y positions**
+levene_results_plot <- levene_results %>%
+  left_join(star_positions, by = c("Timepoint", "Concentration")) %>%
+  mutate(x_position = 1.5)  # Centered between CX & DOX
+
+ggplot(filtered_toptables, aes(x = Drug, y = logFC, fill = Drug)) +
+  geom_violin(trim = FALSE, alpha = 0.5) +  # Violin plot for logFC
+  geom_boxplot(width = 0.1, outlier.shape = NA, color = "black", alpha = 0.5) +  # Add boxplot inside violin
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  
+  facet_grid(Concentration ~ Timepoint) +  
+  geom_text(
+    data = levene_results_plot %>% filter(significance == "*"),  # Only plot significant comparisons
+    aes(x = x_position, y = y_pos, label = significance), 
+    size = 6, fontface = "bold", color = "black", inherit.aes = FALSE
+  ) +
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("Log Fold Change") +  
+  ggtitle("Log Fold Change for DNA Damage Repair Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
   )
 ```
 
@@ -554,6 +733,198 @@ ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
     panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
     strip.background = element_blank(),
     strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+
+## **📌 P53 target genes abs logFC distribution**
+```{r abslogFC P53, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+library(rstatix)
+
+# **🔹 Read P53 Target Genes List**
+P53_Target <- read.csv("data/P53_Target.csv", stringsAsFactors = FALSE)
+
+# **🔹 Convert gene symbols to Entrez IDs**
+P53_Target <- P53_Target %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
+
+# **🔹 Combine all subset_toptables into a single data frame with metadata**
+all_toptables <- bind_rows(
+  CX_0.1_3 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  CX_0.1_24 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  CX_0.1_48 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  CX_0.5_3 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  CX_0.5_24 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  CX_0.5_48 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  DOX_0.1_3 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  DOX_0.1_24 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  DOX_0.1_48 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  DOX_0.5_3 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  DOX_0.5_24 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  DOX_0.5_48 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# **🔹 Filter data for P53 Target Genes**
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% P53_Target_genes) %>%
+  mutate(abs_logFC = abs(logFC))  # Compute absolute logFC
+
+# **🔹 Ensure correct ordering of Timepoints & Concentrations**
+filtered_toptables <- filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # CX first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), 
+                       labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), 
+                           labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  )
+
+# **🔹 Wilcoxon Test for CX vs DOX**
+wilcox_results <- filtered_toptables %>%
+  group_by(Timepoint, Concentration) %>%
+  wilcox_test(abs_logFC ~ Drug) %>%
+  adjust_pvalue(method = "bonferroni") %>%
+  mutate(significance = ifelse(p < 0.05, "*", ""))  # Assign stars if p < 0.05
+
+# **🔹 Determine Y-axis position for Stars**
+star_positions <- filtered_toptables %>%
+  group_by(Timepoint, Concentration, Drug) %>%
+  summarise(y_pos = max(abs_logFC, na.rm = TRUE) + 0.2, .groups = "drop") %>%
+  group_by(Timepoint, Concentration) %>%
+  summarise(y_pos = max(y_pos), .groups = "drop")
+
+# **🔹 Merge Wilcoxon Test results with Star Positions**
+wilcox_results_plot <- wilcox_results %>%
+  left_join(star_positions, by = c("Timepoint", "Concentration")) %>%
+  mutate(x_position = 1.5)  # Place stars in the middle between CX & DOX
+
+# **🔹 Generate Boxplot for LogFC of P53 Target Genes**
+ggplot(filtered_toptables, aes(x = Drug, y = abs_logFC, fill = Drug)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  
+  facet_grid(Concentration ~ Timepoint) +  
+  geom_text(
+    data = wilcox_results_plot, 
+    aes(x = x_position, y = y_pos, label = significance), 
+    size = 6, fontface = "bold", color = "black", inherit.aes = FALSE
+  ) +
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("|Log Fold Change|") +  
+  ggtitle("|Log Fold Change| for P53 Target Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
+  )
+```
+
+## **📌 P53 Target Genes logFC distribution**
+```{r logFC P53, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+library(car)  # For Levene's Test
+
+# Read P53 Target Genes List
+P53_Target <- read.csv("data/P53_Target.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+P53_Target <- P53_Target %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
+
+# **🔹 Combine all subset_toptables into a single data frame with metadata**
+all_toptables <- bind_rows(
+  CX_0.1_3 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "3"),
+  CX_0.1_24 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "24"),
+  CX_0.1_48 %>% mutate(Drug = "CX.5461", Concentration = 0.1, Timepoint = "48"),
+  CX_0.5_3 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "3"),
+  CX_0.5_24 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "24"),
+  CX_0.5_48 %>% mutate(Drug = "CX.5461", Concentration = 0.5, Timepoint = "48"),
+  DOX_0.1_3 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "3"),
+  DOX_0.1_24 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "24"),
+  DOX_0.1_48 %>% mutate(Drug = "DOX", Concentration = 0.1, Timepoint = "48"),
+  DOX_0.5_3 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "3"),
+  DOX_0.5_24 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "24"),
+  DOX_0.5_48 %>% mutate(Drug = "DOX", Concentration = 0.5, Timepoint = "48")
+)
+
+# **🔹 Filter data for P53 target genes**
+filtered_toptables <- all_toptables %>%
+  filter(Entrez_ID %in% P53_Target_genes)
+
+# **🔹 Factorize variables for ordered plotting**
+filtered_toptables <- filtered_toptables %>%
+  mutate(
+    Drug = factor(Drug, levels = c("CX.5461", "DOX")),  # CX first
+    Timepoint = factor(Timepoint, levels = c("3", "24", "48"), 
+                       labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
+    Concentration = factor(Concentration, levels = c(0.1, 0.5), 
+                           labels = c("Concentration: 0.1", "Concentration: 0.5"))
+  )
+
+# **🔹 Perform Levene's test for variability differences**
+levene_results <- filtered_toptables %>%
+  group_by(Timepoint, Concentration) %>%
+  summarise(p_value = leveneTest(logFC ~ Drug, data = .)$`Pr(>F)`[1], .groups = "drop") %>%
+  mutate(significance = ifelse(p_value < 0.05, "*", ""))  # Use p < 0.05 threshold for stars
+
+# **🔹 Determine Y-axis position for Stars**
+star_positions <- filtered_toptables %>%
+  group_by(Timepoint, Concentration, Drug) %>%
+  summarise(y_pos = max(logFC, na.rm = TRUE) + 0.5, .groups = "drop") %>%
+  group_by(Timepoint, Concentration) %>%
+  summarise(y_pos = max(y_pos), .groups = "drop")
+
+# **🔹 Merge Levene test results with Y positions**
+levene_results_plot <- levene_results %>%
+  left_join(star_positions, by = c("Timepoint", "Concentration")) %>%
+  mutate(x_position = 1.5)  # Centered between CX & DOX
+
+# **🔹 Generate Violin Plot with Boxplot & Significance Stars**
+ggplot(filtered_toptables, aes(x = Drug, y = logFC, fill = Drug)) +
+  geom_violin(trim = FALSE, alpha = 0.5) +  # Violin plot for logFC
+  geom_boxplot(width = 0.1, outlier.shape = NA, color = "black", alpha = 0.5) +  # Add boxplot inside violin
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +  
+  facet_grid(Concentration ~ Timepoint) +  
+  geom_text(
+    data = levene_results_plot %>% filter(significance == "*"),  # Only plot significant comparisons
+    aes(x = x_position, y = y_pos, label = significance), 
+    size = 6, fontface = "bold", color = "black", inherit.aes = FALSE
+  ) +
+  theme_bw() +
+  xlab("Drugs") +
+  ylab("Log Fold Change") +  
+  ggtitle("Log Fold Change for P53 Target Genes") +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.line = element_line(linewidth = 1.5),
+    strip.background = element_rect(fill = "gray"),  
+    strip.text = element_text(size = 12, color = "black", face = "bold"),  
+    axis.text.x = element_text(size = 8, color = "black", angle = 15)
   )
 ```
 
