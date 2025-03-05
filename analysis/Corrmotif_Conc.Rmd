@@ -1688,3 +1688,535 @@ ggplot(data_summary_0.5, aes(x = Timepoint, y = mean_logFC, group = Drug, color 
     legend.text = element_text(size = 12)
   )
 ```
+
+## **📌 Proportion of DNA Damage Repair Genes (0.1 micromolar)**
+```{r prop DNA, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# **🔹 Read DNA Damage Repair Gene List**
+DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+DNA_damage <- DNA_damage %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = DNA_damage$Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+
+# **🔹 Load Corrmotif Groups for 0.1 Concentration**
+prob_groups_0.1 <- list(
+  "Non Response (0.1)" = read.csv("data/prob_1_0.1.csv")$Entrez_ID,
+  "DOX only mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
+  "CX_DOX mid-late (0.1)" = read.csv("data/prob_3_0.1.csv")$Entrez_ID
+)
+
+# **🔹 Create Dataframe for Corrmotif Groups**
+corrmotif_df_0.1 <- bind_rows(
+  lapply(prob_groups_0.1, function(ids) {
+    data.frame(Entrez_ID = ids)
+  }),
+  .id = "Response_Group"
+)
+
+# **🔹 Match Entrez_IDs with DNA Damage Repair Genes**
+corrmotif_df_0.1 <- corrmotif_df_0.1 %>%
+  mutate(DNA_Damage = ifelse(Entrez_ID %in% DNA_damage_genes, "Yes", "No"))
+
+# **🔹 Count DNA Damage Repair Genes in Each Response Group**
+proportion_data <- corrmotif_df_0.1 %>%
+  group_by(Response_Group, DNA_Damage) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Response_Group) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **🔹 Ensure "Yes" is at the Bottom and "No" at the Top**
+proportion_data$DNA_Damage <- factor(proportion_data$DNA_Damage, levels = c("Yes", "No"))
+
+# **🔹 Set Order of Response Groups for X-axis**
+response_order <- c("Non Response (0.1)", "DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")
+proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = response_order)
+
+# **🔹 Perform Chi-Square Tests for "DOX only mid-late (0.1)" and "CX_DOX mid-late (0.1)" vs "Non Response (0.1)"**
+non_response_counts <- proportion_data %>%
+  filter(Response_Group == "Non Response (0.1)") %>%
+  dplyr::select(DNA_Damage, Count) %>%
+  {setNames(.$Count, .$DNA_Damage)}  # Convert to named vector
+
+chi_results <- proportion_data %>%
+  filter(Response_Group %in% c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")) %>%
+  group_by(Response_Group) %>%
+  summarise(
+    p_value = {
+      group_counts <- Count[DNA_Damage %in% c("Yes", "No")]
+      if (!"Yes" %in% DNA_Damage) group_counts <- c(group_counts, 0)
+      if (!"No" %in% DNA_Damage) group_counts <- c(0, group_counts)
+
+      contingency_table <- matrix(c(
+        group_counts[1], group_counts[2],
+        non_response_counts["Yes"], non_response_counts["No"]
+      ), nrow = 2, byrow = TRUE)
+
+      # Perform chi-square test if all values are valid
+      if (all(contingency_table >= 0 & is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+
+# **🔹 Merge Chi-Square Results into Proportion Data**
+proportion_data <- proportion_data %>%
+  left_join(chi_results %>% dplyr::select(Response_Group, Significance), by = "Response_Group")
+
+# **🔹 Set Star Position Uniform Across Groups at 105%**
+star_positions <- data.frame(
+  Response_Group = c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)"),
+  y_pos = 105,  # Fixed at 105% of Y-axis
+  Significance = chi_results$Significance
+)
+
+# **🔹 Generate Proportion Plot with Chi-Square Stars**
+ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = DNA_Damage)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  geom_text(
+    data = star_positions,
+    aes(x = Response_Group, y = y_pos, label = Significance),  # Place stars at fixed 105%
+    inherit.aes = FALSE,
+    size = 6, color = "black", fontface = "bold", vjust = 0  # Keeps stars aligned
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 110)) +  # Fixed Y-axis to 100%
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
+  labs(
+    title = "Proportion of DNA Damage Repair Genes in\n0.1 Corrmotif Response Groups",
+    x = "Response Groups (0.1 Concentration)",
+    y = "Percentage",
+    fill = "DNA Damage Repair"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 Proportion of DNA Damage Repair Genes (0.5 micromolar) **
+```{r prop DNA 0.5, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# **🔹 Read DNA Damage Repair Gene List**
+DNA_damage <- read.csv("data/DNA_Damage.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+DNA_damage <- DNA_damage %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = DNA_damage$Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
+
+# **🔹 Load Corrmotif Groups for 0.5 Concentration**
+prob_groups_0.5 <- list(
+  "Non Response (0.5)" = read.csv("data/prob_1_0.5.csv")$Entrez_ID,
+  "DOX-specific response (0.5)" = read.csv("data/prob_2_0.5.csv")$Entrez_ID,
+  "DOX only mid-late response (0.5)" = read.csv("data/prob_3_0.5.csv")$Entrez_ID,
+  "CX DOX (early) response (0.5)" = read.csv("data/prob_4_0.5.csv")$Entrez_ID,
+  "DOX + CX (mid-late) response (0.5)" = read.csv("data/prob_5_0.5.csv")$Entrez_ID
+)
+
+# **🔹 Create Dataframe for Corrmotif Groups**
+corrmotif_df_0.5 <- bind_rows(
+  lapply(prob_groups_0.5, function(ids) {
+    data.frame(Entrez_ID = ids)
+  }),
+  .id = "Response_Group"
+)
+
+# **🔹 Match Entrez_IDs with DNA Damage Repair Genes**
+corrmotif_df_0.5 <- corrmotif_df_0.5 %>%
+  mutate(DNA_Damage = ifelse(Entrez_ID %in% DNA_damage_genes, "Yes", "No"))
+
+# **🔹 Count DNA Damage Repair Genes in Each Response Group**
+proportion_data <- corrmotif_df_0.5 %>%
+  group_by(Response_Group, DNA_Damage) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Response_Group) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **🔹 Ensure "Yes" is at the Bottom and "No" at the Top**
+proportion_data$DNA_Damage <- factor(proportion_data$DNA_Damage, levels = c("Yes", "No"))
+
+# **🔹 Set Order of Response Groups for X-axis**
+response_order <- c("Non Response (0.5)", "DOX-specific response (0.5)", "DOX only mid-late response (0.5)", 
+                    "CX DOX (early) response (0.5)", "DOX + CX (mid-late) response (0.5)")
+proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = response_order)
+
+# **🔹 Perform Chi-Square Tests for Each Response Group vs Non-Response**
+non_response_counts <- proportion_data %>%
+  filter(Response_Group == "Non Response (0.5)") %>%
+  dplyr::select(DNA_Damage, Count) %>%
+  {setNames(.$Count, .$DNA_Damage)}  # Convert to named vector
+
+# **Comparing Each Group Against "Non Response (0.5)"**
+chi_results <- proportion_data %>%
+  filter(Response_Group %in% c("DOX-specific response (0.5)", "DOX only mid-late response (0.5)", 
+                               "CX DOX (early) response (0.5)", "DOX + CX (mid-late) response (0.5)")) %>%
+  group_by(Response_Group) %>%
+  summarise(
+    p_value = {
+      group_counts <- Count[DNA_Damage %in% c("Yes", "No")]
+      if (!"Yes" %in% DNA_Damage) group_counts <- c(group_counts, 0)
+      if (!"No" %in% DNA_Damage) group_counts <- c(0, group_counts)
+
+      contingency_table <- matrix(c(
+        group_counts[1], group_counts[2],  # Response group counts
+        non_response_counts["Yes"], non_response_counts["No"]  # Non-response counts
+      ), nrow = 2, byrow = TRUE)
+
+      # Perform chi-square test if all values are valid
+      if (all(contingency_table >= 0 & is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+
+# **🔹 Merge Chi-Square Results into Proportion Data**
+proportion_data <- proportion_data %>%
+  left_join(chi_results %>% dplyr::select(Response_Group, Significance), by = "Response_Group")
+
+# **🔹 Set Star Position Uniform Across Groups at 105%**
+star_positions <- data.frame(
+  Response_Group = c("DOX-specific response (0.5)", "DOX only mid-late response (0.5)", 
+                     "CX DOX (early) response (0.5)", "DOX + CX (mid-late) response (0.5)"),
+  y_pos = 105,  # Fixed at 105% of Y-axis
+  Significance = chi_results$Significance
+)
+
+# **🔹 Generate Proportion Plot with Chi-Square Stars**
+ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = DNA_Damage)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  geom_text(
+    data = star_positions,
+    aes(x = Response_Group, y = y_pos, label = Significance),  # Place stars at fixed 105%
+    inherit.aes = FALSE,
+    size = 6, color = "black", fontface = "bold", vjust = 0  # Keeps stars aligned
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 110)) +  # **Y-axis now limited to 110% for visibility**
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
+  labs(
+    title = "Proportion of DNA Damage Repair Genes in\n0.5 Corrmotif Response Groups",
+    x = "Response Groups (0.5 Concentration)",
+    y = "Percentage",
+    fill = "DNA Damage Repair Genes"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+
+## **📌 Proportion of P53 target Genes Genes (0.1 micromolar)**
+```{r prop P53 0.1, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# **🔹 Read P53 Target Gene List**
+P53_Target <- read.csv("data/P53_Target.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+P53_Target <- P53_Target %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = P53_Target$Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
+
+# **🔹 Load Corrmotif Groups for 0.1 Concentration**
+prob_groups_0.1 <- list(
+  "Non Response (0.1)" = read.csv("data/prob_1_0.1.csv")$Entrez_ID,
+  "DOX only mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
+  "CX_DOX mid-late (0.1)" = read.csv("data/prob_3_0.1.csv")$Entrez_ID
+)
+
+# **🔹 Create Dataframe for Corrmotif Groups**
+corrmotif_df_0.1 <- bind_rows(
+  lapply(prob_groups_0.1, function(ids) {
+    data.frame(Entrez_ID = ids)
+  }),
+  .id = "Response_Group"
+)
+
+# **🔹 Match Entrez_IDs with P53 Target Genes**
+corrmotif_df_0.1 <- corrmotif_df_0.1 %>%
+  mutate(P53_Target = ifelse(Entrez_ID %in% P53_Target_genes, "Yes", "No"))
+
+# **🔹 Count P53 Target Genes in Each Response Group**
+proportion_data <- corrmotif_df_0.1 %>%
+  group_by(Response_Group, P53_Target) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Response_Group) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **🔹 Ensure "Yes" is at the Bottom and "No" at the Top**
+proportion_data$P53_Target <- factor(proportion_data$P53_Target, levels = c("Yes", "No"))
+
+# **🔹 Set Order of Response Groups for X-axis**
+response_order <- c("Non Response (0.1)", "DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")
+proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = response_order)
+
+# **🔹 Perform Chi-Square Tests for "DOX only mid-late (0.1)" and "CX_DOX mid-late (0.1)" vs "Non Response (0.1)"**
+non_response_counts <- proportion_data %>%
+  filter(Response_Group == "Non Response (0.1)") %>%
+  dplyr::select(P53_Target, Count) %>%
+  {setNames(.$Count, .$P53_Target)}  # Convert to named vector
+
+chi_results <- proportion_data %>%
+  filter(Response_Group %in% c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")) %>%
+  group_by(Response_Group) %>%
+  summarise(
+    p_value = {
+      group_counts <- Count[P53_Target %in% c("Yes", "No")]
+      if (!"Yes" %in% P53_Target) group_counts <- c(group_counts, 0)
+      if (!"No" %in% P53_Target) group_counts <- c(0, group_counts)
+
+      contingency_table <- matrix(c(
+        group_counts[1], group_counts[2],
+        non_response_counts["Yes"], non_response_counts["No"]
+      ), nrow = 2, byrow = TRUE)
+
+      # Perform chi-square test if all values are valid
+      if (all(contingency_table >= 0 & is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+
+# **🔹 Merge Chi-Square Results into Proportion Data**
+proportion_data <- proportion_data %>%
+  left_join(chi_results %>% dplyr::select(Response_Group, Significance), by = "Response_Group")
+
+# **🔹 Set Star Position Uniform Across Groups at 105%**
+star_positions <- data.frame(
+  Response_Group = c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)"),
+  y_pos = 105,  # Fixed at 105% of Y-axis
+  Significance = chi_results$Significance
+)
+
+# **🔹 Generate Proportion Plot with Chi-Square Stars**
+ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = P53_Target)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  geom_text(
+    data = star_positions,
+    aes(x = Response_Group, y = y_pos, label = Significance),  # Place stars at fixed 105%
+    inherit.aes = FALSE,
+    size = 6, color = "black", fontface = "bold", vjust = 0  # Keeps stars aligned
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 110)) +  # Fixed Y-axis to 100%
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
+  labs(
+    title = "Proportion of P53 Target Genes in\n0.1 Corrmotif Response Groups",
+    x = "Response Groups (0.1 Concentration)",
+    y = "Percentage",
+    fill = "P53 Target Genes"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 Proportion of P53 target Genes (0.5 micromolar) **
+```{r prop P53 0.5, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# **🔹 Read P53 Target Gene List**
+P53_Target <- read.csv("data/P53_Target.csv", stringsAsFactors = FALSE)
+
+# Convert gene symbols to Entrez IDs
+P53_Target <- P53_Target %>%
+  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                            keys = P53_Target$Symbol,
+                            column = "ENTREZID",
+                            keytype = "SYMBOL",
+                            multiVals = "first"))
+
+P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
+
+# **🔹 Load Corrmotif Groups for 0.5 Concentration**
+prob_groups_0.5 <- list(
+  "Non Response (0.5)" = read.csv("data/prob_1_0.5.csv")$Entrez_ID,
+  "DOX-specific response (0.5)" = read.csv("data/prob_2_0.5.csv")$Entrez_ID,
+  "DOX only mid-late response (0.5)" = read.csv("data/prob_3_0.5.csv")$Entrez_ID,
+  "CX DOX (early) response (0.5)" = read.csv("data/prob_4_0.5.csv")$Entrez_ID,
+  "DOX + CX (mid-late) response (0.5)" = read.csv("data/prob_5_0.5.csv")$Entrez_ID
+)
+
+# **🔹 Create Dataframe for Corrmotif Groups**
+corrmotif_df_0.5 <- bind_rows(
+  lapply(prob_groups_0.5, function(ids) {
+    data.frame(Entrez_ID = ids)
+  }),
+  .id = "Response_Group"
+)
+
+# **🔹 Match Entrez_IDs with P53 Target Genes**
+corrmotif_df_0.5 <- corrmotif_df_0.5 %>%
+  mutate(P53_Target = ifelse(Entrez_ID %in% P53_Target_genes, "Yes", "No"))
+
+# **🔹 Count P53 Target Genes in Each Response Group**
+proportion_data <- corrmotif_df_0.5 %>%
+  group_by(Response_Group, P53_Target) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Response_Group) %>%
+  mutate(Percentage = (Count / sum(Count)) * 100)
+
+# **🔹 Ensure "Yes" is at the Bottom and "No" at the Top**
+proportion_data$P53_Target <- factor(proportion_data$P53_Target, levels = c("Yes", "No"))
+
+# **🔹 Set Order of Response Groups for X-axis**
+response_order <- c("Non Response (0.5)", "DOX-specific response (0.5)", "DOX only mid-late response (0.5)", 
+                    "CX DOX (early) response (0.5)", "DOX + CX (mid-late) response (0.5)")
+proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = response_order)
+
+# **🔹 Perform Chi-Square Tests for Each Response Group vs Non-Response**
+non_response_counts <- proportion_data %>%
+  filter(Response_Group == "Non Response (0.5)") %>%
+  dplyr::select(P53_Target, Count) %>%
+  {setNames(.$Count, .$P53_Target)}  # Convert to named vector
+
+# **Comparing Each Group Against "Non Response (0.5)"**
+chi_results <- proportion_data %>%
+  filter(Response_Group %in% c("DOX-specific response (0.5)", "DOX only mid-late response (0.5)", 
+                               "CX DOX (early) response (0.5)", "DOX + CX (mid-late) response (0.5)")) %>%
+  group_by(Response_Group) %>%
+  summarise(
+    p_value = {
+      group_counts <- Count[P53_Target %in% c("Yes", "No")]
+      if (!"Yes" %in% P53_Target) group_counts <- c(group_counts, 0)
+      if (!"No" %in% P53_Target) group_counts <- c(0, group_counts)
+
+      contingency_table <- matrix(c(
+        group_counts[1], group_counts[2],  # Response group counts
+        non_response_counts["Yes"], non_response_counts["No"]  # Non-response counts
+      ), nrow = 2, byrow = TRUE)
+
+      # Perform chi-square test if all values are valid
+      if (all(contingency_table >= 0 & is.finite(contingency_table))) {
+        chisq.test(contingency_table)$p.value
+      } else {
+        NA
+      }
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+
+# **🔹 Merge Chi-Square Results into Proportion Data**
+proportion_data <- proportion_data %>%
+  left_join(chi_results %>% dplyr::select(Response_Group, Significance), by = "Response_Group")
+
+# **🔹 Set Star Position Uniform Across Groups at 105%**
+star_positions <- data.frame(
+  Response_Group = c("DOX-specific response (0.5)", "DOX only mid-late response (0.5)", 
+                     "CX DOX (early) response (0.5)", "DOX + CX (mid-late) response (0.5)"),
+  y_pos = 105,  # Fixed at 105% of Y-axis
+  Significance = chi_results$Significance
+)
+
+# **🔹 Generate Proportion Plot with Chi-Square Stars**
+ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = P53_Target)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stacked bars
+  geom_text(
+    data = star_positions,
+    aes(x = Response_Group, y = y_pos, label = Significance),  # Place stars at fixed 105%
+    inherit.aes = FALSE,
+    size = 6, color = "black", fontface = "bold", vjust = 0  # Keeps stars aligned
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 110)) +  # **Y-axis now limited to 110% for visibility**
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
+  labs(
+    title = "Proportion of P53 Target Genes in\n0.5 Corrmotif Response Groups",
+    x = "Response Groups (0.5 Concentration)",
+    y = "Percentage",
+    fill = "P53 Target Genes"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
