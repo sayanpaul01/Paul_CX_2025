@@ -166,9 +166,15 @@ ggplot(proportion_data, aes(x = Set, y = Percentage, fill = DEG_Status)) +
 ```
 
 ## **📌 Proportion of Macrophage genes in CX and DOX DEGs**
-
-## **📌 Read and Process Data**
 ```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+
 # Load DEGs Data
 CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
 CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
@@ -197,10 +203,6 @@ DEG9 <- as.character(DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val < 0.05])
 DEG10 <- as.character(DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val < 0.05])
 DEG11 <- as.character(DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val < 0.05])
 DEG12 <- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val < 0.05])
-```
-
-## **📌 Proportion of Macrophage genes in CX and DOX DEGs datasets**
-```{r proportion1, echo=TRUE,results='hide', message=FALSE, fig.width=14,fig.height=8}
 
 # Define CX-5461 DEG lists
 CX_DEGs <- list(
@@ -214,70 +216,56 @@ DOX_DEGs <- list(
   "DOX_0.5_3" = DEG10, "DOX_0.5_24" = DEG11, "DOX_0.5_48" = DEG12
 )
 
-# Load Macrophage_new dataset (Use `Entrez_ID` for matching)
+# Load Macrophage dataset (Use `Entrez_ID` for matching)
 Macrophage_genes <- na.omit(macrophage_new$Entrez_ID)  # Keep only Entrez_IDs
 
-# **Process CX-5461 Samples**
-CX_DEGs_df <- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Sample_Type = "CX-5461")),
-  .id = "Sample"
-) %>%
-  mutate(Category = ifelse(Entrez_ID %in% Macrophage_genes, "Yes", "No")) %>%
-  group_by(Sample, Sample_Type, Category) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  group_by(Sample, Sample_Type) %>%
-  mutate(Percentage = (Count / sum(Count)) * 100)
+total_macrophage_genes <- length(Macrophage_genes)  # Total Macrophage genes count
 
-# **Process DOX Samples**
-DOX_DEGs_df <- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Sample_Type = "DOX")),
-  .id = "Sample"
-) %>%
-  mutate(Category = ifelse(Entrez_ID %in% Macrophage_genes, "Yes", "No")) %>%
-  group_by(Sample, Sample_Type, Category) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  group_by(Sample, Sample_Type) %>%
-  mutate(Percentage = (Count / sum(Count)) * 100)
+# Function to calculate the proportion of DEGs in Macrophage genes
+calculate_macrophage_proportion <- function(deg_list, drug_name) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    Macrophage_Target_DEGs = sapply(deg_list, function(ids) sum(ids %in% Macrophage_genes)),
+    Non_Macrophage_Target_DEGs = sapply(deg_list, function(ids) total_macrophage_genes - sum(ids %in% Macrophage_genes))
+  ) %>%
+    mutate(
+      Yes_Proportion = (Macrophage_Target_DEGs / total_macrophage_genes) * 100,
+      No_Proportion = (Non_Macrophage_Target_DEGs / total_macrophage_genes) * 100
+    )
+}
 
-# **Merge CX and DOX Dataframes**
-proportion_data <- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+# Calculate Proportions
+CX_proportion <- calculate_macrophage_proportion(CX_DEGs, "CX-5461")
+DOX_proportion <- calculate_macrophage_proportion(DOX_DEGs, "DOX")
 
+# Combine Data
+proportion_data <- bind_rows(CX_proportion, DOX_proportion)
 
+# Convert to long format for visualization
+proportion_long <- proportion_data %>%
+  dplyr::select(Sample, Drug, Yes_Proportion, No_Proportion) %>%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = "Category", values_to = "Percentage") %>%
+  mutate(Category = ifelse(Category == "Yes_Proportion", "Yes", "No"))
 
-# **Fix: Normalize Percentages to Sum Exactly 100%**
-proportion_data <- proportion_data %>%
-  group_by(Sample, Sample_Type) %>%
-  mutate(Percentage = round(Percentage, 2)) %>%  # Round percentages
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %>%  # Compute rounding difference
-  mutate(Percentage = ifelse(Category == "No", Percentage + Adjustment, Percentage)) %>%  # Apply adjustment to "No"
-  mutate(Percentage = ifelse(Percentage < 0, 0, Percentage)) %>%  # Prevent negatives
-  mutate(Percentage = ifelse(Percentage > 100, 100, Percentage)) %>%  # Prevent values > 100
-  ungroup() %>%
-  replace_na(list(Percentage = 0))  # Ensure no NA values
-
-# **Ensure "Yes" is at the Bottom and "No" is at the Top**
-proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
-
-
-# **Ensure "Yes" is at the Bottom and "No" is at the Top**
-proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
-
-# Define correct order for samples
+# Ensure correct order of samples on X-axis
 sample_order <- c(
   "CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
 )
-proportion_data$Sample <- factor(proportion_data$Sample, levels = sample_order)
+proportion_long$Sample <- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
+# Ensure "Yes" is at the Bottom and "No" is at the Top
+proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))
 
-# **Generate Proportion Plot for CX-5461 and DOX Separately**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+# Generate Stacked Bar Plot
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
   geom_bar(stat = "identity", position = "stack") +  # Stacked bars
-  facet_wrap(~Sample_Type, scales = "free_x") +  # Separate CX-5461 and DOX
+  facet_wrap(~Drug, scales = "free_x") +  # Separate CX-5461 and DOX
   scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 100)) +  # Y-axis as percentage
-  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red) at Bottom, No (Blue) on Top
+  scale_fill_manual(values = c("Yes" = "#e41a1c", "No" = "#377eb8")) +  # Yes (Red), No (Blue)
   labs(
-    title = "Proportion of IFN gamma primed macrophage Genes in CX-5461 and DOX DEGs",
+    title = "Proportion of IFN gamma primed Macrophage Genes in CX-5461 and DOX DEGs",
     x = "Samples (CX-5461 and DOX)",
     y = "Percentage",
     fill = "Category"
@@ -288,10 +276,11 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
     axis.title = element_text(size = 15, color = "black"),
     axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
     legend.title = element_blank(),
-    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),  # Updated for ggplot2 3.4.0+
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),  
     strip.background = element_blank(),
     strip.text = element_text(size = 12, face = "bold")
   )
+
 ```
 
 ## **📌 Correlation of Macrophage genes with CX and DOX expressed genes**

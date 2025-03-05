@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1c452e8edce05d8c2b57824fd14e295a7ebb85actargetblank1c452e8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree10d28dd7ba8a410e15ba473a9c14c68fd3eb544atargetblank10d28dda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1c452e8edce05d8c2b57824fd14e295a7ebb85ac" target="_blank">1c452e8</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/10d28dd7ba8a410e15ba473a9c14c68fd3eb544a" target="_blank">10d28dd</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1c452e8edce05d8c2b57824fd14e295a7ebb85actargetblank1c452e8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree10d28dd7ba8a410e15ba473a9c14c68fd3eb544atargetblank10d28dda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1c452e8edce05d8c2b57824fd14e295a7ebb85ac" target="_blank">1c452e8</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/10d28dd7ba8a410e15ba473a9c14c68fd3eb544a" target="_blank">10d28dd</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,6 +548,7 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
 
 Unstaged changes:
     Modified:   analysis/Macrophage.Rmd
@@ -596,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/10d28dd7ba8a410e15ba473a9c14c68fd3eb544a/analysis/Macrophage.Rmd" target="_blank">10d28dd</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/10d28dd7ba8a410e15ba473a9c14c68fd3eb544a/docs/Macrophage.html" target="_blank">10d28dd</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -853,10 +888,14 @@ sayanpaul01
 class="section level2">
 <h2><strong>📌 Proportion of Macrophage genes in CX and DOX
 DEGs</strong></h2>
-</div>
-<div id="read-and-process-data" class="section level2">
-<h2><strong>📌 Read and Process Data</strong></h2>
-<pre class="r"><code># Load DEGs Data
+<pre class="r"><code># Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+
+# Load DEGs Data
 CX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
 CX_0.1_24 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
 CX_0.1_48 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
@@ -883,13 +922,9 @@ DEG8 &lt;- as.character(DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val &lt; 0.05])
 DEG9 &lt;- as.character(DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val &lt; 0.05])
 DEG10 &lt;- as.character(DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val &lt; 0.05])
 DEG11 &lt;- as.character(DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val &lt; 0.05])
-DEG12 &lt;- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val &lt; 0.05])</code></pre>
-</div>
-<div id="proportion-of-macrophage-genes-in-cx-and-dox-degs-datasets"
-class="section level2">
-<h2><strong>📌 Proportion of Macrophage genes in CX and DOX DEGs
-datasets</strong></h2>
-<pre class="r"><code># Define CX-5461 DEG lists
+DEG12 &lt;- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val &lt; 0.05])
+
+# Define CX-5461 DEG lists
 CX_DEGs &lt;- list(
   &quot;CX_0.1_3&quot; = DEG1, &quot;CX_0.1_24&quot; = DEG2, &quot;CX_0.1_48&quot; = DEG3,
   &quot;CX_0.5_3&quot; = DEG4, &quot;CX_0.5_24&quot; = DEG5, &quot;CX_0.5_48&quot; = DEG6
@@ -901,70 +936,56 @@ DOX_DEGs &lt;- list(
   &quot;DOX_0.5_3&quot; = DEG10, &quot;DOX_0.5_24&quot; = DEG11, &quot;DOX_0.5_48&quot; = DEG12
 )
 
-# Load Macrophage_new dataset (Use `Entrez_ID` for matching)
+# Load Macrophage dataset (Use `Entrez_ID` for matching)
 Macrophage_genes &lt;- na.omit(macrophage_new$Entrez_ID)  # Keep only Entrez_IDs
 
-# **Process CX-5461 Samples**
-CX_DEGs_df &lt;- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Sample_Type = &quot;CX-5461&quot;)),
-  .id = &quot;Sample&quot;
-) %&gt;%
-  mutate(Category = ifelse(Entrez_ID %in% Macrophage_genes, &quot;Yes&quot;, &quot;No&quot;)) %&gt;%
-  group_by(Sample, Sample_Type, Category) %&gt;%
-  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
-  group_by(Sample, Sample_Type) %&gt;%
-  mutate(Percentage = (Count / sum(Count)) * 100)
+total_macrophage_genes &lt;- length(Macrophage_genes)  # Total Macrophage genes count
 
-# **Process DOX Samples**
-DOX_DEGs_df &lt;- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Sample_Type = &quot;DOX&quot;)),
-  .id = &quot;Sample&quot;
-) %&gt;%
-  mutate(Category = ifelse(Entrez_ID %in% Macrophage_genes, &quot;Yes&quot;, &quot;No&quot;)) %&gt;%
-  group_by(Sample, Sample_Type, Category) %&gt;%
-  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
-  group_by(Sample, Sample_Type) %&gt;%
-  mutate(Percentage = (Count / sum(Count)) * 100)
+# Function to calculate the proportion of DEGs in Macrophage genes
+calculate_macrophage_proportion &lt;- function(deg_list, drug_name) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    Macrophage_Target_DEGs = sapply(deg_list, function(ids) sum(ids %in% Macrophage_genes)),
+    Non_Macrophage_Target_DEGs = sapply(deg_list, function(ids) total_macrophage_genes - sum(ids %in% Macrophage_genes))
+  ) %&gt;%
+    mutate(
+      Yes_Proportion = (Macrophage_Target_DEGs / total_macrophage_genes) * 100,
+      No_Proportion = (Non_Macrophage_Target_DEGs / total_macrophage_genes) * 100
+    )
+}
 
-# **Merge CX and DOX Dataframes**
-proportion_data &lt;- bind_rows(CX_DEGs_df, DOX_DEGs_df)
+# Calculate Proportions
+CX_proportion &lt;- calculate_macrophage_proportion(CX_DEGs, &quot;CX-5461&quot;)
+DOX_proportion &lt;- calculate_macrophage_proportion(DOX_DEGs, &quot;DOX&quot;)
 
+# Combine Data
+proportion_data &lt;- bind_rows(CX_proportion, DOX_proportion)
 
+# Convert to long format for visualization
+proportion_long &lt;- proportion_data %&gt;%
+  dplyr::select(Sample, Drug, Yes_Proportion, No_Proportion) %&gt;%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = &quot;Category&quot;, values_to = &quot;Percentage&quot;) %&gt;%
+  mutate(Category = ifelse(Category == &quot;Yes_Proportion&quot;, &quot;Yes&quot;, &quot;No&quot;))
 
-# **Fix: Normalize Percentages to Sum Exactly 100%**
-proportion_data &lt;- proportion_data %&gt;%
-  group_by(Sample, Sample_Type) %&gt;%
-  mutate(Percentage = round(Percentage, 2)) %&gt;%  # Round percentages
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %&gt;%  # Compute rounding difference
-  mutate(Percentage = ifelse(Category == &quot;No&quot;, Percentage + Adjustment, Percentage)) %&gt;%  # Apply adjustment to &quot;No&quot;
-  mutate(Percentage = ifelse(Percentage &lt; 0, 0, Percentage)) %&gt;%  # Prevent negatives
-  mutate(Percentage = ifelse(Percentage &gt; 100, 100, Percentage)) %&gt;%  # Prevent values &gt; 100
-  ungroup() %&gt;%
-  replace_na(list(Percentage = 0))  # Ensure no NA values
-
-# **Ensure &quot;Yes&quot; is at the Bottom and &quot;No&quot; is at the Top**
-proportion_data$Category &lt;- factor(proportion_data$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
-
-
-# **Ensure &quot;Yes&quot; is at the Bottom and &quot;No&quot; is at the Top**
-proportion_data$Category &lt;- factor(proportion_data$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
-
-# Define correct order for samples
+# Ensure correct order of samples on X-axis
 sample_order &lt;- c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 )
-proportion_data$Sample &lt;- factor(proportion_data$Sample, levels = sample_order)
+proportion_long$Sample &lt;- factor(proportion_long$Sample, levels = sample_order, ordered = TRUE)
 
+# Ensure &quot;Yes&quot; is at the Bottom and &quot;No&quot; is at the Top
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
 
-# **Generate Proportion Plot for CX-5461 and DOX Separately**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
+# Generate Stacked Bar Plot
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
   geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +  # Stacked bars
-  facet_wrap(~Sample_Type, scales = &quot;free_x&quot;) +  # Separate CX-5461 and DOX
+  facet_wrap(~Drug, scales = &quot;free_x&quot;) +  # Separate CX-5461 and DOX
   scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 100)) +  # Y-axis as percentage
-  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +  # Yes (Red) at Bottom, No (Blue) on Top
+  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +  # Yes (Red), No (Blue)
   labs(
-    title = &quot;Proportion of IFN gamma primed macrophage Genes in CX-5461 and DOX DEGs&quot;,
+    title = &quot;Proportion of IFN gamma primed Macrophage Genes in CX-5461 and DOX DEGs&quot;,
     x = &quot;Samples (CX-5461 and DOX)&quot;,
     y = &quot;Percentage&quot;,
     fill = &quot;Category&quot;
@@ -975,48 +996,11 @@ ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
     axis.title = element_text(size = 15, color = &quot;black&quot;),
     axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
     legend.title = element_blank(),
-    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),  # Updated for ggplot2 3.4.0+
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),  
     strip.background = element_blank(),
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
-<p><img src="figure/Macrophage.Rmd/proportion1-1.png" width="1344" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-proportion1-1">
-Past versions of proportion1-1.png
-</button>
-</p>
-<div id="fig-proportion1-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/sayanpaul01/CX5461_Project/blob/46aa22b9d3ecdb0423e688fbc2c17281dcc9bddd/docs/figure/Macrophage.Rmd/proportion1-1.png" target="_blank">46aa22b</a>
-</td>
-<td>
-sayanpaul01
-</td>
-<td>
-2025-03-01
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/Macrophage.Rmd/load_DEGs-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div
 id="correlation-of-macrophage-genes-with-cx-and-dox-expressed-genes"
@@ -1485,6 +1469,43 @@ ggplot(proportion_long, aes(x = Group, y = Percentage, fill = Category)) +
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
 <p><img src="figure/Macrophage.Rmd/prop%20DNA-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-prop-DNA-1">
+Past versions of "prop DNA-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-prop-DNA-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/10d28dd7ba8a410e15ba473a9c14c68fd3eb544a/docs/figure/Macrophage.Rmd/prop DNA-1.png" target="_blank">10d28dd</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="proportion-of-macrophage-genes-in-corrmotif-0.5-micromolar"
 class="section level2">
@@ -1612,6 +1633,43 @@ ggplot(proportion_long, aes(x = Group, y = Percentage, fill = Category)) +
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
 <p><img src="figure/Macrophage.Rmd/prop%200.5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-prop-0.5-1">
+Past versions of "prop 0.5-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-prop-0.5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/10d28dd7ba8a410e15ba473a9c14c68fd3eb544a/docs/figure/Macrophage.Rmd/prop 0.5-1.png" target="_blank">10d28dd</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
