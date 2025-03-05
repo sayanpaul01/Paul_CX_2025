@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-28
+<strong>Last updated:</strong> 2025-03-05
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreedd3f95afa17c2b63718df46f778695ce7920c27atargetblankdd3f95aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree96d0db145cf68e6db0d39e70bad9af0f75793aaetargetblank96d0db1a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/dd3f95afa17c2b63718df46f778695ce7920c27a" target="_blank">dd3f95a</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/96d0db145cf68e6db0d39e70bad9af0f75793aae" target="_blank">96d0db1</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreedd3f95afa17c2b63718df46f778695ce7920c27atargetblankdd3f95aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree96d0db145cf68e6db0d39e70bad9af0f75793aaetargetblank96d0db1a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/dd3f95afa17c2b63718df46f778695ce7920c27a" target="_blank">dd3f95a</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/96d0db145cf68e6db0d39e70bad9af0f75793aae" target="_blank">96d0db1</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -596,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/5b6c28574cd9e1304a154babe2b1e69817091aeb/analysis/Colorectal.Rmd" target="_blank">5b6c285</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/5b6c28574cd9e1304a154babe2b1e69817091aeb/docs/Colorectal.html" target="_blank">5b6c285</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -859,7 +893,13 @@ DEGs</strong></h2>
 </div>
 <div id="read-and-process-data" class="section level2">
 <h2><strong>📌 Read and Process Data</strong></h2>
-<pre class="r"><code># Load DEGs Data
+<pre class="r"><code># Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# Load DEGs Data
 CX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
 CX_0.1_24 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
 CX_0.1_48 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
@@ -875,150 +915,88 @@ DOX_0.5_24 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
 DOX_0.5_48 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
 
 # Extract Significant DEGs
-DEG1 &lt;- as.character(CX_0.1_3$Entrez_ID[CX_0.1_3$adj.P.Val &lt; 0.05])
-DEG2 &lt;- as.character(CX_0.1_24$Entrez_ID[CX_0.1_24$adj.P.Val &lt; 0.05])
-DEG3 &lt;- as.character(CX_0.1_48$Entrez_ID[CX_0.1_48$adj.P.Val &lt; 0.05])
-DEG4 &lt;- as.character(CX_0.5_3$Entrez_ID[CX_0.5_3$adj.P.Val &lt; 0.05])
-DEG5 &lt;- as.character(CX_0.5_24$Entrez_ID[CX_0.5_24$adj.P.Val &lt; 0.05])
-DEG6 &lt;- as.character(CX_0.5_48$Entrez_ID[CX_0.5_48$adj.P.Val &lt; 0.05])
-DEG7 &lt;- as.character(DOX_0.1_3$Entrez_ID[DOX_0.1_3$adj.P.Val &lt; 0.05])
-DEG8 &lt;- as.character(DOX_0.1_24$Entrez_ID[DOX_0.1_24$adj.P.Val &lt; 0.05])
-DEG9 &lt;- as.character(DOX_0.1_48$Entrez_ID[DOX_0.1_48$adj.P.Val &lt; 0.05])
-DEG10 &lt;- as.character(DOX_0.5_3$Entrez_ID[DOX_0.5_3$adj.P.Val &lt; 0.05])
-DEG11 &lt;- as.character(DOX_0.5_24$Entrez_ID[DOX_0.5_24$adj.P.Val &lt; 0.05])
-DEG12 &lt;- as.character(DOX_0.5_48$Entrez_ID[DOX_0.5_48$adj.P.Val &lt; 0.05])</code></pre>
-</div>
-<div
-id="proportion-of-colorectal-cancer-genes-in-cx-and-dox-degs-datasets"
-class="section level2">
-<h2><strong>📌 Proportion of colorectal cancer genes in CX and DOX DEGs
-datasets</strong></h2>
-<pre class="r"><code>data_6hr &lt;- read.csv(&quot;data/Colorectal/6hr.csv&quot;, stringsAsFactors = FALSE)
+extract_DEGs &lt;- function(df) as.character(df$Entrez_ID[df$adj.P.Val &lt; 0.05])
+
+CX_DEGs &lt;- list(
+  &quot;CX_0.1_3&quot; = extract_DEGs(CX_0.1_3), &quot;CX_0.1_24&quot; = extract_DEGs(CX_0.1_24), &quot;CX_0.1_48&quot; = extract_DEGs(CX_0.1_48),
+  &quot;CX_0.5_3&quot; = extract_DEGs(CX_0.5_3), &quot;CX_0.5_24&quot; = extract_DEGs(CX_0.5_24), &quot;CX_0.5_48&quot; = extract_DEGs(CX_0.5_48)
+)
+
+DOX_DEGs &lt;- list(
+  &quot;DOX_0.1_3&quot; = extract_DEGs(DOX_0.1_3), &quot;DOX_0.1_24&quot; = extract_DEGs(DOX_0.1_24), &quot;DOX_0.1_48&quot; = extract_DEGs(DOX_0.1_48),
+  &quot;DOX_0.5_3&quot; = extract_DEGs(DOX_0.5_3), &quot;DOX_0.5_24&quot; = extract_DEGs(DOX_0.5_24), &quot;DOX_0.5_48&quot; = extract_DEGs(DOX_0.5_48)
+)
+
+# Load Colorectal Cancer Gene Lists
+data_6hr &lt;- read.csv(&quot;data/Colorectal/6hr.csv&quot;, stringsAsFactors = FALSE)
 data_24hr &lt;- read.csv(&quot;data/Colorectal/24hr.csv&quot;, stringsAsFactors = FALSE)
 data_72hr &lt;- read.csv(&quot;data/Colorectal/72hr.csv&quot;, stringsAsFactors = FALSE)
 
-# Map gene symbols to Entrez IDs using org.Hs.eg.db
-data_6hr &lt;- data_6hr %&gt;%
-  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
-                            keys = Symbol,
-                            column = &quot;ENTREZID&quot;,
-                            keytype = &quot;SYMBOL&quot;,
-                            multiVals = &quot;first&quot;))
+# Convert Gene Symbols to Entrez IDs
+data_list &lt;- list(&quot;6hr&quot; = data_6hr, &quot;24hr&quot; = data_24hr, &quot;72hr&quot; = data_72hr)
+data_list &lt;- lapply(data_list, function(df) {
+  df %&gt;% mutate(Entrez_ID = mapIds(org.Hs.eg.db, keys = Symbol, column = &quot;ENTREZID&quot;, keytype = &quot;SYMBOL&quot;, multiVals = &quot;first&quot;)) %&gt;% na.omit()
+})
 
-data_24hr &lt;- data_24hr %&gt;%
-  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
-                            keys = Symbol,
-                            column = &quot;ENTREZID&quot;,
-                            keytype = &quot;SYMBOL&quot;,
-                            multiVals = &quot;first&quot;))
+lit_genes &lt;- lapply(data_list, function(df) df$Entrez_ID)
 
-data_72hr &lt;- data_72hr %&gt;%
-  mutate(Entrez_ID = mapIds(org.Hs.eg.db,
-                            keys = Symbol,
-                            column = &quot;ENTREZID&quot;,
-                            keytype = &quot;SYMBOL&quot;,
-                            multiVals = &quot;first&quot;))
+# Function to calculate DEGs proportion in Colorectal Cancer dataset
+calculate_proportion &lt;- function(deg_list, drug_name, cancer_genes, timepoint) {
+  data.frame(
+    Sample = names(deg_list),
+    Drug = drug_name,
+    Timepoint = timepoint,
+    DEGs_in_Cancer = sapply(deg_list, function(ids) sum(ids %in% cancer_genes)),
+    Non_DEGs_in_Cancer = length(cancer_genes) - sapply(deg_list, function(ids) sum(ids %in% cancer_genes))
+  ) %&gt;%
+    mutate(
+      Yes_Proportion = (DEGs_in_Cancer / length(cancer_genes)) * 100,
+      No_Proportion = (Non_DEGs_in_Cancer / length(cancer_genes)) * 100
+    )
+}
 
-# Define CX-5461 DEG lists
-CX_DEGs &lt;- list(
-  &quot;CX_0.1_3&quot; = DEG1, &quot;CX_0.1_24&quot; = DEG2, &quot;CX_0.1_48&quot; = DEG3,
-  &quot;CX_0.5_3&quot; = DEG4, &quot;CX_0.5_24&quot; = DEG5, &quot;CX_0.5_48&quot; = DEG6
+# Calculate Proportions for Each Timepoint
+proportion_data &lt;- bind_rows(
+  lapply(names(lit_genes), function(tp) calculate_proportion(CX_DEGs, &quot;CX-5461&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(DOX_DEGs, &quot;DOX&quot;, lit_genes[[tp]], tp))
 )
 
-# Define DOX DEG lists
-DOX_DEGs &lt;- list(
-  &quot;DOX_0.1_3&quot; = DEG7, &quot;DOX_0.1_24&quot; = DEG8, &quot;DOX_0.1_48&quot; = DEG9,
-  &quot;DOX_0.5_3&quot; = DEG10, &quot;DOX_0.5_24&quot; = DEG11, &quot;DOX_0.5_48&quot; = DEG12
-)
+# Convert Data to Long Format for Faceting
+proportion_long &lt;- proportion_data %&gt;%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = &quot;Category&quot;, values_to = &quot;Percentage&quot;) %&gt;%
+  mutate(Category = ifelse(Category == &quot;Yes_Proportion&quot;, &quot;Yes&quot;, &quot;No&quot;))
 
-# Extract Entrez_IDs from cancer gene datasets for 6hr, 24hr, and 72hr
-lit_genes &lt;- list(
-  &quot;6hr&quot; = na.omit(data_6hr$Entrez_ID),
-  &quot;24hr&quot; = na.omit(data_24hr$Entrez_ID),
-  &quot;72hr&quot; = na.omit(data_72hr$Entrez_ID)
-)
-
-# Combine CX-5461 DEGs into a dataframe with a &quot;Drug&quot; column
-CX_DEGs_df &lt;- bind_rows(
-  lapply(CX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = &quot;CX-5461&quot;)),
-  .id = &quot;Sample&quot;
-)
-
-# Combine DOX DEGs into a dataframe with a &quot;Drug&quot; column
-DOX_DEGs_df &lt;- bind_rows(
-  lapply(DOX_DEGs, function(ids) data.frame(Entrez_ID = ids, Drug = &quot;DOX&quot;)),
-  .id = &quot;Sample&quot;
-)
-
-# Merge CX-5461 and DOX datasets
-DEGs_df &lt;- bind_rows(CX_DEGs_df, DOX_DEGs_df)
-
-# Match Entrez_IDs with DEGs from 6hr, 24hr, and 72hr datasets
-DEGs_df &lt;- DEGs_df %&gt;%
-  mutate(
-    Category_6hr = ifelse(Entrez_ID %in% lit_genes[[&quot;6hr&quot;]], &quot;Yes&quot;, &quot;No&quot;),
-    Category_24hr = ifelse(Entrez_ID %in% lit_genes[[&quot;24hr&quot;]], &quot;Yes&quot;, &quot;No&quot;),
-    Category_72hr = ifelse(Entrez_ID %in% lit_genes[[&quot;72hr&quot;]], &quot;Yes&quot;, &quot;No&quot;)
-  )
-
-# Convert to long format for ggplot
-proportion_data &lt;- DEGs_df %&gt;%
-  pivot_longer(cols = starts_with(&quot;Category&quot;), names_to = &quot;Timepoint&quot;, values_to = &quot;Category&quot;) %&gt;%
-  group_by(Sample, Drug, Timepoint, Category) %&gt;%
-  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
-  group_by(Sample, Drug, Timepoint) %&gt;%
-  mutate(Percentage = (Count / sum(Count)) * 100)
-
-# **Fix: Normalize Percentages to Sum Exactly 100%**
-proportion_data &lt;- proportion_data %&gt;%
-  group_by(Sample, Timepoint) %&gt;%
-  mutate(Percentage = round(Percentage, 2)) %&gt;%  # Round each percentage
-  mutate(Adjustment = 100 - sum(Percentage, na.rm = TRUE)) %&gt;%  # Compute rounding difference
-  mutate(Percentage = ifelse(Category == &quot;No&quot;, Percentage + Adjustment, Percentage)) %&gt;%  # Apply adjustment to &quot;No&quot;
-  mutate(Percentage = ifelse(Percentage &lt; 0, 0, Percentage)) %&gt;%  # Prevent negatives
-  mutate(Percentage = ifelse(Percentage &gt; 100, 100, Percentage)) %&gt;%  # Prevent values &gt; 100
-  ungroup() %&gt;%  # Remove grouping to avoid select() errors
-  replace_na(list(Percentage = 0))  # Ensure no NA values
-
-# **Ensure &quot;Yes&quot; is at the Bottom and &quot;No&quot; is at the Top**
-proportion_data$Category &lt;- factor(proportion_data$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
-
-# Define correct factor orders for samples and timepoints
+# Ensure Correct Ordering
 sample_order &lt;- c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 )
-proportion_data$Sample &lt;- factor(proportion_data$Sample, levels = sample_order)
+proportion_long$Sample &lt;- factor(proportion_long$Sample, levels = sample_order)
+proportion_long$Timepoint &lt;- factor(proportion_long$Timepoint, levels = c(&quot;6hr&quot;, &quot;24hr&quot;, &quot;72hr&quot;))
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
 
-proportion_data$Timepoint &lt;- factor(
-  proportion_data$Timepoint,
-  levels = c(&quot;Category_6hr&quot;, &quot;Category_24hr&quot;, &quot;Category_72hr&quot;),
-  labels = c(&quot;6hr&quot;, &quot;24hr&quot;, &quot;72hr&quot;)
-)
-
-# **Generate Combined Proportion Plot for CX-5461 and DOX**
-ggplot(proportion_data, aes(x = Sample, y = Percentage, fill = Category)) +
-  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +  # Stacked bars
-  facet_wrap(~Timepoint, scales = &quot;fixed&quot;) +  # Facet by Timepoint (6hr, 24hr, 72hr)
-  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 100)) +  # Y-axis as percentage
-  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +  # Yes (Red) at Bottom, No (Blue) on Top
+# Generate Stacked Bar Plot with Faceting
+ggplot(proportion_long, aes(x = Sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  facet_wrap(~Timepoint, scales = &quot;fixed&quot;) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 100)) +
+  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +
   labs(
-    title = &quot;Proportion of Human Colorectal Cancer Genes in CX-5461 and DOX DEGs&quot;,
-    x = &quot;Samples (CX-5461 and DOX)&quot;,
+    title = &quot;Proportion of CX-5461 and DOX DEGs in Colorectal Cancer Dataset&quot;,
+    x = &quot;Samples&quot;,
     y = &quot;Percentage&quot;,
     fill = &quot;Category&quot;
   ) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
-    axis.title = element_text(size = 15, color = &quot;black&quot;),
     axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
     legend.title = element_blank(),
-    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),  # Updated for ggplot2 3.4.0+
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),
     strip.background = element_blank(),
     strip.text = element_text(size = 12, face = &quot;bold&quot;)
   )</code></pre>
-<p><img src="figure/Colorectal.Rmd/proportion1-1.png" width="1344" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Colorectal.Rmd/load_DEGs-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div
 id="correlation-of-colorectal-cancer-genes-with-cx-and-dox-expressed-genes"
@@ -1127,6 +1105,43 @@ scatter_plot &lt;- ggplot(merged_data, aes(x = logFC_Drug, y = logFC_6hr)) +
 # Display plot
 print(scatter_plot)</code></pre>
 <p><img src="figure/Colorectal.Rmd/Data_prep-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Data_prep-1">
+Past versions of Data_prep-1.png
+</button>
+</p>
+<div id="fig-Data_prep-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/5b6c28574cd9e1304a154babe2b1e69817091aeb/docs/figure/Colorectal.Rmd/Data_prep-1.png" target="_blank">5b6c285</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="hr-1" class="section level2">
 <h2><strong>📌 24hr</strong></h2>
@@ -1229,6 +1244,43 @@ scatter_plot_24hr &lt;- ggplot(merged_data_24hr, aes(x = logFC_Drug, y = logFC_2
 # Display plot
 print(scatter_plot_24hr)</code></pre>
 <p><img src="figure/Colorectal.Rmd/Data_prep_24-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Data_prep_24-1">
+Past versions of Data_prep_24-1.png
+</button>
+</p>
+<div id="fig-Data_prep_24-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/5b6c28574cd9e1304a154babe2b1e69817091aeb/docs/figure/Colorectal.Rmd/Data_prep_24-1.png" target="_blank">5b6c285</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="hr-2" class="section level2">
 <h2><strong>📌 72hr</strong></h2>
@@ -1331,6 +1383,293 @@ scatter_plot_48hr &lt;- ggplot(merged_data_48hr, aes(x = logFC_Drug, y = logFC_7
 # Display plot
 print(scatter_plot_48hr)</code></pre>
 <p><img src="figure/Colorectal.Rmd/Data_prep_72-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Data_prep_72-1">
+Past versions of Data_prep_72-1.png
+</button>
+</p>
+<div id="fig-Data_prep_72-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/5b6c28574cd9e1304a154babe2b1e69817091aeb/docs/figure/Colorectal.Rmd/Data_prep_72-1.png" target="_blank">5b6c285</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div
+id="proportion-of-colorectal-cancer-genes-in-corrmotif-0.1-micromolar"
+class="section level2">
+<h2><strong>📌 Proportion of Colorectal cancer Genes in corrmotif 0.1
+micromolar</strong></h2>
+<pre class="r"><code># Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# Load Colorectal Cancer Gene Lists
+data_6hr &lt;- read.csv(&quot;data/Colorectal/6hr.csv&quot;, stringsAsFactors = FALSE)
+data_24hr &lt;- read.csv(&quot;data/Colorectal/24hr.csv&quot;, stringsAsFactors = FALSE)
+data_72hr &lt;- read.csv(&quot;data/Colorectal/72hr.csv&quot;, stringsAsFactors = FALSE)
+
+# Convert Gene Symbols to Entrez IDs
+data_list &lt;- list(&quot;6hr&quot; = data_6hr, &quot;24hr&quot; = data_24hr, &quot;72hr&quot; = data_72hr)
+data_list &lt;- lapply(data_list, function(df) {
+  df %&gt;% mutate(Entrez_ID = mapIds(org.Hs.eg.db, keys = Symbol, column = &quot;ENTREZID&quot;, keytype = &quot;SYMBOL&quot;, multiVals = &quot;first&quot;)) %&gt;% na.omit()
+})
+
+lit_genes &lt;- lapply(data_list, function(df) df$Entrez_ID)
+
+# Load Corrmotif Groups for 0.1 Concentration
+prob_groups_0.1 &lt;- list(
+  &quot;Non Response (0.1)&quot; = read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID,
+  &quot;DOX only mid-late (0.1)&quot; = read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID,
+  &quot;CX_DOX mid-late (0.1)&quot; = read.csv(&quot;data/prob_3_0.1.csv&quot;)$Entrez_ID
+)
+
+# Function to calculate proportions in colorectal cancer dataset
+calculate_proportion &lt;- function(deg_list, group_name, cancer_genes, timepoint) {
+  total_group_genes &lt;- length(deg_list)
+  matched_genes &lt;- sum(deg_list %in% cancer_genes)
+  
+  data.frame(
+    Group = group_name,
+    Timepoint = timepoint,
+    Colorectal_DEGs = matched_genes,
+    Non_Colorectal_DEGs = total_group_genes - matched_genes
+  ) %&gt;%
+    mutate(
+      Yes_Proportion = (Colorectal_DEGs / total_group_genes) * 100,
+      No_Proportion = (Non_Colorectal_DEGs / total_group_genes) * 100
+    )
+}
+
+# Calculate Proportions for Each Timepoint
+proportion_data &lt;- bind_rows(
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;Non Response (0.1)&quot;]], &quot;Non Response (0.1)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;DOX only mid-late (0.1)&quot;]], &quot;DOX only mid-late (0.1)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;CX_DOX mid-late (0.1)&quot;]], &quot;CX_DOX mid-late (0.1)&quot;, lit_genes[[tp]], tp))
+)
+
+# Convert Data to Long Format for Faceting
+proportion_long &lt;- proportion_data %&gt;%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = &quot;Category&quot;, values_to = &quot;Percentage&quot;) %&gt;%
+  mutate(Category = ifelse(Category == &quot;Yes_Proportion&quot;, &quot;Yes&quot;, &quot;No&quot;))
+
+# Perform Chi-Square Test Comparing Groups to Non-Response
+test_results &lt;- data.frame(Group = character(), Timepoint = character(), P_Value = numeric())
+
+target_groups &lt;- c(&quot;DOX only mid-late (0.1)&quot;, &quot;CX_DOX mid-late (0.1)&quot;)
+for (tp in names(lit_genes)) {
+  for (grp in target_groups) {
+    contingency_table &lt;- matrix(
+      c(
+        sum(prob_groups_0.1[[grp]] %in% lit_genes[[tp]]),
+        length(prob_groups_0.1[[grp]]) - sum(prob_groups_0.1[[grp]] %in% lit_genes[[tp]]),
+        sum(prob_groups_0.1[[&quot;Non Response (0.1)&quot;]] %in% lit_genes[[tp]]),
+        length(prob_groups_0.1[[&quot;Non Response (0.1)&quot;]]) - sum(prob_groups_0.1[[&quot;Non Response (0.1)&quot;]] %in% lit_genes[[tp]])
+      ),
+      nrow = 2, byrow = TRUE
+    )
+    test_result &lt;- chisq.test(contingency_table)
+    test_results &lt;- rbind(test_results, data.frame(Group = grp, Timepoint = tp, P_Value = test_result$p.value))
+  }
+}</code></pre>
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+<pre class="r"><code># Add Significance Stars
+test_results$Significant &lt;- ifelse(test_results$P_Value &lt; 0.05, &quot;*&quot;, &quot;&quot;)
+proportion_long &lt;- left_join(proportion_long, test_results, by = c(&quot;Group&quot;, &quot;Timepoint&quot;))
+
+# Ensure Correct Ordering
+proportion_long$Group &lt;- factor(proportion_long$Group, levels = c(&quot;Non Response (0.1)&quot;, &quot;DOX only mid-late (0.1)&quot;, &quot;CX_DOX mid-late (0.1)&quot;))
+proportion_long$Timepoint &lt;- factor(proportion_long$Timepoint, levels = c(&quot;6hr&quot;, &quot;24hr&quot;, &quot;72hr&quot;))
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
+
+# Generate Stacked Bar Plot with Faceting and Significance Annotations
+ggplot(proportion_long, aes(x = Group, y = Percentage, fill = Category)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  facet_wrap(~Timepoint, scales = &quot;fixed&quot;) +
+  geom_text(data = subset(proportion_long, Significant == &quot;*&quot;),
+            aes(x = Group, y = 102, label = &quot;*&quot;),
+            size = 6, color = &quot;black&quot;, fontface = &quot;bold&quot;) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
+  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +
+  labs(
+    title = &quot;Proportion of Colorectal cancer Genes in\n0.1 Corrmotif Response Groups&quot;,
+    x = &quot;Group&quot;,
+    y = &quot;Percentage&quot;,
+    fill = &quot;Category&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Colorectal.Rmd/prop%20DNA-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="proportion-of-colorectal-cancer-genes-in-corrmotif-0.5-micromolar"
+class="section level2">
+<h2><strong>📌 Proportion of Colorectal cancer Genes in corrmotif 0.5
+micromolar</strong></h2>
+<pre class="r"><code># Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(org.Hs.eg.db)
+
+# Load Colorectal Cancer Gene Lists
+data_6hr &lt;- read.csv(&quot;data/Colorectal/6hr.csv&quot;, stringsAsFactors = FALSE)
+data_24hr &lt;- read.csv(&quot;data/Colorectal/24hr.csv&quot;, stringsAsFactors = FALSE)
+data_72hr &lt;- read.csv(&quot;data/Colorectal/72hr.csv&quot;, stringsAsFactors = FALSE)
+
+# Convert Gene Symbols to Entrez IDs
+data_list &lt;- list(&quot;6hr&quot; = data_6hr, &quot;24hr&quot; = data_24hr, &quot;72hr&quot; = data_72hr)
+data_list &lt;- lapply(data_list, function(df) {
+  df %&gt;% mutate(Entrez_ID = mapIds(org.Hs.eg.db, keys = Symbol, column = &quot;ENTREZID&quot;, keytype = &quot;SYMBOL&quot;, multiVals = &quot;first&quot;)) %&gt;% na.omit()
+})
+
+lit_genes &lt;- lapply(data_list, function(df) df$Entrez_ID)
+
+# Load Corrmotif Groups for 0.5 Concentration
+prob_groups_0.5 &lt;- list(
+  &quot;Non Response (0.5)&quot; = read.csv(&quot;data/prob_1_0.5.csv&quot;)$Entrez_ID,
+  &quot;DOX-specific response (0.5)&quot; = read.csv(&quot;data/prob_2_0.5.csv&quot;)$Entrez_ID,
+  &quot;DOX only mid-late response (0.5)&quot; = read.csv(&quot;data/prob_3_0.5.csv&quot;)$Entrez_ID,
+  &quot;CX DOX (early) response (0.5)&quot; = read.csv(&quot;data/prob_4_0.5.csv&quot;)$Entrez_ID,
+  &quot;DOX + CX (mid-late) response (0.5)&quot; = read.csv(&quot;data/prob_5_0.5.csv&quot;)$Entrez_ID
+)
+
+# Function to calculate proportions in colorectal cancer dataset
+calculate_proportion &lt;- function(deg_list, group_name, cancer_genes, timepoint) {
+  total_group_genes &lt;- length(deg_list)
+  matched_genes &lt;- sum(deg_list %in% cancer_genes)
+  
+  data.frame(
+    Group = group_name,
+    Timepoint = timepoint,
+    Colorectal_DEGs = matched_genes,
+    Non_Colorectal_DEGs = total_group_genes - matched_genes
+  ) %&gt;%
+    mutate(
+      Yes_Proportion = (Colorectal_DEGs / total_group_genes) * 100,
+      No_Proportion = (Non_Colorectal_DEGs / total_group_genes) * 100
+    )
+}
+
+# Calculate Proportions for Each Timepoint
+proportion_data &lt;- bind_rows(
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.5[[&quot;Non Response (0.5)&quot;]], &quot;Non Response (0.5)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.5[[&quot;DOX-specific response (0.5)&quot;]], &quot;DOX-specific response (0.5)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.5[[&quot;DOX only mid-late response (0.5)&quot;]], &quot;DOX only mid-late response (0.5)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.5[[&quot;CX DOX (early) response (0.5)&quot;]], &quot;CX DOX (early) response (0.5)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.5[[&quot;DOX + CX (mid-late) response (0.5)&quot;]], &quot;DOX + CX (mid-late) response (0.5)&quot;, lit_genes[[tp]], tp))
+)
+
+# Convert Data to Long Format for Faceting
+proportion_long &lt;- proportion_data %&gt;%
+  pivot_longer(cols = c(Yes_Proportion, No_Proportion), names_to = &quot;Category&quot;, values_to = &quot;Percentage&quot;) %&gt;%
+  mutate(Category = ifelse(Category == &quot;Yes_Proportion&quot;, &quot;Yes&quot;, &quot;No&quot;))
+
+# Perform Chi-Square Test Comparing Groups to Non-Response
+test_results &lt;- data.frame(Group = character(), Timepoint = character(), P_Value = numeric())
+
+target_groups &lt;- c(&quot;DOX-specific response (0.5)&quot;, &quot;DOX only mid-late response (0.5)&quot;, &quot;CX DOX (early) response (0.5)&quot;, &quot;DOX + CX (mid-late) response (0.5)&quot;)
+for (tp in names(lit_genes)) {
+  for (grp in target_groups) {
+    contingency_table &lt;- matrix(
+      c(
+        sum(prob_groups_0.5[[grp]] %in% lit_genes[[tp]]),
+        length(prob_groups_0.5[[grp]]) - sum(prob_groups_0.5[[grp]] %in% lit_genes[[tp]]),
+        sum(prob_groups_0.5[[&quot;Non Response (0.5)&quot;]] %in% lit_genes[[tp]]),
+        length(prob_groups_0.5[[&quot;Non Response (0.5)&quot;]]) - sum(prob_groups_0.5[[&quot;Non Response (0.5)&quot;]] %in% lit_genes[[tp]])
+      ),
+      nrow = 2, byrow = TRUE
+    )
+    test_result &lt;- chisq.test(contingency_table)
+    test_results &lt;- rbind(test_results, data.frame(Group = grp, Timepoint = tp, P_Value = test_result$p.value))
+  }
+}</code></pre>
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect
+Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+<pre class="r"><code># Add Significance Stars
+test_results$Significant &lt;- ifelse(test_results$P_Value &lt; 0.05, &quot;*&quot;, &quot;&quot;)
+proportion_long &lt;- left_join(proportion_long, test_results, by = c(&quot;Group&quot;, &quot;Timepoint&quot;))
+
+# Ensure Correct Ordering
+proportion_long$Group &lt;- factor(proportion_long$Group, levels = c(&quot;Non Response (0.5)&quot;, &quot;DOX-specific response (0.5)&quot;, &quot;DOX only mid-late response (0.5)&quot;, &quot;CX DOX (early) response (0.5)&quot;, &quot;DOX + CX (mid-late) response (0.5)&quot;))
+proportion_long$Timepoint &lt;- factor(proportion_long$Timepoint, levels = c(&quot;6hr&quot;, &quot;24hr&quot;, &quot;72hr&quot;))
+proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
+
+# Generate Stacked Bar Plot with Faceting and Significance Annotations
+ggplot(proportion_long, aes(x = Group, y = Percentage, fill = Category)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  facet_wrap(~Timepoint, scales = &quot;fixed&quot;) +
+  geom_text(data = subset(proportion_long, Significant == &quot;*&quot;),
+            aes(x = Group, y = 102, label = &quot;*&quot;),
+            size = 6, color = &quot;black&quot;, fontface = &quot;bold&quot;) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
+  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +
+  labs(
+    title = &quot;Proportion of Colorectal cancer Genes in\n0.5 Corrmotif Response Groups&quot;,
+    x = &quot;Group&quot;,
+    y = &quot;Percentage&quot;,
+    fill = &quot;Category&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),
+    strip.background = element_blank(),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;)
+  )</code></pre>
+<p><img src="figure/Colorectal.Rmd/prop%200.5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
