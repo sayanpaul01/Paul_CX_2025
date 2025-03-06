@@ -608,8 +608,8 @@ lit_genes <- lapply(data_list, function(df) df$Entrez_ID)
 # Load Corrmotif Groups for 0.1 Concentration
 prob_groups_0.1 <- list(
   "Non Response (0.1)" = read.csv("data/prob_1_0.1.csv")$Entrez_ID,
-  "DOX only mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
-  "CX_DOX mid-late (0.1)" = read.csv("data/prob_3_0.1.csv")$Entrez_ID
+  "CX_DOX mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
+  "DOX only mid-late (0.1)"= read.csv("data/prob_3_0.1.csv")$Entrez_ID
 )
 
 # Function to calculate proportions in colorectal cancer dataset
@@ -632,9 +632,10 @@ calculate_proportion <- function(deg_list, group_name, cancer_genes, timepoint) 
 # Calculate Proportions for Each Timepoint
 proportion_data <- bind_rows(
   lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[["Non Response (0.1)"]], "Non Response (0.1)", lit_genes[[tp]], tp)),
-  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[["DOX only mid-late (0.1)"]], "DOX only mid-late (0.1)", lit_genes[[tp]], tp)),
-  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[["CX_DOX mid-late (0.1)"]], "CX_DOX mid-late (0.1)", lit_genes[[tp]], tp))
-)
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[["CX_DOX mid-late (0.1)"]], "CX_DOX mid-late (0.1)", lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[["DOX only mid-late (0.1)"]], "DOX only mid-late (0.1)", lit_genes[[tp]], tp)))
+  
+  
 
 # Convert Data to Long Format for Faceting
 proportion_long <- proportion_data %>%
@@ -644,7 +645,7 @@ proportion_long <- proportion_data %>%
 # Perform Chi-Square Test Comparing Groups to Non-Response
 test_results <- data.frame(Group = character(), Timepoint = character(), P_Value = numeric())
 
-target_groups <- c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")
+target_groups <- c("CX_DOX mid-late (0.1)", "DOX only mid-late (0.1)")
 for (tp in names(lit_genes)) {
   for (grp in target_groups) {
     contingency_table <- matrix(
@@ -666,7 +667,7 @@ test_results$Significant <- ifelse(test_results$P_Value < 0.05, "*", "")
 proportion_long <- left_join(proportion_long, test_results, by = c("Group", "Timepoint"))
 
 # Ensure Correct Ordering
-proportion_long$Group <- factor(proportion_long$Group, levels = c("Non Response (0.1)", "DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)"))
+proportion_long$Group <- factor(proportion_long$Group, levels = c("Non Response (0.1)", "CX_DOX mid-late (0.1)", "DOX only mid-late (0.1)"))
 proportion_long$Timepoint <- factor(proportion_long$Timepoint, levels = c("6hr", "24hr", "72hr"))
 proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))
 

@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-03-05
+<strong>Last updated:</strong> 2025-03-06
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree07caa2fdb1c88047c32f0d632105c92d1f23a0e3targetblank07caa2fa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree81247f64f08df43c2b40a386707fc8e9cc240143targetblank81247f6a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/07caa2fdb1c88047c32f0d632105c92d1f23a0e3" target="_blank">07caa2f</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/81247f64f08df43c2b40a386707fc8e9cc240143" target="_blank">81247f6</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree07caa2fdb1c88047c32f0d632105c92d1f23a0e3targetblank07caa2fa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree81247f64f08df43c2b40a386707fc8e9cc240143targetblank81247f6a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/07caa2fdb1c88047c32f0d632105c92d1f23a0e3" target="_blank">07caa2f</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/81247f64f08df43c2b40a386707fc8e9cc240143" target="_blank">81247f6</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,6 +548,7 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
 
 Unstaged changes:
     Modified:   analysis/Colorectal.Rmd
@@ -596,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3e51d798b2f3f0acf7ff448e36b88f121b1e1b33/analysis/Colorectal.Rmd" target="_blank">3e51d79</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/3e51d798b2f3f0acf7ff448e36b88f121b1e1b33/docs/Colorectal.html" target="_blank">3e51d79</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1053,6 +1088,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3e51d798b2f3f0acf7ff448e36b88f121b1e1b33/docs/figure/Colorectal.Rmd/load_DEGs-1.png" target="_blank">3e51d79</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-05
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/1c452e8edce05d8c2b57824fd14e295a7ebb85ac/docs/figure/Colorectal.Rmd/load_DEGs-1.png" target="_blank">1c452e8</a>
@@ -1519,8 +1565,8 @@ lit_genes &lt;- lapply(data_list, function(df) df$Entrez_ID)
 # Load Corrmotif Groups for 0.1 Concentration
 prob_groups_0.1 &lt;- list(
   &quot;Non Response (0.1)&quot; = read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID,
-  &quot;DOX only mid-late (0.1)&quot; = read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID,
-  &quot;CX_DOX mid-late (0.1)&quot; = read.csv(&quot;data/prob_3_0.1.csv&quot;)$Entrez_ID
+  &quot;CX_DOX mid-late (0.1)&quot; = read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID,
+  &quot;DOX only mid-late (0.1)&quot;= read.csv(&quot;data/prob_3_0.1.csv&quot;)$Entrez_ID
 )
 
 # Function to calculate proportions in colorectal cancer dataset
@@ -1543,9 +1589,10 @@ calculate_proportion &lt;- function(deg_list, group_name, cancer_genes, timepoin
 # Calculate Proportions for Each Timepoint
 proportion_data &lt;- bind_rows(
   lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;Non Response (0.1)&quot;]], &quot;Non Response (0.1)&quot;, lit_genes[[tp]], tp)),
-  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;DOX only mid-late (0.1)&quot;]], &quot;DOX only mid-late (0.1)&quot;, lit_genes[[tp]], tp)),
-  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;CX_DOX mid-late (0.1)&quot;]], &quot;CX_DOX mid-late (0.1)&quot;, lit_genes[[tp]], tp))
-)
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;CX_DOX mid-late (0.1)&quot;]], &quot;CX_DOX mid-late (0.1)&quot;, lit_genes[[tp]], tp)),
+  lapply(names(lit_genes), function(tp) calculate_proportion(prob_groups_0.1[[&quot;DOX only mid-late (0.1)&quot;]], &quot;DOX only mid-late (0.1)&quot;, lit_genes[[tp]], tp)))
+  
+  
 
 # Convert Data to Long Format for Faceting
 proportion_long &lt;- proportion_data %&gt;%
@@ -1555,7 +1602,7 @@ proportion_long &lt;- proportion_data %&gt;%
 # Perform Chi-Square Test Comparing Groups to Non-Response
 test_results &lt;- data.frame(Group = character(), Timepoint = character(), P_Value = numeric())
 
-target_groups &lt;- c(&quot;DOX only mid-late (0.1)&quot;, &quot;CX_DOX mid-late (0.1)&quot;)
+target_groups &lt;- c(&quot;CX_DOX mid-late (0.1)&quot;, &quot;DOX only mid-late (0.1)&quot;)
 for (tp in names(lit_genes)) {
   for (grp in target_groups) {
     contingency_table &lt;- matrix(
@@ -1580,7 +1627,7 @@ test_results$Significant &lt;- ifelse(test_results$P_Value &lt; 0.05, &quot;*&qu
 proportion_long &lt;- left_join(proportion_long, test_results, by = c(&quot;Group&quot;, &quot;Timepoint&quot;))
 
 # Ensure Correct Ordering
-proportion_long$Group &lt;- factor(proportion_long$Group, levels = c(&quot;Non Response (0.1)&quot;, &quot;DOX only mid-late (0.1)&quot;, &quot;CX_DOX mid-late (0.1)&quot;))
+proportion_long$Group &lt;- factor(proportion_long$Group, levels = c(&quot;Non Response (0.1)&quot;, &quot;CX_DOX mid-late (0.1)&quot;, &quot;DOX only mid-late (0.1)&quot;))
 proportion_long$Timepoint &lt;- factor(proportion_long$Timepoint, levels = c(&quot;6hr&quot;, &quot;24hr&quot;, &quot;72hr&quot;))
 proportion_long$Category &lt;- factor(proportion_long$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
 
