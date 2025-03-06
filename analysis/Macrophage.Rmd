@@ -574,8 +574,8 @@ macrophage_new <- data.frame(homologs$ortholog_name) %>%
 # Load Corrmotif Groups for 0.1 Concentration
 prob_groups_0.1 <- list(
   "Non Response (0.1)" = read.csv("data/prob_1_0.1.csv")$Entrez_ID,
-  "DOX only mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
-  "CX_DOX mid-late (0.1)" = read.csv("data/prob_3_0.1.csv")$Entrez_ID
+  "CX_DOX mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
+   "DOX only mid-late (0.1)"= read.csv("data/prob_3_0.1.csv")$Entrez_ID
 )
 
 # Function to calculate proportions in macrophage dataset
@@ -597,8 +597,9 @@ calculate_proportion <- function(deg_list, group_name) {
 # Calculate Proportions for Each Group
 proportion_data <- bind_rows(
   calculate_proportion(prob_groups_0.1[["Non Response (0.1)"]], "Non Response (0.1)"),
-  calculate_proportion(prob_groups_0.1[["DOX only mid-late (0.1)"]], "DOX only mid-late (0.1)"),
-  calculate_proportion(prob_groups_0.1[["CX_DOX mid-late (0.1)"]], "CX_DOX mid-late (0.1)")
+   calculate_proportion(prob_groups_0.1[["CX_DOX mid-late (0.1)"]], "CX_DOX mid-late (0.1)"),
+  calculate_proportion(prob_groups_0.1[["DOX only mid-late (0.1)"]], "DOX only mid-late (0.1)")
+ 
 )
 
 # Convert Data to Long Format
@@ -609,7 +610,7 @@ proportion_long <- proportion_data %>%
 # Perform Chi-Square Test Comparing Groups to Non-Response
 test_results <- data.frame(Group = character(), P_Value = numeric())
 
-target_groups <- c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")
+target_groups <- c("CX_DOX mid-late (0.1)","DOX only mid-late (0.1)")
 for (grp in target_groups) {
   contingency_table <- matrix(
     c(
@@ -629,7 +630,7 @@ test_results$Significant <- ifelse(test_results$P_Value < 0.05, "*", "")
 proportion_long <- left_join(proportion_long, test_results, by = "Group")
 
 # Ensure Correct Ordering
-proportion_long$Group <- factor(proportion_long$Group, levels = c("Non Response (0.1)", "DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)"))
+proportion_long$Group <- factor(proportion_long$Group, levels = c("Non Response (0.1)", "CX_DOX mid-late (0.1)","DOX only mid-late (0.1)"))
 proportion_long$Category <- factor(proportion_long$Category, levels = c("Yes", "No"))
 
 # Generate Stacked Bar Plot with Significance Annotations
