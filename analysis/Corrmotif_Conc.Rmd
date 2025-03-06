@@ -1713,8 +1713,8 @@ DNA_damage_genes <- na.omit(DNA_damage$Entrez_ID)
 # **🔹 Load Corrmotif Groups for 0.1 Concentration**
 prob_groups_0.1 <- list(
   "Non Response (0.1)" = read.csv("data/prob_1_0.1.csv")$Entrez_ID,
-  "DOX only mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
-  "CX_DOX mid-late (0.1)" = read.csv("data/prob_3_0.1.csv")$Entrez_ID
+   "CX_DOX mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
+  "DOX only mid-late (0.1)"= read.csv("data/prob_3_0.1.csv")$Entrez_ID
 )
 
 # **🔹 Create Dataframe for Corrmotif Groups**
@@ -1740,7 +1740,7 @@ proportion_data <- corrmotif_df_0.1 %>%
 proportion_data$DNA_Damage <- factor(proportion_data$DNA_Damage, levels = c("Yes", "No"))
 
 # **🔹 Set Order of Response Groups for X-axis**
-response_order <- c("Non Response (0.1)", "DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")
+response_order <- c("Non Response (0.1)", "CX_DOX mid-late (0.1)","DOX only mid-late (0.1)")
 proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = response_order)
 
 # **🔹 Perform Chi-Square Tests for "DOX only mid-late (0.1)" and "CX_DOX mid-late (0.1)" vs "Non Response (0.1)"**
@@ -1780,7 +1780,7 @@ proportion_data <- proportion_data %>%
 
 # **🔹 Set Star Position Uniform Across Groups at 105%**
 star_positions <- data.frame(
-  Response_Group = c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)"),
+  Response_Group = c("CX_DOX mid-late (0.1)", "DOX only mid-late (0.1)"),
   y_pos = 105,  # Fixed at 105% of Y-axis
   Significance = chi_results$Significance
 )
@@ -1970,8 +1970,8 @@ P53_Target_genes <- na.omit(P53_Target$Entrez_ID)
 # **🔹 Load Corrmotif Groups for 0.1 Concentration**
 prob_groups_0.1 <- list(
   "Non Response (0.1)" = read.csv("data/prob_1_0.1.csv")$Entrez_ID,
-  "DOX only mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
-  "CX_DOX mid-late (0.1)" = read.csv("data/prob_3_0.1.csv")$Entrez_ID
+  "CX_DOX mid-late (0.1)" = read.csv("data/prob_2_0.1.csv")$Entrez_ID,
+ "DOX only mid-late (0.1)"= read.csv("data/prob_3_0.1.csv")$Entrez_ID
 )
 
 # **🔹 Create Dataframe for Corrmotif Groups**
@@ -1997,7 +1997,7 @@ proportion_data <- corrmotif_df_0.1 %>%
 proportion_data$P53_Target <- factor(proportion_data$P53_Target, levels = c("Yes", "No"))
 
 # **🔹 Set Order of Response Groups for X-axis**
-response_order <- c("Non Response (0.1)", "DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")
+response_order <- c("Non Response (0.1)", "CX_DOX mid-late (0.1)", "DOX only mid-late (0.1)")
 proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = response_order)
 
 # **🔹 Perform Chi-Square Tests for "DOX only mid-late (0.1)" and "CX_DOX mid-late (0.1)" vs "Non Response (0.1)"**
@@ -2007,7 +2007,7 @@ non_response_counts <- proportion_data %>%
   {setNames(.$Count, .$P53_Target)}  # Convert to named vector
 
 chi_results <- proportion_data %>%
-  filter(Response_Group %in% c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")) %>%
+  filter(Response_Group %in% c("CX_DOX mid-late (0.1)","DOX only mid-late (0.1)")) %>%
   group_by(Response_Group) %>%
   summarise(
     p_value = {
@@ -2037,7 +2037,7 @@ proportion_data <- proportion_data %>%
 
 # **🔹 Set Star Position Uniform Across Groups at 105%**
 star_positions <- data.frame(
-  Response_Group = c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)"),
+  Response_Group = c("CX_DOX mid-late (0.1)","DOX only mid-late (0.1)"),
   y_pos = 105,  # Fixed at 105% of Y-axis
   Significance = chi_results$Significance
 )
