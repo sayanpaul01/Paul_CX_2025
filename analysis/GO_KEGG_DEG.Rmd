@@ -4325,3 +4325,196 @@ if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
 if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
+
+## **📌 Top BP (Cluster Profiler)**
+```{r GO comp, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+# Load required libraries
+library(clusterProfiler)
+library(ggplot2)
+library(dplyr)
+library(tibble)
+
+# Function to perform GO enrichment for BP
+perform_enrichment <- function(gene_set, background, sample_name) {
+  enrichment <- enrichGO(
+    gene = gene_set,
+    OrgDb = org.Hs.eg.db,
+    keyType = "ENTREZID",
+    universe = background,
+    ont = "BP",
+    pvalueCutoff = 0.05
+  )
+  
+  if (!is.null(enrichment) && nrow(as.data.frame(enrichment)) > 0) {
+    enrichment_df <- as_tibble(as.data.frame(enrichment)) %>%
+      mutate(Sample = sample_name, 
+             GeneRatio = Count / as.numeric(sub("/.*", "", BgRatio)), # Compute Gene Ratio
+             neglog_padj = -log10(p.adjust)) %>%  # Compute -log10(adjusted p-value)
+      arrange(p.adjust) %>%
+      slice_head(n = 5) # Keep top 5 terms
+    
+    return(enrichment_df)
+  } else {
+    return(NULL)
+  }
+}
+
+# Define samples and DEG lists
+samples <- list(
+  "CX_0.1_3" = DEG1,
+  "CX_0.1_24" = DEG2,
+  "CX_0.1_48" = DEG3,
+  "CX_0.5_3" = DEG4,
+  "CX_0.5_24" = DEG5,
+  "CX_0.5_48" = DEG6,
+  "DOX_0.1_3" = DEG7,
+  "DOX_0.1_24" = DEG8,
+  "DOX_0.1_48" = DEG9,
+  "DOX_0.5_3" = DEG10,
+  "DOX_0.5_24" = DEG11,
+  "DOX_0.5_48" = DEG12
+)
+
+# Perform enrichment for each sample
+enrichment_results <- lapply(names(samples), function(sample) {
+  perform_enrichment(samples[[sample]], background, sample)
+})
+
+# Combine all results into a single dataframe
+all_enrichment_df <- bind_rows(enrichment_results)
+
+# Identify missing samples (samples without enrichment)
+missing_samples <- setdiff(names(samples), unique(all_enrichment_df$Sample))
+
+# Create placeholder rows for missing samples with "Non enriched terms" in Y-axis
+if (length(missing_samples) > 0) {
+  missing_df <- tibble(
+    Sample = missing_samples,
+    Description = "Non enriched terms",  # Explicitly label missing samples
+    GeneRatio = NA,
+    neglog_padj = NA
+  )
+  all_enrichment_df <- bind_rows(all_enrichment_df, missing_df)
+}
+
+# Ensure all samples appear in the X-axis
+all_enrichment_df$Sample <- factor(all_enrichment_df$Sample, levels = names(samples))
+
+# Generate dot plot
+dotplot <- ggplot(all_enrichment_df, aes(x = Sample, y = Description, size = GeneRatio, color = neglog_padj)) +
+  geom_point(na.rm = TRUE) +  # Ignore NA values
+  scale_color_gradient(low = "blue", high = "red", na.value = "grey") +  # NA values in grey
+  labs(
+    x = "Samples",
+    y = "Biological Process",
+    color = "-log10(Adjusted P-Value)",
+    size = "Gene Ratio",
+    title = "Comparison of Top BP Enrichments Across Samples (clusterprofiler)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, face = "bold"),
+    axis.text.y = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  )
+
+# Display the dot plot
+print(dotplot)
+```
+
+## **📌 Top BP (GProfiler)**
+```{r GO comp2, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
+# Load required libraries
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(tibble)
+
+# Function to perform GO enrichment for BP using g:Profiler
+perform_enrichment <- function(gene_set, background, sample_name) {
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    ordered_query = FALSE,
+    significant = TRUE,
+    correction_method = "fdr",
+    sources = "GO:BP",
+    custom_bg = background
+  )
+  
+  if (!is.null(enrichment) && nrow(enrichment$result) > 0) {
+    enrichment_df <- as_tibble(enrichment$result) %>%
+      mutate(Sample = sample_name, 
+             GeneRatio = intersection_size / effective_domain_size,  # Compute Gene Ratio
+             neglog_padj = -log10(p_value)) %>%  # Compute -log10(adjusted p-value)
+      arrange(p_value) %>%
+      slice_head(n = 5) # Keep top 5 terms
+    
+    return(enrichment_df)
+  } else {
+    return(NULL)
+  }
+}
+
+# Define samples and DEG lists
+samples <- list(
+  "CX_0.1_3" = DEG1,
+  "CX_0.1_24" = DEG2,
+  "CX_0.1_48" = DEG3,
+  "CX_0.5_3" = DEG4,
+  "CX_0.5_24" = DEG5,
+  "CX_0.5_48" = DEG6,
+  "DOX_0.1_3" = DEG7,
+  "DOX_0.1_24" = DEG8,
+  "DOX_0.1_48" = DEG9,
+  "DOX_0.5_3" = DEG10,
+  "DOX_0.5_24" = DEG11,
+  "DOX_0.5_48" = DEG12
+)
+
+# Perform enrichment for each sample
+enrichment_results <- lapply(names(samples), function(sample) {
+  perform_enrichment(samples[[sample]], background, sample)
+})
+
+# Combine all results into a single dataframe
+all_enrichment_df <- bind_rows(enrichment_results)
+
+# Identify missing samples (samples without enrichment)
+missing_samples <- setdiff(names(samples), unique(all_enrichment_df$Sample))
+
+# Create placeholder rows for missing samples with "Non enriched terms" in Y-axis
+if (length(missing_samples) > 0) {
+  missing_df <- tibble(
+    Sample = missing_samples,
+    term_name = "Non enriched terms",  # Explicitly label missing samples
+    GeneRatio = NA,
+    neglog_padj = NA
+  )
+  all_enrichment_df <- bind_rows(all_enrichment_df, missing_df)
+}
+
+# Ensure all samples appear in the X-axis
+all_enrichment_df$Sample <- factor(all_enrichment_df$Sample, levels = names(samples))
+
+# Generate dot plot
+dotplot <- ggplot(all_enrichment_df, aes(x = Sample, y = term_name, size = GeneRatio, color = neglog_padj)) +
+  geom_point(na.rm = TRUE) +  # Ignore NA values
+  scale_color_gradient(low = "blue", high = "red", na.value = "grey") +  # NA values in grey
+  labs(
+    x = "Samples",
+    y = "Biological Process",
+    color = "-log10(Adjusted P-Value)",
+    size = "Gene Ratio",
+    title = "Comparison of Top BP Enrichments Across Samples (GProfiler)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, face = "bold"),
+    axis.text.y = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  )
+
+# Display the dot plot
+print(dotplot)
+```
