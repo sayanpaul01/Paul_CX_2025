@@ -1291,6 +1291,69 @@ ggplot(data, aes(x = "", y = Value, fill = Category)) +
   scale_fill_manual(values = custom_colors)
 ```
 
+## **📌 Combined pie charts for concentrations**
+```{r pie-chart_comb, echo=TRUE, message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Data for 0.1 µM
+data_0.1 <- data.frame(
+  Category = c("Non response", "CX-DOX mid-late response", "DOX only mid-late"),
+  Value = c(12308, 415, 1551),
+  Concentration = "0.1 µM"
+)
+
+# Data for 0.5 µM
+data_0.5 <- data.frame(
+  Category = c("Non response", "DOX specific response", "DOX only mid-late response", 
+               "CX + DOX (early) response", "DOX + CX (mid-late) response"),
+  Value = c(7134, 179, 6450, 142, 221),
+  Concentration = "0.5 µM"
+)
+
+# Combine both datasets
+combined_data <- bind_rows(data_0.1, data_0.5)
+
+# Add values to category names (for legend only)
+combined_data$Category_Legend <- paste0(combined_data$Category, " (", combined_data$Value, ")")
+
+# Define custom colors for updated categories
+custom_colors <- c(
+  "Non response (12308)" = "#FF9999",
+  "CX-DOX mid-late response (415)" = "#66B2FF",
+  "DOX only mid-late (1551)" = "#99FF99",
+  "Non response (7134)" = "#FF9999",
+  "DOX specific response (179)" = "#FF66CC",
+  "DOX only mid-late response (6450)" = "#99FF99",
+  "CX + DOX (early) response (142)" = "#FFD700",
+  "DOX + CX (mid-late) response (221)" = "#8A2BE2"
+)
+
+# Ensure categories appear in a specific order
+combined_data$Category_Legend <- factor(combined_data$Category_Legend, levels = names(custom_colors))
+
+# Create faceted pie charts without numbers inside the slices
+pie_chart <- ggplot(combined_data, aes(x = "", y = Value, fill = Category_Legend)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  facet_wrap(~ Concentration) +  # Facet by concentration (side-by-side)
+  labs(title = "Corrmotif Pie Charts for 0.1 µM and 0.5 µM", x = NULL, y = NULL, fill = "Category") +
+  theme_void() +
+  theme(
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.5),  # Adds box around facets
+    strip.background = element_rect(fill = "white", color = "black", linewidth = 1),  # Box for facet titles
+    strip.text = element_text(size = 12, face = "bold", color = "black"),
+    legend.title = element_text(size = 12, face = "bold"),  # Bold legend title
+    legend.text = element_text(size = 10)  # Adjust legend text size
+  ) +
+  scale_fill_manual(values = custom_colors)
+
+# Display the plot
+print(pie_chart)
+```
+
+
 ## **📌 Save Corr-motif datasets for Gene Ontology analysis (0.5 Micromolar)**
 ```{r box_0.5, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
 write.csv(data.frame(Entrez_ID = prob_1_0.5), "data/prob_1_0.5.csv", row.names = FALSE)

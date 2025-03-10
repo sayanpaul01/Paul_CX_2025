@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-03-06
+<strong>Last updated:</strong> 2025-03-09
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree81247f64f08df43c2b40a386707fc8e9cc240143targetblank81247f6a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec23981f8f388e61206042a44982d367087002e77targetblankc23981fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/81247f64f08df43c2b40a386707fc8e9cc240143" target="_blank">81247f6</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c23981f8f388e61206042a44982d367087002e77" target="_blank">c23981f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree81247f64f08df43c2b40a386707fc8e9cc240143targetblank81247f6a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec23981f8f388e61206042a44982d367087002e77targetblankc23981fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/81247f64f08df43c2b40a386707fc8e9cc240143" target="_blank">81247f6</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c23981f8f388e61206042a44982d367087002e77" target="_blank">c23981f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -548,10 +548,10 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 Unstaged changes:
     Modified:   analysis/Colorectal.Rmd
+    Modified:   analysis/GO_KEGG_DEG.Rmd
 
 </code></pre>
 <p>
@@ -597,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/0aec578ba029d6b945b4201439463119a9a53e32/analysis/Colorectal.Rmd" target="_blank">0aec578</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-06
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/0aec578ba029d6b945b4201439463119a9a53e32/docs/Colorectal.html" target="_blank">0aec578</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-06
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1539,6 +1573,65 @@ sayanpaul01
 </div>
 </div>
 <div
+id="correlation-of-colorectal-cancer-genes-with-cx-and-dox-expressed-genes-combined"
+class="section level2">
+<h2><strong>📌 Correlation of colorectal cancer genes with CX and DOX
+expressed genes (Combined)</strong></h2>
+<pre class="r"><code># Load required libraries
+library(ggplot2)
+library(dplyr)
+library(tibble)
+
+# Add Time column to each dataset
+merged_data_6hr  &lt;- merged_data  %&gt;% mutate(Time = &quot;3hr&quot;)
+merged_data_24hr &lt;- merged_data_24hr %&gt;% mutate(Time = &quot;24hr&quot;)
+merged_data_48hr &lt;- merged_data_48hr %&gt;% mutate(Time = &quot;48hr&quot;)
+
+# Combine all datasets
+combined_data &lt;- bind_rows(merged_data_6hr, merged_data_24hr, merged_data_48hr)
+
+# Combine correlation values for annotation
+correlation_data_6hr  &lt;- correlation_data  %&gt;% mutate(Time = &quot;3hr&quot;)
+correlation_data_24hr &lt;- correlation_data_24hr %&gt;% mutate(Time = &quot;24hr&quot;)
+correlation_data_48hr &lt;- correlation_data_48hr %&gt;% mutate(Time = &quot;48hr&quot;)
+
+# Merge correlation data
+combined_correlation_data &lt;- bind_rows(correlation_data_6hr, correlation_data_24hr, correlation_data_48hr)
+
+# Create a single scatter plot with facets for Time, Drug, and Concentration
+scatter_plot_combined &lt;- ggplot(combined_data, aes(x = logFC_Drug, y = logFC_6hr)) +
+  geom_point(alpha = 0.6, color = &quot;black&quot;) +  # Scatter points
+  geom_smooth(method = &quot;lm&quot;, color = &quot;black&quot;, se = FALSE) +  # Regression line
+  labs(
+    title = &quot;Correlation between Drug Treatment and Colorectal Cancer logFC&quot;,
+    x = &quot;logFC (Drug Treatment)&quot;,
+    y = &quot;logFC (Colorectal Cancer)&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = &quot;bold&quot;),
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 2),
+    strip.background = element_rect(fill = &quot;white&quot;, color = &quot;black&quot;, linewidth = 1.5),
+    strip.text = element_text(size = 12, face = &quot;bold&quot;, color = &quot;black&quot;)
+  ) +
+  
+  # Facet by Time (rows), Drug (columns), and Concentration (separate panels)
+  facet_grid(Time ~ Concentration + Drug) +
+
+  # Add r and p-value annotations
+  geom_text(data = combined_correlation_data,
+            aes(x = x, y = y, label = label),
+            inherit.aes = FALSE, size = 3, fontface = &quot;bold&quot;)
+
+# Display the combined plot
+print(scatter_plot_combined)</code></pre>
+<pre><code>Warning: Removed 77736 rows containing non-finite outside the scale range
+(`stat_smooth()`).</code></pre>
+<pre><code>Warning: Removed 77736 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+<p><img src="figure/Colorectal.Rmd/Combined-1.png" width="1536" style="display: block; margin: auto;" /></p>
+</div>
+<div
 id="proportion-of-colorectal-cancer-genes-in-corrmotif-0.1-micromolar"
 class="section level2">
 <h2><strong>📌 Proportion of Colorectal cancer Genes in corrmotif 0.1
@@ -1678,6 +1771,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/0aec578ba029d6b945b4201439463119a9a53e32/docs/figure/Colorectal.Rmd/prop DNA-1.png" target="_blank">0aec578</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/1c452e8edce05d8c2b57824fd14e295a7ebb85ac/docs/figure/Colorectal.Rmd/prop DNA-1.png" target="_blank">1c452e8</a>
@@ -1893,10 +1997,10 @@ attached base packages:
 [8] base     
 
 other attached packages:
- [1] biomaRt_2.58.2         clusterProfiler_4.10.1 org.Hs.eg.db_3.18.0   
- [4] AnnotationDbi_1.64.1   IRanges_2.36.0         S4Vectors_0.40.1      
- [7] Biobase_2.62.0         BiocGenerics_0.48.1    tidyr_1.3.1           
-[10] dplyr_1.1.4            ggplot2_3.5.1         
+ [1] tibble_3.2.1           biomaRt_2.58.2         clusterProfiler_4.10.1
+ [4] org.Hs.eg.db_3.18.0    AnnotationDbi_1.64.1   IRanges_2.36.0        
+ [7] S4Vectors_0.40.1       Biobase_2.62.0         BiocGenerics_0.48.1   
+[10] tidyr_1.3.1            dplyr_1.1.4            ggplot2_3.5.1         
 
 loaded via a namespace (and not attached):
   [1] RColorBrewer_1.1-3      rstudioapi_0.17.1       jsonlite_1.8.9         
@@ -1931,15 +2035,15 @@ loaded via a namespace (and not attached):
  [88] xfun_0.50               graphlayouts_1.2.0      stringi_1.8.3          
  [91] workflowr_1.7.1         lazyeval_0.2.2          ggfun_0.1.8            
  [94] yaml_2.3.10             evaluate_1.0.3          codetools_0.2-20       
- [97] ggraph_2.2.1            tibble_3.2.1            qvalue_2.34.0          
-[100] ggplotify_0.1.2         cli_3.6.1               munsell_0.5.1          
-[103] jquerylib_0.1.4         Rcpp_1.0.12             GenomeInfoDb_1.38.8    
-[106] dbplyr_2.5.0            png_0.1-8               XML_3.99-0.17          
-[109] parallel_4.3.0          blob_1.2.4              prettyunits_1.2.0      
-[112] DOSE_3.28.2             bitops_1.0-7            viridisLite_0.4.2      
-[115] tidytree_0.4.6          scales_1.3.0            purrr_1.0.2            
-[118] crayon_1.5.3            rlang_1.1.3             cowplot_1.1.3          
-[121] fastmatch_1.1-4         KEGGREST_1.42.0        </code></pre>
+ [97] ggraph_2.2.1            qvalue_2.34.0           ggplotify_0.1.2        
+[100] cli_3.6.1               munsell_0.5.1           jquerylib_0.1.4        
+[103] Rcpp_1.0.12             GenomeInfoDb_1.38.8     dbplyr_2.5.0           
+[106] png_0.1-8               XML_3.99-0.17           parallel_4.3.0         
+[109] blob_1.2.4              prettyunits_1.2.0       DOSE_3.28.2            
+[112] bitops_1.0-7            viridisLite_0.4.2       tidytree_0.4.6         
+[115] scales_1.3.0            purrr_1.0.2             crayon_1.5.3           
+[118] rlang_1.1.3             cowplot_1.1.3           fastmatch_1.1-4        
+[121] KEGGREST_1.42.0        </code></pre>
 </div>
 </div>
 
