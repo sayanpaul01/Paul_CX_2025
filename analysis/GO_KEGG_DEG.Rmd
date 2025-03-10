@@ -4327,7 +4327,7 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
 ## **📌 Top BP (Cluster Profiler)**
-```{r GO comp, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
+```{r GO comp, echo=TRUE, message=FALSE, fig.width=14, fig.height=6}
 # Load required libraries
 library(clusterProfiler)
 library(ggplot2)
@@ -4423,7 +4423,7 @@ print(dotplot)
 ```
 
 ## **📌 Top BP (GProfiler)**
-```{r GO comp2, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
+```{r GO comp2, echo=TRUE, message=FALSE, fig.width=16, fig.height=6}
 # Load required libraries
 library(gprofiler2)
 library(ggplot2)
