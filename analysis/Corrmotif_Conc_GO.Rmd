@@ -1482,7 +1482,7 @@ if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
-## **📌 DOX-only early-mid response (0.5 µM)**
+## **📌 DOX-specific response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO5, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
 # Perform GO enrichment analysis for BP, MF, and CC
@@ -2192,7 +2192,7 @@ if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
-## **📌 CX-only mid-late response (0.5 µM)**
+## **📌 CX + DOX (early) response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO7, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
 # Perform GO enrichment analysis for BP, MF, and CC
@@ -2547,7 +2547,7 @@ if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
-## **📌 CX-DOX mid-late response (0.5 µM)**
+## **📌 DOX + CX (mid-late) response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO8, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
 # Perform GO enrichment analysis for BP, MF, and CC
@@ -2901,3 +2901,247 @@ if (!is.null(gprofiler_reactome) && !is.null(gprofiler_kegg)) {
 if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
+
+
+## **📌 Top BP (Cluster Profiler)**
+```{r GO comp, echo=TRUE, message=FALSE, fig.width=14, fig.height=6}
+
+# Load necessary libraries
+library(clusterProfiler)
+library(ggplot2)
+library(dplyr)
+library(tibble)
+
+# Define response groups and their corresponding gene lists
+response_groups_0.1 <- list(
+  "Non response (0.1)" = prob_1_0.1,
+  "CX-DOX mid-late response (0.1)" = prob_2_0.1,
+  "DOX only mid-late (0.1)" = prob_3_0.1
+)
+
+response_groups_0.5 <- list(
+  "Non response (0.5)" = prob_1_0.5,
+  "DOX specific response (0.5)" = prob_2_0.5,
+  "DOX only mid-late response (0.5)" = prob_3_0.5,
+  "CX + DOX (early) response (0.5)" = prob_4_0.5,
+  "DOX + CX (mid-late) response (0.5)" = prob_5_0.5
+)
+
+# Function to perform GO enrichment for BP
+perform_BP_enrichment <- function(gene_set, sample_name, concentration) {
+  enrichment <- enrichGO(
+    gene = gene_set,
+    OrgDb = org.Hs.eg.db,
+    keyType = "ENTREZID",
+    universe = background,
+    ont = "BP",
+    pvalueCutoff = 0.05
+  )
+  
+  if (!is.null(enrichment) && nrow(as.data.frame(enrichment)) > 0) {
+    enrichment_df <- as_tibble(as.data.frame(enrichment)) %>%
+      mutate(
+        Sample = sample_name,
+        Concentration = concentration,  # Assign correct concentration here
+        GeneRatio = Count / as.numeric(sub("/.*", "", BgRatio)),  # Compute Gene Ratio
+        neglog_padj = -log10(p.adjust)  # Compute -log10(adjusted p-value)
+      ) %>%
+      arrange(p.adjust) %>%
+      slice_head(n = 5)  # Select top 5 terms
+    
+    return(enrichment_df)
+  } else {
+    return(NULL)
+  }
+}
+
+# Perform enrichment for 0.1-specific response groups
+BP_results_0.1 <- lapply(names(response_groups_0.1), function(sample) {
+  perform_BP_enrichment(response_groups_0.1[[sample]], sample, "0.1")
+})
+
+# Perform enrichment for 0.5-specific response groups
+BP_results_0.5 <- lapply(names(response_groups_0.5), function(sample) {
+  perform_BP_enrichment(response_groups_0.5[[sample]], sample, "0.5")
+})
+
+# Combine results into a single dataframe
+BP_combined_df <- bind_rows(BP_results_0.1, BP_results_0.5)
+
+# Ensure all response groups appear in the x-axis, even if they have no enriched terms
+all_groups_0.1 <- names(response_groups_0.1)
+all_groups_0.5 <- names(response_groups_0.5)
+
+missing_groups_0.1 <- setdiff(all_groups_0.1, unique(BP_combined_df$Sample))
+missing_groups_0.5 <- setdiff(all_groups_0.5, unique(BP_combined_df$Sample))
+
+# Create placeholder rows for missing samples, using "No enriched terms" instead of NA
+if (length(missing_groups_0.1) > 0) {
+  missing_df_0.1 <- tibble(
+    Sample = missing_groups_0.1,
+    Description = "No enriched terms",  # Show this in the y-axis
+    GeneRatio = NA,
+    neglog_padj = NA,
+    Concentration = "0.1"  # Assign to 0.1 group
+  )
+  BP_combined_df <- bind_rows(BP_combined_df, missing_df_0.1)
+}
+
+if (length(missing_groups_0.5) > 0) {
+  missing_df_0.5 <- tibble(
+    Sample = missing_groups_0.5,
+    Description = "No enriched terms",  # Show this in the y-axis
+    GeneRatio = NA,
+    neglog_padj = NA,
+    Concentration = "0.5"  # Assign to 0.5 group
+  )
+  BP_combined_df <- bind_rows(BP_combined_df, missing_df_0.5)
+}
+
+# Ensure all response groups appear in the correct order
+BP_combined_df$Sample <- factor(BP_combined_df$Sample, levels = c(all_groups_0.1, all_groups_0.5))
+
+# Generate dot plot
+dotplot_BP <- ggplot(BP_combined_df, aes(x = Sample, y = Description, size = GeneRatio, color = neglog_padj)) +
+  geom_point(na.rm = TRUE) +  # Ignore NA values
+  scale_color_gradient(low = "blue", high = "red", na.value = "grey") +  # NA values in grey
+  labs(
+    x = "Response Groups",
+    y = "Biological Process",
+    color = "-log10(Adjusted P-Value)",
+    size = "Gene Ratio",
+    title = "Top 5 BP Enrichments Across Response Groups (0.1 & 0.5)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10, face = "bold"),
+    axis.text.y = element_text(size = 10, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  facet_wrap(~ Concentration, scales = "free_x")  # Ensures 0.1 and 0.5 groups don't overlap
+
+# Display the dot plot
+print(dotplot_BP)
+```
+
+## **📌 Top BP (GProfiler)**
+```{r GO comp2, echo=TRUE, message=FALSE, fig.width=14, fig.height=6}
+# Load necessary libraries
+library(gprofiler2)
+library(ggplot2)
+library(dplyr)
+library(tibble)
+
+# Define response groups and their corresponding gene lists
+response_groups_0.1 <- list(
+  "Non response (0.1)" = prob_1_0.1,
+  "CX-DOX mid-late response (0.1)" = prob_2_0.1,
+  "DOX only mid-late (0.1)" = prob_3_0.1
+)
+
+response_groups_0.5 <- list(
+  "Non response (0.5)" = prob_1_0.5,
+  "DOX specific response (0.5)" = prob_2_0.5,
+  "DOX only mid-late response (0.5)" = prob_3_0.5,
+  "CX + DOX (early) response (0.5)" = prob_4_0.5,
+  "DOX + CX (mid-late) response (0.5)" = prob_5_0.5
+)
+
+# Function to perform GO enrichment for BP using g:Profiler
+perform_BP_enrichment <- function(gene_set, sample_name, concentration) {
+  enrichment <- gost(
+    query = gene_set,
+    organism = "hsapiens",
+    ordered_query = FALSE,
+    significant = TRUE,
+    correction_method = "fdr",
+    sources = "GO:BP",
+    custom_bg = background
+  )
+  
+  if (!is.null(enrichment) && nrow(enrichment$result) > 0) {
+    enrichment_df <- as_tibble(enrichment$result) %>%
+      mutate(
+        Sample = sample_name,
+        Concentration = concentration,  # Assign correct concentration here
+        GeneRatio = intersection_size / effective_domain_size,  # Compute Gene Ratio
+        neglog_padj = -log10(p_value)  # Compute -log10(adjusted p-value)
+      ) %>%
+      arrange(p_value) %>%
+      slice_head(n = 5)  # Select top 5 terms
+    
+    return(enrichment_df)
+  } else {
+    return(NULL)
+  }
+}
+
+# Perform enrichment for 0.1-specific response groups
+BP_results_0.1 <- lapply(names(response_groups_0.1), function(sample) {
+  perform_BP_enrichment(response_groups_0.1[[sample]], sample, "0.1")
+})
+
+# Perform enrichment for 0.5-specific response groups
+BP_results_0.5 <- lapply(names(response_groups_0.5), function(sample) {
+  perform_BP_enrichment(response_groups_0.5[[sample]], sample, "0.5")
+})
+
+# Combine results into a single dataframe
+BP_combined_df <- bind_rows(BP_results_0.1, BP_results_0.5)
+
+# Ensure all response groups appear in the x-axis, even if they have no enriched terms
+all_groups_0.1 <- names(response_groups_0.1)
+all_groups_0.5 <- names(response_groups_0.5)
+
+missing_groups_0.1 <- setdiff(all_groups_0.1, unique(BP_combined_df$Sample))
+missing_groups_0.5 <- setdiff(all_groups_0.5, unique(BP_combined_df$Sample))
+
+# Create placeholder rows for missing samples, using "No enriched terms" instead of NA
+if (length(missing_groups_0.1) > 0) {
+  missing_df_0.1 <- tibble(
+    Sample = missing_groups_0.1,
+    term_name = "No enriched terms",  # Show this in the y-axis
+    GeneRatio = NA,
+    neglog_padj = NA,
+    Concentration = "0.1"  # Assign to 0.1 group
+  )
+  BP_combined_df <- bind_rows(BP_combined_df, missing_df_0.1)
+}
+
+if (length(missing_groups_0.5) > 0) {
+  missing_df_0.5 <- tibble(
+    Sample = missing_groups_0.5,
+    term_name = "No enriched terms",  # Show this in the y-axis
+    GeneRatio = NA,
+    neglog_padj = NA,
+    Concentration = "0.5"  # Assign to 0.5 group
+  )
+  BP_combined_df <- bind_rows(BP_combined_df, missing_df_0.5)
+}
+
+# Ensure all response groups appear in the correct order
+BP_combined_df$Sample <- factor(BP_combined_df$Sample, levels = c(all_groups_0.1, all_groups_0.5))
+
+# Generate dot plot
+dotplot_BP <- ggplot(BP_combined_df, aes(x = Sample, y = term_name, size = GeneRatio, color = neglog_padj)) +
+  geom_point(na.rm = TRUE) +  # Ignore NA values
+  scale_color_gradient(low = "blue", high = "red", na.value = "grey") +  # NA values in grey
+  labs(
+    x = "Response Groups",
+    y = "Biological Process",
+    color = "-log10(Adjusted P-Value)",
+    size = "Gene Ratio",
+    title = "Top 5 BP Enrichments Across Response Groups (0.1 & 0.5)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10, face = "bold"),
+    axis.text.y = element_text(size = 10, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  facet_wrap(~ Concentration, scales = "free_x")  # Ensures 0.1 and 0.5 groups don't overlap
+
+# Display the dot plot
+print(dotplot_BP)
+```
+
