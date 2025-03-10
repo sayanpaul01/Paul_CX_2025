@@ -37,8 +37,8 @@ sets <- list(
   "Late high dose DOX specific response all" = prob_all_4$ID,
   
   "Non response (0.1)" = prob_1_0.1$ID,
-  "CX_DOX mid-late (0.1)" = prob_3_0.1$ID,
-  "DOX only mid-late (0.1)" = prob_2_0.1$ID,
+  "CX_DOX mid-late (0.1)" = prob_2_0.1$ID,
+  "DOX only mid-late (0.1)" = prob_3_0.1$ID,
   "Non response (0.5)" = prob_1_0.5$ID,
   "DOX only early-mid (0.5)" = prob_2_0.5$ID,
   "DOX only mid-late (0.5)" = prob_3_0.5$ID,
