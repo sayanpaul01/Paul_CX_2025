@@ -857,8 +857,8 @@ data <- data.frame(
 
 # Define custom colors
 custom_colors <- c("Non response (0.1 µM)" = "#FF9999",
-                   "DOX only mid-late (0.1 µM)" = "#99FF99",
-                   "CX-DOX mid-late response (0.1 µM)" = "#66B2FF")
+                   "CX-DOX mid-late response (0.1 µM)" = "#66B2FF",
+                   "DOX only mid-late (0.1 µM)" = "#99FF99")
 
 # Create pie chart
 ggplot(data, aes(x = "", y = Value, fill = Category)) +
@@ -935,8 +935,8 @@ all_toptables_0.1 <- all_toptables_0.1 %>%
     Timepoint = factor(Timepoint, levels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
     Response_Group = factor(Response_Group,
                             levels = c(
-                              "CX-DOX mid-late response\n(0.1 micromolar)",
                               "DOX only mid-late response\n(0.1 micromolar)",
+                              "CX-DOX mid-late response\n(0.1 micromolar)",
                               "Non response\n(0.1 micromolar)"  # Reversed Order
                             ))
   )
@@ -1033,8 +1033,8 @@ data_summary <- data_summary %>%
   mutate(
     Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("3 hours", "24 hours", "48 hours")),
     Response_Group = factor(Response_Group, levels = c(
-      "CX-DOX mid-late response\n(0.1 micromolar)",
       "DOX only mid-late response\n(0.1 micromolar)",
+      "CX-DOX mid-late response\n(0.1 micromolar)",
       "Non response\n(0.1 micromolar)"  # Reversed Order
     ))
   )
@@ -1117,8 +1117,8 @@ all_toptables_0.1 <- all_toptables_0.1 %>%
   mutate(
     Timepoint = factor(Timepoint, levels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
     Response_Group = factor(Response_Group, levels = c(
-      "CX-DOX mid-late response\n(0.1 micromolar)",
       "DOX only mid-late response\n(0.1 micromolar)",
+      "CX-DOX mid-late response\n(0.1 micromolar)",
       "Non response\n(0.1 micromolar)"  # Reversed Order
     ))
   )
@@ -1150,8 +1150,8 @@ data_summary <- data_summary %>%
   mutate(
     Timepoint = factor(Timepoint, levels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
     Response_Group = factor(Response_Group, levels = c(
-      "CX-DOX mid-late response\n(0.1 micromolar)",
       "DOX only mid-late response\n(0.1 micromolar)",
+      "CX-DOX mid-late response\n(0.1 micromolar)",
       "Non response\n(0.1 micromolar)"  # Reversed Order
     ))
   )
@@ -1269,7 +1269,7 @@ library(ggplot2)
 
 # Data
 data <- data.frame(
-  Category = c("Non response (0.5)", "DOX-only early-mid response (0.5 µM)", "DOX only mid-late response (0.5 µM)", "CX-only mid-late response (0.5 µM)", "CX-DOX mid-late response (0.5 µM)"),
+  Category = c("Non response (0.5)", "DOX-specific response (0.5 µM)", "DOX only mid-late response (0.5 µM)", "CX + DOX (early) response (0.5 µM)", "DOX + CX (mid-late) response (0.5 µM)"),
   Value = c(7134,179,6450,142,221)
 )
 
@@ -1408,10 +1408,10 @@ all_toptables_0.5 <- all_toptables_0.5 %>%
   mutate(
     Response_Group = case_when(
       Entrez_ID %in% prob_1_0.5 ~ "Non response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_2_0.5 ~ "DOX-only early-mid response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_2_0.5 ~ "DOX-specific response\n(0.5 micromolar)",
       Entrez_ID %in% prob_3_0.5 ~ "DOX only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_4_0.5 ~ "CX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_5_0.5 ~ "CX-DOX mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_4_0.5 ~ "CX + DOX (early) response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_5_0.5 ~ "DOX + CX (mid-late) response\n(0.5 micromolar)",
       TRUE ~ NA_character_
     )
   )
@@ -1430,10 +1430,10 @@ all_toptables_0.5 <- all_toptables_0.5 %>%
     Timepoint = factor(Timepoint, levels = c("3", "24", "48"),
                        labels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
     Response_Group = factor(Response_Group,
-                            levels = c("CX-DOX mid-late response\n(0.5 micromolar)",
-                                       "CX-only mid-late response\n(0.5 micromolar)",
+                            levels = c("DOX + CX (mid-late) response\n(0.5 micromolar)",
+                                       "CX + DOX (early) response\n(0.5 micromolar)",
                                        "DOX only mid-late response\n(0.5 micromolar)",
-                                       "DOX-only early-mid response\n(0.5 micromolar)",
+                                       "DOX-specific response\n(0.5 micromolar)",
                                        "Non response\n(0.5 micromolar)")) # Reversed Order
   )
 
@@ -1499,10 +1499,10 @@ all_toptables_0.5 <- all_toptables_0.5 %>%
   mutate(
     Response_Group = case_when(
       Entrez_ID %in% prob_1_0.5 ~ "Non response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_2_0.5 ~ "DOX-only early-mid response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_3_0.5 ~ "DOX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_4_0.5 ~ "CX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_5_0.5 ~ "CX-DOX mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_2_0.5 ~ "DOX-specific response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_3_0.5 ~ "DOX only mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_4_0.5 ~ "CX + DOX (early) response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_5_0.5 ~ "DOX + CX (mid-late) response\n(0.5 micromolar)",
       TRUE ~ NA_character_
     )
   ) %>%
@@ -1533,11 +1533,11 @@ data_summary <- data_summary %>%
   mutate(
     Timepoint = factor(Timepoint, levels = c("3", "24", "48"), labels = c("3 hours", "24 hours", "48 hours")),
     Response_Group = factor(Response_Group, levels = c(
-      "CX-DOX mid-late response\n(0.5 micromolar)",
-      "CX-only mid-late response\n(0.5 micromolar)",
-      "DOX-only mid-late response\n(0.5 micromolar)",
-      "DOX-only early-mid response\n(0.5 micromolar)",
-      "Non response\n(0.5 micromolar)"  # Reversed order
+      "DOX + CX (mid-late) response\n(0.5 micromolar)",
+                                       "CX + DOX (early) response\n(0.5 micromolar)",
+                                       "DOX only mid-late response\n(0.5 micromolar)",
+                                       "DOX-specific response\n(0.5 micromolar)",
+                                       "Non response\n(0.5 micromolar)"  # Reversed order
     ))
   )
 
@@ -1608,10 +1608,10 @@ all_toptables_0.5 <- all_toptables_0.5 %>%
   mutate(
     Response_Group = case_when(
       Entrez_ID %in% prob_1_0.5 ~ "Non response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_2_0.5 ~ "DOX-only early-mid response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_3_0.5 ~ "DOX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_4_0.5 ~ "CX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_5_0.5 ~ "CX-DOX mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_2_0.5 ~ "DOX-specific response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_3_0.5 ~ "DOX only mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_4_0.5 ~ "CX + DOX (early) response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_5_0.5 ~ "DOX + CX (mid-late) response\n(0.5 micromolar)",
       TRUE ~ NA_character_
     )
   ) %>%
@@ -1622,11 +1622,11 @@ all_toptables_0.5 <- all_toptables_0.5 %>%
   mutate(
     Timepoint = factor(Timepoint, levels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
     Response_Group = factor(Response_Group, levels = c(
-      "CX-DOX mid-late response\n(0.5 micromolar)",
-      "CX-only mid-late response\n(0.5 micromolar)",
-      "DOX-only mid-late response\n(0.5 micromolar)",
-      "DOX-only early-mid response\n(0.5 micromolar)",
-      "Non response\n(0.5 micromolar)"  # Reversed Order
+      "DOX + CX (mid-late) response\n(0.5 micromolar)",
+                                       "CX + DOX (early) response\n(0.5 micromolar)",
+                                       "DOX only mid-late response\n(0.5 micromolar)",
+                                       "DOX-specific response\n(0.5 micromolar)",
+                                       "Non response\n(0.5 micromolar)"  # Reversed Order
     ))
   )
 
@@ -1684,10 +1684,10 @@ all_toptables_0.5 <- all_toptables_0.5 %>%
   mutate(
     Response_Group = case_when(
       Entrez_ID %in% prob_1_0.5 ~ "Non response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_2_0.5 ~ "DOX-only early-mid response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_3_0.5 ~ "DOX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_4_0.5 ~ "CX-only mid-late response\n(0.5 micromolar)",
-      Entrez_ID %in% prob_5_0.5 ~ "CX-DOX mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_2_0.5 ~ "DOX-specific response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_3_0.5 ~ "DOX only mid-late response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_4_0.5 ~ "CX + DOX (early) response\n(0.5 micromolar)",
+      Entrez_ID %in% prob_5_0.5 ~ "DOX + CX (mid-late) response\n(0.5 micromolar)",
       TRUE ~ NA_character_
     )
   ) %>%
@@ -1717,11 +1717,11 @@ data_summary_0.5 <- data_summary_0.5 %>%
   mutate(
     Timepoint = factor(Timepoint, levels = c("Timepoint: 3 hours", "Timepoint: 24 hours", "Timepoint: 48 hours")),
     Response_Group = factor(Response_Group, levels = c(
-      "CX-DOX mid-late response\n(0.5 micromolar)",
-      "CX-only mid-late response\n(0.5 micromolar)",
-      "DOX-only mid-late response\n(0.5 micromolar)",
-      "DOX-only early-mid response\n(0.5 micromolar)",
-      "Non response\n(0.5 micromolar)"  # Reversed Order
+      "DOX + CX (mid-late) response\n(0.5 micromolar)",
+                                       "CX + DOX (early) response\n(0.5 micromolar)",
+                                       "DOX only mid-late response\n(0.5 micromolar)",
+                                       "DOX-specific response\n(0.5 micromolar)",
+                                       "Non response\n(0.5 micromolar)"  # Reversed Order
     ))
   )
 
@@ -1813,7 +1813,7 @@ non_response_counts <- proportion_data %>%
   {setNames(.$Count, .$DNA_Damage)}  # Convert to named vector
 
 chi_results <- proportion_data %>%
-  filter(Response_Group %in% c("DOX only mid-late (0.1)", "CX_DOX mid-late (0.1)")) %>%
+  filter(Response_Group %in% c("CX_DOX mid-late (0.1)","DOX only mid-late (0.1)")) %>%
   group_by(Response_Group) %>%
   summarise(
     p_value = {
