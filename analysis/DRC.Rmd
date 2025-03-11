@@ -75,6 +75,40 @@ legend("bottomleft", title = "Individuals", legend = c("1", "2", "3"),
        col = "black", pch = c(15, 16, 17), cex = 1.2)
 ```
 
+## **📌 Statistical Test**
+```{r stat, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(drc)
 
+# Fit dose-response models
+curved_fit_CX <- drm(Ratio ~ Conc, data = DRC, fct = LL.4())
+curved_fit_DOX <- drm(Ratio ~ Conc, data = DRC2, fct = LL.4())
 
+# Extract EC50 values with confidence intervals
+EC50_CX <- ED(curved_fit_CX, 50, interval = "delta")
+EC50_DOX <- ED(curved_fit_DOX, 50, interval = "delta")
+
+# Extract EC50 estimates and standard errors (Corrected)
+EC50_CX_value <- EC50_CX[1,1]  # First row, first column
+EC50_CX_SE <- EC50_CX[1,2]     # First row, second column (Standard Error)
+
+EC50_DOX_value <- EC50_DOX[1,1]  # First row, first column
+EC50_DOX_SE <- EC50_DOX[1,2]     # First row, second column (Standard Error)
+
+# Perform a z-test to compare EC50 values
+z_score <- abs(EC50_CX_value - EC50_DOX_value) / sqrt(EC50_CX_SE^2 + EC50_DOX_SE^2)
+p_value <- 2 * (1 - pnorm(z_score))  # Two-tailed test
+
+# Print results
+print(paste("EC50 for CX-5461:", round(EC50_CX_value, 2)))
+print(paste("EC50 for DOX:", round(EC50_DOX_value, 2)))
+print(paste("P-value:", p_value))
+
+# Interpretation
+if (p_value < 0.05) {
+  print("The EC50 values are significantly different (p < 0.05).")
+} else {
+  print("The EC50 values are NOT significantly different (p ≥ 0.05).")
+}
+```
 

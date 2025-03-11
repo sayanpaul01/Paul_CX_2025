@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-03-07
+<strong>Last updated:</strong> 2025-03-10
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -416,10 +416,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree15c3b424c41b54314990d24421786f7fe1824ac8targetblank15c3b42a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreecf95313a966bdd9be14368948d9ba50972683f8ctargetblankcf95313a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/15c3b424c41b54314990d24421786f7fe1824ac8" target="_blank">15c3b42</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/cf95313a966bdd9be14368948d9ba50972683f8c" target="_blank">cf95313</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree15c3b424c41b54314990d24421786f7fe1824ac8targetblank15c3b42a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreecf95313a966bdd9be14368948d9ba50972683f8ctargetblankcf95313a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/15c3b424c41b54314990d24421786f7fe1824ac8" target="_blank">15c3b42</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/cf95313a966bdd9be14368948d9ba50972683f8c" target="_blank">cf95313</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -549,13 +549,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  Dose_Response_Publication.png
-    Untracked:  analysis/DRC.Rmd
-    Untracked:  data/CX-5461.csv
-    Untracked:  data/DOX.csv
-    Untracked:  dose_response_plot.tiff
-    Untracked:  dose_response_plot_with_error_bars.tiff
+Unstaged changes:
+    Modified:   analysis/DRC.Rmd
 
 </code></pre>
 <p>
@@ -570,10 +565,73 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/DRC.Rmd</code>) and HTML
+(<code>docs/DRC.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df69a87ccc1407c2b5428f677fa592b6ad410381/analysis/DRC.Rmd" target="_blank">df69a87</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-07
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/df69a87ccc1407c2b5428f677fa592b6ad410381/docs/DRC.html" target="_blank">df69a87</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-07
+</td>
+<td>
+Commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -648,6 +706,91 @@ legend(&quot;topright&quot;, legend = c(&quot;CX-5461&quot;, &quot;DOX&quot;), c
 legend(&quot;bottomleft&quot;, title = &quot;Individuals&quot;, legend = c(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;), 
        col = &quot;black&quot;, pch = c(15, 16, 17), cex = 1.2)</code></pre>
 <p><img src="figure/DRC.Rmd/load_libraries-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-load_libraries-1">
+Past versions of load_libraries-1.png
+</button>
+</p>
+<div id="fig-load_libraries-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df69a87ccc1407c2b5428f677fa592b6ad410381/docs/figure/DRC.Rmd/load_libraries-1.png" target="_blank">df69a87</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-03-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="statistical-test" class="section level2">
+<h2><strong>📌 Statistical Test</strong></h2>
+<pre class="r"><code># Load necessary libraries
+library(drc)
+
+# Fit dose-response models
+curved_fit_CX &lt;- drm(Ratio ~ Conc, data = DRC, fct = LL.4())
+curved_fit_DOX &lt;- drm(Ratio ~ Conc, data = DRC2, fct = LL.4())
+
+# Extract EC50 values with confidence intervals
+EC50_CX &lt;- ED(curved_fit_CX, 50, interval = &quot;delta&quot;)</code></pre>
+<pre><code>
+Estimated effective doses
+
+       Estimate Std. Error   Lower   Upper
+e:1:50   8.9057     3.6539  1.1966 16.6147</code></pre>
+<pre class="r"><code>EC50_DOX &lt;- ED(curved_fit_DOX, 50, interval = &quot;delta&quot;)</code></pre>
+<pre><code>
+Estimated effective doses
+
+       Estimate Std. Error    Lower    Upper
+e:1:50  0.57065    0.43538 -0.36315  1.50444</code></pre>
+<pre class="r"><code># Extract EC50 estimates and standard errors (Corrected)
+EC50_CX_value &lt;- EC50_CX[1,1]  # First row, first column
+EC50_CX_SE &lt;- EC50_CX[1,2]     # First row, second column (Standard Error)
+
+EC50_DOX_value &lt;- EC50_DOX[1,1]  # First row, first column
+EC50_DOX_SE &lt;- EC50_DOX[1,2]     # First row, second column (Standard Error)
+
+# Perform a z-test to compare EC50 values
+z_score &lt;- abs(EC50_CX_value - EC50_DOX_value) / sqrt(EC50_CX_SE^2 + EC50_DOX_SE^2)
+p_value &lt;- 2 * (1 - pnorm(z_score))  # Two-tailed test
+
+# Print results
+print(paste(&quot;EC50 for CX-5461:&quot;, round(EC50_CX_value, 2)))</code></pre>
+<pre><code>[1] &quot;EC50 for CX-5461: 8.91&quot;</code></pre>
+<pre class="r"><code>print(paste(&quot;EC50 for DOX:&quot;, round(EC50_DOX_value, 2)))</code></pre>
+<pre><code>[1] &quot;EC50 for DOX: 0.57&quot;</code></pre>
+<pre class="r"><code>print(paste(&quot;P-value:&quot;, p_value))</code></pre>
+<pre><code>[1] &quot;P-value: 0.0235055023198667&quot;</code></pre>
+<pre class="r"><code># Interpretation
+if (p_value &lt; 0.05) {
+  print(&quot;The EC50 values are significantly different (p &lt; 0.05).&quot;)
+} else {
+  print(&quot;The EC50 values are NOT significantly different (p ≥ 0.05).&quot;)
+}</code></pre>
+<pre><code>[1] &quot;The EC50 values are significantly different (p &lt; 0.05).&quot;</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -684,17 +827,18 @@ loaded via a namespace (and not attached):
  [1] sandwich_3.1-1    sass_0.4.9        gtools_3.9.5      stringi_1.8.3    
  [5] lattice_0.22-5    digest_0.6.34     magrittr_2.0.3    evaluate_1.0.3   
  [9] grid_4.3.0        mvtnorm_1.3-2     fastmap_1.1.1     rprojroot_2.0.4  
-[13] workflowr_1.7.1   jsonlite_1.8.9    Matrix_1.6-1.1    Formula_1.2-5    
-[17] survival_3.7-0    multcomp_1.4-26   promises_1.3.0    scales_1.3.0     
-[21] TH.data_1.1-2     codetools_0.2-20  jquerylib_0.1.4   abind_1.4-8      
-[25] cli_3.6.1         rlang_1.1.3       munsell_0.5.1     splines_4.3.0    
-[29] cachem_1.0.8      yaml_2.3.10       plotrix_3.8-4     tools_4.3.0      
-[33] colorspace_2.1-0  httpuv_1.6.15     vctrs_0.6.5       R6_2.5.1         
-[37] zoo_1.8-12        lifecycle_1.0.4   git2r_0.35.0      stringr_1.5.1    
-[41] fs_1.6.3          car_3.1-3         pkgconfig_2.0.3   pillar_1.10.1    
-[45] bslib_0.8.0       later_1.3.2       glue_1.7.0        Rcpp_1.0.12      
-[49] xfun_0.50         tibble_3.2.1      rstudioapi_0.17.1 knitr_1.49       
-[53] htmltools_0.5.8.1 rmarkdown_2.29    carData_3.0-5     compiler_4.3.0   </code></pre>
+[13] workflowr_1.7.1   jsonlite_1.8.9    Matrix_1.6-1.1    whisker_0.4.1    
+[17] Formula_1.2-5     survival_3.7-0    multcomp_1.4-26   promises_1.3.0   
+[21] scales_1.3.0      TH.data_1.1-2     codetools_0.2-20  jquerylib_0.1.4  
+[25] abind_1.4-8       cli_3.6.1         rlang_1.1.3       munsell_0.5.1    
+[29] splines_4.3.0     plotrix_3.8-4     cachem_1.0.8      yaml_2.3.10      
+[33] tools_4.3.0       colorspace_2.1-0  httpuv_1.6.15     vctrs_0.6.5      
+[37] R6_2.5.1          zoo_1.8-12        lifecycle_1.0.4   git2r_0.35.0     
+[41] stringr_1.5.1     fs_1.6.3          car_3.1-3         pkgconfig_2.0.3  
+[45] pillar_1.10.1     bslib_0.8.0       later_1.3.2       glue_1.7.0       
+[49] Rcpp_1.0.12       xfun_0.50         tibble_3.2.1      rstudioapi_0.17.1
+[53] knitr_1.49        htmltools_0.5.8.1 rmarkdown_2.29    carData_3.0-5    
+[57] compiler_4.3.0   </code></pre>
 </div>
 </div>
 
