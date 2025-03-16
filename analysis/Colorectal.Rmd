@@ -813,3 +813,131 @@ ggplot(proportion_long, aes(x = Group, y = Percentage, fill = Category)) +
     strip.text = element_text(size = 12, face = "bold")
   )
 ```
+
+## **📌 Correlation heatmap**
+```{r colr, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(org.Hs.eg.db)
+library(biomaRt)
+
+# Load colorectal cancer logFC data for 6hr, 24hr, and 72hr
+data_6hr_logFC <- read.csv("data/Colorectal/6hrlogFC.csv", stringsAsFactors = FALSE)
+data_24hr_logFC <- read.csv("data/Colorectal/24hrlogFC.csv", stringsAsFactors = FALSE)
+data_72hr_logFC <- read.csv("data/Colorectal/72hrlogFC.csv", stringsAsFactors = FALSE)
+
+# Map gene symbols to Entrez IDs
+map_entrez <- function(data) {
+  data %>%
+    mutate(Entrez_ID = mapIds(org.Hs.eg.db,
+                              keys = Symbol,
+                              column = "ENTREZID",
+                              keytype = "SYMBOL",
+                              multiVals = "first"))
+}
+
+data_6hr_logFC <- map_entrez(data_6hr_logFC)
+data_24hr_logFC <- map_entrez(data_24hr_logFC)
+data_72hr_logFC <- map_entrez(data_72hr_logFC)
+
+# Load CX-5461 and DOX logFC data for 3hr, 24hr, 48hr
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv", stringsAsFactors = FALSE)
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv", stringsAsFactors = FALSE)
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv", stringsAsFactors = FALSE)
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv", stringsAsFactors = FALSE)
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv", stringsAsFactors = FALSE)
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv", stringsAsFactors = FALSE)
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv", stringsAsFactors = FALSE)
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv", stringsAsFactors = FALSE)
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv", stringsAsFactors = FALSE)
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv", stringsAsFactors = FALSE)
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv", stringsAsFactors = FALSE)
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv", stringsAsFactors = FALSE)
+
+# Function to merge colorectal and drug datasets
+merge_data <- function(colorectal_data, drug_data) {
+  merged <- merge(colorectal_data, drug_data, by = "Entrez_ID")
+  na.omit(merged)  # Remove NA values
+}
+
+# Merge data for all timepoints and concentrations
+merged_CX_0.1_3 <- merge_data(data_6hr_logFC, CX_0.1_3)
+merged_CX_0.5_3 <- merge_data(data_6hr_logFC, CX_0.5_3)
+merged_DOX_0.1_3 <- merge_data(data_6hr_logFC, DOX_0.1_3)
+merged_DOX_0.5_3 <- merge_data(data_6hr_logFC, DOX_0.5_3)
+
+merged_CX_0.1_24 <- merge_data(data_24hr_logFC, CX_0.1_24)
+merged_CX_0.5_24 <- merge_data(data_24hr_logFC, CX_0.5_24)
+merged_DOX_0.1_24 <- merge_data(data_24hr_logFC, DOX_0.1_24)
+merged_DOX_0.5_24 <- merge_data(data_24hr_logFC, DOX_0.5_24)
+
+merged_CX_0.1_48 <- merge_data(data_72hr_logFC, CX_0.1_48)
+merged_CX_0.5_48 <- merge_data(data_72hr_logFC, CX_0.5_48)
+merged_DOX_0.1_48 <- merge_data(data_72hr_logFC, DOX_0.1_48)
+merged_DOX_0.5_48 <- merge_data(data_72hr_logFC, DOX_0.5_48)
+
+# Compute correlation coefficients (Pearson)
+compute_correlation <- function(df) {
+  cor.test(df$logFC.x, df$logFC.y, method = "pearson")$estimate
+}
+
+cor_CX_0.1_3 <- compute_correlation(merged_CX_0.1_3)
+cor_CX_0.5_3 <- compute_correlation(merged_CX_0.5_3)
+cor_DOX_0.1_3 <- compute_correlation(merged_DOX_0.1_3)
+cor_DOX_0.5_3 <- compute_correlation(merged_DOX_0.5_3)
+
+cor_CX_0.1_24 <- compute_correlation(merged_CX_0.1_24)
+cor_CX_0.5_24 <- compute_correlation(merged_CX_0.5_24)
+cor_DOX_0.1_24 <- compute_correlation(merged_DOX_0.1_24)
+cor_DOX_0.5_24 <- compute_correlation(merged_DOX_0.5_24)
+
+cor_CX_0.1_48 <- compute_correlation(merged_CX_0.1_48)
+cor_CX_0.5_48 <- compute_correlation(merged_CX_0.5_48)
+cor_DOX_0.1_48 <- compute_correlation(merged_DOX_0.1_48)
+cor_DOX_0.5_48 <- compute_correlation(merged_DOX_0.5_48)
+
+# Define correlation values from previously computed Pearson correlations
+correlation_data <- data.frame(
+  Sample = c("CX_0.1_3", "CX_0.5_3", "DOX_0.1_3", "DOX_0.5_3",
+             "CX_0.1_24", "CX_0.5_24", "DOX_0.1_24", "DOX_0.5_24",
+             "CX_0.1_48", "CX_0.5_48", "DOX_0.1_48", "DOX_0.5_48"),
+  Correlation = c(
+    cor_CX_0.1_3, cor_CX_0.5_3, cor_DOX_0.1_3, cor_DOX_0.5_3,
+    cor_CX_0.1_24, cor_CX_0.5_24, cor_DOX_0.1_24, cor_DOX_0.5_24,
+    cor_CX_0.1_48, cor_CX_0.5_48, cor_DOX_0.1_48, cor_DOX_0.5_48
+  )
+)
+
+# Add a single column category for labeling
+correlation_data$Comparison <- "Colorectal"
+
+# Convert to long format for ggplot
+heatmap_data_long <- melt(correlation_data, id.vars = c("Sample", "Comparison"))
+
+# Ensure the Y-axis follows the correct top-down ordering
+heatmap_data_long$Sample <- factor(heatmap_data_long$Sample, levels = rev(c(  # Reversed order
+  "CX_0.1_3", "CX_0.5_3", "DOX_0.1_3", "DOX_0.5_3",
+  "CX_0.1_24", "CX_0.5_24", "DOX_0.1_24", "DOX_0.5_24",
+  "CX_0.1_48", "CX_0.5_48", "DOX_0.1_48", "DOX_0.5_48"
+)))
+
+# Create the correctly ordered single-column heatmap
+ggplot(heatmap_data_long, aes(x = Comparison, y = Sample, fill = value)) +
+  geom_tile(color = "white") +  # Heatmap tiles
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +  # Color gradient
+  geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +  # Display r-values
+  labs(x = "", y = "Samples", fill = "Correlation (r)", 
+       title = "Correlation Heatmap: CX-5461 & DOX with\nColorectal Gene Expression") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(face = "bold", size = 14),
+    axis.text.y = element_text(face = "bold", size = 12),
+    axis.title.y = element_text(face = "bold", size = 14),
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+    legend.title = element_text(face = "bold"),
+    panel.grid = element_blank()
+  )
+```
