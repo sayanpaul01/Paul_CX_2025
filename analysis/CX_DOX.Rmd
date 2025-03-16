@@ -139,4 +139,70 @@ scatter_plot <- ggplot(combined_data, aes(x = logFC_CX, y = logFC_DOX)) +
 print(scatter_plot)
 ```
 
+## **📌 Correlation Heatmap**
+```{r corr, echo=TRUE, message=FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(reshape2)
+library(dplyr)
 
+# Define dataset pairs for correlation analysis
+dataset_pairs <- list(
+  list("CX_0.1_3", CX_0.1_3, "DOX_0.1_3", DOX_0.1_3),
+  list("CX_0.1_24", CX_0.1_24, "DOX_0.1_24", DOX_0.1_24),
+  list("CX_0.1_48", CX_0.1_48, "DOX_0.1_48", DOX_0.1_48),
+  list("CX_0.5_3", CX_0.5_3, "DOX_0.5_3", DOX_0.5_3),
+  list("CX_0.5_24", CX_0.5_24, "DOX_0.5_24", DOX_0.5_24),
+  list("CX_0.5_48", CX_0.5_48, "DOX_0.5_48", DOX_0.5_48)
+)
+
+# Create an empty data frame to store correlations
+correlation_data <- data.frame(CX_Sample = character(), Correlation = numeric())
+
+# Compute correlations for each CX vs. DOX dataset pair
+for (pair in dataset_pairs) {
+  cx_name <- pair[[1]]
+  cx_data <- pair[[2]]
+  dox_name <- pair[[3]]
+  dox_data <- pair[[4]]
+  
+  # Merge datasets on Entrez_ID
+  merged_data <- merge(cx_data, dox_data, by = "Entrez_ID", suffixes = c("_CX", "_DOX"))
+  
+  # Compute Pearson correlation
+  r_value <- cor(merged_data$logFC_CX, merged_data$logFC_DOX, method = "pearson", use = "complete.obs")
+  
+  # Store the result
+  correlation_data <- rbind(correlation_data, data.frame(CX_Sample = cx_name, Correlation = r_value))
+}
+
+# Add a single column category for labeling
+correlation_data$Comparison <- "DOX"
+
+# Convert to long format for ggplot
+heatmap_data_long <- melt(correlation_data, id.vars = c("CX_Sample", "Comparison"))
+
+# Ensure the Y-axis follows the correct ordering (CX samples top to bottom)
+heatmap_data_long$CX_Sample <- factor(heatmap_data_long$CX_Sample, levels = rev(c(
+  "CX_0.1_3", "CX_0.5_3",
+  "CX_0.1_24", "CX_0.5_24",
+  "CX_0.1_48", "CX_0.5_48"
+)))
+
+# Create the single-column CX vs. DOX correlation heatmap
+ggplot(heatmap_data_long, aes(x = Comparison, y = CX_Sample, fill = value)) +
+  geom_tile(color = "white") +  # Heatmap tiles
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +  # Color gradient
+  geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +  # Display r-values
+  labs(x = "", y = "CX Samples", fill = "Correlation (r)", 
+       title = "Correlation Heatmap: CX-5461 vs. DOX Gene Expression") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(face = "bold", size = 14),
+    axis.text.y = element_text(face = "bold", size = 12),
+    axis.title.y = element_text(face = "bold", size = 14),
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+    legend.title = element_text(face = "bold"),
+    panel.grid = element_blank()
+  )
+```
