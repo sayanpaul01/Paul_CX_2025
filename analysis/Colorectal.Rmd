@@ -926,11 +926,13 @@ heatmap_data_long$Sample <- factor(heatmap_data_long$Sample, levels = rev(c(  # 
 
 # Create the correctly ordered single-column heatmap
 ggplot(heatmap_data_long, aes(x = Comparison, y = Sample, fill = value)) +
-  geom_tile(color = "white") +  # Heatmap tiles
-  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +  # Color gradient
-  geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +  # Display r-values
-  labs(x = "", y = "Samples", fill = "Correlation (r)", 
-       title = "Correlation Heatmap: CX-5461 & DOX with\nColorectal Gene Expression") +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "red", limits = c(-0.4,0.4)) +  # Updated scale
+  geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +
+  labs(
+    x = "", y = "Samples", fill = "Correlation (r)",
+    title = "Correlation Heatmap: CX-5461 & DOX with\nColorectal Gene Expression"
+  ) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(face = "bold", size = 14),
