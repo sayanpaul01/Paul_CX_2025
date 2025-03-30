@@ -927,7 +927,8 @@ heatmap_data_long$Sample <- factor(heatmap_data_long$Sample, levels = rev(c(  # 
 # Create the correctly ordered single-column heatmap
 ggplot(heatmap_data_long, aes(x = Comparison, y = Sample, fill = value)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "white", high = "red", limits = c(-0.4,0.4)) +  # Updated scale
+  scale_fill_gradient2(
+    low = "blue", mid = "white", high = "red", limits = c(-0.4,0.4)) +  # Updated scale
   geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +
   labs(
     x = "", y = "Samples", fill = "Correlation (r)",
