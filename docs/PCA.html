@@ -11,7 +11,7 @@
 
 <meta name="author" content="Your Name" />
 
-<meta name="date" content="2025-02-02" />
+<meta name="date" content="2025-04-02" />
 
 <title>PCA Analysis</title>
 
@@ -353,7 +353,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">PCA Analysis</h1>
 <h4 class="author">Your Name</h4>
-<h4 class="date">2025-02-02</h4>
+<h4 class="date">2025-04-02</h4>
 
 </div>
 
@@ -361,7 +361,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -372,8 +372,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,13 +382,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-02
+<strong>Last updated:</strong> 2025-04-02
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -411,18 +411,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -513,15 +516,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree56e44e607a92add89b054abf771e904ed50cd9f5targetblank56e44e6a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree491cd159356de901c5f7aa25cb65f4dad213b675targetblank491cd15a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/56e44e607a92add89b054abf771e904ed50cd9f5" target="_blank">56e44e6</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/491cd159356de901c5f7aa25cb65f4dad213b675" target="_blank">491cd15</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree56e44e607a92add89b054abf771e904ed50cd9f5targetblank56e44e6a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree491cd159356de901c5f7aa25cb65f4dad213b675targetblank491cd15a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +534,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/56e44e607a92add89b054abf771e904ed50cd9f5" target="_blank">56e44e6</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/491cd159356de901c5f7aa25cb65f4dad213b675" target="_blank">491cd15</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -549,6 +552,29 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    0.1 box.svg
+    Ignored:    Rplot04.svg
+
+Untracked files:
+    Untracked:  0.1 density.svg
+    Untracked:  0.1.emf
+    Untracked:  0.1.svg
+    Untracked:  0.5 box.svg
+    Untracked:  0.5 density.svg
+    Untracked:  0.5.svg
+    Untracked:  Figure 1.jpeg
+    Untracked:  Figure 1.pdf
+    Untracked:  Rplot.svg
+    Untracked:  Rplot01.svg
+    Untracked:  Rplot02.svg
+    Untracked:  Rplot03.svg
+    Untracked:  Rplot05.svg
+    Untracked:  Rplot06.svg
+    Untracked:  Rplot07.svg
+
+Unstaged changes:
+    Modified:   .gitignore
+    Modified:   analysis/PCA.Rmd
 
 </code></pre>
 <p>
@@ -593,6 +619,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/PCA.html" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -736,6 +779,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_unfiltered-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_unfiltered-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -781,6 +835,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_unfiltered2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_unfiltered2-1.png" target="_blank">773671b</a>
@@ -830,6 +895,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_unfiltered3-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_unfiltered3-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -851,7 +927,7 @@ sayanpaul01
 ggplot2::autoplot(prcomp_res1, data = Metadata, colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size =4, x=1, y=2) +
   ggrepel::geom_text_repel(label=Indiv) +
   scale_color_manual(values=drug_palc) +
-  ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) filtered (Rowmeans &gt;0)&quot;)) +
+  ggtitle(expression(&quot;PCA of gene expression (log2 cpm)&quot;)) +
   theme_bw()</code></pre>
 <pre><code>Warning: ggrepel: 51 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
@@ -878,6 +954,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_0-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_0-1.png" target="_blank">773671b</a>
@@ -927,6 +1014,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_0_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_0_1-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -972,6 +1070,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_0_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_0_2-1.png" target="_blank">773671b</a>
@@ -1025,6 +1134,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_0.5-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_0.5-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -1072,6 +1192,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_0.5_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_0.5_1-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -1117,6 +1248,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_0.5_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_0.5_2-1.png" target="_blank">773671b</a>
@@ -1169,6 +1311,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_1-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -1214,6 +1367,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_1_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_1_1-1.png" target="_blank">773671b</a>
@@ -1263,6 +1427,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_filtered_1_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/773671b22a4d8f6d93cf10e7a7d48152263e29af/docs/figure/PCA.Rmd/pca_filtered_1_2-1.png" target="_blank">773671b</a>
 </td>
 <td>
@@ -1297,6 +1472,43 @@ ggplot2::autoplot(prcomp_res4, data = as.data.frame(subset_meta), colour = &quot
 <pre><code>Warning: ggrepel: 4 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug-1">
+Past versions of pca_drug-1.png
+</button>
+</p>
+<div id="fig-pca_drug-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res5 &lt;- prcomp(t(subset_matrix_CX[rowMeans(subset_matrix_CX) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res5, data = as.data.frame(subset_meta), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1307,6 +1519,43 @@ ggplot2::autoplot(prcomp_res5, data = as.data.frame(subset_meta), colour = &quot
 <pre><code>Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_1-1">
+Past versions of pca_drug_1-1.png
+</button>
+</p>
+<div id="fig-pca_drug_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res6 &lt;- prcomp(t(subset_matrix_CX[rowMeans(subset_matrix_CX) &gt; 0.5, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res6, data = as.data.frame(subset_meta), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1317,6 +1566,43 @@ ggplot2::autoplot(prcomp_res6, data = as.data.frame(subset_meta), colour = &quot
 <pre><code>Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_2-1">
+Past versions of pca_drug_2-1.png
+</button>
+</p>
+<div id="fig-pca_drug_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res7 &lt;- prcomp(t(subset_matrix_CX[rowMeans(subset_matrix_CX) &gt; 1, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res7, data = as.data.frame(subset_meta), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1325,6 +1611,43 @@ ggplot2::autoplot(prcomp_res7, data = as.data.frame(subset_meta), colour = &quot
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 1 (CX-5461 vs VEH)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_3-1">
+Past versions of pca_drug_3-1.png
+</button>
+</p>
+<div id="fig-pca_drug_3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_3-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="pca-analysis-dox-veh" class="section level2">
 <h2><strong>📌 PCA Analysis: DOX &amp; VEH </strong></h2>
@@ -1343,6 +1666,43 @@ ggplot2::autoplot(prcomp_res8, data = as.data.frame(subset_meta_dox), colour = &
 <pre><code>Warning: ggrepel: 42 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_dox_veh-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_dox_veh-1">
+Past versions of pca_drug_dox_veh-1.png
+</button>
+</p>
+<div id="fig-pca_drug_dox_veh-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_dox_veh-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res9 &lt;- prcomp(t(subset_matrix_DOX[rowMeans(subset_matrix_DOX) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res9, data = as.data.frame(subset_meta_dox), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1353,6 +1713,43 @@ ggplot2::autoplot(prcomp_res9, data = as.data.frame(subset_meta_dox), colour = &
 <pre><code>Warning: ggrepel: 32 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_dox_veh_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_dox_veh_1-1">
+Past versions of pca_drug_dox_veh_1-1.png
+</button>
+</p>
+<div id="fig-pca_drug_dox_veh_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_dox_veh_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res10 &lt;- prcomp(t(subset_matrix_DOX[rowMeans(subset_matrix_DOX) &gt; 0.5, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res10, data = as.data.frame(subset_meta_dox), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1363,6 +1760,43 @@ ggplot2::autoplot(prcomp_res10, data = as.data.frame(subset_meta_dox), colour = 
 <pre><code>Warning: ggrepel: 30 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_dox_veh_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_dox_veh_2-1">
+Past versions of pca_drug_dox_veh_2-1.png
+</button>
+</p>
+<div id="fig-pca_drug_dox_veh_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_dox_veh_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res11 &lt;- prcomp(t(subset_matrix_DOX[rowMeans(subset_matrix_DOX) &gt; 1, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res11, data = as.data.frame(subset_meta_dox), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1373,6 +1807,43 @@ ggplot2::autoplot(prcomp_res11, data = as.data.frame(subset_meta_dox), colour = 
 <pre><code>Warning: ggrepel: 34 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_dox_veh_3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_dox_veh_3-1">
+Past versions of pca_drug_dox_veh_3-1.png
+</button>
+</p>
+<div id="fig-pca_drug_dox_veh_3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_dox_veh_3-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="pca-analysis-cx-5461-dox" class="section level2">
 <h2><strong>📌 PCA Analysis: CX-5461 &amp; DOX</strong></h2>
@@ -1391,6 +1862,43 @@ ggplot2::autoplot(prcomp_res12, data = as.data.frame(subset_meta_cx_dox), colour
 <pre><code>Warning: ggrepel: 30 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_cx_dox-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_cx_dox-1">
+Past versions of pca_drug_cx_dox-1.png
+</button>
+</p>
+<div id="fig-pca_drug_cx_dox-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_cx_dox-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res13 &lt;- prcomp(t(subset_matrix_CX_DOX[rowMeans(subset_matrix_CX_DOX) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res13, data = as.data.frame(subset_meta_cx_dox), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1401,6 +1909,43 @@ ggplot2::autoplot(prcomp_res13, data = as.data.frame(subset_meta_cx_dox), colour
 <pre><code>Warning: ggrepel: 16 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_cx_dox_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_cx_dox_1-1">
+Past versions of pca_drug_cx_dox_1-1.png
+</button>
+</p>
+<div id="fig-pca_drug_cx_dox_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_cx_dox_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res14 &lt;- prcomp(t(subset_matrix_CX_DOX[rowMeans(subset_matrix_CX_DOX) &gt; 0.5, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res14, data = as.data.frame(subset_meta_cx_dox), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1411,6 +1956,43 @@ ggplot2::autoplot(prcomp_res14, data = as.data.frame(subset_meta_cx_dox), colour
 <pre><code>Warning: ggrepel: 15 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_cx_dox_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_cx_dox_2-1">
+Past versions of pca_drug_cx_dox_2-1.png
+</button>
+</p>
+<div id="fig-pca_drug_cx_dox_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_cx_dox_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res15 &lt;- prcomp(t(subset_matrix_CX_DOX[rowMeans(subset_matrix_CX_DOX) &gt; 1, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res15, data = as.data.frame(subset_meta_cx_dox), colour = &quot;Condition&quot;, shape = &quot;Time&quot;, size = 4) +
@@ -1421,6 +2003,43 @@ ggplot2::autoplot(prcomp_res15, data = as.data.frame(subset_meta_cx_dox), colour
 <pre><code>Warning: ggrepel: 21 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_drug_cx_dox_3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_drug_cx_dox_3-1">
+Past versions of pca_drug_cx_dox_3-1.png
+</button>
+</p>
+<div id="fig-pca_drug_cx_dox_3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_drug_cx_dox_3-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="pca-analysis-by-timepoints" class="section level2">
 <h2><strong>📌 PCA Analysis by Timepoints</strong></h2>
@@ -1440,6 +2059,43 @@ ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (3 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_3hr-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_3hr-1">
+Past versions of pca_3hr-1.png
+</button>
+</p>
+<div id="fig-pca_3hr-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_3hr-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_3hr &lt;- prcomp(t(subset_matrix_3hr[rowMeans(subset_matrix_3hr) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour = &quot;Condition&quot;, shape = &quot;Drug&quot;, size = 4, x=2, y=3) +
@@ -1448,6 +2104,43 @@ ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (3 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_3hr_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_3hr_2-1">
+Past versions of pca_3hr_2-1.png
+</button>
+</p>
+<div id="fig-pca_3hr_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_3hr_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_3hr &lt;- prcomp(t(subset_matrix_3hr[rowMeans(subset_matrix_3hr) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour = &quot;Condition&quot;, shape = &quot;Drug&quot;, size = 4, x=3, y=4) +
@@ -1456,6 +2149,43 @@ ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (3 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_3hr_3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_3hr_3-1">
+Past versions of pca_3hr_3-1.png
+</button>
+</p>
+<div id="fig-pca_3hr_3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_3hr_3-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="hour-timepoint-1" class="section level2">
 <h2><strong>📌 24-Hour Timepoint</strong></h2>
@@ -1472,6 +2202,43 @@ ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colou
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (24 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_24hr-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_24hr-1">
+Past versions of pca_24hr-1.png
+</button>
+</p>
+<div id="fig-pca_24hr-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_24hr-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_24hr &lt;- prcomp(t(subset_matrix_24hr[rowMeans(subset_matrix_24hr) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colour = &quot;Condition&quot;, shape = &quot;Drug&quot;, size = 4, x=2, y=3) +
@@ -1480,6 +2247,43 @@ ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colou
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (24 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_24hr_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_24hr_1-1">
+Past versions of pca_24hr_1-1.png
+</button>
+</p>
+<div id="fig-pca_24hr_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_24hr_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_24hr &lt;- prcomp(t(subset_matrix_24hr[rowMeans(subset_matrix_24hr) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colour = &quot;Condition&quot;, shape = &quot;Drug&quot;, size = 4, x=3, y=4) +
@@ -1488,6 +2292,43 @@ ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colou
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (24 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_24hr_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_24hr_2-1">
+Past versions of pca_24hr_2-1.png
+</button>
+</p>
+<div id="fig-pca_24hr_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_24hr_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="hour-timepoint-2" class="section level2">
 <h2><strong>📌 48-Hour Timepoint</strong></h2>
@@ -1505,6 +2346,43 @@ ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), col
 <pre><code>Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_48hr-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_48hr-1">
+Past versions of pca_48hr-1.png
+</button>
+</p>
+<div id="fig-pca_48hr-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_48hr-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_48hr_1 &lt;- prcomp(t(subset_matrix_48hr[rowMeans(subset_matrix_48hr) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), colour = &quot;Condition&quot;, shape = &quot;Drug&quot;, size = 4, x=2, y=3) +
@@ -1513,6 +2391,43 @@ ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), col
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (48 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_48hr_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_48hr_1-1">
+Past versions of pca_48hr_1-1.png
+</button>
+</p>
+<div id="fig-pca_48hr_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_48hr_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_48hr_1 &lt;- prcomp(t(subset_matrix_48hr[rowMeans(subset_matrix_48hr) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), colour = &quot;Condition&quot;, shape = &quot;Drug&quot;, size = 4, x=3, y=4) +
@@ -1521,6 +2436,43 @@ ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), col
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (48 Hours)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_48hr_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_48hr_2-1">
+Past versions of pca_48hr_2-1.png
+</button>
+</p>
+<div id="fig-pca_48hr_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_48hr_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="pca-analysis-by-concentrations" class="section level2">
 <h2><strong>📌 PCA Analysis by Concentrations</strong></h2>
@@ -1540,6 +2492,43 @@ ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (0.1 µM)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_0.1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_0.1-1">
+Past versions of pca_0.1-1.png
+</button>
+</p>
+<div id="fig-pca_0.1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_0.1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_0.1 &lt;- prcomp(t(subset_matrix_0.1[rowMeans(subset_matrix_0.1) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour = &quot;Drug&quot;, shape = &quot;Time&quot;, size = 4, x=2, y=3) +
@@ -1548,6 +2537,43 @@ ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (0.1 µM)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_0.1_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_0.1_1-1">
+Past versions of pca_0.1_1-1.png
+</button>
+</p>
+<div id="fig-pca_0.1_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_0.1_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_0.1 &lt;- prcomp(t(subset_matrix_0.1[rowMeans(subset_matrix_0.1) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour = &quot;Drug&quot;, shape = &quot;Time&quot;, size = 4, x=3, y=4) +
@@ -1556,6 +2582,43 @@ ggplot2::autoplot(prcomp_res_0.1, data = as.data.frame(subset_meta_0.1), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (0.1 µM)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_0.1_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_0.1_2-1">
+Past versions of pca_0.1_2-1.png
+</button>
+</p>
+<div id="fig-pca_0.1_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_0.1_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="µm-concentration-1" class="section level2">
 <h2><strong>📌0.5 µM Concentration</strong></h2>
@@ -1574,6 +2637,43 @@ ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour 
 <pre><code>Warning: ggrepel: 11 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
 <p><img src="figure/PCA.Rmd/pca_0.5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_0.5-1">
+Past versions of pca_0.5-1.png
+</button>
+</p>
+<div id="fig-pca_0.5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_0.5-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_0.5 &lt;- prcomp(t(subset_matrix_0.5[rowMeans(subset_matrix_0.5) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour = &quot;Drug&quot;, shape = &quot;Time&quot;, size = 4, x=2, y=3) +
@@ -1582,6 +2682,43 @@ ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (0.5 µM)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_0.5_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_0.5_1-1">
+Past versions of pca_0.5_1-1.png
+</button>
+</p>
+<div id="fig-pca_0.5_1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_0.5_1-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>prcomp_res_0.5 &lt;- prcomp(t(subset_matrix_0.5[rowMeans(subset_matrix_0.5) &gt; 0, ]), center = TRUE)
 
 ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour = &quot;Drug&quot;, shape = &quot;Time&quot;, size = 4, x=3, y=4) +
@@ -1590,6 +2727,43 @@ ggplot2::autoplot(prcomp_res_0.5, data = as.data.frame(subset_meta_0.5), colour 
   ggtitle(expression(&quot;PCA of log&quot;[2]*&quot;(cpm) Filtered rowMeans &gt; 0 (0.5 µM)&quot;)) +
   theme_bw()</code></pre>
 <p><img src="figure/PCA.Rmd/pca_0.5_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pca_0.5_2-1">
+Past versions of pca_0.5_2-1.png
+</button>
+</p>
+<div id="fig-pca_0.5_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3f3d8c0195de9d12de0d0f5dc0692c19093a8a86/docs/figure/PCA.Rmd/pca_0.5_2-1.png" target="_blank">3f3d8c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1601,7 +2775,7 @@ Session information
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.3.0 (2023-04-21 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 11 x64 (build 22631)
+Running under: Windows 11 x64 (build 26100)
 
 Matrix products: default
 

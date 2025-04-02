@@ -111,7 +111,7 @@ prcomp_res1 <- prcomp(t(filcpm_matrix %>% as.matrix()), center = TRUE)
 ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
   ggrepel::geom_text_repel(label=Indiv) +
   scale_color_manual(values=drug_palc) +
-  ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0)")) +
+  ggtitle(expression("PCA of gene expression (log2 cpm)")) +
   theme_bw()
 ```
 
