@@ -124,6 +124,51 @@ pheatmap(spearman_corr,
          fontsize_number = 8)
 ```
 
+## **📌 Correlation Plot (Tissue specificity)**
+```{r Genes of Interest1, echo=TRUE, message=FALSE, fig.height=8}
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+# Compute correlation
+cor_values <- cor(data_subset, method = "pearson", use = "complete.obs")
+ipsc_cm_corr <- cor_values["IPSC_CM", ]
+ipsc_cm_corr_sorted <- sort(ipsc_cm_corr, decreasing = TRUE)
+
+# Matrix
+corr_matrix <- matrix(ipsc_cm_corr_sorted, ncol = 1)
+rownames(corr_matrix) <- names(ipsc_cm_corr_sorted)
+colnames(corr_matrix) <- "IPSC_CM"
+
+# Color function: blue → white → red for range 0.5–1
+col_fun <- colorRamp2(
+  c(0.5, 0.75, 1.0),
+  c("blue", "white", "red")
+)
+
+# Heatmap with text values and title
+Heatmap(
+  corr_matrix,
+  name = "Corr.",
+  col = col_fun,
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  show_column_names = TRUE,
+  show_row_names = TRUE,
+  row_names_side = "right",
+  column_names_side = "bottom",
+  column_title = "Pearson Correlation with IPSC_CM",
+  column_title_gp = gpar(fontsize = 14, fontface = "bold"),
+  heatmap_width = unit(5, "cm"),
+  heatmap_height = unit(12, "cm"),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    grid.text(sprintf("%.2f", corr_matrix[i, j]), x, y, gp = gpar(fontsize = 9))
+  }
+)
+
+```
+
+
 
 ## **📌 Tissue specific gene proportions in corrmotif clusters**
 
