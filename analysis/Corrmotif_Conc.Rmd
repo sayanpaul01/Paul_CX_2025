@@ -2265,7 +2265,718 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = P53_Targe
   )
 ```
 
+## **📌 Corr-motif Boxplots**
+## **📌 Non response (0.1 micromolar)**
+```{r box1, echo=TRUE, message=FALSE, warning=FALSE}
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
 
+# Load response group files
+prob_1_0.1 <- as.character(read.csv("data/prob_1_0.1.csv")$Entrez_ID)
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the non-response group
+target_entrez <- 92342  # Ensure this is from prob_1_0.1
+
+# Stop if the gene is not in the non-response group
+if (!(target_entrez %in% prob_1_0.1)) {
+  stop("Selected gene is not in the non-response group for 0.1 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTIREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.1 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.1")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.1")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +  # Only facets by Time now
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("Non response (0.1 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+## **📌 CX-DOX Mid-Late Response (0.1 micromolar)**
+```{r box2, echo=TRUE, message=FALSE, warning=FALSE}
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group files
+prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
+
+prob_2_0.1
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the CX-DOX mid-late response group
+target_entrez <- 4521  # Replace with your desired Entrez ID from prob_2_0.1
+
+# Stop if the gene is not in the CX-DOX mid-late response group
+if (!(target_entrez %in% prob_2_0.1)) {
+  stop("Selected gene is not in the CX-DOX mid-late response group for 0.1 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.1 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.1")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.1")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +  # Only facets by Time
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("CX-DOX mid-late\nresponse (0.1 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+## **📌 DOX-only mid-late response (0.1 micromolar)**
+```{r box3, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group files
+prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
+
+# Print gene list if needed
+prob_3_0.1
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the DOX-only mid-late response group
+target_entrez <- 1674  # Replace with your desired Entrez ID from prob_3_0.1
+
+# Stop if the gene is not in the DOX-only mid-late response group
+if (!(target_entrez %in% prob_3_0.1)) {
+  stop("Selected gene is not in the DOX-only mid-late response group for 0.1 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- reshape2::melt(gene_data,
+                                 id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                                 variable.name = "Sample",
+                                 value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.1 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.1")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.1")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("DOX-only mid-late\nresponse (0.1 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 Non response (0.5 micromolar)**
+```{r box4, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group: Non response (0.5 µM)
+prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
+
+# Print genes (optional)
+prob_1_0.5
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the non-response group (0.5 µM)
+target_entrez <- 9446  # Replace with your desired Entrez ID from prob_1_0.5
+
+# Check if it's in the group
+if (!(target_entrez %in% prob_1_0.5)) {
+  stop("Selected gene is not in the Non response group for 0.5 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.5 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.5")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.5")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("Non response (0.5 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+## **📌 DOX-specific response (0.5 µM)**
+```{r box5, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group: DOX-specific response (0.5 µM)
+prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
+
+# View gene list (optional)
+prob_2_0.5
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the DOX-specific response group (0.5 µM)
+target_entrez <- 114821  # Replace with your desired Entrez ID from prob_2_0.5
+
+# Check membership
+if (!(target_entrez %in% prob_2_0.5)) {
+  stop("Selected gene is not in the DOX-specific response group for 0.5 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.5 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.5")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.5")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("DOX-specific\nresponse (0.5 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 DOX only mid-late response (0.5 µM)**
+```{r box6, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group: DOX only mid-late response (0.5 µM)
+prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
+
+# View gene list (optional)
+prob_3_0.5
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the DOX only mid-late response group (0.5 µM)
+target_entrez <- 4892  # Replace with your desired Entrez ID from prob_3_0.5
+
+# Check membership
+if (!(target_entrez %in% prob_3_0.5)) {
+  stop("Selected gene is not in the DOX only mid-late response group for 0.5 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.5 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.5")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.5")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("DOX only mid-late\nresponse (0.5 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
+
+## **📌 CX total + DOX early response (0.5 micromolar)**
+```{r box7, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group: CX total + DOX early response (0.5 µM)
+prob_4_0.5 <- as.character(read.csv("data/prob_4_0.5.csv")$Entrez_ID)
+
+# View gene list (optional)
+prob_4_0.5
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the CX total + DOX early response group (0.5 µM)
+target_entrez <- 983  # Replace with your desired Entrez ID from prob_4_0.5
+
+# Check membership
+if (!(target_entrez %in% prob_4_0.5)) {
+  stop("Selected gene is not in the CX total + DOX early response group for 0.5 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.5 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.5")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.5")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("CX total+ DOX early\nresponse (0.5 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+
+```
+
+## **📌 DOX early + CX-DOX mid-late response (0.5 µM)**
+```{r box8, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+# Load response group: DOX early + CX-DOX mid-late response (0.5 µM)
+prob_5_0.5 <- as.character(read.csv("data/prob_5_0.5.csv")$Entrez_ID)
+
+# View gene list (optional)
+prob_5_0.5
+
+# Load expression dataset
+boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
+boxplot1 <- as.data.frame(boxplot1)
+
+# Choose a gene from the DOX early + CX-DOX mid-late response group (0.5 µM)
+target_entrez <- 672  # Replace with your desired Entrez ID from prob_5_0.5
+
+# Check membership
+if (!(target_entrez %in% prob_5_0.5)) {
+  stop("Selected gene is not in the DOX early + CX-DOX mid-late response group for 0.5 micromolar.")
+}
+
+# Filter for selected gene
+gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
+if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+
+# Reshape to long format
+gene_data_long <- melt(gene_data,
+                       id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
+                       variable.name = "Sample",
+                       value.name = "log2CPM")
+
+# Extract metadata from sample names
+gene_data_long <- gene_data_long %>%
+  mutate(
+    Time = sub(".*_(\\d+)$", "\\1", Sample),
+    Concentration = sub(".*_(0\\.\\d)_\\d+$", "\\1", Sample),
+    Drug = sub(".*_(CX\\.5461|DOX|VEH)_.*", "\\1", Sample),
+    Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
+  )
+
+# Filter for 0.5 micromolar only
+gene_data_long <- gene_data_long %>% filter(Concentration == "0.5")
+
+# Convert to factors
+gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
+gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.5")
+
+# Map individual IDs
+indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
+                  "17.3" = "4", "84.1" = "5", "90.1" = "6")
+
+gene_data_long <- gene_data_long %>%
+  mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
+
+# Define color palette for drugs
+drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
+
+# Extract gene symbol for labeling
+gene_symbol <- unique(gene_data_long$SYMBOL)[1]
+
+# Create the boxplot
+ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_fill_manual(values = drug_palette) +
+  facet_grid(. ~ Time, labeller = label_both) +
+  geom_point(aes(color = Indv), size = 2, alpha = 0.5,
+             position = position_jitter(width = -0.3, height = 0)) +
+  ggtitle("DOX early+ CX-DOX mid-late\nresponse (0.5 micromolar)") +
+  labs(
+    x = "Drugs",
+    y = paste(gene_symbol, " log2CPM")
+  ) +
+  ylim(0, NA) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 15, color = "black"),
+    axis.ticks = element_line(linewidth = 1.5),
+    axis.line = element_line(linewidth = 1.5),
+    axis.text.y = element_text(size = 10, color = "black"),
+    axis.text.x = element_text(size = 10, color = "black", angle = 45, hjust = 1),
+    strip.text = element_text(size = 12, face = "bold")
+  )
+```
 
 
 
