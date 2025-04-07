@@ -2351,6 +2351,7 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text = element_text(size = 12, face = "bold")
   )
 ```
+
 ## **📌 CX-DOX Mid-Late Response (0.1 micromolar)**
 ```{r box2, echo=TRUE, message=FALSE, warning=FALSE}
 # Load libraries
@@ -2438,6 +2439,7 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
     strip.text = element_text(size = 12, face = "bold")
   )
 ```
+
 ## **📌 DOX-only mid-late response (0.1 micromolar)**
 ```{r box3, echo=TRUE, message=FALSE, warning=FALSE}
 
