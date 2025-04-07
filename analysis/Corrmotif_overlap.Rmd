@@ -4,6 +4,60 @@ output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
 ---
+
+## **📌 Overlap of genes between corrmotif Conc. 0.1 and 0.5**
+```{r 0verlap_conc., echo=TRUE, message=FALSE, warning=FALSE, fig.height=8, fig.width=12}
+library(UpSetR)
+library(dplyr)
+
+# Load gene sets
+prob_1_0.1 <- as.character(read.csv("data/prob_1_0.1.csv")$Entrez_ID)
+prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
+prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
+
+prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
+prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
+prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
+prob_4_0.5 <- as.character(read.csv("data/prob_4_0.5.csv")$Entrez_ID)
+prob_5_0.5 <- as.character(read.csv("data/prob_5_0.5.csv")$Entrez_ID)
+
+# Label gene sets (no \n)
+gene_sets <- list(
+  `Non response (0.1 µM)` = prob_1_0.1,
+  `CX-DOX mid-late response (0.1 µM)` = prob_2_0.1,
+  `DOX only mid-late response (0.1 µM)` = prob_3_0.1,
+  `Non response (0.5 µM)` = prob_1_0.5,
+  `DOX-specific response (0.5 µM)` = prob_2_0.5,
+  `DOX only mid-late response (0.5 µM)` = prob_3_0.5,
+  `CX + DOX early response (0.5 µM)` = prob_4_0.5,
+  `DOX + CX (mid-late) response (0.5 µM)` = prob_5_0.5
+)
+
+# Prepare universe
+all_genes <- unique(unlist(gene_sets))
+
+# Build binary matrix
+binary_matrix <- data.frame(Gene = all_genes)
+for (name in names(gene_sets)) {
+  binary_matrix[[name]] <- as.integer(binary_matrix$Gene %in% gene_sets[[name]])
+}
+binary_matrix <- binary_matrix[, -1]  # Remove Gene column
+
+# Set larger bottom margin before plotting
+par(mar = c(10, 4, 2, 2))  # bottom, left, top, right
+
+# Then plot
+upset(binary_matrix,
+      sets = names(gene_sets),
+      order.by = "freq",
+      sets.bar.color = "#56B4E9",
+      mainbar.y.label = "Number of Shared Genes",
+      sets.x.label = "Genes per Set",
+      text.scale = 1.2,
+      nintersects = 30)
+```
+
+
 ## **📌 Overlap of GO functions between Corrmotif all and corrmotif Conc.**
 ```{r 0verlap, echo=TRUE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
 
