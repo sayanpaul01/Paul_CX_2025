@@ -932,7 +932,7 @@ ggplot(heatmap_data_long, aes(x = Comparison, y = Sample, fill = value)) +
   geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +
   labs(
     x = "", y = "Samples", fill = "Correlation (r)",
-    title = "Correlation Heatmap: CX-5461 & DOX with\nColorectal Gene Expression"
+    title = "Correlation in the drug response\nbetween each drug in iPSC-CMs and\nthe response to CX-5461 in colorectal cancer cells"
   ) +
   theme_minimal() +
   theme(

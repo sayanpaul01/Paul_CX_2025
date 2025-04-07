@@ -175,8 +175,11 @@ for (pair in dataset_pairs) {
   # Clamp between 0 and 1
   r_value <- max(0, min(1, r_value))
   
+  # Create label like "CX_0.1_3 vs DOX_0.1_3"
+  comparison_label <- paste(cx_name, "vs", dox_name)
+  
   # Store the result
-  correlation_data <- rbind(correlation_data, data.frame(CX_Sample = cx_name, Correlation = r_value))
+  correlation_data <- rbind(correlation_data, data.frame(CX_Sample = comparison_label, Correlation = r_value))
 }
 
 # Add a single column category for labeling
@@ -185,29 +188,29 @@ correlation_data$Comparison <- "DOX"
 # Convert to long format for ggplot
 heatmap_data_long <- melt(correlation_data, id.vars = c("CX_Sample", "Comparison"))
 
-# Ensure the Y-axis follows the correct ordering (CX samples top to bottom)
+# Ensure Y-axis is ordered from top to bottom as desired
 heatmap_data_long$CX_Sample <- factor(heatmap_data_long$CX_Sample, levels = rev(c(
-  "CX_0.1_3", "CX_0.5_3",
-  "CX_0.1_24", "CX_0.5_24",
-  "CX_0.1_48", "CX_0.5_48"
+  "CX_0.1_3 vs DOX_0.1_3", "CX_0.5_3 vs DOX_0.5_3",
+  "CX_0.1_24 vs DOX_0.1_24", "CX_0.5_24 vs DOX_0.5_24",
+  "CX_0.1_48 vs DOX_0.1_48", "CX_0.5_48 vs DOX_0.5_48"
 )))
 
-# Create the CX vs. DOX correlation heatmap (0 to 1, white to red)
+# Create the heatmap
 ggplot(heatmap_data_long, aes(x = Comparison, y = CX_Sample, fill = value)) +
   geom_tile(color = "white") +
   scale_fill_gradient(low = "white", high = "red", limits = c(0, 1)) +
   geom_text(aes(label = round(value, 3)), color = "black", size = 5, fontface = "bold") +
   labs(
-    x = "", y = "CX Samples", fill = "Correlation (r)",
-    title = "Correlation Heatmap: CX-5461 vs. DOX Gene Expression"
+    x = "", y = "", fill = "Correlation (r)",
+    title = "Correlation of the CX-5461 and DOX response"
   ) +
-  theme_minimal() +
+  theme_minimal(base_family = "Arial") +
   theme(
     axis.text.x = element_text(face = "bold", size = 14),
     axis.text.y = element_text(face = "bold", size = 12),
-    axis.title.y = element_text(face = "bold", size = 14),
     plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
     legend.title = element_text(face = "bold"),
+    legend.text = element_text(size = 10),
     panel.grid = element_blank()
   )
 ```

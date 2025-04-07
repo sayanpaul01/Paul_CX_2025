@@ -105,19 +105,23 @@ library(pheatmap)
 
 # Pearson correlation heatmap
 pheatmap(pearson_corr, 
-         cluster_rows = FALSE, 
-         cluster_cols = FALSE, 
+         cluster_rows = TRUE,       # Enable dendrogram for rows
+         cluster_cols = TRUE,       # Enable dendrogram for columns
          main = "Pearson Correlation Heatmap", 
          color = colorRampPalette(c("blue", "white", "red"))(100), 
-         display_numbers = TRUE)
+         display_numbers = TRUE,
+         number_format = "%.2f",
+         fontsize_number = 8)
 
 # Spearman correlation heatmap
 pheatmap(spearman_corr, 
-         cluster_rows = FALSE, 
-         cluster_cols = FALSE, 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
          main = "Spearman Correlation Heatmap", 
          color = colorRampPalette(c("blue", "white", "red"))(100), 
-         display_numbers = TRUE)
+         display_numbers = TRUE,
+         number_format = "%.2f",
+         fontsize_number = 8)
 ```
 
 

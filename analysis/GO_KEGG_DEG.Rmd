@@ -4409,7 +4409,7 @@ dotplot <- ggplot(all_enrichment_df, aes(x = Sample, y = Description, size = Gen
     y = "Biological Process",
     color = "-log10(Adjusted P-Value)",
     size = "Gene Ratio",
-    title = "Comparison of Top BP Enrichments Across Samples (clusterprofiler)"
+    title = "Top 5 enriched biological processes across samples"
   ) +
   theme_minimal() +
   theme(
