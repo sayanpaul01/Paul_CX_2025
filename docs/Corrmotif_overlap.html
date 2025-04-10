@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreea56887202d8df9b0816df4b966d55f223263e84atargetblanka568872a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3c161c2b10e8a47df194c209cf0979952e50787ftargetblank3c161c2a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/a56887202d8df9b0816df4b966d55f223263e84a" target="_blank">a568872</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3c161c2b10e8a47df194c209cf0979952e50787f" target="_blank">3c161c2</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreea56887202d8df9b0816df4b966d55f223263e84atargetblanka568872a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3c161c2b10e8a47df194c209cf0979952e50787ftargetblank3c161c2a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/a56887202d8df9b0816df4b966d55f223263e84a" target="_blank">a568872</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3c161c2b10e8a47df194c209cf0979952e50787f" target="_blank">3c161c2</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,7 +550,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  0.1 density.svg
@@ -618,6 +617,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3c161c2b10e8a47df194c209cf0979952e50787f/analysis/Corrmotif_overlap.Rmd" target="_blank">3c161c2</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-10
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/3c161c2b10e8a47df194c209cf0979952e50787f/docs/Corrmotif_overlap.html" target="_blank">3c161c2</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-10
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1006,16 +1039,58 @@ venn_list &lt;- list(
   `DOX early+ CX-DOX mid-late\nresponse (0.5 µM)` = prob_5_0.5
 )
 
-# Plot with smaller group name font size
-ggVennDiagram(
+# Build plot object
+p &lt;- ggVennDiagram(
   venn_list,
   label_alpha = 0.6,
-  label = &quot;count&quot;,
-  set_label = ggplot2::geom_text(size = 3)  # &lt;- reduces font size of set labels
+  label = &quot;count&quot;
 ) +
   scale_fill_gradient(low = &quot;#08306B&quot;, high = &quot;#6BAED6&quot;) +
-  theme(legend.position = &quot;right&quot;)</code></pre>
+  theme(legend.position = &quot;right&quot;)
+
+# Manually reduce set label size (layer 3 is usually the set label layer)
+p$layers[[3]]$aes_params$size &lt;- 2.5
+
+# Render the final plot
+p</code></pre>
 <p><img src="figure/Corrmotif_overlap.Rmd/0verlap_CX.-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-0verlap_CX.-1">
+Past versions of 0verlap_CX.-1.png
+</button>
+</p>
+<div id="fig-0verlap_CX.-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/3c161c2b10e8a47df194c209cf0979952e50787f/docs/figure/Corrmotif_overlap.Rmd/0verlap_CX.-1.png" target="_blank">3c161c2</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="overlap-of-go-functions-between-corrmotif-all-and-corrmotif-conc."

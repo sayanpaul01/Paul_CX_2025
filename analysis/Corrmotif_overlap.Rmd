@@ -75,15 +75,20 @@ venn_list <- list(
   `DOX early+ CX-DOX mid-late\nresponse (0.5 µM)` = prob_5_0.5
 )
 
-# Plot with smaller group name font size
-ggVennDiagram(
+# Build plot object
+p <- ggVennDiagram(
   venn_list,
   label_alpha = 0.6,
-  label = "count",
-  set_label = ggplot2::geom_text(size = 3)  # <- reduces font size of set labels
+  label = "count"
 ) +
   scale_fill_gradient(low = "#08306B", high = "#6BAED6") +
   theme(legend.position = "right")
+
+# Manually reduce set label size (layer 3 is usually the set label layer)
+p$layers[[3]]$aes_params$size <- 2.5
+
+# Render the final plot
+p
 ```
 
 
