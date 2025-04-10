@@ -57,6 +57,38 @@ upset(binary_matrix,
       nintersects = 30)
 ```
 
+## **📌 Overlap of CX associate groups**
+```{r 0verlap_CX., echo=TRUE, message=FALSE, warning=FALSE}
+# Load required library
+library(ggVennDiagram)
+library(ggplot2)
+
+# Load gene sets
+prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
+prob_4_0.5 <- as.character(read.csv("data/prob_4_0.5.csv")$Entrez_ID)
+prob_5_0.5 <- as.character(read.csv("data/prob_5_0.5.csv")$Entrez_ID)
+
+# Define gene sets with exact labels
+venn_list <- list(
+  `CX-DOX mid-late\nresponse (0.1 µM)` = prob_2_0.1,
+  `CX total + DOX early\nresponse (0.5 µM)` = prob_4_0.5,
+  `DOX early+ CX-DOX mid-late\nresponse (0.5 µM)` = prob_5_0.5
+)
+
+# Plot with smaller group name font size
+ggVennDiagram(
+  venn_list,
+  label_alpha = 0.6,
+  label = "count",
+  set_label = ggplot2::geom_text(size = 3)  # <- reduces font size of set labels
+) +
+  scale_fill_gradient(low = "#08306B", high = "#6BAED6") +
+  theme(legend.position = "right")
+```
+
+
+
+
 
 ## **📌 Overlap of GO functions between Corrmotif all and corrmotif Conc.**
 ```{r 0verlap, echo=TRUE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
