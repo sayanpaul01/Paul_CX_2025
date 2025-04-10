@@ -2980,8 +2980,165 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
   )
 ```
 
+## **📌 Corrmotif conc boxplot for manuscript 0.1**
+```{r box9, echo=TRUE, message=FALSE, warning=FALSE,fig.width=10}
 
+# Load Required Libraries
+library(dplyr)
+library(ggplot2)
 
+# ----------------- Load Response Groups -----------------
+
+# 0.1 µM
+prob_1_0.1 <- as.character(read.csv("data/prob_1_0.1.csv")$Entrez_ID)
+prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
+prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
+
+# ----------------- Load DEG Data -----------------
+
+# Helper function to load and label
+load_deg <- function(path, drug, time) {
+  read.csv(path) %>%
+    mutate(Drug = drug, Timepoint = time)
+}
+
+# 0.1 µM DEG data
+deg_0.1 <- bind_rows(
+  load_deg("data/DEGs/Toptable_CX_0.1_3.csv", "CX.5461", 3),
+  load_deg("data/DEGs/Toptable_CX_0.1_24.csv", "CX.5461", 24),
+  load_deg("data/DEGs/Toptable_CX_0.1_48.csv", "CX.5461", 48),
+  load_deg("data/DEGs/Toptable_DOX_0.1_3.csv", "DOX", 3),
+  load_deg("data/DEGs/Toptable_DOX_0.1_24.csv", "DOX", 24),
+  load_deg("data/DEGs/Toptable_DOX_0.1_48.csv", "DOX", 48)
+) %>%
+  mutate(
+    Entrez_ID = as.character(Entrez_ID),
+    Response_Group = case_when(
+      Entrez_ID %in% prob_1_0.1 ~ "Non response\n(0.1 µM)",
+      Entrez_ID %in% prob_2_0.1 ~ "CX-DOX mid-late response\n(0.1 µM)",
+      Entrez_ID %in% prob_3_0.1 ~ "DOX only mid-late response\n(0.1 µM)",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# ----------------- Set Factor Levels -----------------
+
+deg_0.1 <- deg_0.1 %>%
+  mutate(
+    Timepoint = factor(Timepoint, levels = c(3, 24, 48)),
+    Response_Group = factor(Response_Group, levels = c(
+      "Non response\n(0.1 µM)",
+      "CX-DOX mid-late response\n(0.1 µM)",
+      "DOX only mid-late response\n(0.1 µM)"
+    ))
+  )
+
+# ----------------- Plot Boxplot (Grouped by Timepoint, Faceted by Response Group) -----------------
+
+ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
+  geom_boxplot(position = position_dodge(width = 0.75)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +
+  facet_grid(. ~ Response_Group, scales = "free_x") +
+  theme_bw() +
+  labs(
+    x = "Timepoint (hours)",
+    y = "Log Fold Change",
+    title = "Log Fold Change Distribution by Drug and Response Group (0.1 µM)",
+    fill = "Drug"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size = 11, face = "bold"),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+
+```
+
+## **📌 Corrmotif conc boxplot for manuscript 0.5**
+```{r box10, echo=TRUE, message=FALSE, warning=FALSE,fig.width=12}
+# Load Required Libraries
+library(dplyr)
+library(ggplot2)
+
+# ----------------- Load Response Groups -----------------
+
+# 0.5 µM
+prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
+prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
+prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
+prob_4_0.5 <- as.character(read.csv("data/prob_4_0.5.csv")$Entrez_ID)
+prob_5_0.5 <- as.character(read.csv("data/prob_5_0.5.csv")$Entrez_ID)
+
+# ----------------- Load DEG Data -----------------
+
+# Helper function to load and label
+load_deg <- function(path, drug, time) {
+  read.csv(path) %>%
+    mutate(Drug = drug, Timepoint = time)
+}
+
+# 0.5 µM DEG data
+deg_0.5 <- bind_rows(
+  load_deg("data/DEGs/Toptable_CX_0.5_3.csv", "CX.5461", 3),
+  load_deg("data/DEGs/Toptable_CX_0.5_24.csv", "CX.5461", 24),
+  load_deg("data/DEGs/Toptable_CX_0.5_48.csv", "CX.5461", 48),
+  load_deg("data/DEGs/Toptable_DOX_0.5_3.csv", "DOX", 3),
+  load_deg("data/DEGs/Toptable_DOX_0.5_24.csv", "DOX", 24),
+  load_deg("data/DEGs/Toptable_DOX_0.5_48.csv", "DOX", 48)
+) %>%
+  mutate(
+    Entrez_ID = as.character(Entrez_ID),
+    Response_Group = case_when(
+      Entrez_ID %in% prob_1_0.5 ~ "Non response\n(0.5 µM)",
+      Entrez_ID %in% prob_2_0.5 ~ "DOX-specific\nresponse (0.5 µM)",
+      Entrez_ID %in% prob_3_0.5 ~ "DOX only mid-late\nresponse (0.5 µM)",
+      Entrez_ID %in% prob_4_0.5 ~ "CX + DOX (early)\nresponse (0.5 µM)",
+      Entrez_ID %in% prob_5_0.5 ~ "DOX + CX (mid-late)\nresponse (0.5 µM)",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Response_Group))
+
+# ----------------- Set Factor Levels -----------------
+
+deg_0.5 <- deg_0.5 %>%
+  mutate(
+    Timepoint = factor(Timepoint, levels = c(3, 24, 48)),
+    Response_Group = factor(Response_Group, levels = c(
+      "Non response\n(0.5 µM)",
+      "DOX-specific\nresponse (0.5 µM)",
+      "DOX only mid-late\nresponse (0.5 µM)",
+      "CX + DOX (early)\nresponse (0.5 µM)",
+      "DOX + CX (mid-late)\nresponse (0.5 µM)"
+    ))
+  )
+
+# ----------------- Plot Boxplot (Grouped by Timepoint, Faceted by Response Group) -----------------
+
+ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
+  geom_boxplot(position = position_dodge(width = 0.75)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +
+  facet_grid(. ~ Response_Group, scales = "free_x") +
+  theme_bw() +
+  labs(
+    x = "Timepoint (hours)",
+    y = "Log Fold Change",
+    title = "Log Fold Change Distribution by Drug and Response Group (0.5 µM)",
+    fill = "Drug"
+  ) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size = 11, face = "bold"),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+```
 
 
 
