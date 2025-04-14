@@ -2648,7 +2648,7 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
   )) +
   scale_y_continuous(limits = c(0, 110), expand = c(0, 0)) +  # allow space for stars and border
   labs(
-    title = "Heart-Specific Gene Proportions Across CorrMotif Clusters (0.1 and 0.5)",
+    title = "Heart-Specific Gene Proportions Across\nCormotif Clusters (0.1 and 0.5)",
     x = "Response Groups",
     y = "Percentage of Genes",
     fill = "Gene Category"
