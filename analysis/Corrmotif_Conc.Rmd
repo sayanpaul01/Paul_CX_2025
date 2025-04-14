@@ -2494,15 +2494,180 @@ ggplot(proportion_0.5, aes(x = Response_Group, y = Percentage, fill = Category))
   )
 ```
 
+## **📌 Proportion of Heart Specific Genes Genes (Combined)**
+```{r prop heart comb, echo=TRUE, message=FALSE, fig.width=10, fig.height=6}
+# Load Required Libraries
+library(dplyr)
+library(ggplot2)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
 
+# ----------------- Load Heart-Specific Genes -----------------
+heart_genes <- read.csv("data/Human_Heart_Genes.csv", stringsAsFactors = FALSE)
+heart_genes$Entrez_ID <- mapIds(
+  org.Hs.eg.db,
+  keys = heart_genes$Gene,
+  column = "ENTREZID",
+  keytype = "SYMBOL",
+  multiVals = "first"
+)
+heart_entrez_ids <- na.omit(heart_genes$Entrez_ID)
 
+# ----------------- Load CorrMotif Groups -----------------
+# 0.1 µM
+prob_1_0.1 <- as.character(read.csv("data/prob_1_0.1.csv")$Entrez_ID)
+prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
+prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
 
+# 0.5 µM
+prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
+prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
+prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
+prob_4_0.5 <- as.character(read.csv("data/prob_4_0.5.csv")$Entrez_ID)
+prob_5_0.5 <- as.character(read.csv("data/prob_5_0.5.csv")$Entrez_ID)
 
+# ----------------- Annotate CorrMotif Groups -----------------
+df_0.1 <- data.frame(Entrez_ID = unique(c(prob_1_0.1, prob_2_0.1, prob_3_0.1))) %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_1_0.1 ~ "Non response",
+      Entrez_ID %in% prob_2_0.1 ~ "CX-DOX mid-late response",
+      Entrez_ID %in% prob_3_0.1 ~ "DOX only mid-late response"
+    ),
+    Category = ifelse(Entrez_ID %in% heart_entrez_ids, "Heart-specific Genes", "Non-Heart-specific Genes"),
+    Concentration = "0.1 µM"
+  )
 
+df_0.5 <- data.frame(Entrez_ID = unique(c(prob_1_0.5, prob_2_0.5, prob_3_0.5, prob_4_0.5, prob_5_0.5))) %>%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_1_0.5 ~ "Non response",
+      Entrez_ID %in% prob_2_0.5 ~ "DOX-specific response",
+      Entrez_ID %in% prob_3_0.5 ~ "DOX only mid-late response",
+      Entrez_ID %in% prob_4_0.5 ~ "CX total + DOX early response",
+      Entrez_ID %in% prob_5_0.5 ~ "DOX early + CX-DOX mid-late response"
+    ),
+    Category = ifelse(Entrez_ID %in% heart_entrez_ids, "Heart-specific Genes", "Non-Heart-specific Genes"),
+    Concentration = "0.5 µM"
+  )
 
+# ----------------- Combine Data -----------------
+df_combined <- bind_rows(df_0.1, df_0.5)
 
+# ----------------- Calculate Proportions -----------------
+proportion_data <- df_combined %>%
+  dplyr::group_by(Concentration, Response_Group, Category) %>%
+  dplyr::summarise(Count = n(), .groups = "drop") %>%
+  dplyr::group_by(Concentration, Response_Group) %>%
+  dplyr::mutate(Percentage = Count / sum(Count) * 100)
 
+# ----------------- Chi-square or Fisher's Test -----------------
+get_chi_or_fisher <- function(df, ref_group) {
+  ref_counts <- df %>%
+    dplyr::ungroup() %>%
+    dplyr::filter(Response_Group == ref_group) %>%
+    dplyr::select(Category, Count) %>%
+    {setNames(.$Count, .$Category)}
+  
+  df %>%
+    dplyr::filter(Response_Group != ref_group) %>%
+    dplyr::group_by(Response_Group) %>%
+    dplyr::summarise(
+      p_value = {
+        group_counts <- Count[Category %in% c("Heart-specific Genes", "Non-Heart-specific Genes")]
+        if (length(group_counts) < 2) group_counts <- c(group_counts, 0)
+        contingency_table <- matrix(c(
+          group_counts[1], group_counts[2],
+          ref_counts["Heart-specific Genes"], ref_counts["Non-Heart-specific Genes"]
+        ), nrow = 2)
+        if (any(contingency_table < 5)) {
+          fisher.test(contingency_table)$p.value
+        } else {
+          chisq.test(contingency_table)$p.value
+        }
+      },
+      .groups = "drop"
+    ) %>%
+    dplyr::mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
+}
 
+# Run test for each concentration
+chi_0.1 <- get_chi_or_fisher(proportion_data %>% dplyr::filter(Concentration == "0.1 µM"), "Non response")
+chi_0.5 <- get_chi_or_fisher(proportion_data %>% dplyr::filter(Concentration == "0.5 µM"), "Non response")
+
+chi_all <- dplyr::bind_rows(
+  chi_0.1 %>% dplyr::mutate(Concentration = "0.1 µM"),
+  chi_0.5 %>% dplyr::mutate(Concentration = "0.5 µM")
+)
+
+# Merge test results into proportions
+proportion_data <- proportion_data %>%
+  dplyr::left_join(chi_all, by = c("Concentration", "Response_Group"))
+
+# ----------------- Reorder Factor Levels -----------------
+proportion_data$Concentration <- factor(proportion_data$Concentration, levels = c("0.1 µM", "0.5 µM"))
+proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels = c(
+  "Non response",
+  "CX-DOX mid-late response",
+  "DOX-specific response",
+  "DOX only mid-late response",
+  "CX total + DOX early response",
+  "DOX early + CX-DOX mid-late response"
+))
+
+# ----------------- Compute Y-position for Significance Labels -----------------
+label_data <- proportion_data %>%
+  dplyr::group_by(Concentration, Response_Group) %>%
+  dplyr::summarise(Significance = dplyr::first(Significance),
+                   ymax = sum(Percentage), .groups = "drop") %>%
+  dplyr::filter(!is.na(Significance)) %>%
+  dplyr::mutate(y_pos = ymax + 3)
+
+# ----------------- Final Plot -----------------
+# --- Position stars above 100
+label_data <- proportion_data %>%
+  dplyr::group_by(Concentration, Response_Group) %>%
+  dplyr::summarise(Significance = dplyr::first(Significance), .groups = "drop") %>%
+  dplyr::filter(!is.na(Significance)) %>%
+  dplyr::mutate(y_pos = 105)  # stars go at 105
+
+# --- Plot
+ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(
+    data = label_data,
+    aes(x = Response_Group, y = y_pos, label = Significance),
+    inherit.aes = FALSE,
+    size = 5,
+    color = "black"
+  ) +
+  facet_wrap(~ Concentration, scales = "free_x") +
+  scale_fill_manual(values = c(
+    "Heart-specific Genes" = "#4daf4a",
+    "Non-Heart-specific Genes" = "#377eb8"
+  )) +
+  scale_y_continuous(limits = c(0, 110), expand = c(0, 0)) +  # allow space for stars and border
+  labs(
+    title = "Heart-Specific Gene Proportions Across CorrMotif Clusters (0.1 and 0.5)",
+    x = "Response Groups",
+    y = "Percentage of Genes",
+    fill = "Gene Category"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(size = 16, hjust = 0.5, face = "bold"),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(size = 11, angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 12),
+    legend.title = element_text(size = 13),
+    legend.text = element_text(size = 12),
+    strip.text = element_text(size = 14, face = "bold"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),  # draws full box
+    panel.spacing = unit(1.2, "lines")  # adds vertical spacing to avoid cramped look
+  )
+
+```
 
 
 ## **📌 Corr-motif Boxplots**
