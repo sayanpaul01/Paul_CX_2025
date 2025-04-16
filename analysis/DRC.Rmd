@@ -171,3 +171,73 @@ ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
 
 ```
 
+
+
+## **📌 CX and DOX dose response curve (Confidence)**
+```{r load_libraries3, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
+
+library(drc)
+
+# Load Data
+DRC <- read.csv("data/CX-5461.csv")
+DRC2 <- read.csv("data/DOX.csv")
+
+# Fit dose-response models with fixed min = 0 and max = 1
+curved_fit <- drm(Ratio ~ Conc, data = DRC,
+                  fct = LL.4(fixed = c(NA, 0, 1, NA)))
+
+curved_fit2 <- drm(Ratio ~ Conc, data = DRC2,
+                   fct = LL.4(fixed = c(NA, 0, 1, NA)))
+
+# Extract EC50 values
+EC50_CX <- coef(curved_fit)[4]
+EC50_DOX <- coef(curved_fit2)[4]
+
+# Generate prediction ranges
+xvals_cx <- exp(seq(log(0.01), log(50), length.out = 200))
+xvals_dox <- exp(seq(log(0.01), log(10), length.out = 200))
+
+# Predict with confidence intervals
+preds_cx <- predict(curved_fit, newdata = data.frame(Conc = xvals_cx), interval = "confidence")
+preds_dox <- predict(curved_fit2, newdata = data.frame(Conc = xvals_dox), interval = "confidence")
+
+# Set up log-scale plot
+par(mfrow = c(1,1), mar = c(5, 5, 3, 2))
+plot(NA, NA, log = "x",
+     xlim = c(0.01, 50), ylim = c(0, 1.1),
+     xlab = "Concentration (uM)", ylab = "Proportion of Viable Cells",
+     main = "Dose-Response Curves with Confidence",
+     axes = FALSE)
+
+# Axes
+axis(1, at = c(0.01, 0.1, 0.5, 1, 5, 10, 50), labels = c("0.01", "0.1", "0.5", "1", "5", "10", "50"))
+axis(2, at = seq(0, 1, 0.2))
+box()
+
+# Confidence bands
+polygon(c(xvals_cx, rev(xvals_cx)),
+        c(preds_cx[,"Lower"], rev(preds_cx[,"Upper"])),
+        col = adjustcolor("#08306B", alpha.f = 0.2), border = NA)
+
+polygon(c(xvals_dox, rev(xvals_dox)),
+        c(preds_dox[,"Lower"], rev(preds_dox[,"Upper"])),
+        col = adjustcolor("#E7298A", alpha.f = 0.2), border = NA)
+
+# Curves
+lines(xvals_cx, preds_cx[,"Prediction"], col = "#08306B", lwd = 3.5)
+lines(xvals_dox, preds_dox[,"Prediction"], col = "#E7298A", lwd = 3.5)
+
+# LD50 vertical lines
+abline(v = EC50_CX, col = "#08306B", lty = 2, lwd = 2)
+abline(v = EC50_DOX, col = "#E7298A", lty = 2, lwd = 2)
+
+# LD50 labels
+text(EC50_CX, 1.02, paste("LD50 CX:", round(EC50_CX, 2)),
+     col = "#08306B", cex = 0.9, font = 2, pos = 4)
+text(EC50_DOX, 0.92, paste("LD50 DOX:", round(EC50_DOX, 2)),
+     col = "#E7298A", cex = 0.9, font = 2, pos = 4)
+
+# Legend
+legend("bottomleft", legend = c("CX-5461", "DOX"),
+       col = c("#08306B", "#E7298A"), lty = 1, lwd = 3.5, bty = "n")
+```
