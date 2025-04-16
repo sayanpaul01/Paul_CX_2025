@@ -75,9 +75,9 @@ DRC2 <- read.csv("data/DOX.csv")
 
 # Define individual labels
 individual_map <- list(
-  `87-1` = "Ind1",
-  `75-1` = "Ind2",
-  `78-1` = "Ind3"
+  `75-1` = "Ind1",
+  `78-1` = "Ind2",
+  `87-1` = "Ind3"
 )
 
 # --- CX-5461: Predict from 0.01 to 50 µM
@@ -135,7 +135,7 @@ combined_data <- combined_data %>%
   )
 
 # Define line types for individuals
-line_types <- c("Ind1" = "solid", "Ind2" = "dotted", "Ind3" = "dashed")
+line_types <- c("Ind1" = "dotted", "Ind2" = "dashed", "Ind3" = "solid")
 
 # Define simplified color palette for drugs
 drug_colors <- c("CX-5461" = "#08306B", "DOX" = "#E7298A")

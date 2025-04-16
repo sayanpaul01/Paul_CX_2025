@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7243dd27aa039bd44fdcb875a7877bcb3586dcdetargetblank7243dd2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7c1a541c9b633ccc69981d52eb38a119c253426atargetblank7c1a541a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7243dd27aa039bd44fdcb875a7877bcb3586dcde" target="_blank">7243dd2</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7c1a541c9b633ccc69981d52eb38a119c253426a" target="_blank">7c1a541</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7243dd27aa039bd44fdcb875a7877bcb3586dcdetargetblank7243dd2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7c1a541c9b633ccc69981d52eb38a119c253426atargetblank7c1a541a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7243dd27aa039bd44fdcb875a7877bcb3586dcde" target="_blank">7243dd2</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7c1a541c9b633ccc69981d52eb38a119c253426a" target="_blank">7c1a541</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -572,9 +575,8 @@ Untracked files:
     Untracked:  Rplot09.svg
     Untracked:  Rplot10.svg
 
-Staged changes:
-    Modified:   data/CX-5461.csv
-    Modified:   data/DOX.csv
+Unstaged changes:
+    Modified:   analysis/DRC.Rmd
 
 </code></pre>
 <p>
@@ -619,6 +621,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/7c1a541c9b633ccc69981d52eb38a119c253426a/docs/DRC.html" target="_blank">7c1a541</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-16
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -882,9 +901,9 @@ DRC2 &lt;- read.csv(&quot;data/DOX.csv&quot;)
 
 # Define individual labels
 individual_map &lt;- list(
-  `87-1` = &quot;Ind1&quot;,
-  `75-1` = &quot;Ind2&quot;,
-  `78-1` = &quot;Ind3&quot;
+  `75-1` = &quot;Ind1&quot;,
+  `78-1` = &quot;Ind2&quot;,
+  `87-1` = &quot;Ind3&quot;
 )
 
 # --- CX-5461: Predict from 0.01 to 50 µM
@@ -942,7 +961,7 @@ combined_data &lt;- combined_data %&gt;%
   )
 
 # Define line types for individuals
-line_types &lt;- c(&quot;Ind1&quot; = &quot;solid&quot;, &quot;Ind2&quot; = &quot;dotted&quot;, &quot;Ind3&quot; = &quot;dashed&quot;)
+line_types &lt;- c(&quot;Ind1&quot; = &quot;dotted&quot;, &quot;Ind2&quot; = &quot;dashed&quot;, &quot;Ind3&quot; = &quot;solid&quot;)
 
 # Define simplified color palette for drugs
 drug_colors &lt;- c(&quot;CX-5461&quot; = &quot;#08306B&quot;, &quot;DOX&quot; = &quot;#E7298A&quot;)
@@ -1003,6 +1022,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/7c1a541c9b633ccc69981d52eb38a119c253426a/docs/figure/DRC.Rmd/load_libraries2-1.png" target="_blank">7c1a541</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-16
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/62952c3197f03f4dc5c751d1ca7cf0ec824b8ddb/docs/figure/DRC.Rmd/load_libraries2-1.png" target="_blank">62952c3</a>
