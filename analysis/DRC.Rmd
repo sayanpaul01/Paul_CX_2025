@@ -5,7 +5,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-## **📌 CX and DOX dose response curve**
+## **📌 CX and DOX dose response curve (Combined)**
 ```{r load_libraries, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
 library(drc)
 
@@ -13,102 +13,161 @@ library(drc)
 DRC <- read.csv("data/CX-5461.csv")
 DRC2 <- read.csv("data/DOX.csv")
 
-# Fit dose-response models (including 0 concentration for curve fitting)
-curved_fit <- drm(Ratio ~ Conc, data = DRC, fct = LL.4(c(NA, NA, 1, NA), 
-                                                       names = c("hill", "min_value", "max_value", "EC_50")))
-curved_fit2 <- drm(Ratio ~ Conc, data = DRC2, fct = LL.4(c(NA, NA, 1, NA), 
-                                                         names = c("hill", "min_value", "max_value", "EC_50")))
+# Fit dose-response models with fixed min = 0 and max = 1
+curved_fit <- drm(Ratio ~ Conc, data = DRC,
+                  fct = LL.4(fixed = c(NA, 0, 1, NA),
+                             names = c("hill", "min", "max", "EC50")))
 
-# **Extract EC50 (LD50) Values**
-EC50_CX <- summary(curved_fit)$coefficients["EC_50:(Intercept)", "Estimate"]
-EC50_DOX <- summary(curved_fit2)$coefficients["EC_50:(Intercept)", "Estimate"]
+curved_fit2 <- drm(Ratio ~ Conc, data = DRC2,
+                   fct = LL.4(fixed = c(NA, 0, 1, NA),
+                              names = c("hill", "min", "max", "EC50")))
 
-# Define X-axis range (ensuring it starts from 0)
-x_min <- min(c(DRC$Conc, DRC2$Conc))  # Keep 0 for the curves
-x_max <- max(c(DRC$Conc, DRC2$Conc))  # Maximum concentration
-x_range <- seq(x_min, x_max, length.out = 100)  # Generate smooth curve range
+# Extract EC50 values
+EC50_CX <- summary(curved_fit)$coefficients["EC50:(Intercept)", "Estimate"]
+EC50_DOX <- summary(curved_fit2)$coefficients["EC50:(Intercept)", "Estimate"]
 
-# **Create Base Plot with CX-5461 Curve (Thicker Line)**
-plot(curved_fit, col = "blue", xlab = "Concentration (µM)", ylab = "Proportion of Viable Cells",
-     confidence.level = 0.95, type = "all", main = "Dose-Response Curves with LD50",
-     xlim = c(x_min, x_max), lwd = 3.5)
+# Set up plot with slightly wider margins to avoid label clipping
+par(mfrow = c(1,1), mar = c(5, 4, 2, 2))  # more space at bottom
 
-# **Add DOX Curve (Thicker Line)**
-plot(curved_fit2, col = "red", confidence.level = 0.95, type = "all", add = TRUE, lwd = 3.5)
+# Base plot (CX curve) with extra y-limit for spacing
+plot(curved_fit, type = "none", broken = FALSE,
+     col = "#08306B", lwd = 3.5,
+     xlab = "Concentration (uM)", ylab = "Proportion of Viable Cells",
+     main = "Dose-Response Curves with LD50",
+     xlim = c(0, 50),
+     ylim = c(0, 1.1), xaxs = "i", yaxs = "i", axes = FALSE)
 
-# **Ensure we exclude 0 concentration points before plotting**
-DRC_no_zero <- subset(DRC, Conc > 0)  
-DRC2_no_zero <- subset(DRC2, Conc > 0)  
+# Custom axes
+axis(1, at = c(0, 0.1, 0.5, 1, 5, 10, 50), las = 1)  # Ensure 0 is shown
+axis(2, at = seq(0, 1, by = 0.2))  # Y-axis up to 1 only
+box()
 
-# **Function to Add Individual Points**
-add_points <- function(data, color) {
-  data <- subset(data, Conc > 0)  # Remove 0 concentration points
-  data$Ind <- as.numeric(data$Ind)
-  
-  # Assign shapes for each individual
-  shape_mapping <- c(15, 16, 17)  # Square, Circle, Triangle
-  
-  for (i in seq_along(shape_mapping)) {
-    ind_subset <- subset(data, Ind == i)  
-    if (nrow(ind_subset) > 0) {  
-      points(ind_subset$Conc, ind_subset$Ratio, 
-             pch = shape_mapping[i], col = color, cex = 2, lwd = 2)
-    }
-  }
-}
+# Overlay DOX curve
+par(new = TRUE)
+plot(curved_fit2, add = TRUE, type = "none", col = "#E7298A", lwd = 3.5)
 
-# **Now call add_points() with the filtered datasets (without 0 concentration points)**
-add_points(DRC_no_zero, "blue")
-add_points(DRC2_no_zero, "red")
+# Add LD50 vertical lines
+abline(v = EC50_CX, col = "#08306B", lty = 2, lwd = 2)
+abline(v = EC50_DOX, col = "#E7298A", lty = 2, lwd = 2)
 
-# **Add Vertical LD50 (EC50) Lines**
-abline(v = EC50_CX, col = "blue", lty = 2, lwd = 2)  # CX-5461 LD50 Line (Dashed)
-abline(v = EC50_DOX, col = "red", lty = 2, lwd = 2)  # DOX LD50 Line (Dashed)
+# LD50 text labels slightly lowered (e.g., 0.95 and 0.85)
+text(EC50_CX, 0.95, labels = paste("LD50 CX:", round(EC50_CX, 2)), col = "#08306B", pos = 4, cex = 0.9, font = 2)
+text(EC50_DOX, 0.85, labels = paste("LD50 DOX:", round(EC50_DOX, 2)), col = "#E7298A", pos = 4, cex = 0.9, font = 2)
 
-# **Add Labels for LD50**
-text(EC50_CX, 0.5, labels = paste("LD50 CX:", round(EC50_CX, 2)), col = "blue", pos = 4, cex = 0.5, font = 2)
-text(EC50_DOX, 0.5, labels = paste("LD50 DOX:", round(EC50_DOX, 2)), col = "red", pos = 4, cex = 0.5, font = 2)
+# Legend in bottom-left
+legend("bottomleft", legend = c("CX-5461", "DOX"),
+       col = c("#08306B", "#E7298A"), lty = 1, lwd = 3.5, cex = 1)
 
-# **Add Legends**
-legend("topright", legend = c("CX-5461", "DOX"), col = c("blue", "red"), lty = 1, lwd = 3.5)
-legend("bottomleft", title = "Individuals", legend = c("1", "2", "3"), 
-       col = "black", pch = c(15, 16, 17), cex = 1.2)
 ```
 
-## **📌 Statistical Test**
-```{r stat, echo=TRUE, message=FALSE}
-# Load necessary libraries
+## **📌 CX and DOX dose response curve (Individual)**
+```{r load_libraries2, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
+
+################Combined#################
+
 library(drc)
+library(dplyr)
+library(ggplot2)
 
-# Fit dose-response models
-curved_fit_CX <- drm(Ratio ~ Conc, data = DRC, fct = LL.4())
-curved_fit_DOX <- drm(Ratio ~ Conc, data = DRC2, fct = LL.4())
+# Load CX-5461 and DOX data
+DRC <- read.csv("data/CX-5461.csv")
+DRC2 <- read.csv("data/DOX.csv")
 
-# Extract EC50 values with confidence intervals
-EC50_CX <- ED(curved_fit_CX, 50, interval = "delta")
-EC50_DOX <- ED(curved_fit_DOX, 50, interval = "delta")
+# Define individual labels
+individual_map <- list(
+  `87-1` = "Ind1",
+  `75-1` = "Ind2",
+  `78-1` = "Ind3"
+)
 
-# Extract EC50 estimates and standard errors (Corrected)
-EC50_CX_value <- EC50_CX[1,1]  # First row, first column
-EC50_CX_SE <- EC50_CX[1,2]     # First row, second column (Standard Error)
+# --- CX-5461: Predict from 0.01 to 50 µM
+pred_conc_cx <- exp(seq(log(0.01), log(50), length.out = 200))
+fits_cx <- DRC %>%
+  group_split(Indv) %>%
+  setNames(unique(DRC$Indv)) %>%
+  lapply(function(df) {
+    tryCatch({
+      drm(Ratio ~ Conc, data = df, fct = LL.4(fixed = c(NA, 0, 1, NA)))
+    }, error = function(e) NULL)
+  })
 
-EC50_DOX_value <- EC50_DOX[1,1]  # First row, first column
-EC50_DOX_SE <- EC50_DOX[1,2]     # First row, second column (Standard Error)
+curve_data_cx <- do.call(rbind, lapply(names(fits_cx), function(name) {
+  fit <- fits_cx[[name]]
+  if (!is.null(fit)) {
+    indiv <- individual_map[[name]]
+    preds <- predict(fit, newdata = data.frame(Conc = pred_conc_cx))
+    data.frame(Conc = pred_conc_cx, Ratio = preds, Label = paste0(indiv, "_CX"))
+  }
+}))
 
-# Perform a z-test to compare EC50 values
-z_score <- abs(EC50_CX_value - EC50_DOX_value) / sqrt(EC50_CX_SE^2 + EC50_DOX_SE^2)
-p_value <- 2 * (1 - pnorm(z_score))  # Two-tailed test
+# --- DOX: Predict from 0.01 to 10 µM
+pred_conc_dox <- exp(seq(log(0.01), log(10), length.out = 200))
+fits_dox <- DRC2 %>%
+  group_split(Indv) %>%
+  setNames(unique(DRC2$Indv)) %>%
+  lapply(function(df) {
+    tryCatch({
+      drm(Ratio ~ Conc, data = df, fct = LL.4(fixed = c(NA, 0, 1, NA)))
+    }, error = function(e) NULL)
+  })
 
-# Print results
-print(paste("EC50 for CX-5461:", round(EC50_CX_value, 2)))
-print(paste("EC50 for DOX:", round(EC50_DOX_value, 2)))
-print(paste("P-value:", p_value))
+curve_data_dox <- do.call(rbind, lapply(names(fits_dox), function(name) {
+  fit <- fits_dox[[name]]
+  if (!is.null(fit)) {
+    indiv <- individual_map[[name]]
+    preds <- predict(fit, newdata = data.frame(Conc = pred_conc_dox))
+    data.frame(Conc = pred_conc_dox, Ratio = preds, Label = paste0(indiv, "_DOX"))
+  }
+}))
 
-# Interpretation
-if (p_value < 0.05) {
-  print("The EC50 values are significantly different (p < 0.05).")
-} else {
-  print("The EC50 values are NOT significantly different (p ≥ 0.05).")
-}
+# Combine all curve data
+combined_data <- bind_rows(curve_data_cx, curve_data_dox)
+
+# Add Drug and Individual columns for aesthetic mapping
+combined_data <- combined_data %>%
+  mutate(
+    Drug = ifelse(grepl("_CX$", Label), "CX-5461", "DOX"),
+    Indv = case_when(
+      grepl("^Ind1", Label) ~ "Ind1",
+      grepl("^Ind2", Label) ~ "Ind2",
+      grepl("^Ind3", Label) ~ "Ind3"
+    )
+  )
+
+# Define line types for individuals
+line_types <- c("Ind1" = "solid", "Ind2" = "dotted", "Ind3" = "dashed")
+
+# Define simplified color palette for drugs
+drug_colors <- c("CX-5461" = "#08306B", "DOX" = "#E7298A")
+
+# Plot
+ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
+  geom_line(size = 1.5) +
+  scale_color_manual(values = drug_colors) +
+  scale_linetype_manual(values = line_types) +
+  scale_x_log10(
+    limits = c(0.01, 50),
+    breaks = c(0.01, 0.1, 1, 10, 50),
+    labels = c("0.01", "0.1", "1", "10", "50")
+  ) +
+  labs(
+    title = "CX-5461 and DOX Cell Viability Curves",
+    x = "Concentration (μM)",
+    y = "Proportion of Viable Cells",
+    color = "Drug",
+    linetype = "Individual"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right",
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(color = "black"),
+    axis.title = element_text(color = "black"),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 1)
+  )
+
 ```
 
