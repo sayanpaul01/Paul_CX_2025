@@ -171,6 +171,73 @@ ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
 
 ```
 
+## **📌 Calculating EC50/LD50 value**
+```{r Ec50, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
+library(drc)
+
+# Load data
+DRC <- read.csv("data/CX-5461.csv")
+DRC2 <- read.csv("data/DOX.csv")
+
+# Function to calculate EC50 for each individual
+calculate_EC50 <- function(data, compound_name) {
+  # Split data by individuals
+  individual_data <- split(data, data$Ind)
+  
+  # Initialize a vector to store EC50 results
+  EC50_values <- data.frame(Individual = character(), EC50 = numeric(), stringsAsFactors = FALSE)
+  
+  for (individual in names(individual_data)) {
+    # Fit dose-response model for the individual
+    fit <- drm(Ratio ~ Conc, data = individual_data[[individual]],
+               fct = LL.4(fixed = c(NA, 0, 1, NA),
+                          names = c("hill", "min", "max", "EC50")))
+    
+    # Extract EC50 value and store it
+    EC50 <- summary(fit)$coefficients["EC50:(Intercept)", "Estimate"]
+    EC50_values <- rbind(EC50_values, data.frame(Individual = individual, EC50 = EC50))
+  }
+  
+  # Add compound column to the results
+  EC50_values$Compound <- compound_name
+  return(EC50_values)
+}
+
+# Calculate EC50 for CX-5461 and DOX
+EC50_CX <- calculate_EC50(DRC, "CX-5461")
+EC50_DOX <- calculate_EC50(DRC2, "DOX")
+
+# Combine results for all compounds
+EC50_results <- rbind(EC50_CX, EC50_DOX)
+
+# Print EC50 results
+print(EC50_results)
+
+
+
+
+# Combine EC50 results for CX and DOX
+# These must contain 'Individual' and 'EC50' columns
+
+# Sort to ensure matching order
+EC50_CX_sorted <- EC50_CX[order(EC50_CX$Individual), ]
+EC50_DOX_sorted <- EC50_DOX[order(EC50_DOX$Individual), ]
+
+# Confirm individuals match
+stopifnot(identical(EC50_CX_sorted$Individual, EC50_DOX_sorted$Individual))
+
+# Extract EC50 values
+cx_values <- EC50_CX_sorted$EC50
+dox_values <- EC50_DOX_sorted$EC50
+
+# Perform paired t-test
+ec50_paired_ttest <- t.test(cx_values, dox_values, paired = TRUE)
+
+# Print results
+cat("Paired t-test results comparing EC50 of CX-5461 and DOX across 3 individuals:\n")
+print(ec50_paired_ttest)
+```
+
 
 
 ## **📌 CX and DOX dose response curve (Confidence)**

@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-04-16
+<strong>Last updated:</strong> 2025-04-17
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7c1a541c9b633ccc69981d52eb38a119c253426atargetblank7c1a541a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree50b8f1764ebc8d5e8e067d91c7330a9147b9a981targetblank50b8f17a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7c1a541c9b633ccc69981d52eb38a119c253426a" target="_blank">7c1a541</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/50b8f1764ebc8d5e8e067d91c7330a9147b9a981" target="_blank">50b8f17</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree7c1a541c9b633ccc69981d52eb38a119c253426atargetblank7c1a541a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree50b8f1764ebc8d5e8e067d91c7330a9147b9a981targetblank50b8f17a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/7c1a541c9b633ccc69981d52eb38a119c253426a" target="_blank">7c1a541</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/50b8f1764ebc8d5e8e067d91c7330a9147b9a981" target="_blank">50b8f17</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -621,6 +621,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/50b8f1764ebc8d5e8e067d91c7330a9147b9a981/analysis/DRC.Rmd" target="_blank">50b8f17</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-16
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/50b8f1764ebc8d5e8e067d91c7330a9147b9a981/docs/DRC.html" target="_blank">50b8f17</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-16
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1024,6 +1058,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/50b8f1764ebc8d5e8e067d91c7330a9147b9a981/docs/figure/DRC.Rmd/load_libraries2-1.png" target="_blank">50b8f17</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-16
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/7c1a541c9b633ccc69981d52eb38a119c253426a/docs/figure/DRC.Rmd/load_libraries2-1.png" target="_blank">7c1a541</a>
 </td>
 <td>
@@ -1048,6 +1093,87 @@ sayanpaul01
 </table>
 </div>
 </div>
+</div>
+<div id="calculating-ec50ld50-value" class="section level2">
+<h2><strong>📌 Calculating EC50/LD50 value</strong></h2>
+<pre class="r"><code>library(drc)
+
+# Load data
+DRC &lt;- read.csv(&quot;data/CX-5461.csv&quot;)
+DRC2 &lt;- read.csv(&quot;data/DOX.csv&quot;)
+
+# Function to calculate EC50 for each individual
+calculate_EC50 &lt;- function(data, compound_name) {
+  # Split data by individuals
+  individual_data &lt;- split(data, data$Ind)
+  
+  # Initialize a vector to store EC50 results
+  EC50_values &lt;- data.frame(Individual = character(), EC50 = numeric(), stringsAsFactors = FALSE)
+  
+  for (individual in names(individual_data)) {
+    # Fit dose-response model for the individual
+    fit &lt;- drm(Ratio ~ Conc, data = individual_data[[individual]],
+               fct = LL.4(fixed = c(NA, 0, 1, NA),
+                          names = c(&quot;hill&quot;, &quot;min&quot;, &quot;max&quot;, &quot;EC50&quot;)))
+    
+    # Extract EC50 value and store it
+    EC50 &lt;- summary(fit)$coefficients[&quot;EC50:(Intercept)&quot;, &quot;Estimate&quot;]
+    EC50_values &lt;- rbind(EC50_values, data.frame(Individual = individual, EC50 = EC50))
+  }
+  
+  # Add compound column to the results
+  EC50_values$Compound &lt;- compound_name
+  return(EC50_values)
+}
+
+# Calculate EC50 for CX-5461 and DOX
+EC50_CX &lt;- calculate_EC50(DRC, &quot;CX-5461&quot;)
+EC50_DOX &lt;- calculate_EC50(DRC2, &quot;DOX&quot;)
+
+# Combine results for all compounds
+EC50_results &lt;- rbind(EC50_CX, EC50_DOX)
+
+# Print EC50 results
+print(EC50_results)</code></pre>
+<pre><code>  Individual       EC50 Compound
+1          1  6.4098291  CX-5461
+2          2 10.9606571  CX-5461
+3          3 10.0306167  CX-5461
+4          1  0.5299658      DOX
+5          2  0.4423945      DOX
+6          3  0.7740361      DOX</code></pre>
+<pre class="r"><code># Combine EC50 results for CX and DOX
+# These must contain &#39;Individual&#39; and &#39;EC50&#39; columns
+
+# Sort to ensure matching order
+EC50_CX_sorted &lt;- EC50_CX[order(EC50_CX$Individual), ]
+EC50_DOX_sorted &lt;- EC50_DOX[order(EC50_DOX$Individual), ]
+
+# Confirm individuals match
+stopifnot(identical(EC50_CX_sorted$Individual, EC50_DOX_sorted$Individual))
+
+# Extract EC50 values
+cx_values &lt;- EC50_CX_sorted$EC50
+dox_values &lt;- EC50_DOX_sorted$EC50
+
+# Perform paired t-test
+ec50_paired_ttest &lt;- t.test(cx_values, dox_values, paired = TRUE)
+
+# Print results
+cat(&quot;Paired t-test results comparing EC50 of CX-5461 and DOX across 3 individuals:\n&quot;)</code></pre>
+<pre><code>Paired t-test results comparing EC50 of CX-5461 and DOX across 3 individuals:</code></pre>
+<pre class="r"><code>print(ec50_paired_ttest)</code></pre>
+<pre><code>
+    Paired t-test
+
+data:  cx_values and dox_values
+t = 6.1761, df = 2, p-value = 0.02523
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+  2.594056 14.509082
+sample estimates:
+mean difference 
+       8.551569 </code></pre>
 </div>
 <div id="cx-and-dox-dose-response-curve-confidence"
 class="section level2">
