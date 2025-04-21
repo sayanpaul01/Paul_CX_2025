@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -378,13 +378,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-04-14
+<strong>Last updated:</strong> 2025-04-21
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1433d3784ab1f1829ee095be49b4a2de6ab57ca5targetblank1433d37a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree693aad487a768e0acf96281271ab6f7952f71e89targetblank693aad4a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1433d3784ab1f1829ee095be49b4a2de6ab57ca5" target="_blank">1433d37</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/693aad487a768e0acf96281271ab6f7952f71e89" target="_blank">693aad4</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1433d3784ab1f1829ee095be49b4a2de6ab57ca5targetblank1433d37a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree693aad487a768e0acf96281271ab6f7952f71e89targetblank693aad4a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1433d3784ab1f1829ee095be49b4a2de6ab57ca5" target="_blank">1433d37</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/693aad487a768e0acf96281271ab6f7952f71e89" target="_blank">693aad4</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -547,6 +550,7 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
+    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  0.1 density.svg
@@ -560,6 +564,7 @@ Untracked files:
     Untracked:  DRC1.svg
     Untracked:  Figure 1.jpeg
     Untracked:  Figure 1.pdf
+    Untracked:  Figure_CM_Purity.pdf
     Untracked:  Rplot.svg
     Untracked:  Rplot01.svg
     Untracked:  Rplot02.svg
@@ -571,6 +576,38 @@ Untracked files:
     Untracked:  Rplot08.svg
     Untracked:  Rplot09.svg
     Untracked:  Rplot10.svg
+    Untracked:  TS_HA.svg
+    Untracked:  TS_HV.svg
+    Untracked:  Violin HA.svg
+    Untracked:  Violin HV.svg
+    Untracked:  data/AF_genes.csv
+    Untracked:  data/CAD_genes.csv
+    Untracked:  data/Cardiotox.csv
+    Untracked:  data/Entrez_Cardiotox.csv
+    Untracked:  data/GWAS.xlsx
+    Untracked:  data/GWAS_SNPs.bed
+    Untracked:  data/HF_genes.csv
+    Untracked:  data/Hypertension_genes.csv
+    Untracked:  data/MI_genes.csv
+    Untracked:  data/TS.csv
+    Untracked:  data/Toptable_CX_0.1_24.csv
+    Untracked:  data/Toptable_CX_0.1_3.csv
+    Untracked:  data/Toptable_CX_0.1_48.csv
+    Untracked:  data/Toptable_CX_0.5_24.csv
+    Untracked:  data/Toptable_CX_0.5_3.csv
+    Untracked:  data/Toptable_CX_0.5_48.csv
+    Untracked:  data/Toptable_DOX_0.1_24.csv
+    Untracked:  data/Toptable_DOX_0.1_3.csv
+    Untracked:  data/Toptable_DOX_0.1_48.csv
+    Untracked:  data/Toptable_DOX_0.5_24.csv
+    Untracked:  data/Toptable_DOX_0.5_3.csv
+    Untracked:  data/Toptable_DOX_0.5_48.csv
+    Untracked:  results/
+    Untracked:  run_bedtools.bat
+
+Unstaged changes:
+    Deleted:    analysis/Actox.Rmd
+    Modified:   analysis/Corrmotif_Conc.Rmd
 
 </code></pre>
 <p>
@@ -616,6 +653,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/008117ab97e9c8b972ffcc1bad9c90b0946274be/docs/Corrmotif_Conc.html" target="_blank">008117a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -3926,7 +3980,7 @@ library(tidyr)</code></pre>
 <pre class="r"><code>library(org.Hs.eg.db)</code></pre>
 <pre><code>Warning: package &#39;AnnotationDbi&#39; was built under R version 4.3.2</code></pre>
 <pre><code>Warning: package &#39;IRanges&#39; was built under R version 4.3.1</code></pre>
-<pre><code>Warning: package &#39;S4Vectors&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;S4Vectors&#39; was built under R version 4.3.2</code></pre>
 <pre class="r"><code># **🔹 Read DNA Damage Repair Gene List**
 DNA_damage &lt;- read.csv(&quot;data/DNA_Damage.csv&quot;, stringsAsFactors = FALSE)
 
@@ -4283,6 +4337,177 @@ sayanpaul01
 </table>
 </div>
 </div>
+</div>
+<div id="proportion-of-dna-damage-repair-genes-combined"
+class="section level2">
+<h2><strong>📌 Proportion of DNA Damage Repair Genes (Combined)
+</strong></h2>
+<pre class="r"><code># Load Required Libraries
+library(dplyr)
+library(ggplot2)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+
+# ----------------- Load DNA Damage Genes -----------------
+DNA_damage &lt;- read.csv(&quot;data/DNA_Damage.csv&quot;, stringsAsFactors = FALSE)
+
+DNA_damage$Entrez_ID &lt;- mapIds(
+  org.Hs.eg.db,
+  keys = DNA_damage$Symbol,
+  column = &quot;ENTREZID&quot;,
+  keytype = &quot;SYMBOL&quot;,
+  multiVals = &quot;first&quot;
+)
+dna_damage_ids &lt;- na.omit(DNA_damage$Entrez_ID)
+
+# ----------------- Load CorrMotif Groups -----------------
+# 0.1 µM
+prob_1_0.1 &lt;- as.character(read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID)
+prob_2_0.1 &lt;- as.character(read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID)
+prob_3_0.1 &lt;- as.character(read.csv(&quot;data/prob_3_0.1.csv&quot;)$Entrez_ID)
+
+# 0.5 µM
+prob_1_0.5 &lt;- as.character(read.csv(&quot;data/prob_1_0.5.csv&quot;)$Entrez_ID)
+prob_2_0.5 &lt;- as.character(read.csv(&quot;data/prob_2_0.5.csv&quot;)$Entrez_ID)
+prob_3_0.5 &lt;- as.character(read.csv(&quot;data/prob_3_0.5.csv&quot;)$Entrez_ID)
+prob_4_0.5 &lt;- as.character(read.csv(&quot;data/prob_4_0.5.csv&quot;)$Entrez_ID)
+prob_5_0.5 &lt;- as.character(read.csv(&quot;data/prob_5_0.5.csv&quot;)$Entrez_ID)
+
+# ----------------- Annotate CorrMotif Groups -----------------
+df_0.1 &lt;- data.frame(Entrez_ID = unique(c(prob_1_0.1, prob_2_0.1, prob_3_0.1))) %&gt;%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_1_0.1 ~ &quot;Non response&quot;,
+      Entrez_ID %in% prob_2_0.1 ~ &quot;CX-DOX mid-late response&quot;,
+      Entrez_ID %in% prob_3_0.1 ~ &quot;DOX only mid-late response&quot;
+    ),
+    Category = ifelse(Entrez_ID %in% dna_damage_ids, &quot;Yes&quot;, &quot;No&quot;),
+    Concentration = &quot;0.1 µM&quot;
+  )
+
+df_0.5 &lt;- data.frame(Entrez_ID = unique(c(prob_1_0.5, prob_2_0.5, prob_3_0.5, prob_4_0.5, prob_5_0.5))) %&gt;%
+  mutate(
+    Response_Group = case_when(
+      Entrez_ID %in% prob_1_0.5 ~ &quot;Non response&quot;,
+      Entrez_ID %in% prob_2_0.5 ~ &quot;DOX-specific response&quot;,
+      Entrez_ID %in% prob_3_0.5 ~ &quot;DOX only mid-late response&quot;,
+      Entrez_ID %in% prob_4_0.5 ~ &quot;CX total + DOX early response&quot;,
+      Entrez_ID %in% prob_5_0.5 ~ &quot;DOX early + CX-DOX mid-late response&quot;
+    ),
+    Category = ifelse(Entrez_ID %in% dna_damage_ids, &quot;Yes&quot;, &quot;No&quot;),
+    Concentration = &quot;0.5 µM&quot;
+  )
+
+# ----------------- Combine All -----------------
+df_combined &lt;- bind_rows(df_0.1, df_0.5)
+
+# ----------------- Calculate Proportions -----------------
+proportion_data &lt;- df_combined %&gt;%
+  group_by(Concentration, Response_Group, Category) %&gt;%
+  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
+  group_by(Concentration, Response_Group) %&gt;%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# ----------------- Set Order: &quot;Yes&quot; at bottom -----------------
+proportion_data$Category &lt;- factor(proportion_data$Category, levels = c(&quot;Yes&quot;, &quot;No&quot;))
+
+# ----------------- Chi-square or Fisher&#39;s Test -----------------
+get_chi_or_fisher &lt;- function(df, ref_group) {
+  ref_counts &lt;- df %&gt;%
+    ungroup() %&gt;%
+    filter(Response_Group == ref_group) %&gt;%
+    dplyr::select(Category, Count) %&gt;%
+    {setNames(.$Count, .$Category)}
+
+  df %&gt;%
+    filter(Response_Group != ref_group) %&gt;%
+    group_by(Response_Group) %&gt;%
+    summarise(
+      p_value = {
+        group_counts &lt;- Count[Category %in% c(&quot;Yes&quot;, &quot;No&quot;)]
+        if (length(group_counts) &lt; 2) group_counts &lt;- c(group_counts, 0)
+        contingency_table &lt;- matrix(c(
+          group_counts[1], group_counts[2],
+          ref_counts[&quot;Yes&quot;], ref_counts[&quot;No&quot;]
+        ), nrow = 2)
+
+        if (any(contingency_table &lt; 5)) {
+          fisher.test(contingency_table)$p.value
+        } else {
+          chisq.test(contingency_table)$p.value
+        }
+      },
+      .groups = &quot;drop&quot;
+    ) %&gt;%
+    mutate(Significance = ifelse(!is.na(p_value) &amp; p_value &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+}
+
+# Perform tests
+chi_0.1 &lt;- get_chi_or_fisher(proportion_data %&gt;% filter(Concentration == &quot;0.1 µM&quot;), &quot;Non response&quot;)
+chi_0.5 &lt;- get_chi_or_fisher(proportion_data %&gt;% filter(Concentration == &quot;0.5 µM&quot;), &quot;Non response&quot;)
+
+chi_all &lt;- bind_rows(
+  chi_0.1 %&gt;% mutate(Concentration = &quot;0.1 µM&quot;),
+  chi_0.5 %&gt;% mutate(Concentration = &quot;0.5 µM&quot;)
+)
+
+proportion_data &lt;- proportion_data %&gt;%
+  left_join(chi_all, by = c(&quot;Concentration&quot;, &quot;Response_Group&quot;))
+
+# ----------------- Factor Levels -----------------
+proportion_data$Concentration &lt;- factor(proportion_data$Concentration, levels = c(&quot;0.1 µM&quot;, &quot;0.5 µM&quot;))
+proportion_data$Response_Group &lt;- factor(proportion_data$Response_Group, levels = c(
+  &quot;Non response&quot;,
+  &quot;CX-DOX mid-late response&quot;,
+  &quot;DOX-specific response&quot;,
+  &quot;DOX only mid-late response&quot;,
+  &quot;CX total + DOX early response&quot;,
+  &quot;DOX early + CX-DOX mid-late response&quot;
+))
+
+# ----------------- Star Positions -----------------
+label_data &lt;- proportion_data %&gt;%
+  group_by(Concentration, Response_Group) %&gt;%
+  summarise(Significance = dplyr::first(Significance), .groups = &quot;drop&quot;) %&gt;%
+  filter(Significance == &quot;*&quot;) %&gt;%
+  mutate(y_pos = 105)
+
+# ----------------- Stack Order -----------------
+proportion_data &lt;- proportion_data %&gt;%
+  arrange(Concentration, Response_Group, Category)
+
+# ----------------- Plot -----------------
+ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;stack&quot;) +
+  geom_text(
+    data = label_data,
+    aes(x = Response_Group, y = y_pos, label = Significance),
+    inherit.aes = FALSE,
+    size = 5, color = &quot;black&quot;
+  ) +
+  facet_wrap(~ Concentration, scales = &quot;free_x&quot;) +
+  scale_fill_manual(values = c(&quot;Yes&quot; = &quot;#e41a1c&quot;, &quot;No&quot; = &quot;#377eb8&quot;)) +
+  scale_y_continuous(limits = c(0, 110), expand = c(0, 0)) +
+  labs(
+    title = &quot;DNA Damage Gene Proportions Across\nCormotif Clusters (0.1 and 0.5 µM)&quot;,
+    x = &quot;Response Groups&quot;,
+    y = &quot;Percentage of Genes&quot;,
+    fill = &quot;DNA Damage Gene&quot;
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(size = 16, hjust = 0.5, face = &quot;bold&quot;),
+    axis.title.x = element_text(size = 14, face = &quot;bold&quot;),
+    axis.title.y = element_text(size = 14, face = &quot;bold&quot;),
+    axis.text.x = element_text(size = 11, angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 12),
+    legend.title = element_text(size = 13),
+    legend.text = element_text(size = 12),
+    strip.text = element_text(size = 14, face = &quot;bold&quot;),
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2),
+    panel.spacing = unit(1.2, &quot;lines&quot;)
+  )</code></pre>
+<p><img src="figure/Corrmotif_Conc.Rmd/prop%20DNA%20combined-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="proportion-of-p53-target-genes-genes-0.1-micromolar"
 class="section level2">
@@ -9181,40 +9406,40 @@ attached base packages:
 
 other attached packages:
  [1] reshape2_1.4.4       org.Hs.eg.db_3.18.0  AnnotationDbi_1.64.1
- [4] IRanges_2.36.0       S4Vectors_0.40.1     tidyr_1.3.1         
- [7] ggplot2_3.5.1        gprofiler2_0.2.3     BiocParallel_1.36.0 
-[10] dplyr_1.1.4          Rfast_2.1.0          RcppParallel_5.1.9  
-[13] RcppZiggurat_0.1.6   Rcpp_1.0.12          Cormotif_1.48.0     
+ [4] IRanges_2.36.0       S4Vectors_0.40.2     tidyr_1.3.1         
+ [7] ggplot2_3.5.2        gprofiler2_0.2.3     BiocParallel_1.36.0 
+[10] dplyr_1.1.4          Rfast_2.1.5.1        RcppParallel_5.1.10 
+[13] zigg_0.0.2           Rcpp_1.0.12          Cormotif_1.48.0     
 [16] limma_3.58.1         affy_1.80.0          Biobase_2.62.0      
 [19] BiocGenerics_0.48.1  workflowr_1.7.1     
 
 loaded via a namespace (and not attached):
  [1] tidyselect_1.2.1        viridisLite_0.4.2       farver_2.1.2           
- [4] blob_1.2.4              bitops_1.0-7            Biostrings_2.70.1      
- [7] RCurl_1.98-1.13         fastmap_1.1.1           lazyeval_0.2.2         
-[10] promises_1.3.0          digest_0.6.34           lifecycle_1.0.4        
-[13] statmod_1.5.0           processx_3.8.5          KEGGREST_1.42.0        
-[16] RSQLite_2.3.3           magrittr_2.0.3          compiler_4.3.0         
-[19] rlang_1.1.3             sass_0.4.9              tools_4.3.0            
-[22] yaml_2.3.10             data.table_1.14.10      knitr_1.49             
-[25] labeling_0.4.3          htmlwidgets_1.6.4       bit_4.0.5              
-[28] plyr_1.8.9              withr_3.0.2             purrr_1.0.2            
-[31] grid_4.3.0              preprocessCore_1.64.0   git2r_0.35.0           
+ [4] blob_1.2.4              bitops_1.0-9            Biostrings_2.70.3      
+ [7] RCurl_1.98-1.17         fastmap_1.2.0           lazyeval_0.2.2         
+[10] promises_1.3.2          digest_0.6.34           lifecycle_1.0.4        
+[13] statmod_1.5.0           processx_3.8.6          KEGGREST_1.42.0        
+[16] RSQLite_2.3.9           magrittr_2.0.3          compiler_4.3.0         
+[19] rlang_1.1.3             sass_0.4.10             tools_4.3.0            
+[22] yaml_2.3.10             data.table_1.17.0       knitr_1.50             
+[25] labeling_0.4.3          htmlwidgets_1.6.4       bit_4.6.0              
+[28] plyr_1.8.9              withr_3.0.2             purrr_1.0.4            
+[31] grid_4.3.0              preprocessCore_1.64.0   git2r_0.36.2           
 [34] colorspace_2.1-0        scales_1.3.0            cli_3.6.1              
 [37] crayon_1.5.3            rmarkdown_2.29          generics_0.1.3         
 [40] rstudioapi_0.17.1       httr_1.4.7              DBI_1.2.3              
-[43] cachem_1.0.8            stringr_1.5.1           zlibbioc_1.48.0        
+[43] cachem_1.1.0            stringr_1.5.1           zlibbioc_1.48.2        
 [46] parallel_4.3.0          XVector_0.42.0          BiocManager_1.30.25    
-[49] vctrs_0.6.5             jsonlite_1.8.9          callr_3.7.6            
-[52] bit64_4.0.5             plotly_4.10.4           jquerylib_0.1.4        
+[49] vctrs_0.6.5             jsonlite_2.0.0          callr_3.7.6            
+[52] bit64_4.6.0-1           plotly_4.10.4           jquerylib_0.1.4        
 [55] affyio_1.72.0           glue_1.7.0              codetools_0.2-20       
 [58] ps_1.8.1                stringi_1.8.3           gtable_0.3.6           
 [61] GenomeInfoDb_1.38.8     later_1.3.2             munsell_0.5.1          
-[64] tibble_3.2.1            pillar_1.10.1           htmltools_0.5.8.1      
-[67] GenomeInfoDbData_1.2.11 R6_2.5.1                rprojroot_2.0.4        
+[64] tibble_3.2.1            pillar_1.10.2           htmltools_0.5.8.1      
+[67] GenomeInfoDbData_1.2.11 R6_2.6.1                rprojroot_2.0.4        
 [70] evaluate_1.0.3          png_0.1-8               memoise_2.0.1          
-[73] httpuv_1.6.15           bslib_0.8.0             whisker_0.4.1          
-[76] xfun_0.50               fs_1.6.3                getPass_0.2-4          
+[73] httpuv_1.6.15           bslib_0.9.0             whisker_0.4.1          
+[76] xfun_0.52               fs_1.6.3                getPass_0.2-4          
 [79] pkgconfig_2.0.3        </code></pre>
 </div>
 </div>
