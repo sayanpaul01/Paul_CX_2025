@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree062a73abf4aa51016b5a82ec16868e5950354cdftargetblank062a73aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreed6226a09c4a6b3b6c2280e9c4f41ba17acb41045targetblankd6226a0a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/062a73abf4aa51016b5a82ec16868e5950354cdf" target="_blank">062a73a</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/d6226a09c4a6b3b6c2280e9c4f41ba17acb41045" target="_blank">d6226a0</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree062a73abf4aa51016b5a82ec16868e5950354cdftargetblank062a73aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreed6226a09c4a6b3b6c2280e9c4f41ba17acb41045targetblankd6226a0a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/062a73abf4aa51016b5a82ec16868e5950354cdf" target="_blank">062a73a</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/d6226a09c4a6b3b6c2280e9c4f41ba17acb41045" target="_blank">d6226a0</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -584,6 +584,8 @@ Untracked files:
     Untracked:  data/AF_genes.csv
     Untracked:  data/CAD_genes.csv
     Untracked:  data/Cardiotox.csv
+    Untracked:  data/DDR.csv
+    Untracked:  data/DDR_Mapped.csv
     Untracked:  data/DOX_Vald.csv
     Untracked:  data/DOX_Vald_Mapped.csv
     Untracked:  data/Entrez_Cardiotox.csv
@@ -659,6 +661,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d6226a09c4a6b3b6c2280e9c4f41ba17acb41045/analysis/Corrmotif_Conc.Rmd" target="_blank">d6226a0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-24
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/d6226a09c4a6b3b6c2280e9c4f41ba17acb41045/docs/Corrmotif_Conc.html" target="_blank">d6226a0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-24
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -4631,6 +4667,180 @@ sayanpaul01
 </div>
 </div>
 </div>
+<div id="dna-damage-marker-expression-changes-between-cx5461-and-dox"
+class="section level2">
+<h2><strong>📌 DNA Damage Marker expression changes between CX5461 and
+DOX</strong></h2>
+<pre class="r"><code>library(tidyverse) 
+library(ggfortify)
+library(cluster)
+library(edgeR)
+library(limma)
+library(Homo.sapiens)
+library(BiocParallel)
+library(qvalue)
+library(pheatmap)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(org.Hs.eg.db)
+library(RColorBrewer)
+library(readr)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(reshape2)
+library(dplyr)
+
+# Load UCSC transcript database
+txdb &lt;- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+# Load DEGs Data
+CX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+
+DOX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
+
+Entrez_IDs &lt;- c(
+  10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
+  11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
+  3014, 317, 355, 4193, 4292, 4361, 4609, 4616, 4683, 472, 50484,
+  5366, 5371, 54205, 545, 55367, 5591, 581, 5810, 5883, 5884,
+  5888, 5893, 5925, 595, 5916, 5981, 6118, 637, 672, 7157, 7799, 8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898, 9133, 9134, 983, 9874, 993, 995
+)
+
+
+# Subset the toptable based on the entrez IDs and select specific columns
+
+subset_toptable1 &lt;- CX_0.1_3[CX_0.1_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+
+subset_toptable2 &lt;- CX_0.1_24[CX_0.1_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+
+subset_toptable3 &lt;- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+
+subset_toptable3 &lt;- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable4 &lt;- CX_0.5_3[CX_0.5_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable5 &lt;- CX_0.5_24[CX_0.5_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable6 &lt;- CX_0.5_48[CX_0.5_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable7 &lt;- DOX_0.1_3[DOX_0.1_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable8 &lt;- DOX_0.1_24[DOX_0.1_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable9 &lt;- DOX_0.1_48[DOX_0.1_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable10 &lt;- DOX_0.5_3[DOX_0.5_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable11 &lt;- DOX_0.5_24[DOX_0.5_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable12 &lt;- DOX_0.5_48[DOX_0.5_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+# Function to add columns and combine data
+add_metadata &lt;- function(data, drug, conc, time) {
+  data %&gt;%
+    mutate(Drug = drug, Conc = conc, Time = time)
+}
+
+# Add metadata and combine all subsets
+combined_data &lt;- bind_rows(
+  add_metadata(subset_toptable1, &quot;CX&quot;, 0.1, 3),
+  add_metadata(subset_toptable2, &quot;CX&quot;, 0.1, 24),
+  add_metadata(subset_toptable3, &quot;CX&quot;, 0.1, 48),
+  add_metadata(subset_toptable4, &quot;CX&quot;, 0.5, 3),
+  add_metadata(subset_toptable5, &quot;CX&quot;, 0.5, 24),
+  add_metadata(subset_toptable6, &quot;CX&quot;, 0.5, 48),
+  add_metadata(subset_toptable7, &quot;DOX&quot;, 0.1, 3),
+  add_metadata(subset_toptable8, &quot;DOX&quot;, 0.1, 24),
+  add_metadata(subset_toptable9, &quot;DOX&quot;, 0.1, 48),
+  add_metadata(subset_toptable10, &quot;DOX&quot;, 0.5, 3),
+  add_metadata(subset_toptable11, &quot;DOX&quot;, 0.5, 24),
+  add_metadata(subset_toptable12, &quot;DOX&quot;, 0.5, 48)
+)
+
+# Convert Entrez IDs to Gene symbols
+combined_data &lt;- combined_data %&gt;%
+  mutate(Gene = mapIds(
+    org.Hs.eg.db,
+    keys = as.character(Entrez_ID),
+    column = &quot;SYMBOL&quot;,
+    keytype = &quot;ENTREZID&quot;,
+    multiVals = &quot;first&quot;
+  ))
+
+# Reorder columns
+final_data &lt;- dplyr::select(combined_data, Entrez_ID, Gene, logFC, adj.P.Val, Drug, Conc, Time)
+
+# Assuming your dataframe is named data
+# Add a column for significance stars
+final_data &lt;- final_data %&gt;%
+  mutate(Significance = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+
+# Create a matrix for the heatmap (logFC values)
+logFC_matrix &lt;- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = &quot;_&quot;), value.var = &quot;logFC&quot;)
+
+# Create a matrix for the significance annotations
+signif_matrix &lt;- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = &quot;_&quot;), value.var = &quot;Significance&quot;)
+
+# Split column names into Drug, Conc, and Time
+colnames_split &lt;- strsplit(colnames(logFC_matrix), &quot;_&quot;)
+drug &lt;- sapply(colnames_split, function(x) x[1])
+conc &lt;- sapply(colnames_split, function(x) x[2])
+time &lt;- sapply(colnames_split, function(x) x[3])
+
+# Create the desired column order: CX 0.1 3hr, CX 0.5 3hr, CX 0.1 24hr, CX 0.5 24hr, CX 0.1 48h, CX 0.5 48h,
+# DOX 0.1 3hr, DOX 0.5 3hr, DOX 0.1 24hr, DOX 0.5 24hr, DOX 0.1 48h, DOX 0.5 48h
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_48&quot;)
+
+# Reorder columns in the matrix based on the desired order
+column_names &lt;- paste(drug, conc, time, sep = &quot;_&quot;)
+column_order &lt;- match(desired_order, column_names)
+logFC_matrix &lt;- logFC_matrix[, column_order]
+signif_matrix &lt;- signif_matrix[, column_order]
+drug &lt;- drug[column_order]
+conc &lt;- conc[column_order]
+time &lt;- time[column_order]
+
+# Prepare annotations matching the column structure
+ha_top &lt;- HeatmapAnnotation(
+  Drug = drug,
+  Conc = conc,
+  Time = time,
+  col = list(Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+             Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+             Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# Create the heatmap
+heatmap &lt;- Heatmap(logFC_matrix, name = &quot;logFC&quot;, top_annotation = ha_top,
+                   cell_fun = function(j, i, x, y, width, height, fill) {
+                     grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 10))
+                   },
+                   show_row_names = TRUE, show_column_names = FALSE,
+                   column_title = &quot;DNA damage response gene expression in\nCX5461 and DOX treated samples&quot;,
+                   column_title_gp = gpar(fontsize = 16, fontface = &quot;bold&quot;),
+                   cluster_columns = FALSE)  # Disable column clustering
+
+# Draw the heatmap
+draw(heatmap, heatmap_legend_side = &quot;right&quot;, annotation_legend_side = &quot;right&quot;)</code></pre>
+<p><img src="figure/Corrmotif_Conc.Rmd/DNA-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
 <div id="proportion-of-p53-target-genes-genes-0.1-micromolar"
 class="section level2">
 <h2><strong>📌 Proportion of P53 target Genes Genes (0.1
@@ -6000,6 +6210,43 @@ heatmap &lt;- Heatmap(logFC_matrix, name = &quot;logFC&quot;, top_annotation = h
 # Draw the heatmap
 draw(heatmap, heatmap_legend_side = &quot;right&quot;, annotation_legend_side = &quot;right&quot;)</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/HF-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-HF-1">
+Past versions of HF-1.png
+</button>
+</p>
+<div id="fig-HF-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d6226a09c4a6b3b6c2280e9c4f41ba17acb41045/docs/figure/Corrmotif_Conc.Rmd/HF-1.png" target="_blank">d6226a0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="corr-motif-boxplots" class="section level2">
 <h2><strong>📌 Corr-motif Boxplots</strong></h2>
