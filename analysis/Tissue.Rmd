@@ -14,6 +14,7 @@ library(tidyr)
 library(org.Hs.eg.db)
 library(clusterProfiler)
 library(biomaRt)
+library(pheatmap)
 ```
 
 ## **📌 Load Data**
@@ -22,25 +23,18 @@ library(biomaRt)
 file_path <- "data/count.csv"
 df <- read.csv(file_path, check.names = FALSE)
 
-# Remove 'x' from column headers
+# Remove 'x' from column headers (if applicable)
 colnames(df) <- gsub("^x", "", colnames(df))
 
-# View the updated dataframe
-head(df)
-
-# View updated column names
-colnames(df)
-
-
-# Step 1: Calculate IPSC_CM
+# Step 1: Calculate IPSC_CM (Median across VEH samples)
 # Select columns with 'VEH' in their names
 veh_columns <- grep("VEH", colnames(df), value = TRUE)
 
-# Calculate the average logCPM across VEH samples
-df$IPSC_CM <- rowMeans(df[, veh_columns], na.rm = TRUE)
+# Calculate the median logCPM across VEH samples
+df$IPSC_CM <- apply(df[, veh_columns], 1, median, na.rm = TRUE)
 
-# Create a new dataframe with ENTREZID, SYMBOL, and IPSC_CM
-veh_avg_df <- df[, c("Entrez_ID","IPSC_CM")]
+# Create a new dataframe with Entrez_ID and IPSC_CM
+veh_median_df <- df[, c("Entrez_ID", "IPSC_CM")]
 
 # Step 2: Read the Tissue_Gtex dataset
 Tissue_Gtex <- read.csv("data/Tissue_Gtex.csv")
@@ -48,7 +42,6 @@ Tissue_Gtex <- read.csv("data/Tissue_Gtex.csv")
 # Step 3: Convert Ensembl IDs to Entrez IDs using biomaRt
 mart <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
 
-# Extract Entrez IDs for the Ensembl IDs in the gene.id column
 gene_ids <- Tissue_Gtex$gene.id
 conversion <- getBM(
   attributes = c("ensembl_gene_id", "entrezgene_id"),
@@ -60,19 +53,15 @@ conversion <- getBM(
 # Merge Entrez IDs back into Tissue_Gtex
 Tissue_Gtex <- merge(Tissue_Gtex, conversion, by.x = "gene.id", by.y = "ensembl_gene_id", all.x = TRUE)
 
-# Rename the column for consistency
+# Rename for consistency
 colnames(Tissue_Gtex)[colnames(Tissue_Gtex) == "entrezgene_id"] <- "Entrez_ID"
 
-# Step 4: Read the veh_avg_df dataframe
-veh_avg_df <- df[, c("Entrez_ID", "IPSC_CM")]
-
-# Step 5: Merge veh_avg_df with Tissue_Gtex by Entrez_ID
-# Ensure column types match
-veh_avg_df$Entrez_ID <- as.character(veh_avg_df$Entrez_ID)
+# Step 4: Ensure Entrez_ID column types match before merging
+veh_median_df$Entrez_ID <- as.character(veh_median_df$Entrez_ID)
 Tissue_Gtex$Entrez_ID <- as.character(Tissue_Gtex$Entrez_ID)
 
-# Perform the merge
-merged_df <- merge(veh_avg_df, Tissue_Gtex, by = "Entrez_ID", all.x = TRUE)
+# Step 5: Merge iPSC_CM with Tissue_Gtex by Entrez_ID
+merged_df <- merge(veh_median_df, Tissue_Gtex, by = "Entrez_ID", all.x = TRUE)
 
 # Step 6: Remove rows with NA values
 cleaned_df <- na.omit(merged_df) 
@@ -82,10 +71,10 @@ cleaned_df <- na.omit(merged_df)
 ```{r Genes of Interest, echo=TRUE, message=FALSE, fig.height=8, fig.width=10}
 # Filter relevant tissue columns
 tissue_cols <- colnames(cleaned_df)[which(colnames(cleaned_df) %in% c(
-  "IPSC_CM", "Adrenal.Gland", "Spleen", "Heart...Atrial", "Pancreas","Artery","Breast",
-  "small.Intestine","Colon","Nerve...Tibial","Esophagus","Muscle...Skeletal",
-  "Thyroid","Heart..Ventricle", "Stomach", "Uterus","Vagina", "Skin", "Ovary", "Liver", "Lung", "Brain", "Pituitary", "Testis", 
-  "Prostate", "Salivary.Gland"))]
+  "IPSC_CM", "Adrenal.Gland", "Spleen", "Heart...Atrial", "Pancreas", "Artery", "Breast",
+  "small.Intestine", "Colon", "Nerve...Tibial", "Esophagus", "Muscle...Skeletal",
+  "Thyroid", "Heart..Ventricle", "Stomach", "Uterus", "Vagina", "Skin", "Ovary", "Liver", 
+  "Lung", "Brain", "Pituitary", "Testis", "Prostate", "Salivary.Gland"))]
 
 data_subset <- cleaned_df[, tissue_cols]
 
@@ -100,20 +89,17 @@ order_spearman <- order(spearman_corr["IPSC_CM", ], decreasing = TRUE)
 pearson_corr <- pearson_corr[order_pearson, order_pearson]
 spearman_corr <- spearman_corr[order_spearman, order_spearman]
 
-# Plot heatmaps
-library(pheatmap)
-
-# Pearson correlation heatmap
+# Plot Pearson correlation heatmap
 pheatmap(pearson_corr, 
-         cluster_rows = TRUE,       # Enable dendrogram for rows
-         cluster_cols = TRUE,       # Enable dendrogram for columns
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
          main = "Pearson Correlation Heatmap", 
          color = colorRampPalette(c("blue", "white", "red"))(100), 
          display_numbers = TRUE,
          number_format = "%.2f",
          fontsize_number = 8)
 
-# Spearman correlation heatmap
+# Optional: Plot Spearman correlation heatmap
 pheatmap(spearman_corr, 
          cluster_rows = TRUE,
          cluster_cols = TRUE,
@@ -126,27 +112,30 @@ pheatmap(spearman_corr,
 
 ## **📌 Correlation Plot (Tissue specificity)**
 ```{r Genes of Interest1, echo=TRUE, message=FALSE, fig.height=8}
+# Load libraries
 library(ComplexHeatmap)
 library(circlize)
 library(grid)
 
-# Compute correlation
+# Compute correlation (Pearson)
 cor_values <- cor(data_subset, method = "pearson", use = "complete.obs")
+
+# Extract and sort correlations with median-based IPSC_CM
 ipsc_cm_corr <- cor_values["IPSC_CM", ]
 ipsc_cm_corr_sorted <- sort(ipsc_cm_corr, decreasing = TRUE)
 
-# Matrix
+# Create matrix for heatmap
 corr_matrix <- matrix(ipsc_cm_corr_sorted, ncol = 1)
 rownames(corr_matrix) <- names(ipsc_cm_corr_sorted)
 colnames(corr_matrix) <- "IPSC_CM"
 
-# Color function: blue → white → red for range 0.5–1
+# Define color function: blue → white → red
 col_fun <- colorRamp2(
   c(0.5, 0.75, 1.0),
   c("blue", "white", "red")
 )
 
-# Heatmap with text values and title
+# Plot heatmap
 Heatmap(
   corr_matrix,
   name = "Corr.",
@@ -157,7 +146,7 @@ Heatmap(
   show_row_names = TRUE,
   row_names_side = "right",
   column_names_side = "bottom",
-  column_title = "Pearson Correlation with IPSC_CM",
+  column_title = "Pearson Correlation with IPSC_CM (Median)",
   column_title_gp = gpar(fontsize = 14, fontface = "bold"),
   heatmap_width = unit(5, "cm"),
   heatmap_height = unit(12, "cm"),
