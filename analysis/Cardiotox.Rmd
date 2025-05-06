@@ -35,156 +35,139 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 
 ## **📌 Read and Process DEG Data**
 ```{r load_DEGs, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
-# Load DEGs Data
-CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
-CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
-CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
-CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
-CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
-CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
-
-DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
-DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
-DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
-DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
-DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
-DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
-
 Entrez_IDs <- c(
   6272, 8029, 11128, 79899, 54477, 121665, 5095, 22863, 57161, 4692,
   8214, 23151, 56606, 108, 22999, 56895, 9603, 3181, 4023, 10499,
   92949, 4363, 10057, 5243, 5244, 5880, 1535, 2950, 847, 5447,
   3038, 3077, 4846, 3958, 23327, 29899, 23155, 80856, 55020, 78996,
-  150383, 79730, 344595, 6251, 3482, 23262, 9588, 87769, 23409, 339416, 7292, 55157, 720, 5066, 3107, 54535, 1590, 80059, 7991, 57110, 8803, 9620, 323, 54826, 5916, 23371, 283337, 64078, 80010, 1933, 10818, 51020, 873, 874, 2064, 2878, 2944, 51196, 6687, 7799, 4292, 51310, 9154, 10060, 89845, 56853, 4625, 1573, 79890
+  23262, 150383, 9620, 79730, 344595, 5066, 6251, 3482, 9588, 339416,
+  7292, 55157, 87769, 23409, 720, 3107, 54535, 1590, 80059, 7991,
+  57110, 8803, 323, 54826, 5916, 23371, 283337, 64078, 80010, 1933,
+  10818, 51020
 )
 
-# Subset the toptable based on the entrez IDs and select specific columns
-
-subset_toptable1 <- CX_0.1_3[CX_0.1_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-
-subset_toptable2 <- CX_0.1_24[CX_0.1_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-
-subset_toptable3 <- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-
-subset_toptable3 <- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable4 <- CX_0.5_3[CX_0.5_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable5 <- CX_0.5_24[CX_0.5_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable6 <- CX_0.5_48[CX_0.5_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable7 <- DOX_0.1_3[DOX_0.1_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable8 <- DOX_0.1_24[DOX_0.1_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable9 <- DOX_0.1_48[DOX_0.1_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable10 <- DOX_0.5_3[DOX_0.5_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable11 <- DOX_0.5_24[DOX_0.5_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-
-subset_toptable12 <- DOX_0.5_48[DOX_0.5_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
-```
-
-## **📌 Add metadata and combine all subsets**
-```{r Read mapping counts, echo=FALSE, results='hide', include=FALSE}
-# Function to add columns and combine data
-add_metadata <- function(data, drug, conc, time) {
-  data %>%
-    mutate(Drug = drug, Conc = conc, Time = time)
+# Load DEG data
+load_deg <- function(name) {
+  read.csv(paste0("data/DEGs/Toptable_", name, ".csv"))
 }
 
-# Add metadata and combine all subsets
-combined_data <- bind_rows(
-  add_metadata(subset_toptable1, "CX", 0.1, 3),
-  add_metadata(subset_toptable2, "CX", 0.1, 24),
-  add_metadata(subset_toptable3, "CX", 0.1, 48),
-  add_metadata(subset_toptable4, "CX", 0.5, 3),
-  add_metadata(subset_toptable5, "CX", 0.5, 24),
-  add_metadata(subset_toptable6, "CX", 0.5, 48),
-  add_metadata(subset_toptable7, "DOX", 0.1, 3),
-  add_metadata(subset_toptable8, "DOX", 0.1, 24),
-  add_metadata(subset_toptable9, "DOX", 0.1, 48),
-  add_metadata(subset_toptable10, "DOX", 0.5, 3),
-  add_metadata(subset_toptable11, "DOX", 0.5, 24),
-  add_metadata(subset_toptable12, "DOX", 0.5, 48)
-)
+samples <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", 
+             "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+             "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", 
+             "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
 
-# Convert Entrez IDs to Gene symbols
+deg_list <- lapply(samples, load_deg)
+names(deg_list) <- samples
+
+# Subset and annotate DEG tables
+get_subset <- function(df, name) {
+  parts <- strsplit(name, "_")[[1]]
+  df %>%
+    filter(Entrez_ID %in% Entrez_IDs) %>%
+    dplyr::select(Entrez_ID, logFC, adj.P.Val) %>%
+    mutate(Drug = parts[1], Conc = parts[2], Time = parts[3])
+}
+
+combined_data <- bind_rows(mapply(get_subset, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Add Gene symbol and significance
 combined_data <- combined_data %>%
-  mutate(Gene = mapIds(
-    org.Hs.eg.db,
-    keys = as.character(Entrez_ID),
-    column = "SYMBOL",
-    keytype = "ENTREZID",
-    multiVals = "first"
-  ))
+  mutate(Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                       column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+         Significance = ifelse(adj.P.Val < 0.05, "*", ""))
+```
 
-# Reorder columns
-final_data <- dplyr::select(combined_data, Entrez_ID, Gene, logFC, adj.P.Val, Drug, Conc, Time)
+## **📌 rsID + Study annotation **
+```{r Read mapping counts, echo=FALSE, results='hide', include=FALSE}
+# Load rsID + Study annotation
+rsid_study <- read.csv("data/Cardiotox_mapped.csv")
+rsid_study$Entrez_ID <- as.integer(rsid_study$Entrez_ID)
+
+# Join and keep only one rsID per Entrez_ID (for display)
+rsid_study_clean <- rsid_study %>%
+  distinct(Entrez_ID, .keep_all = TRUE)
+
+combined_data <- combined_data %>%
+  left_join(rsid_study_clean, by = "Entrez_ID")
+
+# Create logFC and Significance matrices
+logFC_matrix <- acast(combined_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "logFC")
+signif_matrix <- acast(combined_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "Significance")
+
+# Match column order
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", 
+                   "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", 
+                   "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+logFC_matrix <- logFC_matrix[, desired_order]
+signif_matrix <- signif_matrix[, desired_order]
+
+# Create row order based on study groups
+rsid_info <- combined_data %>%
+  distinct(Gene, Entrez_ID, rsID, Study) %>%
+  filter(Gene %in% rownames(logFC_matrix)) %>%
+  arrange(factor(Study, levels = c("GWAS1", "GWAS2", "TWAS")))
+
+logFC_matrix <- logFC_matrix[rsid_info$Gene, ]
+signif_matrix <- signif_matrix[rsid_info$Gene, ]
+
+# Column annotation
+split_cols <- strsplit(colnames(logFC_matrix), "_")
+drug <- sapply(split_cols, `[`, 1)
+conc <- sapply(split_cols, `[`, 2)
+time <- sapply(split_cols, `[`, 3)
 ```
 
 
 ## **📌Create a matrix and heatmap**
-```{r Data_prep, echo=TRUE, message=FALSE, fig.height=14, fig.width=10}
-# Assuming your dataframe is named data
-# Add a column for significance stars
-final_data <- final_data %>%
-  mutate(Significance = ifelse(adj.P.Val < 0.05, "*", ""))
-
-# Create a matrix for the heatmap (logFC values)
-logFC_matrix <- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "logFC")
-
-# Create a matrix for the significance annotations
-signif_matrix <- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "Significance")
-
-# Split column names into Drug, Conc, and Time
-colnames_split <- strsplit(colnames(logFC_matrix), "_")
-drug <- sapply(colnames_split, function(x) x[1])
-conc <- sapply(colnames_split, function(x) x[2])
-time <- sapply(colnames_split, function(x) x[3])
-
-# Create the desired column order: CX 0.1 3hr, CX 0.5 3hr, CX 0.1 24hr, CX 0.5 24hr, CX 0.1 48h, CX 0.5 48h,
-# DOX 0.1 3hr, DOX 0.5 3hr, DOX 0.1 24hr, DOX 0.5 24hr, DOX 0.1 48h, DOX 0.5 48h
-desired_order <- c("CX_0.1_3", "CX_0.5_3", "CX_0.1_24", "CX_0.5_24", "CX_0.1_48", "CX_0.5_48",
-                   "DOX_0.1_3", "DOX_0.5_3", "DOX_0.1_24", "DOX_0.5_24", "DOX_0.1_48", "DOX_0.5_48")
-
-# Reorder columns in the matrix based on the desired order
-column_names <- paste(drug, conc, time, sep = "_")
-column_order <- match(desired_order, column_names)
-logFC_matrix <- logFC_matrix[, column_order]
-signif_matrix <- signif_matrix[, column_order]
-drug <- drug[column_order]
-conc <- conc[column_order]
-time <- time[column_order]
-
-# Prepare annotations matching the column structure
+```{r Data_prep, echo=TRUE, message=FALSE, fig.height=16, fig.width=10}
 ha_top <- HeatmapAnnotation(
   Drug = drug,
   Conc = conc,
   Time = time,
-  col = list(Drug = c("CX" = "blue", "DOX" = "red"),
-             Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
-             Time = c("3" = "yellow", "24" = "orange", "48" = "purple")),
+  col = list(
+    Drug = c("CX" = "blue", "DOX" = "red"),
+    Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+    Time = c("3" = "yellow", "24" = "orange", "48" = "purple")
+  ),
   annotation_height = unit(c(2, 2, 2), "cm")
 )
 
-# Create the heatmap
-heatmap <- Heatmap(logFC_matrix, name = "logFC", top_annotation = ha_top,
-                   cell_fun = function(j, i, x, y, width, height, fill) {
-                     grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 10))
-                   },
-                   show_row_names = TRUE, show_column_names = FALSE,
-                   column_title = "Genes in AC toxicity-associated loci\nresponse to CX5461 and DOX",
-                   column_title_gp = gpar(fontsize = 16, fontface = "bold"),
-                   cluster_columns = FALSE)  # Disable column clustering
+# Row annotation
+rsid_factor <- factor(rsid_info$rsID)
+study_factor <- factor(rsid_info$Study, levels = c("GWAS1", "GWAS2", "TWAS"))
 
-# Draw the heatmap
-draw(heatmap, heatmap_legend_side = "right", annotation_legend_side = "right")
+rsid_colors <- setNames(rainbow(length(levels(rsid_factor))), levels(rsid_factor))
+study_colors <- setNames(RColorBrewer::brewer.pal(length(levels(study_factor)), "Set2"), levels(study_factor))
+
+ha_left <- rowAnnotation(
+  rsID = anno_text(rsid_info$rsID, location = 0, just = "left", gp = gpar(fontsize = 9)),
+  rsID_color = rsid_factor,
+  Study = study_factor,
+  col = list(
+    rsID_color = rsid_colors,
+    Study = study_colors
+  ),
+  show_legend = c(rsID = FALSE, rsID_color = FALSE, Study = TRUE),
+  annotation_name_side = "top",
+  annotation_width = unit(c(4.3, 0.25, 0.25), "cm")
+)
+
+# Draw final heatmap
+Heatmap(logFC_matrix,
+        name = "logFC",
+        top_annotation = ha_top,
+        left_annotation = ha_left,
+        cluster_columns = FALSE,
+        cluster_rows = FALSE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = "AC Toxicity-Associated Genes: CX-5461 vs DOX",
+        column_title_gp = gpar(fontsize = 14, fontface = "bold")
+)
 ```
 
 
