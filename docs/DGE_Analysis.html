@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree92099e7a5fa068d2357cb772c18c0e40b0953661targetblank92099e7a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree43e348d0bc195290fd54602de2e15faafc29c815targetblank43e348da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/92099e7a5fa068d2357cb772c18c0e40b0953661" target="_blank">92099e7</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/43e348d0bc195290fd54602de2e15faafc29c815" target="_blank">43e348d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree92099e7a5fa068d2357cb772c18c0e40b0953661targetblank92099e7a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree43e348d0bc195290fd54602de2e15faafc29c815targetblank43e348da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/92099e7a5fa068d2357cb772c18c0e40b0953661" target="_blank">92099e7</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/43e348d0bc195290fd54602de2e15faafc29c815" target="_blank">43e348d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -606,6 +606,8 @@ Untracked files:
     Untracked:  data/Hypertension_genes.csv
     Untracked:  data/MI_genes.csv
     Untracked:  data/P53_Target_mapped.csv
+    Untracked:  data/TOP2B_target.csv
+    Untracked:  data/TOP2B_target_mapped.csv
     Untracked:  data/TS.csv
     Untracked:  data/TS_HPA.csv
     Untracked:  data/TS_HPA_mapped.csv
@@ -673,6 +675,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/43e348d0bc195290fd54602de2e15faafc29c815/analysis/DGE_Analysis.Rmd" target="_blank">43e348d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-08
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/43e348d0bc195290fd54602de2e15faafc29c815/docs/DGE_Analysis.html" target="_blank">43e348d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-08
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2896,6 +2932,130 @@ ggplot(complete_p53, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/P53_target_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-P53_target_box-1">
+Past versions of P53_target_box-1.png
+</button>
+</p>
+<div id="fig-P53_target_box-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/43e348d0bc195290fd54602de2e15faafc29c815/docs/figure/DGE_Analysis.Rmd/P53_target_box-1.png" target="_blank">43e348d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="logfc-boxplots-of-top2b-target-genes" class="section level2">
+<h2><strong>📌 LogFC boxplots of TOP2B target Genes</strong></h2>
+<pre class="r"><code># Load libraries
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# Read TOP2B target Entrez IDs from CSV
+top2b_entrez_ids &lt;- read_csv(&quot;data/TOP2B_target_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
+  pull(Entrez_ID) %&gt;%
+  unique()
+
+# DEG file paths and labels
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# Load DEG data and tag with condition + drug
+top2b_data_raw &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    filter(Entrez_ID %in% top2b_entrez_ids) %&gt;%
+    mutate(
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    )
+})
+
+# Generate all gene-condition combinations
+all_combos &lt;- crossing(
+  Entrez_ID = top2b_entrez_ids,
+  Condition = names(deg_files)
+) %&gt;%
+  mutate(Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;))
+
+# Merge and fill missing entries
+complete_top2b &lt;- all_combos %&gt;%
+  left_join(top2b_data_raw, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  ) %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# Set condition order for X-axis
+complete_top2b$Condition &lt;- factor(complete_top2b$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# Ensure drug factor levels for consistent color
+complete_top2b$Drug &lt;- factor(complete_top2b$Drug, levels = c(&quot;CX.5461&quot;, &quot;DOX&quot;))
+
+# Plot logFC boxplot with default Y scale
+ggplot(complete_top2b, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(position = position_dodge(width = 0.75)) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;#08306B&quot;, &quot;DOX&quot; = &quot;#E7298A&quot;)) +
+  labs(
+    x = &quot;Treatment Condition&quot;,
+    y = &quot;Log Fold Change&quot;,
+    title = &quot;LogFC of TOP2B Target Genes\n(ipSC-CM ChIP Seq)&quot;,
+    fill = &quot;Drug&quot;
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/TOP2B_target_box-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div
 id="atrial-fibrillation-gene-expression-changes-between-cx5461-and-dox"
