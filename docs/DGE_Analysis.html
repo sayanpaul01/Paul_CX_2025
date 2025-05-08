@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree711098f70cf35739ae12795badc60904e4505b4btargetblank711098fa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreed11a2ea01708a96de53fa57d625c8ec8b2d13700targetblankd11a2eaa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/711098f70cf35739ae12795badc60904e4505b4b" target="_blank">711098f</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/d11a2ea01708a96de53fa57d625c8ec8b2d13700" target="_blank">d11a2ea</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree711098f70cf35739ae12795badc60904e4505b4btargetblank711098fa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreed11a2ea01708a96de53fa57d625c8ec8b2d13700targetblankd11a2eaa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/711098f70cf35739ae12795badc60904e4505b4b" target="_blank">711098f</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/d11a2ea01708a96de53fa57d625c8ec8b2d13700" target="_blank">d11a2ea</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -607,12 +607,13 @@ Untracked files:
     Untracked:  data/MI_genes.csv
     Untracked:  data/P53_Target_mapped.csv
     Untracked:  data/TOP2A.bed
-    Untracked:  data/TOP2A_nearest_genes_within_20kb.csv
     Untracked:  data/TOP2A_target.csv
     Untracked:  data/TOP2A_target_lit.csv
     Untracked:  data/TOP2A_target_lit_mapped.csv
     Untracked:  data/TOP2A_target_mapped.csv
     Untracked:  data/TOP2B_target.csv
+    Untracked:  data/TOP2B_target_heatmap.csv
+    Untracked:  data/TOP2B_target_heatmap_mapped.csv
     Untracked:  data/TOP2B_target_mapped.csv
     Untracked:  data/TS.csv
     Untracked:  data/TS_HPA.csv
@@ -681,6 +682,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d11a2ea01708a96de53fa57d625c8ec8b2d13700/analysis/DGE_Analysis.Rmd" target="_blank">d11a2ea</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-08
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/d11a2ea01708a96de53fa57d625c8ec8b2d13700/docs/DGE_Analysis.html" target="_blank">d11a2ea</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-08
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -3196,6 +3231,107 @@ sayanpaul01
 </div>
 </div>
 </div>
+<div
+id="top2b-target-gene-expression-changes-between-cx5461-and-dox-ipsc-cm-chip-seq"
+class="section level2">
+<h2><strong>📌 TOP2B target gene expression changes between CX5461 and
+DOX (ipSC-CM ChIP Seq)</strong></h2>
+<pre class="r"><code># Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg &lt;- function(path) read.csv(path)
+
+CX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+DOX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
+
+# TOP2B target Entrez IDs
+entrez_ids &lt;- c(
+  8365, 8367, 8334, 79171, 1876, 2802, 3012, 10024, 85450, 6945,
+  100288069, 51367, 8665, 9441, 148304, 51433, 29882, 84893, 4751, 1662,
+  9601, 2872, 255812, 1871, 10523, 23435, 8896, 5566, 65095, 388
+)
+
+# Function to extract relevant data
+extract_data &lt;- function(df, name) {
+  df %&gt;%
+    filter(Entrez_ID %in% entrez_ids) %&gt;%
+    mutate(
+      Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                    column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
+      Condition = name,
+      Signif = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;)
+    )
+}
+
+# Combine DEG data
+deg_list &lt;- list(
+  &quot;CX_0.1_3&quot; = CX_0.1_3, &quot;CX_0.1_24&quot; = CX_0.1_24, &quot;CX_0.1_48&quot; = CX_0.1_48,
+  &quot;CX_0.5_3&quot; = CX_0.5_3, &quot;CX_0.5_24&quot; = CX_0.5_24, &quot;CX_0.5_48&quot; = CX_0.5_48,
+  &quot;DOX_0.1_3&quot; = DOX_0.1_3, &quot;DOX_0.1_24&quot; = DOX_0.1_24, &quot;DOX_0.1_48&quot; = DOX_0.1_48,
+  &quot;DOX_0.5_3&quot; = DOX_0.5_3, &quot;DOX_0.5_24&quot; = DOX_0.5_24, &quot;DOX_0.5_48&quot; = DOX_0.5_48
+)
+
+all_data &lt;- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create logFC and significance matrices
+logFC_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;logFC&quot;)
+signif_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;Signif&quot;)
+
+# Desired condition order
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+                   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+                   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+
+logFC_mat &lt;- logFC_mat[, desired_order, drop = FALSE]
+signif_mat &lt;- signif_mat[, desired_order, drop = FALSE]
+
+# Top annotation
+meta &lt;- str_split_fixed(colnames(logFC_mat), &quot;_&quot;, 3)
+col_annot &lt;- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+    Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+    Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)
+  ),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# Plot heatmap
+Heatmap(logFC_mat,
+        name = &quot;logFC&quot;,
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = &quot;TOP2B Target Genes\nCX-5461 and DOX Expression&quot;,
+        column_title_gp = gpar(fontsize = 14, fontface = &quot;bold&quot;)
+)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/TOP2B_target_heatmap-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
 <div id="logfc-boxplots-of-top2a-target-genes-chip-atlas"
 class="section level2">
 <h2><strong>📌 LogFC boxplots of TOP2A target Genes (ChIP
@@ -3322,9 +3458,110 @@ sayanpaul01
 </div>
 </div>
 </div>
+<div
+id="top2a-target-gene-expression-changes-between-cx5461-and-dox-chip_atlas"
+class="section level2">
+<h2><strong>📌 TOP2A target gene expression changes between CX5461 and
+DOX (ChIP_Atlas)</strong></h2>
+<pre class="r"><code># Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg &lt;- function(path) read.csv(path)
+
+CX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+DOX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
+
+# TOP2A ChIP Atlas Entrez IDs
+entrez_ids &lt;- c(
+  9856, 100462981, 4437, 1719, 256691, 100462977, 100463486, 91522, 8214, 51567,
+  55856, 3800, 84898, 729857, 400966, 56999, 7317, 729515, 55684, 84960, 7337,
+  64901, 140735, 23443, 100463487, 79643, 2976, 90522, 9424, 23189
+)
+
+# Extract relevant data
+extract_data &lt;- function(df, name) {
+  df %&gt;%
+    filter(Entrez_ID %in% entrez_ids) %&gt;%
+    mutate(
+      Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                    column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
+      Condition = name,
+      Signif = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;)
+    )
+}
+
+# Combine DEG data
+deg_list &lt;- list(
+  &quot;CX_0.1_3&quot; = CX_0.1_3, &quot;CX_0.1_24&quot; = CX_0.1_24, &quot;CX_0.1_48&quot; = CX_0.1_48,
+  &quot;CX_0.5_3&quot; = CX_0.5_3, &quot;CX_0.5_24&quot; = CX_0.5_24, &quot;CX_0.5_48&quot; = CX_0.5_48,
+  &quot;DOX_0.1_3&quot; = DOX_0.1_3, &quot;DOX_0.1_24&quot; = DOX_0.1_24, &quot;DOX_0.1_48&quot; = DOX_0.1_48,
+  &quot;DOX_0.5_3&quot; = DOX_0.5_3, &quot;DOX_0.5_24&quot; = DOX_0.5_24, &quot;DOX_0.5_48&quot; = DOX_0.5_48
+)
+
+all_data &lt;- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create logFC and significance matrices
+logFC_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;logFC&quot;)
+signif_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;Signif&quot;)
+
+# Desired condition order
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+                   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+                   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+
+logFC_mat &lt;- logFC_mat[, desired_order, drop = FALSE]
+signif_mat &lt;- signif_mat[, desired_order, drop = FALSE]
+
+# Column annotation
+meta &lt;- str_split_fixed(colnames(logFC_mat), &quot;_&quot;, 3)
+col_annot &lt;- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+    Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+    Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)
+  ),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# Draw heatmap
+Heatmap(logFC_mat,
+        name = &quot;logFC&quot;,
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = &quot;TOP2A Target Genes (ChIP Atlas)\nCX-5461 and DOX Expression&quot;,
+        column_title_gp = gpar(fontsize = 14, fontface = &quot;bold&quot;)
+)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/TOP2A_target_heatmap-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
 <div id="logfc-boxplots-of-top2a-target-genes-rpe-1-cell-line"
 class="section level2">
-<h2><strong>📌 LogFC boxplots of TOP2A target Genes ((RPE-1 cell
+<h2><strong>📌 LogFC boxplots of TOP2A target Genes (RPE-1 cell
 line)</strong></h2>
 <pre class="r"><code># Load libraries
 library(tidyverse)
@@ -3410,6 +3647,43 @@ ggplot(complete_top2a_lit, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/TOP2A_target_box_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TOP2A_target_box_2-1">
+Past versions of TOP2A_target_box_2-1.png
+</button>
+</p>
+<div id="fig-TOP2A_target_box_2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/d11a2ea01708a96de53fa57d625c8ec8b2d13700/docs/figure/DGE_Analysis.Rmd/TOP2A_target_box_2-1.png" target="_blank">d11a2ea</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="atrial-fibrillation-gene-expression-changes-between-cx5461-and-dox"

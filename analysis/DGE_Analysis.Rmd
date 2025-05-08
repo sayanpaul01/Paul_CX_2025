@@ -741,6 +741,105 @@ ggplot(complete_top2b, aes(x = Condition, y = logFC, fill = Drug)) +
   )
 ```
 
+## **📌 TOP2B target gene expression changes between CX5461 and DOX (ipSC-CM ChIP Seq)**
+```{r TOP2B_target_heatmap, echo=TRUE, message=FALSE, warning=FALSE, fig.height=8, fig.width=8}
+# Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg <- function(path) read.csv(path)
+
+CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- load_deg("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- load_deg("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- load_deg("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- load_deg("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- load_deg("data/DEGs/Toptable_CX_0.5_48.csv")
+DOX_0.1_3 <- load_deg("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- load_deg("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- load_deg("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# TOP2B target Entrez IDs
+entrez_ids <- c(
+  8365, 8367, 8334, 79171, 1876, 2802, 3012, 10024, 85450, 6945,
+  100288069, 51367, 8665, 9441, 148304, 51433, 29882, 84893, 4751, 1662,
+  9601, 2872, 255812, 1871, 10523, 23435, 8896, 5566, 65095, 388
+)
+
+# Function to extract relevant data
+extract_data <- function(df, name) {
+  df %>%
+    filter(Entrez_ID %in% entrez_ids) %>%
+    mutate(
+      Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                    column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+      Condition = name,
+      Signif = ifelse(adj.P.Val < 0.05, "*", "")
+    )
+}
+
+# Combine DEG data
+deg_list <- list(
+  "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
+  "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
+  "DOX_0.1_3" = DOX_0.1_3, "DOX_0.1_24" = DOX_0.1_24, "DOX_0.1_48" = DOX_0.1_48,
+  "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
+)
+
+all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create logFC and significance matrices
+logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
+signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
+
+# Desired condition order
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+                   "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+                   "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+
+logFC_mat <- logFC_mat[, desired_order, drop = FALSE]
+signif_mat <- signif_mat[, desired_order, drop = FALSE]
+
+# Top annotation
+meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
+col_annot <- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c("CX" = "blue", "DOX" = "red"),
+    Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+    Time = c("3" = "yellow", "24" = "orange", "48" = "purple")
+  ),
+  annotation_height = unit(c(2, 2, 2), "cm")
+)
+
+# Plot heatmap
+Heatmap(logFC_mat,
+        name = "logFC",
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = "TOP2B Target Genes\nCX-5461 and DOX Expression",
+        column_title_gp = gpar(fontsize = 14, fontface = "bold")
+)
+```
+
+
 ## **📌 LogFC boxplots of TOP2A target Genes (ChIP Atlas)**
 ```{r TOP2A_target_box, echo=TRUE, message=FALSE, warning=FALSE}
 # Load libraries
@@ -828,7 +927,106 @@ ggplot(complete_top2a, aes(x = Condition, y = logFC, fill = Drug)) +
   )
 ```
 
-## **📌 LogFC boxplots of TOP2A target Genes ((RPE-1 cell line)**
+## **📌 TOP2A target gene expression changes between CX5461 and DOX (ChIP_Atlas)**
+```{r TOP2A_target_heatmap, echo=TRUE, message=FALSE, warning=FALSE, fig.height=8, fig.width=8}
+
+# Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg <- function(path) read.csv(path)
+
+CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- load_deg("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- load_deg("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- load_deg("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- load_deg("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- load_deg("data/DEGs/Toptable_CX_0.5_48.csv")
+DOX_0.1_3 <- load_deg("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- load_deg("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- load_deg("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# TOP2A ChIP Atlas Entrez IDs
+entrez_ids <- c(
+  9856, 100462981, 4437, 1719, 256691, 100462977, 100463486, 91522, 8214, 51567,
+  55856, 3800, 84898, 729857, 400966, 56999, 7317, 729515, 55684, 84960, 7337,
+  64901, 140735, 23443, 100463487, 79643, 2976, 90522, 9424, 23189
+)
+
+# Extract relevant data
+extract_data <- function(df, name) {
+  df %>%
+    filter(Entrez_ID %in% entrez_ids) %>%
+    mutate(
+      Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                    column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+      Condition = name,
+      Signif = ifelse(adj.P.Val < 0.05, "*", "")
+    )
+}
+
+# Combine DEG data
+deg_list <- list(
+  "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
+  "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
+  "DOX_0.1_3" = DOX_0.1_3, "DOX_0.1_24" = DOX_0.1_24, "DOX_0.1_48" = DOX_0.1_48,
+  "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
+)
+
+all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create logFC and significance matrices
+logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
+signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
+
+# Desired condition order
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+                   "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+                   "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+
+logFC_mat <- logFC_mat[, desired_order, drop = FALSE]
+signif_mat <- signif_mat[, desired_order, drop = FALSE]
+
+# Column annotation
+meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
+col_annot <- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c("CX" = "blue", "DOX" = "red"),
+    Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+    Time = c("3" = "yellow", "24" = "orange", "48" = "purple")
+  ),
+  annotation_height = unit(c(2, 2, 2), "cm")
+)
+
+# Draw heatmap
+Heatmap(logFC_mat,
+        name = "logFC",
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = "TOP2A Target Genes (ChIP Atlas)\nCX-5461 and DOX Expression",
+        column_title_gp = gpar(fontsize = 14, fontface = "bold")
+)
+```
+
+## **📌 LogFC boxplots of TOP2A target Genes (RPE-1 cell line)**
 ```{r TOP2A_target_box_2, echo=TRUE, message=FALSE, warning=FALSE}
 
 # Load libraries
