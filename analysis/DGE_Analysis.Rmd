@@ -234,3 +234,644 @@ for (plot_name in names(volcano_plots)) {
 ```
 
 
+## **📌 DNA Damage Marker expression changes between CX5461 and DOX**
+```{r DNA, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=20, fig.width=10}
+# Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg <- function(path) read.csv(path)
+
+CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- load_deg("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- load_deg("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- load_deg("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- load_deg("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- load_deg("data/DEGs/Toptable_CX_0.5_48.csv")
+DOX_0.1_3 <- load_deg("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- load_deg("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- load_deg("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# DNA damage response Entrez IDs
+entrez_ids <- c(
+  10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
+  11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
+  3014, 317, 355, 4193, 4292, 4361, 4609, 4616, 4683, 472, 50484,
+  5366, 5371, 54205, 545, 55367, 5591, 581, 5810, 5883, 5884,
+  5888, 5893, 5925, 595, 5916, 5981, 6118, 637, 672, 7157, 7799, 
+  8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898, 9133, 
+  9134, 983, 9874, 993, 995
+)
+
+# Function to extract relevant data
+extract_data <- function(df, name) {
+  df %>%
+    filter(Entrez_ID %in% entrez_ids) %>%
+    mutate(Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                         column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+           Condition = name,
+           Signif = ifelse(adj.P.Val < 0.05, "*", ""))
+}
+
+# Collect all data
+deg_list <- list(
+  "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
+  "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
+  "DOX_0.1_3" = DOX_0.1_3, "DOX_0.1_24" = DOX_0.1_24, "DOX_0.1_48" = DOX_0.1_48,
+  "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
+)
+
+all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create matrices
+logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
+signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
+
+# Desired column order
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", 
+                   "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", 
+                   "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+
+logFC_mat <- logFC_mat[, desired_order]
+signif_mat <- signif_mat[, desired_order]
+
+# Column annotation
+meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
+col_annot <- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c("CX" = "blue", "DOX" = "red"),
+    Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+    Time = c("3" = "yellow", "24" = "orange", "48" = "purple")
+  ),
+  annotation_height = unit(c(2, 2, 2), "cm")
+)
+
+# Draw heatmap
+Heatmap(logFC_mat,
+        name = "logFC",
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = "DNA Damage Response Genes\nCX-5461 and DOX Expression",
+        column_title_gp = gpar(fontsize = 14, fontface = "bold")
+)
+```
+
+## **📌 LogFC boxplots of DNA Damage Response Genes**
+```{r DDR, echo=TRUE, message=FALSE, warning=FALSE}
+# Load libraries
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# DEG file paths and labels
+deg_files <- list(
+  "CX_0.1_3" = "data/DEGs/Toptable_CX_0.1_3.csv",
+  "CX_0.1_24" = "data/DEGs/Toptable_CX_0.1_24.csv",
+  "CX_0.1_48" = "data/DEGs/Toptable_CX_0.1_48.csv",
+  "CX_0.5_3" = "data/DEGs/Toptable_CX_0.5_3.csv",
+  "CX_0.5_24" = "data/DEGs/Toptable_CX_0.5_24.csv",
+  "CX_0.5_48" = "data/DEGs/Toptable_CX_0.5_48.csv",
+  "DOX_0.1_3" = "data/DEGs/Toptable_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/DEGs/Toptable_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/DEGs/Toptable_DOX_0.1_48.csv",
+  "DOX_0.5_3" = "data/DEGs/Toptable_DOX_0.5_3.csv",
+  "DOX_0.5_24" = "data/DEGs/Toptable_DOX_0.5_24.csv",
+  "DOX_0.5_48" = "data/DEGs/Toptable_DOX_0.5_48.csv"
+)
+
+# DDR Entrez IDs (68 genes)
+entrez_ids <- c(
+  10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
+  11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
+  3014, 317, 355, 4193, 4292, 4361, 4609, 4616, 4683, 472, 50484,
+  5366, 5371, 54205, 545, 55367, 5591, 581, 5810, 5883, 5884,
+  5888, 5893, 5925, 595, 5981, 6118, 637, 672, 7157, 7799,
+  8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898,
+  9133, 9134, 983, 9874, 993, 995, 5916
+)
+
+# Create full DDR table from all conditions
+ddr_data_list <- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %>%
+    filter(Entrez_ID %in% entrez_ids) %>%
+    mutate(
+      Condition = label,
+      Drug = ifelse(str_detect(label, "CX"), "CX.5461", "DOX")
+    )
+})
+
+# Create full combination of genes × conditions
+all_conditions <- names(deg_files)
+all_combos <- crossing(
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
+) %>%
+  mutate(
+    Drug = ifelse(str_detect(Condition, "CX"), "CX.5461", "DOX")
+  )
+
+# Merge with actual DEG data and fill missing logFC
+complete_ddr <- all_combos %>%
+  left_join(ddr_data_list, by = c("Entrez_ID", "Condition", "Drug")) %>%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# Map gene symbols
+complete_ddr <- complete_ddr %>%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                  column = "SYMBOL", keytype = "ENTREZID", multiVals = "first")
+  )
+
+# Order X-axis by your preferred condition order
+complete_ddr$Condition <- factor(complete_ddr$Condition, levels = c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+))
+
+# Final boxplot (with default outlier points from geom_boxplot)
+ggplot(complete_ddr, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +
+  labs(
+    x = "Treatment Condition",
+    y = "Log Fold Change",
+    title = "LogFC of DNA Damage Response Genes",
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+```
+
+## **📌 P53 target gene expression changes between CX5461 and DOX**
+```{r P53_target, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=60, fig.width=10}
+
+# Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg <- function(path) read.csv(path)
+
+CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- load_deg("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- load_deg("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- load_deg("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- load_deg("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- load_deg("data/DEGs/Toptable_CX_0.5_48.csv")
+DOX_0.1_3 <- load_deg("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- load_deg("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- load_deg("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+# P53 target Entrez IDs (shortened for clarity – replace with your full list)
+entrez_ids <- c(1026,50484,4193,9766,9518,7832,1643,1647,1263,57103,51065,8795,51499,64393,581,
+                5228,5429,8493,55959,7508,64782,282991,355,53836,4814,10769,9050,27244,9540,94241,
+                26154,57763,900,26999,55332,26263,23479,23612,29950,9618,10346,8824,134147,55294,
+                22824,4254,6560,467,27113,60492,8444,60401,1969,220965,2232,3976,55191,84284,93129,
+                5564,7803,83667,7779,132671,7039,51768,137695,93134,7633,10973,340485,307,27350,
+                23245,3732,29965,1363,1435,196513,8507,8061,2517,51278,53354,54858,23228,5366,5912,
+                6236,51222,26152,59,1907,50650,91012,780,9249,11072,144455,64787,116151,27165,2876,
+                57822,55733,57722,121457,375449,85377,4851,5875,127544,29901,84958,8797,8793,441631,
+                220001,54541,5889,5054,25816,25987,5111,98,317,598,604,10904,1294,80315,53944,
+                1606,2770,3628,3675,3985,4035,4163,84552,29085,55367,5371,5791,54884,5980,8794,
+                1462,50808,220,583,694,1056,9076,10978,54677,1612,55040,114907,2274,127707,4000,
+                8079,4646,4747,27445,5143,80055,79156,5360,5364,23654,5565,5613,5625,10076,56963,
+                6004,390,255488,6326,6330,23513,7869,283130,204962,83959,6548,6774,9263,10228,
+                22954,10475,85363,494514,10142,79714,1006,8446,9648,79828,5507,55240,63874,25841,
+                9289,84883,154810,51321,421,8553,655,119032,84280,10950,824,839,57828,857,8812,
+                8837,94027,113189,22837,132864,10898,3300,81704,1847,1849,1947,9538,24139,5168,
+                147965,115548,9873,23768,2632,2817,3280,3265,23308,3490,51477,182,3856,8844,144811,
+                9404,4043,9848,2872,23041,740,343263,4638,26509,4792,22861,57523,55214,80025,164091,
+                57060,64065,51090,5453,8496,333926,55671,5900,55544,23179,8601,389,6223,55800,6385,
+                4088,6643,122809,257397,285343,7011,54790,374618,55362,51754,7157,9537,22906,7205,
+                80705,219699,55245,83719,7748,25946,118738)
+
+# Function to extract relevant data
+extract_data <- function(df, name) {
+  df %>%
+    filter(Entrez_ID %in% entrez_ids) %>%
+    mutate(Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                         column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+           Condition = name,
+           Signif = ifelse(adj.P.Val < 0.05, "*", ""))
+}
+
+# Collect all data
+deg_list <- list(
+  "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
+  "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
+  "DOX_0.1_3" = DOX_0.1_3, "DOX_0.1_24" = DOX_0.1_24, "DOX_0.1_48" = DOX_0.1_48,
+  "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
+)
+
+all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create matrices
+logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
+signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
+
+# Desired column order
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", 
+                   "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", 
+                   "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+
+logFC_mat <- logFC_mat[, desired_order]
+signif_mat <- signif_mat[, desired_order]
+
+# Column annotation
+meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
+col_annot <- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c("CX" = "blue", "DOX" = "red"),
+    Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+    Time = c("3" = "yellow", "24" = "orange", "48" = "purple")
+  ),
+  annotation_height = unit(c(2, 2, 2), "cm")
+)
+
+# Draw heatmap
+Heatmap(logFC_mat,
+        name = "logFC",
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = "P53 Target Genes\nCX-5461 and DOX Expression",
+        column_title_gp = gpar(fontsize = 14, fontface = "bold")
+)
+```
+
+## **📌 Atrial fibrillation gene expression changes between CX5461 and DOX**
+```{r AF, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=65, fig.width=10}
+library(tidyverse) 
+library(ggfortify)
+library(cluster)
+library(edgeR)
+library(limma)
+library(Homo.sapiens)
+library(BiocParallel)
+library(qvalue)
+library(pheatmap)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(org.Hs.eg.db)
+library(RColorBrewer)
+library(readr)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(reshape2)
+library(dplyr)
+
+# Load UCSC transcript database
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+# Load DEGs Data
+CX_0.1_3 <- read.csv("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- read.csv("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- read.csv("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- read.csv("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- read.csv("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- read.csv("data/DEGs/Toptable_CX_0.5_48.csv")
+
+DOX_0.1_3 <- read.csv("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- read.csv("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- read.csv("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- read.csv("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- read.csv("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+
+Entrez_IDs <- c(
+  3425, 53834, 9464, 79658, 55876, 3781, 9472, 11017, 64395, 23353,
+  57794, 79591, 2702, 51306, 857, 10418, 9644, 115509, 89797, 10728,
+  282996, 8497, 5695, 9026, 57666, 143384, 5883, 90102, 84909, 221037,
+  29119, 79933, 391, 81575, 8738, 5396, 26010, 744, 56981, 80724,
+  5781, 6910, 4598, 79068, 2250, 56978, 3752, 5208, 9736, 26778,
+  80315, 64374, 79159, 11078, 5308, 3782, 10654, 79776, 6310, 8082,
+  2995, 23224, 79741, 5708, 26136, 9967, 84033, 9148, 29982, 81488,
+  1788, 9208, 2908, 1021, 5339, 5727, 23118, 10090, 57585, 221154,
+  1073, 29998, 817, 858, 3486, 5747, 2104, 55105, 4194, 3570,
+  1607, 6586, 5570, 2070, 27145, 4646, 3159, 9748, 79991, 221035,
+  5033, 80212, 196385, 79600, 11046, 54014, 151636, 64778, 92597, 3983,
+  7090, 9267, 7273, 26018, 9948, 2131, 55870, 5523, 5318, 6239,
+  3480, 55777, 2066, 11165, 2028, 57619, 2690, 23414, 55818, 84700,
+  28965, 80204, 463, 5108, 222553, 387119, 28981, 11113, 10301, 995,
+  23030, 2697, 996, 339500, 54805, 9960, 91404, 145781, 100820829, 84542,
+  2176, 51684, 9513, 7473, 4666, 23150, 5915, 5062, 4016, 23039,
+  159686, 1839, 5201, 93166, 64753, 29959, 5496, 23245, 5069, 56916,
+  92344, 23092, 3992, 9415, 10554, 7456, 9570, 57178, 23143, 161176,
+  5424, 2034, 10277, 11278, 79803, 6653, 4756, 132660, 5430, 9031,
+  57158, 285761, 8110, 387700, 1829, 4126, 7323, 51308, 7332, 6598,
+  3757, 6187, 6660, 10529, 6920, 115286, 8451, 8943, 4137, 7514,
+  4801, 9709, 23177, 8671, 29915, 26207, 3680, 490, 493856, 58489,
+  54897, 4625, 22955, 84952, 10221, 2263, 84641, 4892, 1026, 84650,
+  8382, 221656, 2969, 144453, 117177, 2626, 8476, 161882, 51807, 4624,
+  9612, 55795, 51043, 144348, 51232, 8729, 3899, 11155, 23316, 79006,
+  146330, 6403, 6331, 4300, 427, 845, 3313, 113622, 5789, 376132,
+  29841, 8462, 203859, 401397, 5506, 55521, 5819, 4059, 6934, 57727,
+  23066, 79568, 83478, 10087, 9586, 222194, 10466, 10499, 58499, 79720,
+  4772, 10794, 125919, 602, 27332, 59345, 340359, 3705, 64710, 57801,
+  10818, 143684, 149281, 55013, 23095, 93649, 84034, 23347, 440926, 11124,
+  23293, 51426, 832, 7068, 57646, 152002, 7531, 1398, 100101267, 221937,
+  26873, 3709, 10576, 27040, 201176, 284403, 307, 6525, 5387, 1808,
+  114907, 1952, 4091, 5096, 23451, 51207, 142891, 4084, 3797, 1185,
+  5334, 217, 2042, 7781, 253461, 152404, 2992, 153478, 6695, 26249,
+  662, 23036, 22852, 23411, 23387, 6786, 7690, 10021, 8925, 5595,
+  63892, 23466, 11149, 139411, 755, 55347, 22820, 55111, 84444, 6258,
+  57623, 1387, 3762, 5861, 3339, 114822, 129787, 196528, 54437, 10395,
+  4023, 5095, 894, 3156, 1877, 283871, 2673, 23157, 10512, 2258,
+  79750, 84665, 26091, 5978, 8751, 79695, 2768, 155382, 84163, 7709,
+  4092, 1837, 2064, 4629, 55122, 8882, 150962, 23013, 8742, 489,
+  201134, 55114, 84264, 64428, 4089, 861, 7422
+)
+
+
+# Subset the toptable based on the entrez IDs and select specific columns
+
+subset_toptable1 <- CX_0.1_3[CX_0.1_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+
+subset_toptable2 <- CX_0.1_24[CX_0.1_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+
+subset_toptable3 <- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+
+subset_toptable3 <- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable4 <- CX_0.5_3[CX_0.5_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable5 <- CX_0.5_24[CX_0.5_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable6 <- CX_0.5_48[CX_0.5_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable7 <- DOX_0.1_3[DOX_0.1_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable8 <- DOX_0.1_24[DOX_0.1_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable9 <- DOX_0.1_48[DOX_0.1_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable10 <- DOX_0.5_3[DOX_0.5_3$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable11 <- DOX_0.5_24[DOX_0.5_24$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+subset_toptable12 <- DOX_0.5_48[DOX_0.5_48$Entrez_ID %in% Entrez_IDs, c("Entrez_ID", "logFC", "adj.P.Val")]
+
+# Function to add columns and combine data
+add_metadata <- function(data, drug, conc, time) {
+  data %>%
+    mutate(Drug = drug, Conc = conc, Time = time)
+}
+
+# Add metadata and combine all subsets
+combined_data <- bind_rows(
+  add_metadata(subset_toptable1, "CX", 0.1, 3),
+  add_metadata(subset_toptable2, "CX", 0.1, 24),
+  add_metadata(subset_toptable3, "CX", 0.1, 48),
+  add_metadata(subset_toptable4, "CX", 0.5, 3),
+  add_metadata(subset_toptable5, "CX", 0.5, 24),
+  add_metadata(subset_toptable6, "CX", 0.5, 48),
+  add_metadata(subset_toptable7, "DOX", 0.1, 3),
+  add_metadata(subset_toptable8, "DOX", 0.1, 24),
+  add_metadata(subset_toptable9, "DOX", 0.1, 48),
+  add_metadata(subset_toptable10, "DOX", 0.5, 3),
+  add_metadata(subset_toptable11, "DOX", 0.5, 24),
+  add_metadata(subset_toptable12, "DOX", 0.5, 48)
+)
+
+# Convert Entrez IDs to Gene symbols
+combined_data <- combined_data %>%
+  mutate(Gene = mapIds(
+    org.Hs.eg.db,
+    keys = as.character(Entrez_ID),
+    column = "SYMBOL",
+    keytype = "ENTREZID",
+    multiVals = "first"
+  ))
+
+# Reorder columns
+final_data <- dplyr::select(combined_data, Entrez_ID, Gene, logFC, adj.P.Val, Drug, Conc, Time)
+
+# Assuming your dataframe is named data
+# Add a column for significance stars
+final_data <- final_data %>%
+  mutate(Significance = ifelse(adj.P.Val < 0.05, "*", ""))
+
+# Create a matrix for the heatmap (logFC values)
+logFC_matrix <- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "logFC")
+
+# Create a matrix for the significance annotations
+signif_matrix <- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "Significance")
+
+# Split column names into Drug, Conc, and Time
+colnames_split <- strsplit(colnames(logFC_matrix), "_")
+drug <- sapply(colnames_split, function(x) x[1])
+conc <- sapply(colnames_split, function(x) x[2])
+time <- sapply(colnames_split, function(x) x[3])
+
+# Create the desired column order: CX 0.1 3hr, CX 0.5 3hr, CX 0.1 24hr, CX 0.5 24hr, CX 0.1 48h, CX 0.5 48h,
+# DOX 0.1 3hr, DOX 0.5 3hr, DOX 0.1 24hr, DOX 0.5 24hr, DOX 0.1 48h, DOX 0.5 48h
+desired_order <- c("CX_0.1_3", "CX_0.5_3", "CX_0.1_24", "CX_0.5_24", "CX_0.1_48", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.5_3", "DOX_0.1_24", "DOX_0.5_24", "DOX_0.1_48", "DOX_0.5_48")
+
+# Reorder columns in the matrix based on the desired order
+column_names <- paste(drug, conc, time, sep = "_")
+column_order <- match(desired_order, column_names)
+logFC_matrix <- logFC_matrix[, column_order]
+signif_matrix <- signif_matrix[, column_order]
+drug <- drug[column_order]
+conc <- conc[column_order]
+time <- time[column_order]
+
+# Prepare annotations matching the column structure
+ha_top <- HeatmapAnnotation(
+  Drug = drug,
+  Conc = conc,
+  Time = time,
+  col = list(Drug = c("CX" = "blue", "DOX" = "red"),
+             Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+             Time = c("3" = "yellow", "24" = "orange", "48" = "purple")),
+  annotation_height = unit(c(2, 2, 2), "cm")
+)
+
+# Create the heatmap
+heatmap <- Heatmap(logFC_matrix, name = "logFC", top_annotation = ha_top,
+                   cell_fun = function(j, i, x, y, width, height, fill) {
+                     grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 10))
+                   },
+                   show_row_names = TRUE, show_column_names = FALSE,
+                   column_title = "Genes in Atrial fibrillation GWAS associated loci\nin response to CX5461 and DOX",
+                   column_title_gp = gpar(fontsize = 16, fontface = "bold"),
+                   cluster_columns = FALSE)  # Disable column clustering
+
+# Draw the heatmap
+draw(heatmap, heatmap_legend_side = "right", annotation_legend_side = "right")
+```
+
+## **📌 Heart Failure gene expression changes between CX5461 and DOX**
+```{r HF, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=8, fig.width=8}
+# Load necessary libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(org.Hs.eg.db)
+library(reshape2)
+library(grid)
+
+# Set 30 Entrez IDs
+Entrez_IDs <- c(
+  9709, 8882, 4023, 29959, 5496, 3992, 9415, 5308, 1026, 54437,
+  79068, 10221, 9031, 1187, 1952, 3705, 84722, 7273, 23293, 155382,
+  9531, 602, 27258, 84163, 81846, 79933, 56911, 64753, 93210, 1021
+)
+
+# rsID mapping for row annotation
+rsid_mapping <- data.frame(
+  Entrez_ID = Entrez_IDs,
+  rsID = c("rs247617", "rs964184", "rs765547", "rs1728918", "rs1728918", "rs174547",
+           "rs174547", "rs59788391", "rs3176326", "rs7632505", "rs11642015", "rs2980853",
+           "rs2074755", "rs28579893", "rs602633", "rs4905014", "rs602633", "rs2562845",
+           "rs216193", "rs799165", "rs17617337", "rs4803750", "rs11710541", "rs202209188",
+           "rs2957657", "rs34163229", "rs56968346", "rs3807132", "rs12150603", "rs2282979"
+  )
+)
+
+# Load DEGs
+load_deg <- function(name) {
+  read.csv(paste0("data/DEGs/Toptable_", name, ".csv"))
+}
+samples <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+             "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+deg_list <- lapply(samples, load_deg)
+names(deg_list) <- samples
+
+# Subset and annotate
+# Subset and annotate
+get_subset <- function(df, name) {
+  parts <- strsplit(name, "_")[[1]]
+  df %>%
+    filter(Entrez_ID %in% Entrez_IDs) %>%
+    dplyr::select(Entrez_ID, logFC, adj.P.Val) %>%
+    mutate(Drug = parts[1], Conc = parts[2], Time = parts[3])
+}
+combined_data <- bind_rows(mapply(get_subset, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Add gene symbol and significance
+combined_data <- combined_data %>%
+  mutate(Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                       column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+         Significance = ifelse(adj.P.Val < 0.05, "*", ""))
+
+# Join rsID mapping
+combined_data <- left_join(combined_data, rsid_mapping, by = "Entrez_ID")
+
+# Preserve gene order
+ordered_genes <- combined_data %>%
+  distinct(Entrez_ID, Gene) %>%
+  arrange(factor(Entrez_ID, levels = Entrez_IDs)) %>%
+  pull(Gene)
+
+# Create logFC and significance matrices
+logFC_matrix <- acast(combined_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "logFC")
+signif_matrix <- acast(combined_data, Gene ~ paste(Drug, Conc, Time, sep = "_"), value.var = "Significance")
+logFC_matrix <- logFC_matrix[ordered_genes, ]
+signif_matrix <- signif_matrix[ordered_genes, ]
+
+# Desired order: group 0.1 first, then 0.5 for both drugs
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48", "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48", "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
+logFC_matrix <- logFC_matrix[, desired_order]
+signif_matrix <- signif_matrix[, desired_order]
+
+# Split column info
+split_cols <- strsplit(colnames(logFC_matrix), "_")
+drug <- sapply(split_cols, `[`, 1)
+conc <- sapply(split_cols, `[`, 2)
+time <- sapply(split_cols, `[`, 3)
+
+# Annotations
+ha_top <- HeatmapAnnotation(
+  Drug = drug,
+  Conc = conc,
+  Time = time,
+  col = list(
+    Drug = c("CX" = "blue", "DOX" = "red"),
+    Conc = c("0.1" = "lightgreen", "0.5" = "darkgreen"),
+    Time = c("3" = "yellow", "24" = "orange", "48" = "purple")
+  ),
+  annotation_height = unit(c(2, 2, 2), "cm")
+)
+
+# rsID annotation
+rsid_vector <- combined_data %>%
+  distinct(Gene, rsID) %>%
+  filter(Gene %in% ordered_genes) %>%
+  arrange(match(Gene, ordered_genes)) %>%
+  pull(rsID)
+
+ha_left <- rowAnnotation(
+  rsID = anno_text(rsid_vector, location = 0, just = "left", gp = gpar(fontsize = 9)),
+  annotation_name_side = "top",
+  width = unit(5, "cm")
+)
+
+# Heatmap
+Heatmap(logFC_matrix,
+        name = "logFC",
+        top_annotation = ha_top,
+        left_annotation = ha_left,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cluster_columns = FALSE,
+        cluster_rows = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 10))
+        },
+        column_title = "Heart Failure GWAS Genes: Response to CX-5461 and DOX",
+        column_title_gp = gpar(fontsize = 16, fontface = "bold")
+)
+
+```
+

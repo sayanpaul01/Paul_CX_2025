@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -378,13 +378,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-07
+<strong>Last updated:</strong> 2025-05-08
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree918f852228f1179da3bf3f39795d013d73a5aeaatargetblank918f852a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1661001828f9b43008c4958fd25156f288811169targetblank1661001a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/918f852228f1179da3bf3f39795d013d73a5aeaa" target="_blank">918f852</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1661001828f9b43008c4958fd25156f288811169" target="_blank">1661001</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree918f852228f1179da3bf3f39795d013d73a5aeaatargetblank918f852a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree1661001828f9b43008c4958fd25156f288811169targetblank1661001a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/918f852228f1179da3bf3f39795d013d73a5aeaa" target="_blank">918f852</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/1661001828f9b43008c4958fd25156f288811169" target="_blank">1661001</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -545,9 +548,86 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    0.1 box.svg
+    Ignored:    Rplot04.svg
+
+Untracked files:
+    Untracked:  0.1 density.svg
+    Untracked:  0.1.emf
+    Untracked:  0.1.svg
+    Untracked:  0.5 box.svg
+    Untracked:  0.5 density.svg
+    Untracked:  0.5.svg
+    Untracked:  Additional/
+    Untracked:  CX_5461_Pattern_Genes_24hr.csv
+    Untracked:  CX_5461_Pattern_Genes_3hr.csv
+    Untracked:  Cell viability box plot.svg
+    Untracked:  DRC1.svg
+    Untracked:  Figure 1.jpeg
+    Untracked:  Figure 1.pdf
+    Untracked:  Figure_CM_Purity.pdf
+    Untracked:  Rplot.svg
+    Untracked:  Rplot01.svg
+    Untracked:  Rplot02.svg
+    Untracked:  Rplot03.svg
+    Untracked:  Rplot05.svg
+    Untracked:  Rplot06.svg
+    Untracked:  Rplot07.svg
+    Untracked:  Rplot08.jpeg
+    Untracked:  Rplot08.svg
+    Untracked:  Rplot09.svg
+    Untracked:  Rplot10.svg
+    Untracked:  Rplot11.svg
+    Untracked:  TS HPA (Violin).svg
+    Untracked:  TS HPA.svg
+    Untracked:  TS_HA.svg
+    Untracked:  TS_HV.svg
+    Untracked:  Violin HA.svg
+    Untracked:  Violin HV (CX vs DOX).svg
+    Untracked:  Violin HV.svg
+    Untracked:  data/AF.csv
+    Untracked:  data/AF_Mapped.csv
+    Untracked:  data/AF_genes.csv
+    Untracked:  data/Annotated_DOX_Gene_Table.csv
+    Untracked:  data/CAD_genes.csv
+    Untracked:  data/Cardiotox.csv
+    Untracked:  data/Cardiotox_mapped.csv
+    Untracked:  data/DDR.csv
+    Untracked:  data/DDR_Mapped.csv
+    Untracked:  data/DOX_Vald.csv
+    Untracked:  data/DOX_Vald_Mapped.csv
+    Untracked:  data/Entrez_Cardiotox.csv
+    Untracked:  data/Entrez_Cardiotox_Mapped.csv
+    Untracked:  data/GWAS.xlsx
+    Untracked:  data/GWAS_SNPs.bed
+    Untracked:  data/HF.csv
+    Untracked:  data/HF_Mapped.csv
+    Untracked:  data/HF_genes.csv
+    Untracked:  data/Hypertension_genes.csv
+    Untracked:  data/MI_genes.csv
+    Untracked:  data/P53_Target_mapped.csv
+    Untracked:  data/TS.csv
+    Untracked:  data/TS_HPA.csv
+    Untracked:  data/TS_HPA_mapped.csv
+    Untracked:  data/Toptable_CX_0.1_24.csv
+    Untracked:  data/Toptable_CX_0.1_3.csv
+    Untracked:  data/Toptable_CX_0.1_48.csv
+    Untracked:  data/Toptable_CX_0.5_24.csv
+    Untracked:  data/Toptable_CX_0.5_3.csv
+    Untracked:  data/Toptable_CX_0.5_48.csv
+    Untracked:  data/Toptable_DOX_0.1_24.csv
+    Untracked:  data/Toptable_DOX_0.1_3.csv
+    Untracked:  data/Toptable_DOX_0.1_48.csv
+    Untracked:  data/Toptable_DOX_0.5_24.csv
+    Untracked:  data/Toptable_DOX_0.5_3.csv
+    Untracked:  data/Toptable_DOX_0.5_48.csv
+    Untracked:  data/ts_data_mapped
+    Untracked:  results/
+    Untracked:  run_bedtools.bat
 
 Unstaged changes:
-    Modified:   analysis/LogFC_Correlation.Rmd
+    Deleted:    analysis/Actox.Rmd
+    Modified:   analysis/DGE_Analysis.Rmd
 
 </code></pre>
 <p>
@@ -593,6 +673,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/a6d66b90210019cfb38d0ec5de6773e6336904a7/docs/DGE_Analysis.html" target="_blank">a6d66b9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-02-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -878,20 +975,19 @@ Added DGE Analysis with structured chunks
 <h3><strong>📌 Load Required Libraries</strong></h3>
 <pre class="r"><code># Load necessary packages
 library(edgeR)</code></pre>
-<pre><code>Warning: package &#39;edgeR&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;edgeR&#39; was built under R version 4.3.2</code></pre>
 <pre><code>Warning: package &#39;limma&#39; was built under R version 4.3.1</code></pre>
 <pre class="r"><code>library(limma)
 library(data.table)</code></pre>
-<pre><code>Warning: package &#39;data.table&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;data.table&#39; was built under R version 4.3.3</code></pre>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>Warning: package &#39;tidyverse&#39; was built under R version 4.3.2</code></pre>
-<pre><code>Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
 <pre><code>Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
 <pre><code>Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
-<pre><code>Warning: package &#39;purrr&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;purrr&#39; was built under R version 4.3.3</code></pre>
 <pre><code>Warning: package &#39;dplyr&#39; was built under R version 4.3.2</code></pre>
 <pre><code>Warning: package &#39;stringr&#39; was built under R version 4.3.2</code></pre>
-<pre><code>Warning: package &#39;lubridate&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;lubridate&#39; was built under R version 4.3.3</code></pre>
 <pre class="r"><code>library(ggplot2)
 library(dplyr)
 library(scales)</code></pre>
@@ -903,7 +999,7 @@ library(scales)</code></pre>
 <pre><code>Warning: package &#39;BiocGenerics&#39; was built under R version 4.3.1</code></pre>
 <pre><code>Warning: package &#39;Biobase&#39; was built under R version 4.3.1</code></pre>
 <pre><code>Warning: package &#39;IRanges&#39; was built under R version 4.3.1</code></pre>
-<pre><code>Warning: package &#39;S4Vectors&#39; was built under R version 4.3.1</code></pre>
+<pre><code>Warning: package &#39;S4Vectors&#39; was built under R version 4.3.2</code></pre>
 <pre><code>Warning: package &#39;OrganismDbi&#39; was built under R version 4.3.1</code></pre>
 <pre><code>Warning: package &#39;GenomicFeatures&#39; was built under R version 4.3.3</code></pre>
 <pre><code>Warning: package &#39;GenomeInfoDb&#39; was built under R version 4.3.3</code></pre>
@@ -2078,6 +2174,655 @@ sayanpaul01
 </table>
 </div>
 </div>
+</div>
+<div id="dna-damage-marker-expression-changes-between-cx5461-and-dox"
+class="section level2">
+<h2><strong>📌 DNA Damage Marker expression changes between CX5461 and
+DOX</strong></h2>
+<pre class="r"><code># Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg &lt;- function(path) read.csv(path)
+
+CX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+DOX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
+
+# DNA damage response Entrez IDs
+entrez_ids &lt;- c(
+  10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
+  11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
+  3014, 317, 355, 4193, 4292, 4361, 4609, 4616, 4683, 472, 50484,
+  5366, 5371, 54205, 545, 55367, 5591, 581, 5810, 5883, 5884,
+  5888, 5893, 5925, 595, 5916, 5981, 6118, 637, 672, 7157, 7799, 
+  8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898, 9133, 
+  9134, 983, 9874, 993, 995
+)
+
+# Function to extract relevant data
+extract_data &lt;- function(df, name) {
+  df %&gt;%
+    filter(Entrez_ID %in% entrez_ids) %&gt;%
+    mutate(Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                         column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
+           Condition = name,
+           Signif = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+}
+
+# Collect all data
+deg_list &lt;- list(
+  &quot;CX_0.1_3&quot; = CX_0.1_3, &quot;CX_0.1_24&quot; = CX_0.1_24, &quot;CX_0.1_48&quot; = CX_0.1_48,
+  &quot;CX_0.5_3&quot; = CX_0.5_3, &quot;CX_0.5_24&quot; = CX_0.5_24, &quot;CX_0.5_48&quot; = CX_0.5_48,
+  &quot;DOX_0.1_3&quot; = DOX_0.1_3, &quot;DOX_0.1_24&quot; = DOX_0.1_24, &quot;DOX_0.1_48&quot; = DOX_0.1_48,
+  &quot;DOX_0.5_3&quot; = DOX_0.5_3, &quot;DOX_0.5_24&quot; = DOX_0.5_24, &quot;DOX_0.5_48&quot; = DOX_0.5_48
+)
+
+all_data &lt;- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create matrices
+logFC_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;logFC&quot;)
+signif_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;Signif&quot;)
+
+# Desired column order
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, 
+                   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, 
+                   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+
+logFC_mat &lt;- logFC_mat[, desired_order]
+signif_mat &lt;- signif_mat[, desired_order]
+
+# Column annotation
+meta &lt;- str_split_fixed(colnames(logFC_mat), &quot;_&quot;, 3)
+col_annot &lt;- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+    Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+    Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)
+  ),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# Draw heatmap
+Heatmap(logFC_mat,
+        name = &quot;logFC&quot;,
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = &quot;DNA Damage Response Genes\nCX-5461 and DOX Expression&quot;,
+        column_title_gp = gpar(fontsize = 14, fontface = &quot;bold&quot;)
+)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/DNA-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="logfc-boxplots-of-dna-damage-response-genes"
+class="section level2">
+<h2><strong>📌 LogFC boxplots of DNA Damage Response Genes</strong></h2>
+<pre class="r"><code># Load libraries
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# DEG file paths and labels
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# DDR Entrez IDs (68 genes)
+entrez_ids &lt;- c(
+  10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
+  11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
+  3014, 317, 355, 4193, 4292, 4361, 4609, 4616, 4683, 472, 50484,
+  5366, 5371, 54205, 545, 55367, 5591, 581, 5810, 5883, 5884,
+  5888, 5893, 5925, 595, 5981, 6118, 637, 672, 7157, 7799,
+  8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898,
+  9133, 9134, 983, 9874, 993, 995, 5916
+)
+
+# Create full DDR table from all conditions
+ddr_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    filter(Entrez_ID %in% entrez_ids) %&gt;%
+    mutate(
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    )
+})
+
+# Create full combination of genes × conditions
+all_conditions &lt;- names(deg_files)
+all_combos &lt;- crossing(
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
+) %&gt;%
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
+
+# Merge with actual DEG data and fill missing logFC
+complete_ddr &lt;- all_combos %&gt;%
+  left_join(ddr_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# Map gene symbols
+complete_ddr &lt;- complete_ddr %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# Order X-axis by your preferred condition order
+complete_ddr$Condition &lt;- factor(complete_ddr$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# Final boxplot (with default outlier points from geom_boxplot)
+ggplot(complete_ddr, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
+  labs(
+    x = &quot;Treatment Condition&quot;,
+    y = &quot;Log Fold Change&quot;,
+    title = &quot;LogFC of DNA Damage Response Genes&quot;,
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/DDR-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="p53-target-gene-expression-changes-between-cx5461-and-dox"
+class="section level2">
+<h2><strong>📌 P53 target gene expression changes between CX5461 and
+DOX</strong></h2>
+<pre class="r"><code># Load libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(org.Hs.eg.db)
+library(reshape2)
+
+# Load DEG files
+load_deg &lt;- function(path) read.csv(path)
+
+CX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+DOX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
+
+# P53 target Entrez IDs (shortened for clarity – replace with your full list)
+entrez_ids &lt;- c(1026,50484,4193,9766,9518,7832,1643,1647,1263,57103,51065,8795,51499,64393,581,
+                5228,5429,8493,55959,7508,64782,282991,355,53836,4814,10769,9050,27244,9540,94241,
+                26154,57763,900,26999,55332,26263,23479,23612,29950,9618,10346,8824,134147,55294,
+                22824,4254,6560,467,27113,60492,8444,60401,1969,220965,2232,3976,55191,84284,93129,
+                5564,7803,83667,7779,132671,7039,51768,137695,93134,7633,10973,340485,307,27350,
+                23245,3732,29965,1363,1435,196513,8507,8061,2517,51278,53354,54858,23228,5366,5912,
+                6236,51222,26152,59,1907,50650,91012,780,9249,11072,144455,64787,116151,27165,2876,
+                57822,55733,57722,121457,375449,85377,4851,5875,127544,29901,84958,8797,8793,441631,
+                220001,54541,5889,5054,25816,25987,5111,98,317,598,604,10904,1294,80315,53944,
+                1606,2770,3628,3675,3985,4035,4163,84552,29085,55367,5371,5791,54884,5980,8794,
+                1462,50808,220,583,694,1056,9076,10978,54677,1612,55040,114907,2274,127707,4000,
+                8079,4646,4747,27445,5143,80055,79156,5360,5364,23654,5565,5613,5625,10076,56963,
+                6004,390,255488,6326,6330,23513,7869,283130,204962,83959,6548,6774,9263,10228,
+                22954,10475,85363,494514,10142,79714,1006,8446,9648,79828,5507,55240,63874,25841,
+                9289,84883,154810,51321,421,8553,655,119032,84280,10950,824,839,57828,857,8812,
+                8837,94027,113189,22837,132864,10898,3300,81704,1847,1849,1947,9538,24139,5168,
+                147965,115548,9873,23768,2632,2817,3280,3265,23308,3490,51477,182,3856,8844,144811,
+                9404,4043,9848,2872,23041,740,343263,4638,26509,4792,22861,57523,55214,80025,164091,
+                57060,64065,51090,5453,8496,333926,55671,5900,55544,23179,8601,389,6223,55800,6385,
+                4088,6643,122809,257397,285343,7011,54790,374618,55362,51754,7157,9537,22906,7205,
+                80705,219699,55245,83719,7748,25946,118738)
+
+# Function to extract relevant data
+extract_data &lt;- function(df, name) {
+  df %&gt;%
+    filter(Entrez_ID %in% entrez_ids) %&gt;%
+    mutate(Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                         column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
+           Condition = name,
+           Signif = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+}
+
+# Collect all data
+deg_list &lt;- list(
+  &quot;CX_0.1_3&quot; = CX_0.1_3, &quot;CX_0.1_24&quot; = CX_0.1_24, &quot;CX_0.1_48&quot; = CX_0.1_48,
+  &quot;CX_0.5_3&quot; = CX_0.5_3, &quot;CX_0.5_24&quot; = CX_0.5_24, &quot;CX_0.5_48&quot; = CX_0.5_48,
+  &quot;DOX_0.1_3&quot; = DOX_0.1_3, &quot;DOX_0.1_24&quot; = DOX_0.1_24, &quot;DOX_0.1_48&quot; = DOX_0.1_48,
+  &quot;DOX_0.5_3&quot; = DOX_0.5_3, &quot;DOX_0.5_24&quot; = DOX_0.5_24, &quot;DOX_0.5_48&quot; = DOX_0.5_48
+)
+
+all_data &lt;- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Create matrices
+logFC_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;logFC&quot;)
+signif_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;Signif&quot;)
+
+# Desired column order
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, 
+                   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, 
+                   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+
+logFC_mat &lt;- logFC_mat[, desired_order]
+signif_mat &lt;- signif_mat[, desired_order]
+
+# Column annotation
+meta &lt;- str_split_fixed(colnames(logFC_mat), &quot;_&quot;, 3)
+col_annot &lt;- HeatmapAnnotation(
+  Drug = meta[, 1],
+  Conc = meta[, 2],
+  Time = meta[, 3],
+  col = list(
+    Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+    Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+    Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)
+  ),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# Draw heatmap
+Heatmap(logFC_mat,
+        name = &quot;logFC&quot;,
+        top_annotation = col_annot,
+        cluster_columns = FALSE,
+        cluster_rows = TRUE,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
+        },
+        column_title = &quot;P53 Target Genes\nCX-5461 and DOX Expression&quot;,
+        column_title_gp = gpar(fontsize = 14, fontface = &quot;bold&quot;)
+)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/P53_target-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="atrial-fibrillation-gene-expression-changes-between-cx5461-and-dox"
+class="section level2">
+<h2><strong>📌 Atrial fibrillation gene expression changes between
+CX5461 and DOX</strong></h2>
+<pre class="r"><code>library(tidyverse) 
+library(ggfortify)
+library(cluster)
+library(edgeR)
+library(limma)
+library(Homo.sapiens)
+library(BiocParallel)
+library(qvalue)
+library(pheatmap)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(org.Hs.eg.db)
+library(RColorBrewer)
+library(readr)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+library(reshape2)
+library(dplyr)
+
+# Load UCSC transcript database
+txdb &lt;- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+# Load DEGs Data
+CX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- read.csv(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+
+DOX_0.1_3 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- read.csv(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
+
+Entrez_IDs &lt;- c(
+  3425, 53834, 9464, 79658, 55876, 3781, 9472, 11017, 64395, 23353,
+  57794, 79591, 2702, 51306, 857, 10418, 9644, 115509, 89797, 10728,
+  282996, 8497, 5695, 9026, 57666, 143384, 5883, 90102, 84909, 221037,
+  29119, 79933, 391, 81575, 8738, 5396, 26010, 744, 56981, 80724,
+  5781, 6910, 4598, 79068, 2250, 56978, 3752, 5208, 9736, 26778,
+  80315, 64374, 79159, 11078, 5308, 3782, 10654, 79776, 6310, 8082,
+  2995, 23224, 79741, 5708, 26136, 9967, 84033, 9148, 29982, 81488,
+  1788, 9208, 2908, 1021, 5339, 5727, 23118, 10090, 57585, 221154,
+  1073, 29998, 817, 858, 3486, 5747, 2104, 55105, 4194, 3570,
+  1607, 6586, 5570, 2070, 27145, 4646, 3159, 9748, 79991, 221035,
+  5033, 80212, 196385, 79600, 11046, 54014, 151636, 64778, 92597, 3983,
+  7090, 9267, 7273, 26018, 9948, 2131, 55870, 5523, 5318, 6239,
+  3480, 55777, 2066, 11165, 2028, 57619, 2690, 23414, 55818, 84700,
+  28965, 80204, 463, 5108, 222553, 387119, 28981, 11113, 10301, 995,
+  23030, 2697, 996, 339500, 54805, 9960, 91404, 145781, 100820829, 84542,
+  2176, 51684, 9513, 7473, 4666, 23150, 5915, 5062, 4016, 23039,
+  159686, 1839, 5201, 93166, 64753, 29959, 5496, 23245, 5069, 56916,
+  92344, 23092, 3992, 9415, 10554, 7456, 9570, 57178, 23143, 161176,
+  5424, 2034, 10277, 11278, 79803, 6653, 4756, 132660, 5430, 9031,
+  57158, 285761, 8110, 387700, 1829, 4126, 7323, 51308, 7332, 6598,
+  3757, 6187, 6660, 10529, 6920, 115286, 8451, 8943, 4137, 7514,
+  4801, 9709, 23177, 8671, 29915, 26207, 3680, 490, 493856, 58489,
+  54897, 4625, 22955, 84952, 10221, 2263, 84641, 4892, 1026, 84650,
+  8382, 221656, 2969, 144453, 117177, 2626, 8476, 161882, 51807, 4624,
+  9612, 55795, 51043, 144348, 51232, 8729, 3899, 11155, 23316, 79006,
+  146330, 6403, 6331, 4300, 427, 845, 3313, 113622, 5789, 376132,
+  29841, 8462, 203859, 401397, 5506, 55521, 5819, 4059, 6934, 57727,
+  23066, 79568, 83478, 10087, 9586, 222194, 10466, 10499, 58499, 79720,
+  4772, 10794, 125919, 602, 27332, 59345, 340359, 3705, 64710, 57801,
+  10818, 143684, 149281, 55013, 23095, 93649, 84034, 23347, 440926, 11124,
+  23293, 51426, 832, 7068, 57646, 152002, 7531, 1398, 100101267, 221937,
+  26873, 3709, 10576, 27040, 201176, 284403, 307, 6525, 5387, 1808,
+  114907, 1952, 4091, 5096, 23451, 51207, 142891, 4084, 3797, 1185,
+  5334, 217, 2042, 7781, 253461, 152404, 2992, 153478, 6695, 26249,
+  662, 23036, 22852, 23411, 23387, 6786, 7690, 10021, 8925, 5595,
+  63892, 23466, 11149, 139411, 755, 55347, 22820, 55111, 84444, 6258,
+  57623, 1387, 3762, 5861, 3339, 114822, 129787, 196528, 54437, 10395,
+  4023, 5095, 894, 3156, 1877, 283871, 2673, 23157, 10512, 2258,
+  79750, 84665, 26091, 5978, 8751, 79695, 2768, 155382, 84163, 7709,
+  4092, 1837, 2064, 4629, 55122, 8882, 150962, 23013, 8742, 489,
+  201134, 55114, 84264, 64428, 4089, 861, 7422
+)
+
+
+# Subset the toptable based on the entrez IDs and select specific columns
+
+subset_toptable1 &lt;- CX_0.1_3[CX_0.1_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+
+subset_toptable2 &lt;- CX_0.1_24[CX_0.1_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+
+subset_toptable3 &lt;- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+
+subset_toptable3 &lt;- CX_0.1_48[CX_0.1_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable4 &lt;- CX_0.5_3[CX_0.5_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable5 &lt;- CX_0.5_24[CX_0.5_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable6 &lt;- CX_0.5_48[CX_0.5_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable7 &lt;- DOX_0.1_3[DOX_0.1_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable8 &lt;- DOX_0.1_24[DOX_0.1_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable9 &lt;- DOX_0.1_48[DOX_0.1_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable10 &lt;- DOX_0.5_3[DOX_0.5_3$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable11 &lt;- DOX_0.5_24[DOX_0.5_24$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+subset_toptable12 &lt;- DOX_0.5_48[DOX_0.5_48$Entrez_ID %in% Entrez_IDs, c(&quot;Entrez_ID&quot;, &quot;logFC&quot;, &quot;adj.P.Val&quot;)]
+
+# Function to add columns and combine data
+add_metadata &lt;- function(data, drug, conc, time) {
+  data %&gt;%
+    mutate(Drug = drug, Conc = conc, Time = time)
+}
+
+# Add metadata and combine all subsets
+combined_data &lt;- bind_rows(
+  add_metadata(subset_toptable1, &quot;CX&quot;, 0.1, 3),
+  add_metadata(subset_toptable2, &quot;CX&quot;, 0.1, 24),
+  add_metadata(subset_toptable3, &quot;CX&quot;, 0.1, 48),
+  add_metadata(subset_toptable4, &quot;CX&quot;, 0.5, 3),
+  add_metadata(subset_toptable5, &quot;CX&quot;, 0.5, 24),
+  add_metadata(subset_toptable6, &quot;CX&quot;, 0.5, 48),
+  add_metadata(subset_toptable7, &quot;DOX&quot;, 0.1, 3),
+  add_metadata(subset_toptable8, &quot;DOX&quot;, 0.1, 24),
+  add_metadata(subset_toptable9, &quot;DOX&quot;, 0.1, 48),
+  add_metadata(subset_toptable10, &quot;DOX&quot;, 0.5, 3),
+  add_metadata(subset_toptable11, &quot;DOX&quot;, 0.5, 24),
+  add_metadata(subset_toptable12, &quot;DOX&quot;, 0.5, 48)
+)
+
+# Convert Entrez IDs to Gene symbols
+combined_data &lt;- combined_data %&gt;%
+  mutate(Gene = mapIds(
+    org.Hs.eg.db,
+    keys = as.character(Entrez_ID),
+    column = &quot;SYMBOL&quot;,
+    keytype = &quot;ENTREZID&quot;,
+    multiVals = &quot;first&quot;
+  ))
+
+# Reorder columns
+final_data &lt;- dplyr::select(combined_data, Entrez_ID, Gene, logFC, adj.P.Val, Drug, Conc, Time)
+
+# Assuming your dataframe is named data
+# Add a column for significance stars
+final_data &lt;- final_data %&gt;%
+  mutate(Significance = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+
+# Create a matrix for the heatmap (logFC values)
+logFC_matrix &lt;- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = &quot;_&quot;), value.var = &quot;logFC&quot;)
+
+# Create a matrix for the significance annotations
+signif_matrix &lt;- acast(final_data, Gene ~ paste(Drug, Conc, Time, sep = &quot;_&quot;), value.var = &quot;Significance&quot;)
+
+# Split column names into Drug, Conc, and Time
+colnames_split &lt;- strsplit(colnames(logFC_matrix), &quot;_&quot;)
+drug &lt;- sapply(colnames_split, function(x) x[1])
+conc &lt;- sapply(colnames_split, function(x) x[2])
+time &lt;- sapply(colnames_split, function(x) x[3])
+
+# Create the desired column order: CX 0.1 3hr, CX 0.5 3hr, CX 0.1 24hr, CX 0.5 24hr, CX 0.1 48h, CX 0.5 48h,
+# DOX 0.1 3hr, DOX 0.5 3hr, DOX 0.1 24hr, DOX 0.5 24hr, DOX 0.1 48h, DOX 0.5 48h
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_48&quot;)
+
+# Reorder columns in the matrix based on the desired order
+column_names &lt;- paste(drug, conc, time, sep = &quot;_&quot;)
+column_order &lt;- match(desired_order, column_names)
+logFC_matrix &lt;- logFC_matrix[, column_order]
+signif_matrix &lt;- signif_matrix[, column_order]
+drug &lt;- drug[column_order]
+conc &lt;- conc[column_order]
+time &lt;- time[column_order]
+
+# Prepare annotations matching the column structure
+ha_top &lt;- HeatmapAnnotation(
+  Drug = drug,
+  Conc = conc,
+  Time = time,
+  col = list(Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+             Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+             Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# Create the heatmap
+heatmap &lt;- Heatmap(logFC_matrix, name = &quot;logFC&quot;, top_annotation = ha_top,
+                   cell_fun = function(j, i, x, y, width, height, fill) {
+                     grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 10))
+                   },
+                   show_row_names = TRUE, show_column_names = FALSE,
+                   column_title = &quot;Genes in Atrial fibrillation GWAS associated loci\nin response to CX5461 and DOX&quot;,
+                   column_title_gp = gpar(fontsize = 16, fontface = &quot;bold&quot;),
+                   cluster_columns = FALSE)  # Disable column clustering
+
+# Draw the heatmap
+draw(heatmap, heatmap_legend_side = &quot;right&quot;, annotation_legend_side = &quot;right&quot;)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/AF-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="heart-failure-gene-expression-changes-between-cx5461-and-dox"
+class="section level2">
+<h2><strong>📌 Heart Failure gene expression changes between CX5461 and
+DOX</strong></h2>
+<pre class="r"><code># Load necessary libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(org.Hs.eg.db)
+library(reshape2)
+library(grid)
+
+# Set 30 Entrez IDs
+Entrez_IDs &lt;- c(
+  9709, 8882, 4023, 29959, 5496, 3992, 9415, 5308, 1026, 54437,
+  79068, 10221, 9031, 1187, 1952, 3705, 84722, 7273, 23293, 155382,
+  9531, 602, 27258, 84163, 81846, 79933, 56911, 64753, 93210, 1021
+)
+
+# rsID mapping for row annotation
+rsid_mapping &lt;- data.frame(
+  Entrez_ID = Entrez_IDs,
+  rsID = c(&quot;rs247617&quot;, &quot;rs964184&quot;, &quot;rs765547&quot;, &quot;rs1728918&quot;, &quot;rs1728918&quot;, &quot;rs174547&quot;,
+           &quot;rs174547&quot;, &quot;rs59788391&quot;, &quot;rs3176326&quot;, &quot;rs7632505&quot;, &quot;rs11642015&quot;, &quot;rs2980853&quot;,
+           &quot;rs2074755&quot;, &quot;rs28579893&quot;, &quot;rs602633&quot;, &quot;rs4905014&quot;, &quot;rs602633&quot;, &quot;rs2562845&quot;,
+           &quot;rs216193&quot;, &quot;rs799165&quot;, &quot;rs17617337&quot;, &quot;rs4803750&quot;, &quot;rs11710541&quot;, &quot;rs202209188&quot;,
+           &quot;rs2957657&quot;, &quot;rs34163229&quot;, &quot;rs56968346&quot;, &quot;rs3807132&quot;, &quot;rs12150603&quot;, &quot;rs2282979&quot;
+  )
+)
+
+# Load DEGs
+load_deg &lt;- function(name) {
+  read.csv(paste0(&quot;data/DEGs/Toptable_&quot;, name, &quot;.csv&quot;))
+}
+samples &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+             &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+deg_list &lt;- lapply(samples, load_deg)
+names(deg_list) &lt;- samples
+
+# Subset and annotate
+# Subset and annotate
+get_subset &lt;- function(df, name) {
+  parts &lt;- strsplit(name, &quot;_&quot;)[[1]]
+  df %&gt;%
+    filter(Entrez_ID %in% Entrez_IDs) %&gt;%
+    dplyr::select(Entrez_ID, logFC, adj.P.Val) %&gt;%
+    mutate(Drug = parts[1], Conc = parts[2], Time = parts[3])
+}
+combined_data &lt;- bind_rows(mapply(get_subset, deg_list, names(deg_list), SIMPLIFY = FALSE))
+
+# Add gene symbol and significance
+combined_data &lt;- combined_data %&gt;%
+  mutate(Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                       column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
+         Significance = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+
+# Join rsID mapping
+combined_data &lt;- left_join(combined_data, rsid_mapping, by = &quot;Entrez_ID&quot;)
+
+# Preserve gene order
+ordered_genes &lt;- combined_data %&gt;%
+  distinct(Entrez_ID, Gene) %&gt;%
+  arrange(factor(Entrez_ID, levels = Entrez_IDs)) %&gt;%
+  pull(Gene)
+
+# Create logFC and significance matrices
+logFC_matrix &lt;- acast(combined_data, Gene ~ paste(Drug, Conc, Time, sep = &quot;_&quot;), value.var = &quot;logFC&quot;)
+signif_matrix &lt;- acast(combined_data, Gene ~ paste(Drug, Conc, Time, sep = &quot;_&quot;), value.var = &quot;Significance&quot;)
+logFC_matrix &lt;- logFC_matrix[ordered_genes, ]
+signif_matrix &lt;- signif_matrix[ordered_genes, ]
+
+# Desired order: group 0.1 first, then 0.5 for both drugs
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+logFC_matrix &lt;- logFC_matrix[, desired_order]
+signif_matrix &lt;- signif_matrix[, desired_order]
+
+# Split column info
+split_cols &lt;- strsplit(colnames(logFC_matrix), &quot;_&quot;)
+drug &lt;- sapply(split_cols, `[`, 1)
+conc &lt;- sapply(split_cols, `[`, 2)
+time &lt;- sapply(split_cols, `[`, 3)
+
+# Annotations
+ha_top &lt;- HeatmapAnnotation(
+  Drug = drug,
+  Conc = conc,
+  Time = time,
+  col = list(
+    Drug = c(&quot;CX&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
+    Conc = c(&quot;0.1&quot; = &quot;lightgreen&quot;, &quot;0.5&quot; = &quot;darkgreen&quot;),
+    Time = c(&quot;3&quot; = &quot;yellow&quot;, &quot;24&quot; = &quot;orange&quot;, &quot;48&quot; = &quot;purple&quot;)
+  ),
+  annotation_height = unit(c(2, 2, 2), &quot;cm&quot;)
+)
+
+# rsID annotation
+rsid_vector &lt;- combined_data %&gt;%
+  distinct(Gene, rsID) %&gt;%
+  filter(Gene %in% ordered_genes) %&gt;%
+  arrange(match(Gene, ordered_genes)) %&gt;%
+  pull(rsID)
+
+ha_left &lt;- rowAnnotation(
+  rsID = anno_text(rsid_vector, location = 0, just = &quot;left&quot;, gp = gpar(fontsize = 9)),
+  annotation_name_side = &quot;top&quot;,
+  width = unit(5, &quot;cm&quot;)
+)
+
+# Heatmap
+Heatmap(logFC_matrix,
+        name = &quot;logFC&quot;,
+        top_annotation = ha_top,
+        left_annotation = ha_left,
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cluster_columns = FALSE,
+        cluster_rows = FALSE,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(signif_matrix[i, j], x, y, gp = gpar(fontsize = 10))
+        },
+        column_title = &quot;Heart Failure GWAS Genes: Response to CX-5461 and DOX&quot;,
+        column_title_gp = gpar(fontsize = 16, fontface = &quot;bold&quot;)
+)</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/HF-1.png" width="768" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2089,7 +2834,7 @@ Session information
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.3.0 (2023-04-21 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 11 x64 (build 22631)
+Running under: Windows 11 x64 (build 26100)
 
 Matrix products: default
 
@@ -2105,90 +2850,121 @@ time zone: America/Chicago
 tzcode source: internal
 
 attached base packages:
-[1] stats4    stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] grid      stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
 
 other attached packages:
- [1] Homo.sapiens_1.3.1                     
- [2] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
- [3] org.Hs.eg.db_3.18.0                    
- [4] GO.db_3.18.0                           
- [5] OrganismDbi_1.44.0                     
- [6] GenomicFeatures_1.54.4                 
- [7] GenomicRanges_1.54.1                   
- [8] GenomeInfoDb_1.38.8                    
- [9] AnnotationDbi_1.64.1                   
-[10] IRanges_2.36.0                         
-[11] S4Vectors_0.40.1                       
-[12] Biobase_2.62.0                         
-[13] BiocGenerics_0.48.1                    
-[14] biomaRt_2.58.2                         
-[15] scales_1.3.0                           
-[16] lubridate_1.9.3                        
-[17] forcats_1.0.0                          
-[18] stringr_1.5.1                          
-[19] dplyr_1.1.4                            
-[20] purrr_1.0.2                            
-[21] readr_2.1.5                            
-[22] tidyr_1.3.1                            
-[23] tibble_3.2.1                           
-[24] ggplot2_3.5.1                          
-[25] tidyverse_2.0.0                        
-[26] data.table_1.14.10                     
-[27] edgeR_4.0.1                            
-[28] limma_3.58.1                           
-[29] workflowr_1.7.1                        
+ [1] TxDb.Hsapiens.UCSC.hg38.knownGene_3.18.0
+ [2] RColorBrewer_1.1-3                      
+ [3] clusterProfiler_4.10.1                  
+ [4] pheatmap_1.0.12                         
+ [5] qvalue_2.34.0                           
+ [6] BiocParallel_1.36.0                     
+ [7] cluster_2.1.8.1                         
+ [8] ggfortify_0.4.17                        
+ [9] reshape2_1.4.4                          
+[10] circlize_0.4.16                         
+[11] ComplexHeatmap_2.18.0                   
+[12] Homo.sapiens_1.3.1                      
+[13] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2 
+[14] org.Hs.eg.db_3.18.0                     
+[15] GO.db_3.18.0                            
+[16] OrganismDbi_1.44.0                      
+[17] GenomicFeatures_1.54.4                  
+[18] GenomicRanges_1.54.1                    
+[19] GenomeInfoDb_1.38.8                     
+[20] AnnotationDbi_1.64.1                    
+[21] IRanges_2.36.0                          
+[22] S4Vectors_0.40.2                        
+[23] Biobase_2.62.0                          
+[24] BiocGenerics_0.48.1                     
+[25] biomaRt_2.58.2                          
+[26] scales_1.3.0                            
+[27] lubridate_1.9.4                         
+[28] forcats_1.0.0                           
+[29] stringr_1.5.1                           
+[30] dplyr_1.1.4                             
+[31] purrr_1.0.4                             
+[32] readr_2.1.5                             
+[33] tidyr_1.3.1                             
+[34] tibble_3.2.1                            
+[35] ggplot2_3.5.2                           
+[36] tidyverse_2.0.0                         
+[37] data.table_1.17.0                       
+[38] edgeR_4.0.16                            
+[39] limma_3.58.1                            
 
 loaded via a namespace (and not attached):
- [1] DBI_1.2.3                   bitops_1.0-7               
- [3] RBGL_1.78.0                 rlang_1.1.3                
- [5] magrittr_2.0.3              git2r_0.35.0               
- [7] matrixStats_1.4.1           compiler_4.3.0             
- [9] RSQLite_2.3.3               getPass_0.2-4              
-[11] png_0.1-8                   callr_3.7.6                
-[13] vctrs_0.6.5                 pkgconfig_2.0.3            
-[15] crayon_1.5.3                fastmap_1.1.1              
-[17] dbplyr_2.5.0                XVector_0.42.0             
-[19] labeling_0.4.3              Rsamtools_2.18.0           
-[21] promises_1.3.0              rmarkdown_2.29             
-[23] tzdb_0.4.0                  graph_1.80.0               
-[25] ps_1.8.1                    bit_4.0.5                  
-[27] xfun_0.50                   zlibbioc_1.48.0            
-[29] cachem_1.0.8                jsonlite_1.8.9             
-[31] progress_1.2.3              blob_1.2.4                 
-[33] later_1.3.2                 DelayedArray_0.28.0        
-[35] BiocParallel_1.36.0         parallel_4.3.0             
-[37] prettyunits_1.2.0           R6_2.5.1                   
-[39] bslib_0.8.0                 stringi_1.8.3              
-[41] rtracklayer_1.62.0          jquerylib_0.1.4            
-[43] SummarizedExperiment_1.32.0 Rcpp_1.0.12                
-[45] knitr_1.49                  Matrix_1.6-1.1             
-[47] httpuv_1.6.15               timechange_0.3.0           
-[49] tidyselect_1.2.1            abind_1.4-8                
-[51] rstudioapi_0.17.1           yaml_2.3.10                
-[53] codetools_0.2-20            curl_6.0.1                 
-[55] processx_3.8.5              lattice_0.22-5             
-[57] withr_3.0.2                 KEGGREST_1.42.0            
-[59] evaluate_1.0.3              BiocFileCache_2.10.2       
-[61] xml2_1.3.6                  Biostrings_2.70.1          
-[63] BiocManager_1.30.25         pillar_1.10.1              
-[65] filelock_1.0.3              MatrixGenerics_1.14.0      
-[67] whisker_0.4.1               generics_0.1.3             
-[69] rprojroot_2.0.4             RCurl_1.98-1.13            
-[71] hms_1.1.3                   munsell_0.5.1              
-[73] glue_1.7.0                  tools_4.3.0                
-[75] BiocIO_1.12.0               locfit_1.5-9.8             
-[77] GenomicAlignments_1.38.2    fs_1.6.3                   
-[79] XML_3.99-0.17               grid_4.3.0                 
-[81] colorspace_2.1-0            GenomeInfoDbData_1.2.11    
-[83] restfulr_0.0.15             cli_3.6.1                  
-[85] rappdirs_0.3.3              S4Arrays_1.2.1             
-[87] gtable_0.3.6                sass_0.4.9                 
-[89] digest_0.6.34               SparseArray_1.2.4          
-[91] farver_2.1.2                rjson_0.2.23               
-[93] memoise_2.0.1               htmltools_0.5.8.1          
-[95] lifecycle_1.0.4             httr_1.4.7                 
-[97] statmod_1.5.0               bit64_4.0.5                </code></pre>
+  [1] splines_4.3.0               later_1.3.2                
+  [3] BiocIO_1.12.0               ggplotify_0.1.2            
+  [5] bitops_1.0-9                filelock_1.0.3             
+  [7] polyclip_1.10-7             graph_1.80.0               
+  [9] XML_3.99-0.18               lifecycle_1.0.4            
+ [11] doParallel_1.0.17           rprojroot_2.0.4            
+ [13] lattice_0.22-7              vroom_1.6.5                
+ [15] MASS_7.3-60                 magrittr_2.0.3             
+ [17] sass_0.4.10                 rmarkdown_2.29             
+ [19] jquerylib_0.1.4             yaml_2.3.10                
+ [21] httpuv_1.6.15               cowplot_1.1.3              
+ [23] DBI_1.2.3                   abind_1.4-8                
+ [25] zlibbioc_1.48.2             ggraph_2.2.1               
+ [27] RCurl_1.98-1.17             yulab.utils_0.2.0          
+ [29] tweenr_2.0.3                rappdirs_0.3.3             
+ [31] git2r_0.36.2                GenomeInfoDbData_1.2.11    
+ [33] enrichplot_1.22.0           ggrepel_0.9.6              
+ [35] tidytree_0.4.6              codetools_0.2-20           
+ [37] DelayedArray_0.28.0         DOSE_3.28.2                
+ [39] xml2_1.3.8                  ggforce_0.4.2              
+ [41] tidyselect_1.2.1            shape_1.4.6.1              
+ [43] aplot_0.2.5                 farver_2.1.2               
+ [45] viridis_0.6.5               matrixStats_1.5.0          
+ [47] BiocFileCache_2.10.2        GenomicAlignments_1.38.2   
+ [49] jsonlite_2.0.0              GetoptLong_1.0.5           
+ [51] tidygraph_1.3.1             iterators_1.0.14           
+ [53] foreach_1.5.2               tools_4.3.0                
+ [55] progress_1.2.3              treeio_1.26.0              
+ [57] Rcpp_1.0.12                 glue_1.7.0                 
+ [59] gridExtra_2.3               SparseArray_1.2.4          
+ [61] xfun_0.52                   MatrixGenerics_1.14.0      
+ [63] withr_3.0.2                 BiocManager_1.30.25        
+ [65] fastmap_1.2.0               digest_0.6.34              
+ [67] gridGraphics_0.5-1          timechange_0.3.0           
+ [69] R6_2.6.1                    colorspace_2.1-0           
+ [71] Cairo_1.6-2                 RSQLite_2.3.9              
+ [73] generics_0.1.3              rtracklayer_1.62.0         
+ [75] graphlayouts_1.2.2          prettyunits_1.2.0          
+ [77] httr_1.4.7                  S4Arrays_1.2.1             
+ [79] scatterpie_0.2.4            whisker_0.4.1              
+ [81] pkgconfig_2.0.3             gtable_0.3.6               
+ [83] blob_1.2.4                  workflowr_1.7.1            
+ [85] XVector_0.42.0              shadowtext_0.1.4           
+ [87] htmltools_0.5.8.1           fgsea_1.28.0               
+ [89] RBGL_1.78.0                 clue_0.3-66                
+ [91] png_0.1-8                   ggfun_0.1.8                
+ [93] knitr_1.50                  rstudioapi_0.17.1          
+ [95] tzdb_0.5.0                  rjson_0.2.23               
+ [97] nlme_3.1-168                curl_6.2.2                 
+ [99] cachem_1.1.0                GlobalOptions_0.1.2        
+[101] parallel_4.3.0              HDO.db_0.99.1              
+[103] restfulr_0.0.15             pillar_1.10.2              
+[105] vctrs_0.6.5                 promises_1.3.2             
+[107] dbplyr_2.5.0                evaluate_1.0.3             
+[109] magick_2.8.6                cli_3.6.1                  
+[111] locfit_1.5-9.12             compiler_4.3.0             
+[113] Rsamtools_2.18.0            rlang_1.1.3                
+[115] crayon_1.5.3                labeling_0.4.3             
+[117] plyr_1.8.9                  fs_1.6.3                   
+[119] stringi_1.8.3               viridisLite_0.4.2          
+[121] munsell_0.5.1               Biostrings_2.70.3          
+[123] lazyeval_0.2.2              GOSemSim_2.28.1            
+[125] Matrix_1.6-1.1              patchwork_1.3.0            
+[127] hms_1.1.3                   bit64_4.6.0-1              
+[129] KEGGREST_1.42.0             statmod_1.5.0              
+[131] SummarizedExperiment_1.32.0 igraph_2.1.4               
+[133] memoise_2.0.1               bslib_0.9.0                
+[135] ggtree_3.10.1               fastmatch_1.1-6            
+[137] bit_4.6.0                   gson_0.1.0                 
+[139] ape_5.8-1                  </code></pre>
 </div>
 </div>
 
