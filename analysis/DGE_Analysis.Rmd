@@ -741,7 +741,7 @@ ggplot(complete_top2b, aes(x = Condition, y = logFC, fill = Drug)) +
   )
 ```
 
-## **📌 LogFC boxplots of TOP2A target Genes**
+## **📌 LogFC boxplots of TOP2A target Genes (ChIP Atlas)**
 ```{r TOP2A_target_box, echo=TRUE, message=FALSE, warning=FALSE}
 # Load libraries
 library(tidyverse)
@@ -816,6 +816,94 @@ ggplot(complete_top2a, aes(x = Condition, y = logFC, fill = Drug)) +
     x = "Treatment Condition",
     y = "Log Fold Change",
     title = "LogFC of TOP2A Target Genes\n(ChIP atlas)",
+    fill = "Drug"
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+```
+
+## **📌 LogFC boxplots of TOP2A target Genes ((RPE-1 cell line)**
+```{r TOP2A_target_box_2, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# Read TOP2A literature-based target Entrez IDs from CSV
+top2a_lit_ids <- read_csv("data/TOP2A_target_lit_mapped.csv", show_col_types = FALSE) %>%
+  pull(Entrez_ID) %>%
+  unique()
+
+# DEG file paths and labels
+deg_files <- list(
+  "CX_0.1_3" = "data/DEGs/Toptable_CX_0.1_3.csv",
+  "CX_0.1_24" = "data/DEGs/Toptable_CX_0.1_24.csv",
+  "CX_0.1_48" = "data/DEGs/Toptable_CX_0.1_48.csv",
+  "CX_0.5_3" = "data/DEGs/Toptable_CX_0.5_3.csv",
+  "CX_0.5_24" = "data/DEGs/Toptable_CX_0.5_24.csv",
+  "CX_0.5_48" = "data/DEGs/Toptable_CX_0.5_48.csv",
+  "DOX_0.1_3" = "data/DEGs/Toptable_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/DEGs/Toptable_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/DEGs/Toptable_DOX_0.1_48.csv",
+  "DOX_0.5_3" = "data/DEGs/Toptable_DOX_0.5_3.csv",
+  "DOX_0.5_24" = "data/DEGs/Toptable_DOX_0.5_24.csv",
+  "DOX_0.5_48" = "data/DEGs/Toptable_DOX_0.5_48.csv"
+)
+
+# Load DEG data and tag with condition + drug
+top2a_lit_data <- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %>%
+    filter(Entrez_ID %in% top2a_lit_ids) %>%
+    mutate(
+      Condition = label,
+      Drug = ifelse(str_detect(label, "CX"), "CX.5461", "DOX")
+    )
+})
+
+# Generate all gene-condition combinations
+all_combos <- crossing(
+  Entrez_ID = top2a_lit_ids,
+  Condition = names(deg_files)
+) %>%
+  mutate(Drug = ifelse(str_detect(Condition, "CX"), "CX.5461", "DOX"))
+
+# Merge and fill missing entries
+complete_top2a_lit <- all_combos %>%
+  left_join(top2a_lit_data, by = c("Entrez_ID", "Condition", "Drug")) %>%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  ) %>%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+                  column = "SYMBOL", keytype = "ENTREZID", multiVals = "first")
+  )
+
+# Set condition order for X-axis
+complete_top2a_lit$Condition <- factor(complete_top2a_lit$Condition, levels = c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+))
+
+# Ensure Drug factor order for color consistency
+complete_top2a_lit$Drug <- factor(complete_top2a_lit$Drug, levels = c("CX.5461", "DOX"))
+
+# Plot logFC boxplot (default y-scale)
+ggplot(complete_top2a_lit, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(position = position_dodge(width = 0.75)) +
+  scale_fill_manual(values = c("CX.5461" = "blue", "DOX" = "red")) +
+  labs(
+    x = "Treatment Condition",
+    y = "Log Fold Change",
+    title = "LogFC of TOP2A Target Genes\n(RPE-1 cell)",
     fill = "Drug"
   ) +
   theme_bw() +
