@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3d33304d85bf2b6b87a3d324bc3a9d5e93720619targetblank3d33304a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeef120cdbac14259c8108fd6c61120ad8326225d7targetblankef120cda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3d33304d85bf2b6b87a3d324bc3a9d5e93720619" target="_blank">3d33304</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/ef120cdbac14259c8108fd6c61120ad8326225d7" target="_blank">ef120cd</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3d33304d85bf2b6b87a3d324bc3a9d5e93720619targetblank3d33304a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeef120cdbac14259c8108fd6c61120ad8326225d7targetblankef120cda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3d33304d85bf2b6b87a3d324bc3a9d5e93720619" target="_blank">3d33304</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/ef120cdbac14259c8108fd6c61120ad8326225d7" target="_blank">ef120cd</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -589,8 +592,6 @@ Untracked files:
     Untracked:  data/CAD_genes.csv
     Untracked:  data/Cardiotox.csv
     Untracked:  data/Cardiotox_mapped.csv
-    Untracked:  data/DDR.csv
-    Untracked:  data/DDR_Mapped.csv
     Untracked:  data/DOX_Vald.csv
     Untracked:  data/DOX_Vald_Mapped.csv
     Untracked:  data/Entrez_Cardiotox.csv
@@ -633,6 +634,7 @@ Untracked files:
 
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
+    Modified:   analysis/DGE_Analysis.Rmd
 
 </code></pre>
 <p>
@@ -678,6 +680,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/dcf1e50fd654002fbd5ada235cd7e5956b9da7a8/docs/DGE_Analysis.html" target="_blank">dcf1e50</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-09
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2627,7 +2646,7 @@ sayanpaul01
 class="section level2">
 <h2><strong>📌 DNA Damage Marker expression changes between CX5461 and
 DOX</strong></h2>
-<pre class="r"><code># 📌 DNA Damage Marker expression changes between CX5461 and DOX
+<pre class="r"><code># 📌 DDR Gene Expression Heatmap — CX-5461 and DOX (68 genes, with categories)
 
 # Load libraries
 library(tidyverse)
@@ -2640,22 +2659,20 @@ library(reshape2)
 # Load DEG files
 load_deg &lt;- function(path) read.csv(path)
 
-deg_list &lt;- list(
-  &quot;CX_0.1_3&quot; = load_deg(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;),
-  &quot;CX_0.1_24&quot; = load_deg(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;),
-  &quot;CX_0.1_48&quot; = load_deg(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;),
-  &quot;CX_0.5_3&quot; = load_deg(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;),
-  &quot;CX_0.5_24&quot; = load_deg(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;),
-  &quot;CX_0.5_48&quot; = load_deg(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;),
-  &quot;DOX_0.1_3&quot; = load_deg(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;),
-  &quot;DOX_0.1_24&quot; = load_deg(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;),
-  &quot;DOX_0.1_48&quot; = load_deg(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;),
-  &quot;DOX_0.5_3&quot; = load_deg(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;),
-  &quot;DOX_0.5_24&quot; = load_deg(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;),
-  &quot;DOX_0.5_48&quot; = load_deg(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
-)
+CX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;)
+CX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;)
+CX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;)
+CX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;)
+CX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;)
+CX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;)
+DOX_0.1_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;)
+DOX_0.1_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;)
+DOX_0.1_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;)
+DOX_0.5_3 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;)
+DOX_0.5_24 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;)
+DOX_0.5_48 &lt;- load_deg(&quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;)
 
-# Final 68-gene category mapping (curated and verified)
+# Final Entrez IDs and categories (68 genes)
 entrez_category &lt;- tribble(
   ~ENTREZID, ~Category,
   317, &quot;Apoptosis&quot;, 355, &quot;Apoptosis&quot;, 581, &quot;Apoptosis&quot;, 637, &quot;Apoptosis&quot;,
@@ -2675,8 +2692,8 @@ entrez_category &lt;- tribble(
   6118, &quot;Damage Sensors / Signal Transducers&quot;, 4361, &quot;Damage Sensors / Signal Transducers&quot;,
   10111, &quot;Damage Sensors / Signal Transducers&quot;, 4683, &quot;Damage Sensors / Signal Transducers&quot;,
   84126, &quot;Damage Sensors / Signal Transducers&quot;, 3014, &quot;Damage Sensors / Signal Transducers&quot;,
-  672, &quot;DNA Repair&quot;, 2177, &quot;DNA Repair&quot;, 5888, &quot;DNA Repair&quot;, 5893, &quot;DNA Repair&quot;, 
-  1647, &quot;DNA Repair&quot;, 4616, &quot;DNA Repair&quot;, 10912, &quot;DNA Repair&quot;, 1111, &quot;DNA Repair&quot;, 
+  672, &quot;DNA Repair&quot;, 2177, &quot;DNA Repair&quot;, 5888, &quot;DNA Repair&quot;, 5893, &quot;DNA Repair&quot;,
+  1647, &quot;DNA Repair&quot;, 4616, &quot;DNA Repair&quot;, 10912, &quot;DNA Repair&quot;, 1111, &quot;DNA Repair&quot;,
   11200, &quot;DNA Repair&quot;, 1643, &quot;DNA Repair&quot;, 8243, &quot;DNA Repair&quot;, 5981, &quot;DNA Repair&quot;,
   7157, &quot;p53 Regulators / Targets&quot;, 4193, &quot;p53 Regulators / Targets&quot;, 5371, &quot;p53 Regulators / Targets&quot;,
   27244, &quot;p53 Regulators / Targets&quot;, 50484, &quot;p53 Regulators / Targets&quot;,
@@ -2684,37 +2701,46 @@ entrez_category &lt;- tribble(
   207, &quot;Miscellaneous / Broad&quot;, 25, &quot;Miscellaneous / Broad&quot;
 )
 
-# Filter Entrez IDs
 entrez_ids &lt;- entrez_category$ENTREZID
 
-# Extract DEG subset
+# Extract relevant DEG values
 extract_data &lt;- function(df, name) {
   df %&gt;%
     filter(Entrez_ID %in% entrez_ids) %&gt;%
-    mutate(Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
-                         column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
-           Condition = name,
-           Signif = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;))
+    mutate(
+      Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                    column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;),
+      Condition = name,
+      Signif = ifelse(adj.P.Val &lt; 0.05, &quot;*&quot;, &quot;&quot;)
+    )
 }
 
-# Combine and annotate
+# DEG list
+deg_list &lt;- list(
+  &quot;CX_0.1_3&quot; = CX_0.1_3, &quot;CX_0.1_24&quot; = CX_0.1_24, &quot;CX_0.1_48&quot; = CX_0.1_48,
+  &quot;CX_0.5_3&quot; = CX_0.5_3, &quot;CX_0.5_24&quot; = CX_0.5_24, &quot;CX_0.5_48&quot; = CX_0.5_48,
+  &quot;DOX_0.1_3&quot; = DOX_0.1_3, &quot;DOX_0.1_24&quot; = DOX_0.1_24, &quot;DOX_0.1_48&quot; = DOX_0.1_48,
+  &quot;DOX_0.5_3&quot; = DOX_0.5_3, &quot;DOX_0.5_24&quot; = DOX_0.5_24, &quot;DOX_0.5_48&quot; = DOX_0.5_48
+)
+
+# Combine all DEGs and annotate
 all_data &lt;- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE)) %&gt;%
   left_join(entrez_category, by = c(&quot;Entrez_ID&quot; = &quot;ENTREZID&quot;))
 
-# Create logFC and significance matrices
+# Create matrices
 logFC_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;logFC&quot;)
 signif_mat &lt;- acast(all_data, Gene ~ Condition, value.var = &quot;Signif&quot;)
 
-# Order rows by category
-gene_order_df &lt;- all_data %&gt;%
-  distinct(Gene, Category) %&gt;%
-  arrange(factor(Category, levels = sort(unique(entrez_category$Category))), Gene)
+# Set desired order
+desired_order &lt;- c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+                   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+                   &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+                   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
 
-ordered_genes &lt;- gene_order_df$Gene
-logFC_mat &lt;- logFC_mat[ordered_genes, ]
-signif_mat &lt;- signif_mat[ordered_genes, ]
+logFC_mat &lt;- logFC_mat[, desired_order, drop = FALSE]
+signif_mat &lt;- signif_mat[, desired_order, drop = FALSE]
 
-# Top annotation
+# Column annotation
 meta &lt;- str_split_fixed(colnames(logFC_mat), &quot;_&quot;, 3)
 col_annot &lt;- HeatmapAnnotation(
   Drug = meta[, 1],
@@ -2729,6 +2755,14 @@ col_annot &lt;- HeatmapAnnotation(
 )
 
 # Row annotation
+gene_order_df &lt;- all_data %&gt;%
+  distinct(Gene, Category) %&gt;%
+  arrange(factor(Category, levels = sort(unique(entrez_category$Category))), Gene)
+
+ordered_genes &lt;- gene_order_df$Gene
+logFC_mat &lt;- logFC_mat[ordered_genes, ]
+signif_mat &lt;- signif_mat[ordered_genes, ]
+
 category_colors &lt;- structure(
   c(&quot;darkorange&quot;, &quot;steelblue&quot;, &quot;darkgreen&quot;, &quot;firebrick&quot;, &quot;gold&quot;, &quot;mediumpurple&quot;, &quot;gray60&quot;),
   names = sort(unique(entrez_category$Category))
@@ -2740,7 +2774,7 @@ ha_left &lt;- rowAnnotation(
   annotation_name_side = &quot;top&quot;
 )
 
-# Heatmap
+# Final Heatmap
 Heatmap(logFC_mat,
         name = &quot;logFC&quot;,
         top_annotation = col_annot,
@@ -2750,7 +2784,7 @@ Heatmap(logFC_mat,
         show_row_names = TRUE,
         show_column_names = FALSE,
         row_names_gp = gpar(fontsize = 10),
-        column_title = &quot;DDR Gene Expression Response\nbetween CX-5461 and DOX&quot;,
+        column_title = &quot;DDR Gene Expression Response (n = 68)\nCX-5461 and DOX&quot;,
         column_title_gp = gpar(fontsize = 14, fontface = &quot;bold&quot;),
         cell_fun = function(j, i, x, y, width, height, fill) {
           grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))

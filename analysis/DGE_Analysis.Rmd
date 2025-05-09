@@ -235,8 +235,8 @@ for (plot_name in names(volcano_plots)) {
 
 
 ## **📌 DNA Damage Marker expression changes between CX5461 and DOX**
-```{r DNA, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=12, fig.width=10}
-# 📌 DNA Damage Marker expression changes between CX5461 and DOX
+```{r DNA, echo=TRUE, message=FALSE, warning=FALSE, fig.height=12, fig.width=10}
+# 📌 DDR Gene Expression Heatmap — CX-5461 and DOX (68 genes, with categories)
 
 # Load libraries
 library(tidyverse)
@@ -249,22 +249,20 @@ library(reshape2)
 # Load DEG files
 load_deg <- function(path) read.csv(path)
 
-deg_list <- list(
-  "CX_0.1_3" = load_deg("data/DEGs/Toptable_CX_0.1_3.csv"),
-  "CX_0.1_24" = load_deg("data/DEGs/Toptable_CX_0.1_24.csv"),
-  "CX_0.1_48" = load_deg("data/DEGs/Toptable_CX_0.1_48.csv"),
-  "CX_0.5_3" = load_deg("data/DEGs/Toptable_CX_0.5_3.csv"),
-  "CX_0.5_24" = load_deg("data/DEGs/Toptable_CX_0.5_24.csv"),
-  "CX_0.5_48" = load_deg("data/DEGs/Toptable_CX_0.5_48.csv"),
-  "DOX_0.1_3" = load_deg("data/DEGs/Toptable_DOX_0.1_3.csv"),
-  "DOX_0.1_24" = load_deg("data/DEGs/Toptable_DOX_0.1_24.csv"),
-  "DOX_0.1_48" = load_deg("data/DEGs/Toptable_DOX_0.1_48.csv"),
-  "DOX_0.5_3" = load_deg("data/DEGs/Toptable_DOX_0.5_3.csv"),
-  "DOX_0.5_24" = load_deg("data/DEGs/Toptable_DOX_0.5_24.csv"),
-  "DOX_0.5_48" = load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
-)
+CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
+CX_0.1_24 <- load_deg("data/DEGs/Toptable_CX_0.1_24.csv")
+CX_0.1_48 <- load_deg("data/DEGs/Toptable_CX_0.1_48.csv")
+CX_0.5_3 <- load_deg("data/DEGs/Toptable_CX_0.5_3.csv")
+CX_0.5_24 <- load_deg("data/DEGs/Toptable_CX_0.5_24.csv")
+CX_0.5_48 <- load_deg("data/DEGs/Toptable_CX_0.5_48.csv")
+DOX_0.1_3 <- load_deg("data/DEGs/Toptable_DOX_0.1_3.csv")
+DOX_0.1_24 <- load_deg("data/DEGs/Toptable_DOX_0.1_24.csv")
+DOX_0.1_48 <- load_deg("data/DEGs/Toptable_DOX_0.1_48.csv")
+DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
+DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
+DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
 
-# Final 68-gene category mapping (curated and verified)
+# Final Entrez IDs and categories (68 genes)
 entrez_category <- tribble(
   ~ENTREZID, ~Category,
   317, "Apoptosis", 355, "Apoptosis", 581, "Apoptosis", 637, "Apoptosis",
@@ -284,8 +282,8 @@ entrez_category <- tribble(
   6118, "Damage Sensors / Signal Transducers", 4361, "Damage Sensors / Signal Transducers",
   10111, "Damage Sensors / Signal Transducers", 4683, "Damage Sensors / Signal Transducers",
   84126, "Damage Sensors / Signal Transducers", 3014, "Damage Sensors / Signal Transducers",
-  672, "DNA Repair", 2177, "DNA Repair", 5888, "DNA Repair", 5893, "DNA Repair", 
-  1647, "DNA Repair", 4616, "DNA Repair", 10912, "DNA Repair", 1111, "DNA Repair", 
+  672, "DNA Repair", 2177, "DNA Repair", 5888, "DNA Repair", 5893, "DNA Repair",
+  1647, "DNA Repair", 4616, "DNA Repair", 10912, "DNA Repair", 1111, "DNA Repair",
   11200, "DNA Repair", 1643, "DNA Repair", 8243, "DNA Repair", 5981, "DNA Repair",
   7157, "p53 Regulators / Targets", 4193, "p53 Regulators / Targets", 5371, "p53 Regulators / Targets",
   27244, "p53 Regulators / Targets", 50484, "p53 Regulators / Targets",
@@ -293,37 +291,46 @@ entrez_category <- tribble(
   207, "Miscellaneous / Broad", 25, "Miscellaneous / Broad"
 )
 
-# Filter Entrez IDs
 entrez_ids <- entrez_category$ENTREZID
 
-# Extract DEG subset
+# Extract relevant DEG values
 extract_data <- function(df, name) {
   df %>%
     filter(Entrez_ID %in% entrez_ids) %>%
-    mutate(Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
-                         column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
-           Condition = name,
-           Signif = ifelse(adj.P.Val < 0.05, "*", ""))
+    mutate(
+      Gene = mapIds(org.Hs.eg.db, as.character(Entrez_ID),
+                    column = "SYMBOL", keytype = "ENTREZID", multiVals = "first"),
+      Condition = name,
+      Signif = ifelse(adj.P.Val < 0.05, "*", "")
+    )
 }
 
-# Combine and annotate
+# DEG list
+deg_list <- list(
+  "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
+  "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
+  "DOX_0.1_3" = DOX_0.1_3, "DOX_0.1_24" = DOX_0.1_24, "DOX_0.1_48" = DOX_0.1_48,
+  "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
+)
+
+# Combine all DEGs and annotate
 all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE)) %>%
   left_join(entrez_category, by = c("Entrez_ID" = "ENTREZID"))
 
-# Create logFC and significance matrices
+# Create matrices
 logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
 signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
 
-# Order rows by category
-gene_order_df <- all_data %>%
-  distinct(Gene, Category) %>%
-  arrange(factor(Category, levels = sort(unique(entrez_category$Category))), Gene)
+# Set desired order
+desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+                   "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+                   "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+                   "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48")
 
-ordered_genes <- gene_order_df$Gene
-logFC_mat <- logFC_mat[ordered_genes, ]
-signif_mat <- signif_mat[ordered_genes, ]
+logFC_mat <- logFC_mat[, desired_order, drop = FALSE]
+signif_mat <- signif_mat[, desired_order, drop = FALSE]
 
-# Top annotation
+# Column annotation
 meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
 col_annot <- HeatmapAnnotation(
   Drug = meta[, 1],
@@ -338,6 +345,14 @@ col_annot <- HeatmapAnnotation(
 )
 
 # Row annotation
+gene_order_df <- all_data %>%
+  distinct(Gene, Category) %>%
+  arrange(factor(Category, levels = sort(unique(entrez_category$Category))), Gene)
+
+ordered_genes <- gene_order_df$Gene
+logFC_mat <- logFC_mat[ordered_genes, ]
+signif_mat <- signif_mat[ordered_genes, ]
+
 category_colors <- structure(
   c("darkorange", "steelblue", "darkgreen", "firebrick", "gold", "mediumpurple", "gray60"),
   names = sort(unique(entrez_category$Category))
@@ -349,7 +364,7 @@ ha_left <- rowAnnotation(
   annotation_name_side = "top"
 )
 
-# Heatmap
+# Final Heatmap
 Heatmap(logFC_mat,
         name = "logFC",
         top_annotation = col_annot,
@@ -359,7 +374,7 @@ Heatmap(logFC_mat,
         show_row_names = TRUE,
         show_column_names = FALSE,
         row_names_gp = gpar(fontsize = 10),
-        column_title = "DDR Gene Expression Response\nbetween CX-5461 and DOX",
+        column_title = "DDR Gene Expression Response (n = 68)\nCX-5461 and DOX",
         column_title_gp = gpar(fontsize = 14, fontface = "bold"),
         cell_fun = function(j, i, x, y, width, height, fill) {
           grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
