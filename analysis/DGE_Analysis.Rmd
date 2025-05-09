@@ -235,7 +235,9 @@ for (plot_name in names(volcano_plots)) {
 
 
 ## **📌 DNA Damage Marker expression changes between CX5461 and DOX**
-```{r DNA, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=20, fig.width=10}
+```{r DNA, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=12, fig.width=10}
+# 📌 DNA Damage Marker expression changes between CX5461 and DOX
+
 # Load libraries
 library(tidyverse)
 library(ComplexHeatmap)
@@ -247,37 +249,27 @@ library(reshape2)
 # Load DEG files
 load_deg <- function(path) read.csv(path)
 
-CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
-CX_0.1_24 <- load_deg("data/DEGs/Toptable_CX_0.1_24.csv")
-CX_0.1_48 <- load_deg("data/DEGs/Toptable_CX_0.1_48.csv")
-CX_0.5_3 <- load_deg("data/DEGs/Toptable_CX_0.5_3.csv")
-CX_0.5_24 <- load_deg("data/DEGs/Toptable_CX_0.5_24.csv")
-CX_0.5_48 <- load_deg("data/DEGs/Toptable_CX_0.5_48.csv")
-DOX_0.1_3 <- load_deg("data/DEGs/Toptable_DOX_0.1_3.csv")
-DOX_0.1_24 <- load_deg("data/DEGs/Toptable_DOX_0.1_24.csv")
-DOX_0.1_48 <- load_deg("data/DEGs/Toptable_DOX_0.1_48.csv")
-DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
-DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
-DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
-
-# Define Entrez IDs of interest (DDR genes)
-entrez_ids <- c(
-  10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
-  11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
-  3014, 317, 355, 4193, 4292, 4361, 4609, 4616, 4683, 472, 50484,
-  5366, 5371, 54205, 545, 55367, 5591, 581, 5810, 5883, 5884,
-  5888, 5893, 5925, 595, 5916, 5981, 6118, 637, 672, 7157, 7799, 
-  8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898, 9133, 
-  9134, 983, 9874, 993, 995
+deg_list <- list(
+  "CX_0.1_3" = load_deg("data/DEGs/Toptable_CX_0.1_3.csv"),
+  "CX_0.1_24" = load_deg("data/DEGs/Toptable_CX_0.1_24.csv"),
+  "CX_0.1_48" = load_deg("data/DEGs/Toptable_CX_0.1_48.csv"),
+  "CX_0.5_3" = load_deg("data/DEGs/Toptable_CX_0.5_3.csv"),
+  "CX_0.5_24" = load_deg("data/DEGs/Toptable_CX_0.5_24.csv"),
+  "CX_0.5_48" = load_deg("data/DEGs/Toptable_CX_0.5_48.csv"),
+  "DOX_0.1_3" = load_deg("data/DEGs/Toptable_DOX_0.1_3.csv"),
+  "DOX_0.1_24" = load_deg("data/DEGs/Toptable_DOX_0.1_24.csv"),
+  "DOX_0.1_48" = load_deg("data/DEGs/Toptable_DOX_0.1_48.csv"),
+  "DOX_0.5_3" = load_deg("data/DEGs/Toptable_DOX_0.5_3.csv"),
+  "DOX_0.5_24" = load_deg("data/DEGs/Toptable_DOX_0.5_24.csv"),
+  "DOX_0.5_48" = load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
 )
 
-# Define category mapping for Entrez IDs (based on final user-provided classification)
+# Final 68-gene category mapping (curated and verified)
 entrez_category <- tribble(
   ~ENTREZID, ~Category,
-  5366, "Apoptosis", 55367, "Apoptosis", 8795, "Apoptosis", 355, "Apoptosis",
-  27113, "Apoptosis", 317, "Apoptosis", 836, "Apoptosis", 841, "Apoptosis",
-  842, "Apoptosis", 581, "Apoptosis", 637, "Apoptosis", 54205, "Apoptosis",
-  
+  317, "Apoptosis", 355, "Apoptosis", 581, "Apoptosis", 637, "Apoptosis",
+  836, "Apoptosis", 841, "Apoptosis", 842, "Apoptosis", 27113, "Apoptosis",
+  5366, "Apoptosis", 54205, "Apoptosis", 55367, "Apoptosis", 8795, "Apoptosis",
   1026, "Cell Cycle / Checkpoint", 1027, "Cell Cycle / Checkpoint", 595, "Cell Cycle / Checkpoint",
   894, "Cell Cycle / Checkpoint", 896, "Cell Cycle / Checkpoint", 898, "Cell Cycle / Checkpoint",
   9133, "Cell Cycle / Checkpoint", 9134, "Cell Cycle / Checkpoint", 891, "Cell Cycle / Checkpoint",
@@ -286,25 +278,25 @@ entrez_category <- tribble(
   995, "Cell Cycle / Checkpoint", 1869, "Cell Cycle / Checkpoint", 4609, "Cell Cycle / Checkpoint",
   5925, "Cell Cycle / Checkpoint", 9874, "Cell Cycle / Checkpoint", 11011, "Cell Cycle / Checkpoint",
   1385, "Cell Cycle / Checkpoint",
-  
   472, "Damage Sensors / Signal Transducers", 545, "Damage Sensors / Signal Transducers",
   5591, "Damage Sensors / Signal Transducers", 5810, "Damage Sensors / Signal Transducers",
   5883, "Damage Sensors / Signal Transducers", 5884, "Damage Sensors / Signal Transducers",
   6118, "Damage Sensors / Signal Transducers", 4361, "Damage Sensors / Signal Transducers",
   10111, "Damage Sensors / Signal Transducers", 4683, "Damage Sensors / Signal Transducers",
   84126, "Damage Sensors / Signal Transducers", 3014, "Damage Sensors / Signal Transducers",
-  
   672, "DNA Repair", 2177, "DNA Repair", 5888, "DNA Repair", 5893, "DNA Repair", 
   1647, "DNA Repair", 4616, "DNA Repair", 10912, "DNA Repair", 1111, "DNA Repair", 
   11200, "DNA Repair", 1643, "DNA Repair", 8243, "DNA Repair", 5981, "DNA Repair",
-  
   7157, "p53 Regulators / Targets", 4193, "p53 Regulators / Targets", 5371, "p53 Regulators / Targets",
   27244, "p53 Regulators / Targets", 50484, "p53 Regulators / Targets",
-  
-  25, "Miscellaneous / Broad", 207, "Miscellaneous / Broad"
+  5916, "DOX Cardiotoxicity", 7799, "DOX Cardiotoxicity", 4292, "DOX Cardiotoxicity",
+  207, "Miscellaneous / Broad", 25, "Miscellaneous / Broad"
 )
 
-# Extract relevant data
+# Filter Entrez IDs
+entrez_ids <- entrez_category$ENTREZID
+
+# Extract DEG subset
 extract_data <- function(df, name) {
   df %>%
     filter(Entrez_ID %in% entrez_ids) %>%
@@ -314,23 +306,22 @@ extract_data <- function(df, name) {
            Signif = ifelse(adj.P.Val < 0.05, "*", ""))
 }
 
-# Bind all data
-deg_list <- list(
-  "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
-  "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
-  "DOX_0.1_3" = DOX_0.1_3, "DOX_0.1_24" = DOX_0.1_24, "DOX_0.1_48" = DOX_0.1_48,
-  "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
-)
+# Combine and annotate
+all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE)) %>%
+  left_join(entrez_category, by = c("Entrez_ID" = "ENTREZID"))
 
-all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE))
-
-# Merge with Entrez category
-all_data <- left_join(all_data, entrez_category, by = c("Entrez_ID" = "ENTREZID"))
-
-
-# Build matrices
+# Create logFC and significance matrices
 logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
 signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
+
+# Order rows by category
+gene_order_df <- all_data %>%
+  distinct(Gene, Category) %>%
+  arrange(factor(Category, levels = sort(unique(entrez_category$Category))), Gene)
+
+ordered_genes <- gene_order_df$Gene
+logFC_mat <- logFC_mat[ordered_genes, ]
+signif_mat <- signif_mat[ordered_genes, ]
 
 # Top annotation
 meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
@@ -346,19 +337,10 @@ col_annot <- HeatmapAnnotation(
   annotation_height = unit(c(1, 1, 1), "cm")
 )
 
-# Reorder genes alphabetically by category
-gene_order_df <- all_data %>%
-  distinct(Gene, Category) %>%
-  arrange(Category, Gene)
-
-ordered_genes <- gene_order_df$Gene
-logFC_mat <- logFC_mat[ordered_genes, ]
-signif_mat <- signif_mat[ordered_genes, ]
-
 # Row annotation
 category_colors <- structure(
-  c("darkorange", "steelblue", "darkgreen", "firebrick", "gold", "gray60"),
-  names = sort(unique(gene_order_df$Category))
+  c("darkorange", "steelblue", "darkgreen", "firebrick", "gold", "mediumpurple", "gray60"),
+  names = sort(unique(entrez_category$Category))
 )
 
 ha_left <- rowAnnotation(
@@ -367,7 +349,7 @@ ha_left <- rowAnnotation(
   annotation_name_side = "top"
 )
 
-# Final heatmap
+# Heatmap
 Heatmap(logFC_mat,
         name = "logFC",
         top_annotation = col_annot,
@@ -377,7 +359,7 @@ Heatmap(logFC_mat,
         show_row_names = TRUE,
         show_column_names = FALSE,
         row_names_gp = gpar(fontsize = 10),
-        column_title = "DNA Damage Response Genes\nCX-5461 and DOX Expression",
+        column_title = "DDR Gene Expression Response\nbetween CX-5461 and DOX",
         column_title_gp = gpar(fontsize = 14, fontface = "bold"),
         cell_fun = function(j, i, x, y, width, height, fill) {
           grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
