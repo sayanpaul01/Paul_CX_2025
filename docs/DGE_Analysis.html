@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,21 +407,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -512,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5a1db8113750a17ebafa6fec8521e12848f7e4fatargetblank5a1db81a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree48c7dd996be73caabffb9feef79bc7f692b0507ctargetblank48c7dd9a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5a1db8113750a17ebafa6fec8521e12848f7e4fa" target="_blank">5a1db81</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/48c7dd996be73caabffb9feef79bc7f692b0507c" target="_blank">48c7dd9</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5a1db8113750a17ebafa6fec8521e12848f7e4fatargetblank5a1db81a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree48c7dd996be73caabffb9feef79bc7f692b0507ctargetblank48c7dd9a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5a1db8113750a17ebafa6fec8521e12848f7e4fa" target="_blank">5a1db81</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/48c7dd996be73caabffb9feef79bc7f692b0507c" target="_blank">48c7dd9</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -634,7 +631,6 @@ Untracked files:
 
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
-    Modified:   analysis/DGE_Analysis.Rmd
 
 </code></pre>
 <p>
@@ -680,6 +676,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/analysis/DGE_Analysis.Rmd" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/DGE_Analysis.html" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -3048,6 +3078,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/DDR-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/92099e7a5fa068d2357cb772c18c0e40b0953661/docs/figure/DGE_Analysis.Rmd/DDR-1.png" target="_blank">92099e7</a>
 </td>
 <td>
@@ -3373,6 +3414,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/P53_target_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/43e348d0bc195290fd54602de2e15faafc29c815/docs/figure/DGE_Analysis.Rmd/P53_target_box-1.png" target="_blank">43e348d</a>
 </td>
 <td>
@@ -3525,6 +3577,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/TOP2B_target_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/711098f70cf35739ae12795badc60904e4505b4b/docs/figure/DGE_Analysis.Rmd/TOP2B_target_box-1.png" target="_blank">711098f</a>
@@ -3832,6 +3895,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/TOP2A_target_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/711098f70cf35739ae12795badc60904e4505b4b/docs/figure/DGE_Analysis.Rmd/TOP2A_target_box-1.png" target="_blank">711098f</a>
 </td>
 <td>
@@ -4126,6 +4200,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/TOP2A_target_box_2-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/d11a2ea01708a96de53fa57d625c8ec8b2d13700/docs/figure/DGE_Analysis.Rmd/TOP2A_target_box_2-1.png" target="_blank">d11a2ea</a>
 </td>
 <td>
@@ -4269,6 +4354,43 @@ ggplot(complete_ac, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/AC_cardiotox_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-AC_cardiotox_box-1">
+Past versions of AC_cardiotox_box-1.png
+</button>
+</p>
+<div id="fig-AC_cardiotox_box-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/AC_cardiotox_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="logfc-boxplots-of-dox-cardiotoxicity-genes"
 class="section level2">
@@ -4393,6 +4515,43 @@ ggplot(complete_doxcardio, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/DOX_cardiotox_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DOX_cardiotox_box-1">
+Past versions of DOX_cardiotox_box-1.png
+</button>
+</p>
+<div id="fig-DOX_cardiotox_box-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/DOX_cardiotox_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="logfc-boxplots-of-heart-specific-genes" class="section level2">
 <h2><strong>📌 LogFC boxplots of Heart specific genes</strong></h2>
@@ -4520,6 +4679,43 @@ ggplot(complete_heart, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/Heart_Specific_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Heart_Specific_box-1">
+Past versions of Heart_Specific_box-1.png
+</button>
+</p>
+<div id="fig-Heart_Specific_box-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/Heart_Specific_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="atrial-fibrillation-gene-expression-changes-between-cx5461-and-dox"
@@ -4931,6 +5127,43 @@ ggplot(complete_af, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/AF_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-AF_box-1">
+Past versions of AF_box-1.png
+</button>
+</p>
+<div id="fig-AF_box-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/AF_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heart-failure-gene-expression-changes-between-cx5461-and-dox"
 class="section level2">
@@ -5226,6 +5459,43 @@ ggplot(complete_hf, aes(x = Condition, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/DGE_Analysis.Rmd/HF_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-HF_box-1">
+Past versions of HF_box-1.png
+</button>
+</p>
+<div id="fig-HF_box-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/48c7dd996be73caabffb9feef79bc7f692b0507c/docs/figure/DGE_Analysis.Rmd/HF_box-1.png" target="_blank">48c7dd9</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
