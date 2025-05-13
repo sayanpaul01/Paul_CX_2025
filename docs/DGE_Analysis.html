@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-09
+<strong>Last updated:</strong> 2025-05-13
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeef120cdbac14259c8108fd6c61120ad8326225d7targetblankef120cda">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5a1db8113750a17ebafa6fec8521e12848f7e4fatargetblank5a1db81a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/ef120cdbac14259c8108fd6c61120ad8326225d7" target="_blank">ef120cd</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5a1db8113750a17ebafa6fec8521e12848f7e4fa" target="_blank">5a1db81</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeef120cdbac14259c8108fd6c61120ad8326225d7targetblankef120cda"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5a1db8113750a17ebafa6fec8521e12848f7e4fatargetblank5a1db81a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/ef120cdbac14259c8108fd6c61120ad8326225d7" target="_blank">ef120cd</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5a1db8113750a17ebafa6fec8521e12848f7e4fa" target="_blank">5a1db81</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -680,6 +680,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/5a1db8113750a17ebafa6fec8521e12848f7e4fa/analysis/DGE_Analysis.Rmd" target="_blank">5a1db81</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-09
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/5a1db8113750a17ebafa6fec8521e12848f7e4fa/docs/DGE_Analysis.html" target="_blank">5a1db81</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-09
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -2815,6 +2849,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/5a1db8113750a17ebafa6fec8521e12848f7e4fa/docs/figure/DGE_Analysis.Rmd/DNA-1.png" target="_blank">5a1db81</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-09
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/3d33304d85bf2b6b87a3d324bc3a9d5e93720619/docs/figure/DGE_Analysis.Rmd/DNA-1.png" target="_blank">3d33304</a>
 </td>
 <td>
@@ -2854,11 +2899,11 @@ sayanpaul01
 <div id="logfc-boxplots-of-dna-damage-response-genes"
 class="section level2">
 <h2><strong>📌 LogFC boxplots of DNA Damage Response Genes</strong></h2>
-<pre class="r"><code># Load libraries
+<pre class="r"><code># Load Libraries
 library(tidyverse)
 library(org.Hs.eg.db)
 
-# DEG file paths and labels
+# DEG File Paths 
 deg_files &lt;- list(
   &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
@@ -2874,7 +2919,7 @@ deg_files &lt;- list(
   &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
 )
 
-# DDR Entrez IDs (68 genes)
+# DDR Entrez IDs
 entrez_ids &lt;- c(
   10111, 1017, 1019, 1020, 1021, 1026, 1027, 10912, 11011, 1111,
   11200, 1385, 1643, 1647, 1869, 207, 2177, 25, 27113, 27244,
@@ -2883,19 +2928,20 @@ entrez_ids &lt;- c(
   5888, 5893, 5925, 595, 5981, 6118, 637, 672, 7157, 7799,
   8243, 836, 841, 84126, 842, 8795, 891, 894, 896, 898,
   9133, 9134, 983, 9874, 993, 995, 5916
-)
+) %&gt;% as.character()
 
-# Create full DDR table from all conditions
+# Load and Filter DEGs
 ddr_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
   read_csv(file, show_col_types = FALSE) %&gt;%
-    filter(Entrez_ID %in% entrez_ids) %&gt;%
     mutate(
+      Entrez_ID = as.character(Entrez_ID),
       Condition = label,
       Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
-    )
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
 })
 
-# Create full combination of genes × conditions
+# Complete Combinations
 all_conditions &lt;- names(deg_files)
 all_combos &lt;- crossing(
   Entrez_ID = entrez_ids,
@@ -2905,7 +2951,7 @@ all_combos &lt;- crossing(
     Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
   )
 
-# Merge with actual DEG data and fill missing logFC
+# Merge with DEG Data 
 complete_ddr &lt;- all_combos %&gt;%
   left_join(ddr_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
   mutate(
@@ -2913,14 +2959,14 @@ complete_ddr &lt;- all_combos %&gt;%
     adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
   )
 
-# Map gene symbols
+#Map Gene Symbols
 complete_ddr &lt;- complete_ddr %&gt;%
   mutate(
-    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
                   column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
   )
 
-# Order X-axis by your preferred condition order
+# Order Condition Labels
 complete_ddr$Condition &lt;- factor(complete_ddr$Condition, levels = c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
@@ -2928,16 +2974,48 @@ complete_ddr$Condition &lt;- factor(complete_ddr$Condition, levels = c(
   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 ))
 
-# Final boxplot (with default outlier points from geom_boxplot)
+#Wilcoxon Test: CX vs DOX Per Condition 
+
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
+
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_ddr %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_ddr %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# Final Boxplot
 ggplot(complete_ddr, aes(x = Condition, y = logFC, fill = Drug)) +
-  geom_boxplot() +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
   scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
   labs(
-    x = &quot;Treatment Condition&quot;,
-    y = &quot;Log Fold Change&quot;,
     title = &quot;LogFC of DNA Damage Response Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
+    fill = &quot;Drug&quot;
   ) +
-  theme_bw() +
+  theme_bw(base_size = 14) +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
     axis.title = element_text(size = 14),
@@ -3137,11 +3215,11 @@ sayanpaul01
 </div>
 <div id="logfc-boxplots-of-p53-target-genes" class="section level2">
 <h2><strong>📌 LogFC boxplots of P53 target Genes</strong></h2>
-<pre class="r"><code># Load libraries
+<pre class="r"><code># ----------------- Load Libraries -----------------
 library(tidyverse)
 library(org.Hs.eg.db)
 
-# DEG file paths and labels
+# ----------------- DEG File Paths -----------------
 deg_files &lt;- list(
   &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
@@ -3157,8 +3235,8 @@ deg_files &lt;- list(
   &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
 )
 
-# P53 target Entrez IDs (300 genes)
-p53_entrez_ids &lt;- c(
+# ----------------- P53 Target Entrez IDs -----------------
+entrez_ids &lt;- c(
   1026, 50484, 4193, 9766, 9518, 7832, 1643, 1647, 1263, 57103, 51065, 8795, 51499, 64393, 581, 5228, 5429, 8493, 55959,
   7508, 64782, 282991, 355, 53836, 4814, 10769, 9050, 27244, 9540, 94241, 26154, 57763, 900, 26999, 55332, 26263, 23479,
   23612, 29950, 9618, 10346, 8824, 134147, 55294, 22824, 4254, 6560, 467, 27113, 60492, 8444, 60401, 1969, 220965, 2232,
@@ -3176,38 +3254,45 @@ p53_entrez_ids &lt;- c(
   4043, 9848, 2872, 23041, 740, 343263, 4638, 26509, 4792, 22861, 57523, 55214, 80025, 164091, 57060, 64065, 51090,
   5453, 8496, 333926, 55671, 5900, 55544, 23179, 8601, 389, 6223, 55800, 6385, 4088, 6643, 122809, 257397, 285343,
   7011, 54790, 374618, 55362, 51754, 7157, 9537, 22906, 7205, 80705, 219699, 55245, 83719, 7748, 25946, 118738
-)
+) %&gt;% as.character()
 
-# Load DEG data and tag with condition + drug
-p53_data_raw &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+# ----------------- Load and Filter DEGs -----------------
+p53_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
   read_csv(file, show_col_types = FALSE) %&gt;%
-    filter(Entrez_ID %in% p53_entrez_ids) %&gt;%
     mutate(
+      Entrez_ID = as.character(Entrez_ID),
       Condition = label,
       Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
-    )
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
 })
 
-# Generate all gene-condition combinations
+# ----------------- Complete Combinations -----------------
+all_conditions &lt;- names(deg_files)
 all_combos &lt;- crossing(
-  Entrez_ID = p53_entrez_ids,
-  Condition = names(deg_files)
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
 ) %&gt;%
-  mutate(Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;))
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
 
-# Merge and fill missing entries
+# ----------------- Merge with DEG Data -----------------
 complete_p53 &lt;- all_combos %&gt;%
-  left_join(p53_data_raw, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  left_join(p53_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
   mutate(
     logFC = ifelse(is.na(logFC), 0, logFC),
     adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
-  ) %&gt;%
+  )
+
+# ----------------- Map Gene Symbols -----------------
+complete_p53 &lt;- complete_p53 %&gt;%
   mutate(
-    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
                   column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
   )
 
-# Set condition order for X-axis
+# ----------------- Order Condition Labels -----------------
 complete_p53$Condition &lt;- factor(complete_p53$Condition, levels = c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
@@ -3215,28 +3300,47 @@ complete_p53$Condition &lt;- factor(complete_p53$Condition, levels = c(
   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 ))
 
-# Plot logFC boxplot
-# Ensure Drug is a factor with fixed order
-complete_p53$Drug &lt;- factor(complete_p53$Drug, levels = c(&quot;CX.5461&quot;, &quot;DOX&quot;))
+# ----------------- Wilcoxon Tests: CX vs DOX -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
 
-# Plot
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_p53 %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_p53 %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Plot -----------------
 ggplot(complete_p53, aes(x = Condition, y = logFC, fill = Drug)) +
-  geom_boxplot(position = position_dodge(width = 0.75)) +
-  scale_fill_manual(
-    values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;),
-    labels = c(&quot;CX.5461&quot;, &quot;DOX&quot;)
-  ) +
-  scale_y_continuous(
-    limits = c(-3, 10),
-    breaks = c(-3, 0, 3, 6, 9)
-  ) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
   labs(
-    x = &quot;Treatment Condition&quot;,
-    y = &quot;Log Fold Change&quot;,
     title = &quot;LogFC of P53 Target Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
     fill = &quot;Drug&quot;
   ) +
-  theme_bw() +
+  theme_bw(base_size = 14) +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
     axis.title = element_text(size = 14),
@@ -3285,16 +3389,11 @@ sayanpaul01
 </div>
 <div id="logfc-boxplots-of-top2b-target-genes" class="section level2">
 <h2><strong>📌 LogFC boxplots of TOP2B target Genes</strong></h2>
-<pre class="r"><code># Load libraries
+<pre class="r"><code># ----------------- Load Libraries -----------------
 library(tidyverse)
 library(org.Hs.eg.db)
 
-# Read TOP2B target Entrez IDs from CSV
-top2b_entrez_ids &lt;- read_csv(&quot;data/TOP2B_target_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
-  pull(Entrez_ID) %&gt;%
-  unique()
-
-# DEG file paths and labels
+# ----------------- DEG File Paths -----------------
 deg_files &lt;- list(
   &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
@@ -3310,9 +3409,16 @@ deg_files &lt;- list(
   &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
 )
 
-# Load DEG data and tag with condition + drug
-top2b_data_raw &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+# ----------------- TOP2B Entrez IDs -----------------
+top2b_entrez_ids &lt;- read_csv(&quot;data/TOP2B_target_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
+  pull(Entrez_ID) %&gt;%
+  unique() %&gt;%
+  as.character()
+
+# ----------------- Load &amp; Combine DEG Data -----------------
+top2b_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
   read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(Entrez_ID = as.character(Entrez_ID)) %&gt;%  # FIX: Ensure type match
     filter(Entrez_ID %in% top2b_entrez_ids) %&gt;%
     mutate(
       Condition = label,
@@ -3320,26 +3426,27 @@ top2b_data_raw &lt;- map2_dfr(deg_files, names(deg_files), function(file, label)
     )
 })
 
-# Generate all gene-condition combinations
+# ----------------- Create All Gene × Condition Combos -----------------
+all_conditions &lt;- names(deg_files)
 all_combos &lt;- crossing(
   Entrez_ID = top2b_entrez_ids,
-  Condition = names(deg_files)
+  Condition = all_conditions
 ) %&gt;%
-  mutate(Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;))
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
 
-# Merge and fill missing entries
+# ----------------- Merge &amp; Impute logFC -----------------
 complete_top2b &lt;- all_combos %&gt;%
-  left_join(top2b_data_raw, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  left_join(top2b_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
   mutate(
     logFC = ifelse(is.na(logFC), 0, logFC),
-    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
-  ) %&gt;%
-  mutate(
-    Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val),
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
                   column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
   )
 
-# Set condition order for X-axis
+# ----------------- Order X-axis Conditions -----------------
 complete_top2b$Condition &lt;- factor(complete_top2b$Condition, levels = c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
@@ -3347,17 +3454,44 @@ complete_top2b$Condition &lt;- factor(complete_top2b$Condition, levels = c(
   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 ))
 
-# Ensure drug factor levels for consistent color
-complete_top2b$Drug &lt;- factor(complete_top2b$Drug, levels = c(&quot;CX.5461&quot;, &quot;DOX&quot;))
+# ----------------- Wilcoxon Test: CX vs DOX per condition -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
 
-# Plot logFC boxplot with default Y scale
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_top2b %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_top2b %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Boxplot with Wilcoxon Stars -----------------
 ggplot(complete_top2b, aes(x = Condition, y = logFC, fill = Drug)) +
-  geom_boxplot(position = position_dodge(width = 0.75)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
   scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
   labs(
+    title = &quot;LogFC of TOP2B Target Genes&quot;,
     x = &quot;Treatment Condition&quot;,
     y = &quot;Log Fold Change&quot;,
-    title = &quot;LogFC of TOP2B Target Genes\n(ipSC-CM ChIP Seq)&quot;,
     fill = &quot;Drug&quot;
   ) +
   theme_bw() +
@@ -3560,16 +3694,11 @@ sayanpaul01
 class="section level2">
 <h2><strong>📌 LogFC boxplots of TOP2A target Genes (ChIP
 Atlas)</strong></h2>
-<pre class="r"><code># Load libraries
+<pre class="r"><code># ----------------- Load Libraries -----------------
 library(tidyverse)
 library(org.Hs.eg.db)
 
-# Read TOP2A target Entrez IDs from CSV
-top2a_entrez_ids &lt;- read_csv(&quot;data/TOP2A_target_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
-  pull(Entrez_ID) %&gt;%
-  unique()
-
-# DEG file paths and labels
+# ----------------- DEG File Paths -----------------
 deg_files &lt;- list(
   &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
@@ -3585,9 +3714,16 @@ deg_files &lt;- list(
   &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
 )
 
-# Load DEG data and tag with condition + drug
-top2a_data_raw &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+# ----------------- Load TOP2A Entrez IDs -----------------
+top2a_entrez_ids &lt;- read_csv(&quot;data/TOP2A_target_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
+  pull(Entrez_ID) %&gt;%
+  unique() %&gt;%
+  as.character()
+
+# ----------------- Load &amp; Filter DEGs -----------------
+top2a_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
   read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(Entrez_ID = as.character(Entrez_ID)) %&gt;%
     filter(Entrez_ID %in% top2a_entrez_ids) %&gt;%
     mutate(
       Condition = label,
@@ -3595,26 +3731,27 @@ top2a_data_raw &lt;- map2_dfr(deg_files, names(deg_files), function(file, label)
     )
 })
 
-# Generate all gene-condition combinations
+# ----------------- Create All Gene × Condition Combos -----------------
+all_conditions &lt;- names(deg_files)
 all_combos &lt;- crossing(
   Entrez_ID = top2a_entrez_ids,
-  Condition = names(deg_files)
+  Condition = all_conditions
 ) %&gt;%
-  mutate(Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;))
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
 
-# Merge and fill missing entries
+# ----------------- Merge &amp; Impute logFC -----------------
 complete_top2a &lt;- all_combos %&gt;%
-  left_join(top2a_data_raw, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  left_join(top2a_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
   mutate(
     logFC = ifelse(is.na(logFC), 0, logFC),
-    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
-  ) %&gt;%
-  mutate(
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val),
     Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
                   column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
   )
 
-# Set condition order for X-axis
+# ----------------- Order X-axis Conditions -----------------
 complete_top2a$Condition &lt;- factor(complete_top2a$Condition, levels = c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
@@ -3622,20 +3759,47 @@ complete_top2a$Condition &lt;- factor(complete_top2a$Condition, levels = c(
   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 ))
 
-# Ensure Drug factor order for color consistency
-complete_top2a$Drug &lt;- factor(complete_top2a$Drug, levels = c(&quot;CX.5461&quot;, &quot;DOX&quot;))
+# ----------------- Wilcoxon Test: CX vs DOX per condition -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
 
-# Plot logFC boxplot (default y-scale)
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_top2a %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_top2a %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01 ~ &quot;**&quot;,
+      pval &lt; 0.05 ~ &quot;*&quot;,
+      TRUE ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Boxplot -----------------
 ggplot(complete_top2a, aes(x = Condition, y = logFC, fill = Drug)) +
-  geom_boxplot(position = position_dodge(width = 0.75)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
   scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
   labs(
+    title = &quot;LogFC of TOP2A Target Genes (ChIP Atlas)&quot;,
     x = &quot;Treatment Condition&quot;,
     y = &quot;Log Fold Change&quot;,
-    title = &quot;LogFC of TOP2A Target Genes\n(ChIP atlas)&quot;,
     fill = &quot;Drug&quot;
   ) +
-  theme_bw() +
+  theme_bw(base_size = 14) +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
     axis.title = element_text(size = 14),
@@ -3824,16 +3988,11 @@ sayanpaul01
 class="section level2">
 <h2><strong>📌 LogFC boxplots of TOP2A target Genes (RPE-1 cell
 line)</strong></h2>
-<pre class="r"><code># Load libraries
+<pre class="r"><code># ----------------- Load Libraries -----------------
 library(tidyverse)
 library(org.Hs.eg.db)
 
-# Read TOP2A literature-based target Entrez IDs from CSV
-top2a_lit_ids &lt;- read_csv(&quot;data/TOP2A_target_lit_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
-  pull(Entrez_ID) %&gt;%
-  unique()
-
-# DEG file paths and labels
+# ----------------- DEG File Paths -----------------
 deg_files &lt;- list(
   &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
@@ -3849,9 +4008,16 @@ deg_files &lt;- list(
   &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
 )
 
-# Load DEG data and tag with condition + drug
+# ----------------- Load TOP2A (RPE-1) Entrez IDs -----------------
+top2a_lit_ids &lt;- read_csv(&quot;data/TOP2A_target_lit_mapped.csv&quot;, show_col_types = FALSE) %&gt;%
+  pull(Entrez_ID) %&gt;%
+  unique() %&gt;%
+  as.character()
+
+# ----------------- Load &amp; Filter DEGs -----------------
 top2a_lit_data &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
   read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(Entrez_ID = as.character(Entrez_ID)) %&gt;%
     filter(Entrez_ID %in% top2a_lit_ids) %&gt;%
     mutate(
       Condition = label,
@@ -3859,26 +4025,27 @@ top2a_lit_data &lt;- map2_dfr(deg_files, names(deg_files), function(file, label)
     )
 })
 
-# Generate all gene-condition combinations
+# ----------------- Create All Gene × Condition Combos -----------------
+all_conditions &lt;- names(deg_files)
 all_combos &lt;- crossing(
   Entrez_ID = top2a_lit_ids,
-  Condition = names(deg_files)
+  Condition = all_conditions
 ) %&gt;%
-  mutate(Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;))
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
 
-# Merge and fill missing entries
+# ----------------- Merge &amp; Impute logFC -----------------
 complete_top2a_lit &lt;- all_combos %&gt;%
   left_join(top2a_lit_data, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
   mutate(
     logFC = ifelse(is.na(logFC), 0, logFC),
-    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
-  ) %&gt;%
-  mutate(
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val),
     Gene = mapIds(org.Hs.eg.db, keys = as.character(Entrez_ID),
                   column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
   )
 
-# Set condition order for X-axis
+# ----------------- Order Conditions -----------------
 complete_top2a_lit$Condition &lt;- factor(complete_top2a_lit$Condition, levels = c(
   &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
   &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
@@ -3886,20 +4053,47 @@ complete_top2a_lit$Condition &lt;- factor(complete_top2a_lit$Condition, levels =
   &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
 ))
 
-# Ensure Drug factor order for color consistency
-complete_top2a_lit$Drug &lt;- factor(complete_top2a_lit$Drug, levels = c(&quot;CX.5461&quot;, &quot;DOX&quot;))
+# ----------------- Wilcoxon Test: CX vs DOX -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
 
-# Plot logFC boxplot (default y-scale)
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_top2a_lit %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_top2a_lit %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01 ~ &quot;**&quot;,
+      pval &lt; 0.05 ~ &quot;*&quot;,
+      TRUE ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Boxplot -----------------
 ggplot(complete_top2a_lit, aes(x = Condition, y = logFC, fill = Drug)) +
-  geom_boxplot(position = position_dodge(width = 0.75)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
   scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
   labs(
+    title = &quot;LogFC of TOP2A Target Genes\n(RPE-1, Literature)&quot;,
     x = &quot;Treatment Condition&quot;,
     y = &quot;Log Fold Change&quot;,
-    title = &quot;LogFC of TOP2A Target Genes\n(RPE-1 cell)&quot;,
     fill = &quot;Drug&quot;
   ) +
-  theme_bw() +
+  theme_bw(base_size = 14) +
   theme(
     plot.title = element_text(size = rel(1.5), hjust = 0.5),
     axis.title = element_text(size = 14),
@@ -3945,6 +4139,387 @@ sayanpaul01
 </table>
 </div>
 </div>
+</div>
+<div id="logfc-boxplots-of-anthracycline-cardiotoxicity-genes"
+class="section level2">
+<h2><strong>📌 LogFC boxplots of Anthracycline cardiotoxicity
+genes</strong></h2>
+<pre class="r"><code># ----------------- Load Libraries -----------------
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# ----------------- DEG File Paths -----------------
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# ----------------- AC Cardiotoxicity Entrez IDs -----------------
+entrez_ids &lt;- c(
+  6272, 8029, 11128, 79899, 54477, 121665, 5095, 22863, 57161, 4692,
+  8214, 23151, 56606, 108, 22999, 56895, 9603, 3181, 4023, 10499,
+  92949, 4363, 10057, 5243, 5244, 5880, 1535, 2950, 847, 5447,
+  3038, 3077, 4846, 3958, 23327, 29899, 23155, 80856, 55020, 78996,
+  23262, 150383, 9620, 79730, 344595, 5066, 6251, 3482, 9588, 339416,
+  7292, 55157, 87769, 23409, 720, 3107, 54535, 1590, 80059, 7991,
+  57110, 8803, 323, 54826, 5916, 23371, 283337, 64078, 80010, 1933,
+  10818, 51020
+) %&gt;% as.character()
+
+# ----------------- Load and Filter DEGs -----------------
+ac_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(
+      Entrez_ID = as.character(Entrez_ID),
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
+})
+
+# ----------------- Create Full Gene × Condition Table -----------------
+all_conditions &lt;- names(deg_files)
+all_combos &lt;- crossing(
+  Entrez_ID = entrez_ids %&gt;% as.character(),
+  Condition = all_conditions
+) %&gt;%
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
+
+# ----------------- Merge and Fill Missing Values -----------------
+complete_ac &lt;- all_combos %&gt;%
+  left_join(ac_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# ----------------- Annotate Gene Symbols -----------------
+complete_ac &lt;- complete_ac %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# ----------------- Order Conditions -----------------
+complete_ac$Condition &lt;- factor(complete_ac$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# ----------------- Wilcoxon Test: CX vs DOX (paired by condition) -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
+
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_ac %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_ac %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Plot Boxplot with Wilcoxon Stars -----------------
+ggplot(complete_ac, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
+  labs(
+    title = &quot;LogFC of AC Cardiotoxicity Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
+    fill = &quot;Drug&quot;
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/AC_cardiotox_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="logfc-boxplots-of-dox-cardiotoxicity-genes"
+class="section level2">
+<h2><strong>📌 LogFC boxplots of DOX cardiotoxicity genes</strong></h2>
+<pre class="r"><code># ----------------- Load Libraries -----------------
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# ----------------- DEG File Paths -----------------
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# ----------------- DOX Cardiotoxicity Entrez IDs -----------------
+entrez_ids &lt;- c(
+  847, 873, 2064, 2878, 2944, 3038, 4846, 51196, 5880, 6687,
+  7799, 4292, 5916, 3077, 51310, 9154, 64078, 5244, 10057, 10060,
+  89845, 56853, 4625, 1573, 79890
+) %&gt;% as.character()
+
+# ----------------- Load and Filter DEGs -----------------
+tox_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(
+      Entrez_ID = as.character(Entrez_ID),
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
+})
+
+# ----------------- Create Full Gene × Condition Table -----------------
+all_conditions &lt;- names(deg_files)
+all_combos &lt;- crossing(
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
+) %&gt;%
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
+
+# ----------------- Merge and Fill Missing Values -----------------
+complete_doxcardio &lt;- all_combos %&gt;%
+  left_join(tox_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# ----------------- Annotate Gene Symbols -----------------
+complete_doxcardio &lt;- complete_doxcardio %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# ----------------- Order Conditions -----------------
+complete_doxcardio$Condition &lt;- factor(complete_doxcardio$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# ----------------- Wilcoxon Test: CX vs DOX (paired by condition) -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
+
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_doxcardio %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_doxcardio %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Boxplot -----------------
+ggplot(complete_doxcardio, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
+  labs(
+    title = &quot;LogFC of DOX Cardiotoxicity Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
+    fill = &quot;Drug&quot;
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/DOX_cardiotox_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="logfc-boxplots-of-heart-specific-genes" class="section level2">
+<h2><strong>📌 LogFC boxplots of Heart specific genes</strong></h2>
+<pre class="r"><code># ----------------- Load Libraries -----------------
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# ----------------- DEG File Paths -----------------
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# ----------------- Load Heart-Specific Genes and Map to Entrez IDs -----------------
+heart_genes &lt;- read.csv(&quot;data/Human_Heart_Genes.csv&quot;, stringsAsFactors = FALSE)
+heart_genes$Entrez_ID &lt;- mapIds(
+  org.Hs.eg.db,
+  keys = heart_genes$Gene,
+  column = &quot;ENTREZID&quot;,
+  keytype = &quot;SYMBOL&quot;,
+  multiVals = &quot;first&quot;
+)
+entrez_ids &lt;- na.omit(heart_genes$Entrez_ID) %&gt;% as.character()
+
+# ----------------- Load and Filter DEGs -----------------
+heart_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(
+      Entrez_ID = as.character(Entrez_ID),
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
+})
+
+# ----------------- Create Full Gene × Condition Table -----------------
+all_conditions &lt;- names(deg_files)
+all_combos &lt;- crossing(
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
+) %&gt;%
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
+
+# ----------------- Merge and Fill Missing Values -----------------
+complete_heart &lt;- all_combos %&gt;%
+  left_join(heart_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# ----------------- Annotate Gene Symbols -----------------
+complete_heart &lt;- complete_heart %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# ----------------- Order Conditions -----------------
+complete_heart$Condition &lt;- factor(complete_heart$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# ----------------- Wilcoxon Test: CX vs DOX (matched) -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
+
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_heart %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_heart %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Boxplot -----------------
+ggplot(complete_heart, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
+  labs(
+    title = &quot;LogFC of Heart-Specific Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
+    fill = &quot;Drug&quot;
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/Heart_Specific_box-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div
 id="atrial-fibrillation-gene-expression-changes-between-cx5461-and-dox"
@@ -4194,6 +4769,169 @@ sayanpaul01
 </div>
 </div>
 </div>
+<div id="logfc-boxplots-of-atrial-fibrillation-gwas-genes"
+class="section level2">
+<h2><strong>📌 LogFC boxplots of Atrial fibrillation GWAS
+genes</strong></h2>
+<pre class="r"><code># ----------------- Load Libraries -----------------
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# ----------------- DEG File Paths -----------------
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# ----------------- AF Entrez IDs -----------------
+entrez_ids &lt;- c(
+  3425, 53834, 9464, 79658, 55876, 3781, 9472, 11017, 64395, 23353,
+  57794, 79591, 2702, 51306, 857, 10418, 9644, 115509, 89797, 10728,
+  282996, 8497, 5695, 9026, 57666, 143384, 5883, 90102, 84909, 221037,
+  29119, 79933, 391, 81575, 8738, 5396, 26010, 744, 56981, 80724,
+  5781, 6910, 4598, 79068, 2250, 56978, 3752, 5208, 9736, 26778,
+  80315, 64374, 79159, 11078, 5308, 3782, 10654, 79776, 6310, 8082,
+  2995, 23224, 79741, 5708, 26136, 9967, 84033, 9148, 29982, 81488,
+  1788, 9208, 2908, 1021, 5339, 5727, 23118, 10090, 57585, 221154,
+  1073, 29998, 817, 858, 3486, 5747, 2104, 55105, 4194, 3570,
+  1607, 6586, 5570, 2070, 27145, 4646, 3159, 9748, 79991, 221035,
+  5033, 80212, 196385, 79600, 11046, 54014, 151636, 64778, 92597, 3983,
+  7090, 9267, 7273, 26018, 9948, 2131, 55870, 5523, 5318, 6239,
+  3480, 55777, 2066, 11165, 2028, 57619, 2690, 23414, 55818, 84700,
+  28965, 80204, 463, 5108, 222553, 387119, 28981, 11113, 10301, 995,
+  23030, 2697, 996, 339500, 54805, 9960, 91404, 145781, 100820829, 84542,
+  2176, 51684, 9513, 7473, 4666, 23150, 5915, 5062, 4016, 23039,
+  159686, 1839, 5201, 93166, 64753, 29959, 5496, 23245, 5069, 56916,
+  92344, 23092, 3992, 9415, 10554, 7456, 9570, 57178, 23143, 161176,
+  5424, 2034, 10277, 11278, 79803, 6653, 4756, 132660, 5430, 9031,
+  57158, 285761, 8110, 387700, 1829, 4126, 7323, 51308, 7332, 6598,
+  3757, 6187, 6660, 10529, 6920, 115286, 8451, 8943, 4137, 7514,
+  4801, 9709, 23177, 8671, 29915, 26207, 3680, 490, 493856, 58489,
+  54897, 4625, 22955, 84952, 10221, 2263, 84641, 4892, 1026, 84650,
+  8382, 221656, 2969, 144453, 117177, 2626, 8476, 161882, 51807, 4624,
+  9612, 55795, 51043, 144348, 51232, 8729, 3899, 11155, 23316, 79006,
+  146330, 6403, 6331, 4300, 427, 845, 3313, 113622, 5789, 376132,
+  29841, 8462, 203859, 401397, 5506, 55521, 5819, 4059, 6934, 57727,
+  23066, 79568, 83478, 10087, 9586, 222194, 10466, 10499, 58499, 79720,
+  4772, 10794, 125919, 602, 27332, 59345, 340359, 3705, 64710, 57801,
+  10818, 143684, 149281, 55013, 23095, 93649, 84034, 23347, 440926, 11124,
+  23293, 51426, 832, 7068, 57646, 152002, 7531, 1398, 100101267, 221937,
+  26873, 3709, 10576, 27040, 201176, 284403, 307, 6525, 5387, 1808,
+  114907, 1952, 4091, 5096, 23451, 51207, 142891, 4084, 3797, 1185,
+  5334, 217, 2042, 7781, 253461, 152404, 2992, 153478, 6695, 26249,
+  662, 23036, 22852, 23411, 23387, 6786, 7690, 10021, 8925, 5595,
+  63892, 23466, 11149, 139411, 755, 55347, 22820, 55111, 84444, 6258,
+  57623, 1387, 3762, 5861, 3339, 114822, 129787, 196528, 54437, 10395,
+  4023, 5095, 894, 3156, 1877, 283871, 2673, 23157, 10512, 2258,
+  79750, 84665, 26091, 5978, 8751, 79695, 2768, 155382, 84163, 7709,
+  4092, 1837, 2064, 4629, 55122, 8882, 150962, 23013, 8742, 489,
+  201134, 55114, 84264, 64428, 4089, 861, 7422
+) %&gt;% as.character()
+
+# ----------------- Load and Filter DEGs -----------------
+af_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(
+      Entrez_ID = as.character(Entrez_ID),
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
+})
+
+# ----------------- Complete Combinations -----------------
+all_conditions &lt;- names(deg_files)
+all_combos &lt;- crossing(
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
+) %&gt;%
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
+
+# ----------------- Merge with Data -----------------
+complete_af &lt;- all_combos %&gt;%
+  left_join(af_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# ----------------- Gene Symbol Mapping -----------------
+complete_af &lt;- complete_af %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# ----------------- Order Conditions -----------------
+complete_af$Condition &lt;- factor(complete_af$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# ----------------- Wilcoxon Tests -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
+
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_af %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_af %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Plot -----------------
+ggplot(complete_af, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
+  labs(
+    title = &quot;LogFC of AF-Associated Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
+    fill = &quot;Drug&quot;
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/AF_box-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 <div id="heart-failure-gene-expression-changes-between-cx5461-and-dox"
 class="section level2">
 <h2><strong>📌 Heart Failure gene expression changes between CX5461 and
@@ -4356,6 +5094,138 @@ sayanpaul01
 </table>
 </div>
 </div>
+</div>
+<div id="logfc-boxplots-of-heart-failure-gwas-genes"
+class="section level2">
+<h2><strong>📌 LogFC boxplots of Heart Failure GWAS genes</strong></h2>
+<pre class="r"><code># ----------------- Load Libraries -----------------
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# ----------------- DEG File Paths -----------------
+deg_files &lt;- list(
+  &quot;CX_0.1_3&quot; = &quot;data/DEGs/Toptable_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/DEGs/Toptable_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/DEGs/Toptable_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot; = &quot;data/DEGs/Toptable_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/DEGs/Toptable_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/DEGs/Toptable_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/DEGs/Toptable_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/DEGs/Toptable_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/DEGs/Toptable_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/DEGs/Toptable_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/DEGs/Toptable_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/DEGs/Toptable_DOX_0.5_48.csv&quot;
+)
+
+# ----------------- Heart Failure Entrez IDs -----------------
+entrez_ids &lt;- c(
+  9709, 8882, 4023, 29959, 5496, 3992, 9415, 5308, 1026, 54437, 79068, 10221,
+  9031, 1187, 1952, 3705, 84722, 7273, 23293, 155382, 9531, 602, 27258, 84163,
+  81846, 79933, 56911, 64753, 93210, 1021, 283450, 5998, 57602, 114991, 7073,
+  3156, 100101267, 22996, 285025, 11080, 11124, 54810, 7531, 27241, 4774, 57794,
+  463, 91319, 6598, 9640, 2186, 26010, 80816, 571, 88, 51652, 64788, 90523, 2969,
+  7781, 80777, 10725, 23387, 817, 134728, 8842, 949, 6934, 129787, 10327, 202052,
+  2318, 5578, 6801, 6311, 10019, 80724, 217, 84909, 388591, 55101, 9839, 27161,
+  5310, 387119, 4641, 5587, 55188, 222553, 9960, 22852, 10087, 9570, 54497,
+  200942, 26249, 4137, 375056, 5409, 64116, 8291, 22876, 339855, 4864, 5142,
+  221692, 55023, 51426, 6146, 84251, 8189, 27332, 57099, 1869, 1112, 23327,
+  11264, 6001
+) %&gt;% as.character()
+
+# ----------------- Load and Filter DEGs -----------------
+hf_data_list &lt;- map2_dfr(deg_files, names(deg_files), function(file, label) {
+  read_csv(file, show_col_types = FALSE) %&gt;%
+    mutate(
+      Entrez_ID = as.character(Entrez_ID),
+      Condition = label,
+      Drug = ifelse(str_detect(label, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+    ) %&gt;%
+    filter(Entrez_ID %in% entrez_ids)
+})
+
+# ----------------- Complete Combinations -----------------
+all_conditions &lt;- names(deg_files)
+all_combos &lt;- crossing(
+  Entrez_ID = entrez_ids,
+  Condition = all_conditions
+) %&gt;%
+  mutate(
+    Drug = ifelse(str_detect(Condition, &quot;CX&quot;), &quot;CX.5461&quot;, &quot;DOX&quot;)
+  )
+
+# ----------------- Merge with Data -----------------
+complete_hf &lt;- all_combos %&gt;%
+  left_join(hf_data_list, by = c(&quot;Entrez_ID&quot;, &quot;Condition&quot;, &quot;Drug&quot;)) %&gt;%
+  mutate(
+    logFC = ifelse(is.na(logFC), 0, logFC),
+    adj.P.Val = ifelse(is.na(adj.P.Val), 1, adj.P.Val)
+  )
+
+# ----------------- Gene Symbol Mapping -----------------
+complete_hf &lt;- complete_hf %&gt;%
+  mutate(
+    Gene = mapIds(org.Hs.eg.db, keys = Entrez_ID,
+                  column = &quot;SYMBOL&quot;, keytype = &quot;ENTREZID&quot;, multiVals = &quot;first&quot;)
+  )
+
+# ----------------- Order Conditions -----------------
+complete_hf$Condition &lt;- factor(complete_hf$Condition, levels = c(
+  &quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;,
+  &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;,
+  &quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;,
+  &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;
+))
+
+# ----------------- Wilcoxon Tests -----------------
+condition_pairs &lt;- tibble(
+  cx = c(&quot;CX_0.1_3&quot;, &quot;CX_0.1_24&quot;, &quot;CX_0.1_48&quot;, &quot;CX_0.5_3&quot;, &quot;CX_0.5_24&quot;, &quot;CX_0.5_48&quot;),
+  dox = c(&quot;DOX_0.1_3&quot;, &quot;DOX_0.1_24&quot;, &quot;DOX_0.1_48&quot;, &quot;DOX_0.5_3&quot;, &quot;DOX_0.5_24&quot;, &quot;DOX_0.5_48&quot;)
+)
+
+wilcox_results &lt;- map2_dfr(condition_pairs$cx, condition_pairs$dox, function(cx_label, dox_label) {
+  cx_vals &lt;- complete_hf %&gt;% filter(Condition == cx_label) %&gt;% pull(logFC)
+  dox_vals &lt;- complete_hf %&gt;% filter(Condition == dox_label) %&gt;% pull(logFC)
+  
+  test &lt;- tryCatch(wilcox.test(cx_vals, dox_vals), error = function(e) NULL)
+  pval &lt;- if (!is.null(test)) test$p.value else NA
+  
+  tibble(
+    Condition = dox_label,
+    p_value = signif(pval, 3),
+    label = case_when(
+      pval &lt; 0.001 ~ &quot;***&quot;,
+      pval &lt; 0.01  ~ &quot;**&quot;,
+      pval &lt; 0.05  ~ &quot;*&quot;,
+      TRUE         ~ &quot;&quot;
+    ),
+    y_pos = max(c(cx_vals, dox_vals), na.rm = TRUE) + 0.5
+  )
+})
+
+# ----------------- Final Plot -----------------
+ggplot(complete_hf, aes(x = Condition, y = logFC, fill = Drug)) +
+  geom_boxplot(outlier.size = 0.6) +
+  geom_text(data = wilcox_results,
+            aes(x = Condition, y = y_pos, label = label),
+            inherit.aes = FALSE,
+            size = 4, vjust = 0) +
+  scale_fill_manual(values = c(&quot;CX.5461&quot; = &quot;blue&quot;, &quot;DOX&quot; = &quot;red&quot;)) +
+  labs(
+    title = &quot;LogFC of Heart Failure-Associated Genes&quot;,
+    x = &quot;Condition&quot;,
+    y = &quot;logFC&quot;,
+    fill = &quot;Drug&quot;
+  ) +
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_text(size = rel(1.5), hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )</code></pre>
+<p><img src="figure/DGE_Analysis.Rmd/HF_box-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
