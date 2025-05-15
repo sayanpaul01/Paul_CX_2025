@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,21 +407,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -512,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree576c23ec8dc8b634200f9514a5c7e68eb6020359targetblank576c23ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree01a423feca180bf7e8669c85a3c03e54357c1b38targetblank01a423fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/576c23ec8dc8b634200f9514a5c7e68eb6020359" target="_blank">576c23e</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/01a423feca180bf7e8669c85a3c03e54357c1b38" target="_blank">01a423f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree576c23ec8dc8b634200f9514a5c7e68eb6020359targetblank576c23ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree01a423feca180bf7e8669c85a3c03e54357c1b38targetblank01a423fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/576c23ec8dc8b634200f9514a5c7e68eb6020359" target="_blank">576c23e</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/01a423feca180bf7e8669c85a3c03e54357c1b38" target="_blank">01a423f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -551,7 +548,6 @@ Ignored files:
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
     Ignored:    analysis/DGE_Analysis.html
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  0.1 density.svg
@@ -640,7 +636,6 @@ Untracked files:
 
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
-    Modified:   analysis/Corrmotif_Conc.Rmd
     Modified:   data/count.csv
 
 </code></pre>
@@ -687,6 +682,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/analysis/Corrmotif_Conc.Rmd" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/Corrmotif_Conc.html" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -5042,6 +5071,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/prop%20DDR-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-prop-DDR-1">
+Past versions of "prop DDR-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-prop-DDR-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/prop DDR-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-dna-damage-response-genes-across-corrmotifs-molecular-signature-dataset-per-concentration"
@@ -5224,6 +5290,43 @@ ggplot(ddr_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DDR%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DDR-logFC-1">
+Past versions of "Mean DDR logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DDR-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DDR logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-dna-damage-response-genes-across-corrmotifs-molecular-signature-dataset-faceted-by-concentration-timepoint"
@@ -5391,6 +5494,43 @@ ggplot(ddr_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DDR%20logFC1-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DDR-logFC1-1">
+Past versions of "Mean DDR logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DDR-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DDR logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-dna-damage-response-genes-across-corrmotifs-molecular-signature-dataset-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -5521,6 +5661,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DDR%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DDR-logFC3-1">
+Past versions of "Mean DDR logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DDR-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DDR logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### DDR Genes — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -5652,6 +5829,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DDR%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DDR-logFC3-2">
+Past versions of "Mean DDR logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DDR-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DDR logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="proportion-of-p53-target-genes-across-corrmotif-clusters"
 class="section level2">
@@ -5856,6 +6070,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/prop P53 0.1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/aab6b9f3f2edcffc45770d376b789be169cfe44e/docs/figure/Corrmotif_Conc.Rmd/prop P53 0.1-1.png" target="_blank">aab6b9f</a>
@@ -6081,6 +6306,43 @@ ggplot(p53_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20P53%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-P53-logFC-1">
+Past versions of "Mean P53 logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-P53-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean P53 logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-p53-target-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -6256,6 +6518,43 @@ ggplot(p53_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20P53%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-P53-logFC1-1">
+Past versions of "Mean P53 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-P53-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean P53 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-p53-target-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -6396,6 +6695,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20P53%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-P53-logFC3-1">
+Past versions of "Mean P53 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-P53-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean P53 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### P53 Target Genes — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -6537,6 +6873,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20P53%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-P53-logFC3-2">
+Past versions of "Mean P53 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-P53-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean P53 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="top2b-target-genes-proportions-across-corrmotifs"
 class="section level2">
@@ -6699,6 +7072,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/TOP2B%20Prop-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-TOP2B-Prop-1">
+Past versions of "TOP2B Prop-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-TOP2B-Prop-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/TOP2B Prop-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2b-target-genes-across-corrmotifs-per-concentration"
@@ -6868,6 +7278,43 @@ ggplot(top2b_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2B%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2B-logFC-1">
+Past versions of "Mean TOP2B logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2B-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2B logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2b-target-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -7028,6 +7475,43 @@ ggplot(top2b_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2B%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2B-logFC1-1">
+Past versions of "Mean TOP2B logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2B-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2B logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2b-target-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -7155,6 +7639,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2B%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2B-logFC3-1">
+Past versions of "Mean TOP2B logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2B-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2B logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### TOP2B Target Genes — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -7280,9 +7801,49 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.title = element_text(size = 14),
     legend.text = element_text(size = 12)
   )</code></pre>
-<p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2B%20logFC3-2.png" width="1152" style="display: block; margin: auto;" />
-## <strong>📌 TOP2A target genes (ChIP_Atlas) proportion across
-corrmotifs</strong></p>
+<p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2B%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2B-logFC3-2">
+Past versions of "Mean TOP2B logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2B-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2B logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="top2a-target-genes-chip_atlas-proportion-across-corrmotifs"
+class="section level2">
+<h2><strong>📌 TOP2A target genes (ChIP_Atlas) proportion across
+corrmotifs</strong></h2>
 <pre class="r"><code># ----------------- Load Required Libraries -----------------
 library(dplyr)
 library(ggplot2)
@@ -7444,6 +8005,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_Prop-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_Prop-1">
+Past versions of "Mean TOP2A_Prop-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_Prop-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_Prop-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2a-target-genes-chip_atlas-across-corrmotifs-per-concentration"
@@ -7628,6 +8226,43 @@ ggplot(top2a_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_ChIP%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_ChIP-logFC-1">
+Past versions of "Mean TOP2A_ChIP logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_ChIP-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_ChIP logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2a-target-genes-chip_atlas-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -7788,6 +8423,43 @@ ggplot(top2a_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_ChIP_Atlas%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_ChIP_Atlas-logFC1-1">
+Past versions of "Mean TOP2A_ChIP_Atlas logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_ChIP_Atlas-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_ChIP_Atlas logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2a-target-genes-chip_atlas-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -7913,6 +8585,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_ChIP_Atlas%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_ChIP_Atlas-logFC3-1">
+Past versions of "Mean TOP2A_ChIP_Atlas logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_ChIP_Atlas-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_ChIP_Atlas logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### TOP2A Target Genes (ChIP-Atlas) — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -8039,6 +8748,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_ChIP_Atlas%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_ChIP_Atlas-logFC3-2">
+Past versions of "Mean TOP2A_ChIP_Atlas logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_ChIP_Atlas-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_ChIP_Atlas logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="proportion-of-top2a-target-genes-rpe-1-across-corrmotifs"
 class="section level2">
@@ -8201,6 +8947,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/TOP2A_lit_prop%20logFC-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-TOP2A_lit_prop-logFC-1">
+Past versions of "TOP2A_lit_prop logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-TOP2A_lit_prop-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/TOP2A_lit_prop logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2a-target-genes-rpe-1-across-corrmotifs-per-concentration"
@@ -8385,6 +9168,43 @@ ggplot(top2a_lit_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_lit_1%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_lit_1-logFC-1">
+Past versions of "Mean TOP2A_lit_1 logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_lit_1-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_lit_1 logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2a-target-genes-rpe-1-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -8545,6 +9365,43 @@ ggplot(top2a_lit_all, aes(x = Response_Group, y = logFC, fill = Response_Group))
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_lit_2%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_lit_2-logFC1-1">
+Past versions of "Mean TOP2A_lit_2 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_lit_2-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_lit_2 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-top2a-target-genes-rpe-1-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -8672,6 +9529,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_lit_3%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_lit_3-logFC3-1">
+Past versions of "Mean TOP2A_lit_3 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_lit_3-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_lit_3 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### TOP2A Target Genes (RPE-1 Literature) — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -8798,6 +9692,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20TOP2A_lit_3%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-TOP2A_lit_3-logFC3-2">
+Past versions of "Mean TOP2A_lit_3 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-TOP2A_lit_3-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean TOP2A_lit_3 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="proportion-of-anthracycline-cardiotoxicity-genes-across-corrmotifs"
@@ -8966,6 +9897,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Ac_tox%20prop-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Ac_tox-prop-1">
+Past versions of "Ac_tox prop-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Ac_tox-prop-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Ac_tox prop-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-anthracycline-cardiotoxicity-genes-across-corrmotifs-per-concentration"
@@ -9147,6 +10115,43 @@ ggplot(ac_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20Ac_tox%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-Ac_tox-logFC-1">
+Past versions of "Mean Ac_tox logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-Ac_tox-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean Ac_tox logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-anthracycline-cardiotoxicity-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -9313,6 +10318,43 @@ ggplot(ac_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20Ac_tox_2%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-Ac_tox_2-logFC1-1">
+Past versions of "Mean Ac_tox_2 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-Ac_tox_2-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean Ac_tox_2 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-anthracycline-cardiotoxicity-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -9446,6 +10488,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20Ac_tox_3%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-Ac_tox_3-logFC3-1">
+Past versions of "Mean Ac_tox_3 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-Ac_tox_3-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean Ac_tox_3 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### AC Genes — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -9578,6 +10657,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20Ac_tox_3%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-Ac_tox_3-logFC3-2">
+Past versions of "Mean Ac_tox_3 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-Ac_tox_3-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean Ac_tox_3 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="proportion-of-dox-cardiotoxicity-genes-across-corrmotifs"
 class="section level2">
@@ -9745,6 +10861,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/DOX_tox%20prop-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-DOX_tox-prop-1">
+Past versions of "DOX_tox prop-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-DOX_tox-prop-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/DOX_tox prop-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-dox-cardiotoxicity-genes-across-corrmotifs-per-concentration"
@@ -9921,6 +11074,43 @@ ggplot(dox_cardio_logfc, aes(x = Response_Group, y = logFC, fill = Response_Grou
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DOX_tox%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DOX_tox-logFC-1">
+Past versions of "Mean DOX_tox logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DOX_tox-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DOX_tox logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-dox-cardiotoxicity-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -10082,6 +11272,43 @@ ggplot(dox_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DOX_tox_2%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DOX_tox_2-logFC1-1">
+Past versions of "Mean DOX_tox_2 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DOX_tox_2-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DOX_tox_2 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-dox-cardiotoxicity-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -10210,6 +11437,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DOX_tox_3%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DOX_tox_3-logFC3-1">
+Past versions of "Mean DOX_tox_3 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DOX_tox_3-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DOX_tox_3 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>################### DOX Cardiotoxicity Genes — 0.5 µM ###################
 
 # ----------------- Load Libraries -----------------
@@ -10337,6 +11601,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20DOX_tox_3%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-DOX_tox_3-logFC3-2">
+Past versions of "Mean DOX_tox_3 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-DOX_tox_3-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean DOX_tox_3 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="proportion-of-heart-specific-genes-combined"
 class="section level2">
@@ -10737,6 +12038,43 @@ ggplot(heart_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HS%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HS-logFC-1">
+Past versions of "Mean HS logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HS-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-heart-specific-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -10902,6 +12240,43 @@ ggplot(heart_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HS_2%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HS_2-logFC1-1">
+Past versions of "Mean HS_2 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HS_2-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS_2 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-heart-specific-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -11034,6 +12409,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HS_3%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HS_3-logFC3-1">
+Past versions of "Mean HS_3 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HS_3-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>############ HEART-SPECIFIC GENES — 0.5 µM #######################
 
 # ----------------- Load Libraries -----------------
@@ -11165,6 +12577,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HS_3%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HS_3-logFC3-2">
+Past versions of "Mean HS_3 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HS_3-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="proportion-of-atrial-fibrillation-gwas-genes-across-corrmotifs"
 class="section level2">
@@ -11353,6 +12802,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/AF_Prop-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-AF_Prop-1">
+Past versions of AF_Prop-1.png
+</button>
+</p>
+<div id="fig-AF_Prop-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/AF_Prop-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-atrial-fibrillation-gwas-genes-across-corrmotifs-per-concentration"
@@ -11556,6 +13042,43 @@ ggplot(af_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20AF%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-AF-logFC-1">
+Past versions of "Mean AF logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-AF-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-atrial-fibrillation-gwas-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -11721,6 +13244,43 @@ ggplot(heart_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20AF%20logFC_2%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-AF-logFC_2-logFC1-1">
+Past versions of "Mean AF logFC_2 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-AF-logFC_2-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_2 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-atrial-fibrillation-gwas-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -11887,6 +13447,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20AF%20logFC_3%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-AF-logFC_3-logFC3-1">
+Past versions of "Mean AF logFC_3 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-AF-logFC_3-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_3 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>############ AF GENES — 0.5 µM #######################
 
 # ----------------- Load Libraries -----------------
@@ -12052,6 +13649,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20AF%20logFC_3%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-AF-logFC_3-logFC3-2">
+Past versions of "Mean AF logFC_3 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-AF-logFC_3-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_3 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="proportion-of-heart-failure-gwas-genes-across-corrmotifs-per-concentration"
@@ -12211,6 +13845,43 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.spacing = unit(1.2, &quot;lines&quot;)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/HF%20Prop-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-HF-Prop-1">
+Past versions of "HF Prop-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-HF-Prop-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/HF Prop-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-heart-failure-gwas-genes-across-corrmotifs-per-concentration"
@@ -12385,6 +14056,43 @@ ggplot(hf_logfc, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HF%20logFC-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HF-logFC-1">
+Past versions of "Mean HF logFC-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HF-logFC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HF logFC-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-heart-failure-gwas-genes-across-corrmotifs-faceted-by-concentration-timepoint"
@@ -12555,6 +14263,43 @@ ggplot(hf_all, aes(x = Response_Group, y = logFC, fill = Response_Group)) +
     panel.border = element_rect(color = &quot;black&quot;, fill = NA, linewidth = 1.2)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HF%20logFC_2%20logFC1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HF-logFC_2-logFC1-1">
+Past versions of "Mean HF logFC_2 logFC1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HF-logFC_2-logFC1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HF logFC_2 logFC1-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="mean-logfc-of-heart-failure-gwas-genes-across-corrmotifs-faceted-by-concentration-timepoint-drug-cx-vs-dox-side-by-side"
@@ -12691,6 +14436,43 @@ ggplot(deg_0.1, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HF%20logFC_3%20logFC3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HF-logFC_3-logFC3-1">
+Past versions of "Mean HF logFC_3 logFC3-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HF-logFC_3-logFC3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HF logFC_3 logFC3-1.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>############ HEART FAILURE GENES — 0.5 µM #######################
 
 # ----------------- Load Libraries -----------------
@@ -12826,6 +14608,43 @@ ggplot(deg_0.5, aes(x = Timepoint, y = logFC, fill = Drug)) +
     legend.text = element_text(size = 12)
   )</code></pre>
 <p><img src="figure/Corrmotif_Conc.Rmd/Mean%20HF%20logFC_3%20logFC3-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Mean-HF-logFC_3-logFC3-2">
+Past versions of "Mean HF logFC_3 logFC3-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-Mean-HF-logFC_3-logFC3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HF logFC_3 logFC3-2.png" target="_blank">01a423f</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="corr-motif-boxplots" class="section level2">
 <h2><strong>📌 Corr-motif Boxplots</strong></h2>
