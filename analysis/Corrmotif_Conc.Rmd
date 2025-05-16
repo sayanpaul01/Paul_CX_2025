@@ -10026,7 +10026,6 @@ library(reshape2)
 # Load response group files
 prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
 
-prob_2_0.1
 
 # Load expression dataset
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
@@ -10115,8 +10114,6 @@ library(reshape2)
 # Load response group files
 prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
 
-# Print gene list if needed
-prob_3_0.1
 
 # Load expression dataset
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
@@ -10205,8 +10202,6 @@ library(reshape2)
 # Load response group: Non response (0.5 µM)
 prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
 
-# Print genes (optional)
-prob_1_0.5
 
 # Load expression dataset
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
@@ -10294,8 +10289,6 @@ library(reshape2)
 # Load response group: DOX-specific response (0.5 µM)
 prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
 
-# View gene list (optional)
-prob_2_0.5
 
 # Load expression dataset
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
@@ -10384,8 +10377,6 @@ library(reshape2)
 # Load response group: DOX only mid-late response (0.5 µM)
 prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
 
-# View gene list (optional)
-prob_3_0.5
 
 # Load expression dataset
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
@@ -10466,40 +10457,38 @@ ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
 ## **📌 CX total + DOX early response (0.5 micromolar)**
 ```{r box7, echo=TRUE, message=FALSE, warning=FALSE}
 
-# Load libraries
+# ----------------- Load Libraries -----------------
 library(dplyr)
 library(ggplot2)
 library(reshape2)
 
-# Load response group: CX total + DOX early response (0.5 µM)
+# ----------------- Load Response Group -----------------
 prob_4_0.5 <- as.character(read.csv("data/prob_4_0.5.csv")$Entrez_ID)
 
-# View gene list (optional)
-prob_4_0.5
 
-# Load expression dataset
+# ----------------- Load Expression Dataset -----------------
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
 boxplot1 <- as.data.frame(boxplot1)
 
-# Choose a gene from the CX total + DOX early response group (0.5 µM)
-target_entrez <- 983  # Replace with your desired Entrez ID from prob_4_0.5
+# ----------------- Choose a Target Gene -----------------
+target_entrez <- 100996485  # Replace this with any valid Entrez ID from prob_4_0.5
 
-# Check membership
+# Check if gene is valid
 if (!(target_entrez %in% prob_4_0.5)) {
   stop("Selected gene is not in the CX total + DOX early response group for 0.5 micromolar.")
 }
 
-# Filter for selected gene
+# ----------------- Filter Data for Selected Gene -----------------
 gene_data <- boxplot1[boxplot1$ENTREZID == target_entrez, ]
-if(nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
+if (nrow(gene_data) == 0) stop("No data found for selected ENTREZID.")
 
-# Reshape to long format
+# ----------------- Reshape to Long Format -----------------
 gene_data_long <- melt(gene_data,
                        id.vars = c("ENTREZID", "SYMBOL", "GENENAME"),
                        variable.name = "Sample",
                        value.name = "log2CPM")
 
-# Extract metadata from sample names
+# ----------------- Extract Metadata -----------------
 gene_data_long <- gene_data_long %>%
   mutate(
     Time = sub(".*_(\\d+)$", "\\1", Sample),
@@ -10508,27 +10497,27 @@ gene_data_long <- gene_data_long %>%
     Indv = sub("^([0-9]+\\.[0-9]+)_.*", "\\1", Sample)
   )
 
-# Filter for 0.5 micromolar only
+# ----------------- Filter for 0.5 µM Only -----------------
 gene_data_long <- gene_data_long %>% filter(Concentration == "0.5")
 
-# Convert to factors
+# ----------------- Convert to Factors -----------------
 gene_data_long$Time <- factor(gene_data_long$Time, levels = c("3", "24", "48"))
 gene_data_long$Concentration <- factor(gene_data_long$Concentration, levels = "0.5")
 
-# Map individual IDs
+# ----------------- Map Individual IDs -----------------
 indv_mapping <- c("75.1" = "1", "78.1" = "2", "87.1" = "3", 
                   "17.3" = "4", "84.1" = "5", "90.1" = "6")
 
 gene_data_long <- gene_data_long %>%
   mutate(Indv = ifelse(Indv %in% names(indv_mapping), indv_mapping[Indv], "Unknown"))
 
-# Define color palette for drugs
+# ----------------- Define Drug Color Palette -----------------
 drug_palette <- c("CX.5461" = "#08306B", "DOX" = "#E7298A", "VEH" = "green")
 
-# Extract gene symbol for labeling
+# ----------------- Extract Gene Symbol -----------------
 gene_symbol <- unique(gene_data_long$SYMBOL)[1]
 
-# Create the boxplot
+# ----------------- Plot -----------------
 ggplot(gene_data_long, aes(x = Drug, y = log2CPM, fill = Drug)) +
   geom_boxplot(outlier.shape = NA) +
   scale_fill_manual(values = drug_palette) +
@@ -10565,8 +10554,6 @@ library(reshape2)
 # Load response group: DOX early + CX-DOX mid-late response (0.5 µM)
 prob_5_0.5 <- as.character(read.csv("data/prob_5_0.5.csv")$Entrez_ID)
 
-# View gene list (optional)
-prob_5_0.5
 
 # Load expression dataset
 boxplot1 <- read.csv("data/boxplot1.csv", check.names = FALSE)
