@@ -32,15 +32,15 @@ library(ggfortify)
 📍 Load the Count Matrix CSV file
 
 ```{r Read mapping counts, echo=FALSE, include=FALSE}
-# Load the count matrix from the TSV file
-counts_matrix <- read.csv("data/counts_matrix.csv", header=TRUE, check.names=FALSE)
+### 📍 Load the Count Matrix CSV file
+counts_matrix <- read.csv("data/counts_matrix.csv", header = TRUE, check.names = FALSE)
 
 # Compute log2 Counts Per Million (CPM)
 cpm <- cpm(counts_matrix)
-lcpm <- cpm(counts_matrix, log=TRUE)  # Log2 CPM matrix
+lcpm <- cpm(counts_matrix, log = TRUE)
 
 # Apply filtering thresholds
-filcpm_matrix <- subset(lcpm, rowMeans(lcpm) > 0)
+filcpm_matrix  <- subset(lcpm, rowMeans(lcpm) > 0)
 filcpm_matrix1 <- subset(lcpm, rowMeans(lcpm) > 0.5)
 filcpm_matrix2 <- subset(lcpm, rowMeans(lcpm) > 1)
 ```
@@ -49,6 +49,15 @@ filcpm_matrix2 <- subset(lcpm, rowMeans(lcpm) > 1)
 ## **📌Color palettes**
 
 ```{r color_palettes, echo=TRUE, message=FALSE}
+### 📌 Color palettes (updated)
+drug_conc_palette <- c(
+  "CX-5461_0.1" = "gold",  # light green
+  "CX-5461_0.5" = "green4",  # dark green
+  "DOX_0.1"     = "salmon2",  # peach
+  "DOX_0.5"     = "red3",  # burnt orange
+  "VEH_0.1"     = "lightblue3",  # sky blue
+  "VEH_0.5"     = "darkblue"   # navy blue
+)
 drug_palc <- c("#8B006D","#DF707E","#F1B72B", "#3386DD","#707031","#41B333")
 drug_palc1 <- c("#8B006D","#F1B72B", "#3386DD","#707031")
 drug_palc2 <- c("#8B006D","#F1B72B", "#3386DD")
@@ -60,10 +69,20 @@ drug_palc2 <- c("#8B006D","#F1B72B", "#3386DD")
 Metadata <- read.csv("data/Metadata.csv")
 dim(Metadata)
 head(Metadata)
-Metadata$Time <- as.character(Metadata$Time)
+
+# Time relabeling
+Metadata$Time <- factor(Metadata$Time, levels = c(3, 24, 48),
+                        labels = c("3hr", "24hr", "48hr"))
 Metadata$Ind <- as.character(Metadata$Ind)
-Indiv <- as.character(Metadata$Ind)
-# Convert to matrix
+Metadata$Drug <- as.character(Metadata$Drug)
+Metadata$Conc <- as.character(Metadata$Conc)
+Metadata$Drug_Conc <- paste(Metadata$Drug, Metadata$Conc, sep = "_")
+
+Metadata$Indiv <- factor(Metadata$Ind, levels = c("75-1", "78-1", "87-1", "17-3", "84-1", "90-1"),
+                         labels = c("1 (Female)", "2 (Female)", "3 (Female)", 
+                                    "4 (Male)", "5 (Male)", "6 (Male)"))
+
+Indiv <- Metadata$Ind
 matrix <- as.matrix(lcpm)
 ```
 
@@ -71,11 +90,12 @@ matrix <- as.matrix(lcpm)
 ## **📌PCA of Unfiltered log2(CPM)**
 
 ```{r pca_unfiltered, echo=TRUE, message=FALSE}
-prcomp_res <- prcomp(t(lcpm %>% as.matrix()), center = TRUE)
+prcomp_res <- prcomp(t(matrix), center = TRUE)
 
-ggplot2::autoplot(prcomp_res, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
-  ggrepel::geom_text_repel(label=Indiv) +
-  scale_color_manual(values=drug_palc) +
+ggplot2::autoplot(prcomp_res, data = Metadata,
+                  colour = "Drug_Conc", shape = "Time", size = 4, x = 1, y = 2) +
+  ggrepel::geom_text_repel(label = Indiv) +
+  scale_color_manual(values = drug_conc_palette) +
   ggtitle(expression("PCA of log"[2]*"(cpm) Unfiltered")) +
   theme_bw()
 ```
@@ -108,9 +128,9 @@ ggplot2::autoplot(prcomp_res, data = Metadata, colour = "Condition", shape = "Ti
 ```{r pca_filtered_0, echo=TRUE, message=FALSE}
 prcomp_res1 <- prcomp(t(filcpm_matrix %>% as.matrix()), center = TRUE)
 
-ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "Time", size =4, x=1, y=2) +
+ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Drug_Conc", shape = "Time", size =4, x=1, y=2) +
   ggrepel::geom_text_repel(label=Indiv) +
-  scale_color_manual(values=drug_palc) +
+  scale_color_manual(values=drug_conc_palette) +
   ggtitle(expression("PCA of gene expression (log2 cpm)")) +
   theme_bw()
 ```
@@ -118,9 +138,9 @@ ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "T
 ```{r pca_filtered_0_1, echo=TRUE, message=FALSE}
 prcomp_res1 <- prcomp(t(filcpm_matrix %>% as.matrix()), center = TRUE)
 
-ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "Time", size =4, x=2, y=3) +
+ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Drug_Conc", shape = "Time", size =4, x=2, y=3) +
   ggrepel::geom_text_repel(label=Indiv) +
-  scale_color_manual(values=drug_palc) +
+  scale_color_manual(values=drug_conc_palette) +
   ggtitle(expression("PCA of log"[2]*"(cpm) filtered (Rowmeans >0)")) +
   theme_bw()
 ```
@@ -365,16 +385,22 @@ ggplot2::autoplot(prcomp_res15, data = as.data.frame(subset_meta_cx_dox), colour
 ```{r pca_3hr, echo=TRUE, message=FALSE}
 selected_columns <- grepl("_3", colnames(matrix))
 subset_matrix_3hr <- matrix[, selected_columns]
+subset_meta_3hr <- subset(Metadata, Metadata$Time == "3hr")
 
-subset_meta_3hr <- subset(Metadata, Metadata$Time == 3)
+filtered_matrix_3hr <- subset_matrix_3hr[rowMeans(subset_matrix_3hr) > 0, ]
 
-prcomp_res_3hr <- prcomp(t(subset_matrix_3hr[rowMeans(subset_matrix_3hr) > 0, ]), center = TRUE)
+if (nrow(filtered_matrix_3hr) > 2) {
+  prcomp_res_3hr <- prcomp(t(filtered_matrix_3hr), center = TRUE)
 
-ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour = "Condition", shape = "Drug", size = 4) +
-  ggrepel::geom_text_repel(label = subset_meta_3hr$Ind) +
-  scale_color_manual(values = drug_palc) +
-  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (3 Hours)")) +
-  theme_bw()
+  ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr),
+                    colour = "Drug_Conc", shape = "Drug", size = 4) +
+    ggrepel::geom_text_repel(aes(label = Ind)) +
+    scale_color_manual(values = drug_conc_palette) +
+    ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (3 Hours)")) +
+    theme_bw()
+} else {
+  print("No genes passed the rowMeans > 0 filter for 3hr samples.")
+}
 ```
 
 ```{r pca_3hr_2, echo=TRUE, message=FALSE}
@@ -402,18 +428,27 @@ ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr), colour 
 ## **📌 24-Hour Timepoint**
 
 ```{r pca_24hr, echo=TRUE, message=FALSE}
+# 📌 Subset for 24hr samples
 selected_columns <- grepl("_24", colnames(matrix))
 subset_matrix_24hr <- matrix[, selected_columns]
+subset_meta_24hr <- subset(Metadata, Metadata$Time == "24hr")  # match your relabeled timepoints
 
-subset_meta_24hr <- subset(Metadata, Metadata$Time == 24)
+# 📌 Filter low-expression genes
+filtered_matrix_24hr <- subset_matrix_24hr[rowMeans(subset_matrix_24hr) > 0, ]
 
-prcomp_res_24hr <- prcomp(t(subset_matrix_24hr[rowMeans(subset_matrix_24hr) > 0, ]), center = TRUE)
+# 📌 Run PCA if genes remain
+if (nrow(filtered_matrix_24hr) > 2) {
+  prcomp_res_24hr <- prcomp(t(filtered_matrix_24hr), center = TRUE)
 
-ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colour = "Condition", shape = "Drug", size = 4) +
-  ggrepel::geom_text_repel(label = subset_meta_24hr$Ind) +
-  scale_color_manual(values = drug_palc) +
-  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (24 Hours)")) +
-  theme_bw()
+  ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr),
+                    colour = "Drug_Conc", shape = "Drug", size = 4) +
+    ggrepel::geom_text_repel(aes(label = Ind)) +
+    scale_color_manual(values = drug_conc_palette) +
+    ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (24 Hours)")) +
+    theme_bw()
+} else {
+  message("⚠️ No genes passed the rowMeans > 0 filter for 24-hour samples.")
+}
 ```
 
 
@@ -442,17 +477,27 @@ ggplot2::autoplot(prcomp_res_24hr, data = as.data.frame(subset_meta_24hr), colou
 
 ## **📌 48-Hour Timepoint**
 ```{r pca_48hr, echo=TRUE, message=FALSE}
+# 📌 Subset for 48hr samples
 selected_columns <- grepl("_48", colnames(matrix))
 subset_matrix_48hr <- matrix[, selected_columns]
-subset_meta_48hr <- subset(Metadata, Metadata$Time == 48)
+subset_meta_48hr <- subset(Metadata, Metadata$Time == "48hr")  # must match relabeled levels
 
-prcomp_res_48hr_1 <- prcomp(t(subset_matrix_48hr[rowMeans(subset_matrix_48hr) > 0, ]), center = TRUE)
+# 📌 Filter low-expression genes
+filtered_matrix_48hr <- subset_matrix_48hr[rowMeans(subset_matrix_48hr) > 0, ]
 
-ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr), colour = "Condition", shape = "Drug", size = 4) +
-  ggrepel::geom_text_repel(label = subset_meta_48hr$Ind) +
-  scale_color_manual(values = drug_palc) +
-  ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (48 Hours)")) +
-  theme_bw()
+# 📌 Run PCA only if data is valid
+if (nrow(filtered_matrix_48hr) > 2) {
+  prcomp_res_48hr_1 <- prcomp(t(filtered_matrix_48hr), center = TRUE)
+
+  ggplot2::autoplot(prcomp_res_48hr_1, data = as.data.frame(subset_meta_48hr),
+                    colour = "Drug_Conc", shape = "Drug", size = 4) +
+    ggrepel::geom_text_repel(aes(label = Ind)) +
+    scale_color_manual(values = drug_conc_palette) +
+    ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (48 Hours)")) +
+    theme_bw()
+} else {
+  message("⚠️ No genes passed the rowMeans > 0 filter for 48-hour samples.")
+}
 ```
 
 
