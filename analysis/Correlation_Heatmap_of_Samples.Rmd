@@ -65,10 +65,11 @@ cor_matrix_pearson <- cor(lcpm_2, method = "pearson")
 cor_matrix_spearman <- cor(lcpm_2, method = "spearman")
 
 # Extract metadata columns
-individuals <- as.character(Metadata$Ind)
-timepoints <- as.character(Metadata$Time)
-drugs <- as.character(Metadata$Drug)
+individuals    <- as.character(Metadata$Ind)
+timepoints     <- as.character(Metadata$Time)
+drugs          <- as.character(Metadata$Drug)
 concentrations <- as.character(Metadata$Conc.)
+sex            <- as.character(Metadata$Sex) 
 
 # Define color palettes for annotations
 ind_colors <- c("1" = "red", "2" = "blue", "3" = "green", "4" = "orange", "5" = "thistle", "6" = "magenta4")
@@ -76,17 +77,28 @@ time_colors <- c("3" = "purple", "24" = "pink", "48" = "tomato3")
 drug_colors <- c("CX-5461" = "yellow", "DOX" = "magenta4", "VEH" = "red3")
 conc_colors <- c("0.1" = "lightblue", "0.5" = "lightcoral")
 
+sex_colors <- c("Male" = "skyblue3", "Female" = "deeppink3")
+
 # Create annotations
 top_annotation <- HeatmapAnnotation(
-  individuals = individuals, 
+  individuals = individuals,
+  sex = sex,  # New annotation
   timepoints = timepoints,
   drugs = drugs,
   concentrations = concentrations,
   col = list(
-    individuals = ind_colors, 
+    individuals = ind_colors,
+    sex = sex_colors,  # Link sex to palette
     timepoints = time_colors,
     drugs = drug_colors,
     concentrations = conc_colors
+  ),
+  annotation_legend_param = list(
+    sex = list(title = "Sex"),
+    individuals = list(title = "Individual"),
+    timepoints = list(title = "Time"),
+    drugs = list(title = "Drug"),
+    concentrations = list(title = "Concentration")
   )
 )
 ```
@@ -103,6 +115,7 @@ heatmap_pearson <- Heatmap(cor_matrix_pearson,
                            cluster_rows = TRUE,
                            cluster_columns = TRUE)
 
+
 # Draw the heatmap
 draw(heatmap_pearson)
 ```
@@ -118,7 +131,6 @@ heatmap_spearman <- Heatmap(cor_matrix_spearman,
                             show_column_names = TRUE,
                             cluster_rows = TRUE,
                             cluster_columns = TRUE)
-
 # Draw the heatmap
 draw(heatmap_spearman)
 ```
