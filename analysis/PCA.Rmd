@@ -155,6 +155,116 @@ ggplot2::autoplot(prcomp_res1, data = Metadata, colour = "Condition", shape = "T
   theme_bw()
 ```
 
+## **📌PC1–PC3 Gene Expression Variance Across Individual, Drug, Concentration, and Timepoint log2(CPM) (RowMeans > 0)**
+```{r pca_box, echo=TRUE, message=FALSE}
+
+# Load Required Libraries
+library(edgeR)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggrepel)
+library(patchwork)
+
+# Load Count Matrix
+counts_matrix <- read.csv("data/counts_matrix.csv", header = TRUE, check.names = FALSE)
+cpm <- cpm(counts_matrix)
+lcpm <- cpm(counts_matrix, log = TRUE)
+filcpm_matrix <- subset(lcpm, rowMeans(lcpm) > 0)
+matrix <- as.matrix(filcpm_matrix)
+
+# Load and clean Metadata
+Metadata <- read.csv("data/Metadata.csv")
+Metadata$Time <- factor(Metadata$Time, levels = c(3, 24, 48), labels = c("3hr", "24hr", "48hr"))
+Metadata$Ind <- factor(Metadata$Ind, levels = 1:6, labels = as.character(1:6))
+Metadata$Drug <- as.character(Metadata$Drug)
+Metadata$`Conc.` <- factor(Metadata$`Conc.`, levels = c(0.1, 0.5))  # access using backticks
+
+# PCA
+prcomp_res <- prcomp(t(matrix), center = TRUE)
+pca_df <- as.data.frame(prcomp_res$x[, 1:3])  # PC1–PC3
+pca_df$Ind <- Metadata$Ind
+pca_df$Drug <- Metadata$Drug
+pca_df$Conc <- Metadata$`Conc.`
+pca_df$Time <- Metadata$Time
+
+# Renee-style p-value from linear model
+get_regr_pval <- function(mod) {
+  stopifnot(class(mod) == "lm")
+  fstat <- summary(mod)$fstatistic
+  pval <- 1 - pf(fstat[1], fstat[2], fstat[3])
+  return(pval)
+}
+
+# Boxplot function with lm() p-value
+plot_pc_box <- function(df, group_var, pc) {
+  group_data <- df[[group_var]]
+  n_groups <- length(unique(group_data))
+  
+  if (n_groups > 1) {
+    model <- lm(df[[pc]] ~ group_data)
+    pval <- get_regr_pval(model)
+    pval_label <- paste0("p-value: ", signif(pval, 3))
+  } else {
+    pval_label <- "p-value: NA"
+  }
+  
+  ggplot(df, aes_string(x = group_var, y = pc, fill = group_var)) +
+    geom_boxplot(color = "black") +
+    theme_bw(base_size = 11) +
+    ylab(pc) + xlab(group_var) +
+    ggtitle(paste(pc, "by", group_var), subtitle = pval_label) +
+    theme(legend.position = "none",
+          plot.title = element_text(face = "bold", size = 12),
+          plot.subtitle = element_text(size = 10))
+}
+
+# 🔄 Generate all 12 plots: PC1–3 × Ind, Drug, Conc, Time
+pcs <- c("PC1", "PC2", "PC3")
+group_vars <- c("Ind", "Drug", "Conc", "Time")
+plots <- list()
+
+for (pc in pcs) {
+  for (group in group_vars) {
+    key <- paste(pc, group, sep = "_")
+    
+    base_plot <- plot_pc_box(pca_df, group, pc)
+    
+    if (pc == "PC1") {
+      upper_limit <- max(pca_df[[pc]], na.rm = TRUE) * 1.1
+      plots[[key]] <- base_plot +
+        scale_y_continuous(limits = c(-60, upper_limit),
+                           breaks = c(-60, -30, 0, 30, 60, 90, 120))
+    } else {
+      plots[[key]] <- base_plot
+    }
+  }
+}
+
+# Remove titles (we’ll add column headers instead)
+plots <- lapply(plots, function(p) {
+  p + theme(plot.title = element_blank())  # removes main title only, keeps subtitle
+})
+
+# Create column headers as empty plots with titles
+header_ind  <- ggplot() + theme_void() + ggtitle("Ind")  + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+header_drug <- ggplot() + theme_void() + ggtitle("Drug") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+header_conc <- ggplot() + theme_void() + ggtitle("Conc") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+header_time <- ggplot() + theme_void() + ggtitle("Time") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+
+# Assemble the full 4-column layout with 3 PC rows
+final_plot <- (
+  (header_ind | header_drug | header_conc | header_time) /
+    (plots[["PC1_Ind"]] | plots[["PC1_Drug"]] | plots[["PC1_Conc"]] | plots[["PC1_Time"]]) /
+    (plots[["PC2_Ind"]] | plots[["PC2_Drug"]] | plots[["PC2_Conc"]] | plots[["PC2_Time"]]) /
+    (plots[["PC3_Ind"]] | plots[["PC3_Drug"]] | plots[["PC3_Conc"]] | plots[["PC3_Time"]])
+) + plot_layout(heights = c(0.07, 1, 1, 1))  # header height
+
+# Show the plot
+print(final_plot)
+
+```
+
 ## **📌PCA of Filtered log2(CPM) (RowMeans > 0.5)**
 
 ```{r pca_filtered_0.5, echo=TRUE, message=FALSE}
@@ -383,17 +493,29 @@ ggplot2::autoplot(prcomp_res15, data = as.data.frame(subset_meta_cx_dox), colour
 ## **📌 3-Hour Timepoint**
 
 ```{r pca_3hr, echo=TRUE, message=FALSE}
+# 🎯 3-Hour PCA Subset
+Metadata$Drug_Conc <- paste(Metadata$Drug, Metadata$Conc, sep = "_")
+
 selected_columns <- grepl("_3", colnames(matrix))
 subset_matrix_3hr <- matrix[, selected_columns]
 subset_meta_3hr <- subset(Metadata, Metadata$Time == "3hr")
 
+# Filter genes by rowMeans > 0 for 3hr samples
 filtered_matrix_3hr <- subset_matrix_3hr[rowMeans(subset_matrix_3hr) > 0, ]
 
 if (nrow(filtered_matrix_3hr) > 2) {
+  # Run PCA
   prcomp_res_3hr <- prcomp(t(filtered_matrix_3hr), center = TRUE)
 
-  ggplot2::autoplot(prcomp_res_3hr, data = as.data.frame(subset_meta_3hr),
-                    colour = "Drug_Conc", shape = "Drug", size = 4) +
+  # Combine PCA coordinates with metadata
+  pca_3hr_df <- as.data.frame(prcomp_res_3hr$x[, 1:2])  # PC1 and PC2
+  pca_3hr_df$Ind <- subset_meta_3hr$Ind
+  pca_3hr_df$Drug <- subset_meta_3hr$Drug
+  pca_3hr_df$Drug_Conc <- subset_meta_3hr$Drug_Conc
+
+  # Plot
+  ggplot(pca_3hr_df, aes(x = PC1, y = PC2, colour = Drug_Conc, shape = Drug)) +
+    geom_point(size = 4) +
     ggrepel::geom_text_repel(aes(label = Ind)) +
     scale_color_manual(values = drug_conc_palette) +
     ggtitle(expression("PCA of log"[2]*"(cpm) Filtered rowMeans > 0 (3 Hours)")) +
