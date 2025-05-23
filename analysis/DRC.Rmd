@@ -63,25 +63,23 @@ legend("bottomleft", legend = c("CX-5461", "DOX"),
 ## **📌 CX and DOX dose response curve (Individual)**
 ```{r load_libraries2, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
 
-################Combined#################
-
+# 📌 Load Required Libraries
 library(drc)
 library(dplyr)
 library(ggplot2)
 
-# Load CX-5461 and DOX data
+# 📌 Load CX-5461 and DOX data
 DRC <- read.csv("data/CX-5461.csv")
 DRC2 <- read.csv("data/DOX.csv")
 
-# Define individual labels
-individual_map <- list(
-  `75-1` = "Ind1",
-  `78-1` = "Ind2",
-  `87-1` = "Ind3"
-)
+# 📌 Map individual labels
+individual_map <- list(`75-1` = "Ind1", `78-1` = "Ind2", `87-1` = "Ind3")
 
-# --- CX-5461: Predict from 0.01 to 50 µM
+# 📌 Predict concentrations for curve fitting
 pred_conc_cx <- exp(seq(log(0.01), log(50), length.out = 200))
+pred_conc_dox <- exp(seq(log(0.01), log(10), length.out = 200))
+
+# 📌 Fit and predict CX-5461
 fits_cx <- DRC %>%
   group_split(Indv) %>%
   setNames(unique(DRC$Indv)) %>%
@@ -100,8 +98,7 @@ curve_data_cx <- do.call(rbind, lapply(names(fits_cx), function(name) {
   }
 }))
 
-# --- DOX: Predict from 0.01 to 10 µM
-pred_conc_dox <- exp(seq(log(0.01), log(10), length.out = 200))
+# 📌 Fit and predict DOX
 fits_dox <- DRC2 %>%
   group_split(Indv) %>%
   setNames(unique(DRC2$Indv)) %>%
@@ -120,11 +117,8 @@ curve_data_dox <- do.call(rbind, lapply(names(fits_dox), function(name) {
   }
 }))
 
-# Combine all curve data
-combined_data <- bind_rows(curve_data_cx, curve_data_dox)
-
-# Add Drug and Individual columns for aesthetic mapping
-combined_data <- combined_data %>%
+# 📌 Combine all prediction curves
+combined_data <- bind_rows(curve_data_cx, curve_data_dox) %>%
   mutate(
     Drug = ifelse(grepl("_CX$", Label), "CX-5461", "DOX"),
     Indv = case_when(
@@ -134,15 +128,65 @@ combined_data <- combined_data %>%
     )
   )
 
-# Define line types for individuals
+# 📌 Define style settings
 line_types <- c("Ind1" = "dotted", "Ind2" = "dashed", "Ind3" = "solid")
-
-# Define simplified color palette for drugs
 drug_colors <- c("CX-5461" = "#08306B", "DOX" = "#E7298A")
 
-# Plot
+# 📌 Function to calculate EC50 per individual
+calculate_EC50 <- function(data, compound_name) {
+  individual_data <- split(data, data$Ind)
+  EC50_values <- data.frame(Individual = character(), EC50 = numeric(), stringsAsFactors = FALSE)
+  
+  for (individual in names(individual_data)) {
+    fit <- drm(Ratio ~ Conc, data = individual_data[[individual]],
+               fct = LL.4(fixed = c(NA, 0, 1, NA),
+                          names = c("hill", "min", "max", "EC50")))
+    EC50 <- summary(fit)$coefficients["EC50:(Intercept)", "Estimate"]
+    EC50_values <- rbind(EC50_values, data.frame(Individual = individual, EC50 = EC50))
+  }
+  
+  EC50_values$Compound <- compound_name
+  return(EC50_values)
+}
+
+# 📌 Calculate EC50s
+EC50_CX <- calculate_EC50(DRC, "CX-5461")
+EC50_DOX <- calculate_EC50(DRC2, "DOX")
+EC50_results <- bind_rows(EC50_CX, EC50_DOX) %>%
+  mutate(
+    Indv = recode(Individual, "75-1" = "Ind1", "78-1" = "Ind2", "87-1" = "Ind3"),
+    EC50 = round(EC50, 3)
+  )
+
+# 📌 Prepare annotation text
+cx_text <- EC50_results %>%
+  filter(Compound == "CX-5461") %>%
+  arrange(Indv) %>%
+  mutate(line = paste0(Indv, ": ", EC50)) %>%
+  pull(line)
+
+dox_text <- EC50_results %>%
+  filter(Compound == "DOX") %>%
+  arrange(Indv) %>%
+  mutate(line = paste0(Indv, ": ", EC50)) %>%
+  pull(line)
+
+combined_label <- paste0(
+  "LD50 CX-5461:\n", paste(cx_text, collapse = "\n"),
+  "\n\nLD50 DOX:\n", paste(dox_text, collapse = "\n")
+)
+
+# 📌 Plot with EC50 lines and label
 ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
-  geom_line(size = 1.5) +
+  geom_line(linewidth = 1.5) +
+  geom_vline(
+    data = EC50_results,
+    aes(xintercept = EC50),
+    color = "red", linetype = "dotted", linewidth = 0.8, inherit.aes = FALSE
+  ) +
+  annotate("label", x = 0.015, y = 0.05, hjust = 0, vjust = 0,
+           label = combined_label, size = 4.2, fontface = "bold", 
+           color = "black", fill = "#f0f0f0", label.size = 0.4)+
   scale_color_manual(values = drug_colors) +
   scale_linetype_manual(values = line_types) +
   scale_x_log10(
@@ -151,7 +195,7 @@ ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
     labels = c("0.01", "0.1", "1", "10", "50")
   ) +
   labs(
-    title = "CX-5461 and DOX Cell Viability Curves",
+    title = "CX-5461 and DOX Cell Viability Curves with LD50",
     x = "Concentration (μM)",
     y = "Proportion of Viable Cells",
     color = "Drug",
@@ -168,7 +212,6 @@ ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
     plot.background = element_rect(fill = "white", color = NA),
     panel.border = element_rect(fill = NA, color = "black", linewidth = 1)
   )
-
 ```
 
 ## **📌 Calculating EC50/LD50 value**
