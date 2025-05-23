@@ -192,42 +192,74 @@ saveRDS(list(
 ## **📌 Volcano Plots for Differential Expression Analysis**
 ```{r volcano plot, echo=TRUE, message=FALSE}
 # Define a function to generate volcano plots
+# Define a function to generate volcano plots with count-based legend
 generate_volcano_plot <- function(toptable, title) {
   
-  # Add Significance Labels
+  # Annotate Significance
   toptable$Significance <- "Not Significant"
   toptable$Significance[toptable$logFC > 0 & toptable$adj.P.Val < 0.05] <- "Upregulated"
   toptable$Significance[toptable$logFC < 0 & toptable$adj.P.Val < 0.05] <- "Downregulated"
-
-  # Generate Volcano Plot
+  
+  # Count per category
+  count_table <- table(toptable$Significance)
+  up_count <- count_table["Upregulated"]
+  down_count <- count_table["Downregulated"]
+  ns_count <- count_table["Not Significant"]
+  
+  # Handle NAs
+  if (is.na(up_count)) up_count <- 0
+  if (is.na(down_count)) down_count <- 0
+  if (is.na(ns_count)) ns_count <- 0
+  
+  # Labels with counts
+  custom_labels <- c(
+    paste0("Downregulated (", down_count, ")"),
+    paste0("Not Significant (", ns_count, ")"),
+    paste0("Upregulated (", up_count, ")")
+  )
+  names(custom_labels) <- c("Downregulated", "Not Significant", "Upregulated")
+  
+  # Volcano plot
   ggplot(toptable, aes(x = logFC, y = -log10(P.Value), color = Significance)) +
-    geom_point(alpha = 0.4, size = 2) + 
-    scale_color_manual(values = c("Downregulated" = "red", "Upregulated" = "blue", "Not Significant" = "gray")) +
+    geom_point(alpha = 0.4, size = 2) +
+    scale_color_manual(
+      values = c("Downregulated" = "red", "Upregulated" = "blue", "Not Significant" = "gray"),
+      labels = custom_labels
+    ) +
     xlim(-5, 5) +
-    labs(title = title, x = "log2 Fold Change", y = "-log10 P-value") +
-    theme(legend.position = "none", 
-          plot.title = element_text(size = rel(1.5), hjust = 0.5),
-          axis.title = element_text(size = rel(1.25))) +
-    theme_bw()
+    labs(
+      title = title,
+      x = "log2 Fold Change",
+      y = "-log10 P-value",
+      color = "Gene Status"
+    ) +
+    theme_bw() +
+    theme(
+      legend.position = "right",
+      plot.title = element_text(size = rel(1.5), hjust = 0.5),
+      axis.title = element_text(size = rel(1.25)),
+      legend.title = element_text(size = 11, face = "bold"),
+      legend.text = element_text(size = 10)
+    )
 }
 
 # Generate volcano plots for all comparisons
 volcano_plots <- list(
-  "CX_0.1_3" = generate_volcano_plot(Toptable_CX_0.1_3, "Volcano Plot CX_0.1_3 (adj P-val<0.05)"),
-  "CX_0.1_24" = generate_volcano_plot(Toptable_CX_0.1_24, "Volcano Plot CX_0.1_24 (adj P-val<0.05)"),
-  "CX_0.1_48" = generate_volcano_plot(Toptable_CX_0.1_48, "Volcano Plot CX_0.1_48 (adj P-val<0.05)"),
-  "CX_0.5_3" = generate_volcano_plot(Toptable_CX_0.5_3, "Volcano Plot CX_0.5_3 (adj P-val<0.05)"),
-  "CX_0.5_24" = generate_volcano_plot(Toptable_CX_0.5_24, "Volcano Plot CX_0.5_24 (adj P-val<0.05)"),
-  "CX_0.5_48" = generate_volcano_plot(Toptable_CX_0.5_48, "Volcano Plot CX_0.5_48 (adj P-val<0.05)"),
-  "DOX_0.1_3" = generate_volcano_plot(Toptable_DOX_0.1_3, "Volcano Plot DOX_0.1_3 (adj P-val<0.05)"),
-  "DOX_0.1_24" = generate_volcano_plot(Toptable_DOX_0.1_24, "Volcano Plot DOX_0.1_24 (adj P-val<0.05)"),
-  "DOX_0.1_48" = generate_volcano_plot(Toptable_DOX_0.1_48, "Volcano Plot DOX_0.1_48 (adj P-val<0.05)"),
-  "DOX_0.5_3" = generate_volcano_plot(Toptable_DOX_0.5_3, "Volcano Plot DOX_0.5_3 (adj P-val<0.05)"),
-  "DOX_0.5_24" = generate_volcano_plot(Toptable_DOX_0.5_24, "Volcano Plot DOX_0.5_24 (adj P-val<0.05)"),
-  "DOX_0.5_48" = generate_volcano_plot(Toptable_DOX_0.5_48, "Volcano Plot DOX_0.5_48 (adj P-val<0.05)")
+  "CX_0.1_3"   = generate_volcano_plot(Toptable_CX_0.1_3, "Volcano Plot CX_0.1_3"),
+  "CX_0.1_24"  = generate_volcano_plot(Toptable_CX_0.1_24, "Volcano Plot CX_0.1_24"),
+  "CX_0.1_48"  = generate_volcano_plot(Toptable_CX_0.1_48, "Volcano Plot CX_0.1_48"),
+  "CX_0.5_3"   = generate_volcano_plot(Toptable_CX_0.5_3, "Volcano Plot CX_0.5_3"),
+  "CX_0.5_24"  = generate_volcano_plot(Toptable_CX_0.5_24, "Volcano Plot CX_0.5_24"),
+  "CX_0.5_48"  = generate_volcano_plot(Toptable_CX_0.5_48, "Volcano Plot CX_0.5_48"),
+  "DOX_0.1_3"  = generate_volcano_plot(Toptable_DOX_0.1_3, "Volcano Plot DOX_0.1_3"),
+  "DOX_0.1_24" = generate_volcano_plot(Toptable_DOX_0.1_24, "Volcano Plot DOX_0.1_24"),
+  "DOX_0.1_48" = generate_volcano_plot(Toptable_DOX_0.1_48, "Volcano Plot DOX_0.1_48"),
+  "DOX_0.5_3"  = generate_volcano_plot(Toptable_DOX_0.5_3, "Volcano Plot DOX_0.5_3"),
+  "DOX_0.5_24" = generate_volcano_plot(Toptable_DOX_0.5_24, "Volcano Plot DOX_0.5_24"),
+  "DOX_0.5_48" = generate_volcano_plot(Toptable_DOX_0.5_48, "Volcano Plot DOX_0.5_48")
 )
 
-# Display each volcano plot
+# Display plots
 for (plot_name in names(volcano_plots)) {
   print(volcano_plots[[plot_name]])
 }
