@@ -1,0 +1,154 @@
+---
+title: "Specific GO terms enrichment in DEGs"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 DNA damage response GO terms**
+```{r load_libraries, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
+
+### 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+### 📁 Input GO Enrichment Files (First Set)
+go_files <- list(
+  "CX_0.1_3"  = "data/BP/All_Terms/GO_BP_CX_0.1_3.csv",
+  "CX_0.1_24" = "data/BP/All_Terms/GO_BP_CX_0.1_24.csv",
+  "CX_0.1_48" = "data/BP/All_Terms/GO_BP_CX_0.1_48.csv",
+  "CX_0.5_3"  = "data/BP/All_Terms/GO_BP_CX_0.5_3.csv",
+  "CX_0.5_24" = "data/BP/All_Terms/GO_BP_CX_0.5_24.csv",
+  "CX_0.5_48" = "data/BP/All_Terms/GO_BP_CX_0.5_48.csv",
+  "DOX_0.1_3" = "data/BP/All_Terms/GO_BP_DOX_0.1_3.csv",
+  "DOX_0.1_24"= "data/BP/All_Terms/GO_BP_DOX_0.1_24.csv",
+  "DOX_0.1_48"= "data/BP/All_Terms/GO_BP_DOX_0.1_48.csv",
+  "DOX_0.5_3" = "data/BP/All_Terms/GO_BP_DOX_0.5_3.csv",
+  "DOX_0.5_24"= "data/BP/All_Terms/GO_BP_DOX_0.5_24.csv",
+  "DOX_0.5_48"= "data/BP/All_Terms/GO_BP_DOX_0.5_48.csv"
+)
+
+### 🧬 Define GO parent terms of interest and map their children
+parent_terms <- list(
+  "GO:0006974" = "DNA damage response",
+  "GO:0141112" = "broken chromosome clustering",
+  "GO:0006281" = "DNA repair",
+  "GO:0140861" = "DNA repair-dependent chromatin remodeling",
+  "GO:0008630" = "intrinsic apoptotic signaling pathway in response to DNA damage",
+  "GO:0042770" = "signal transduction in response to DNA damage",
+  "GO:0009432" = "SOS response",
+  "GO:0043247" = "telomere maintenance in response to DNA damage"
+)
+
+child_map <- list(
+  "GO:0006281" = c("GO:0006284", "GO:0006307", "GO:0006302", "GO:0006298", "GO:0043504",
+                   "GO:0006289", "GO:0006301", "GO:0006290", "GO:0000725", "GO:0000012"),
+  "GO:0008630" = c("GO:0042771", "GO:1902230", "GO:1902231", "GO:1902229"),
+  "GO:0042770" = c("GO:0000077", "GO:0030330", "GO:0042772", "GO:0044773",
+                   "GO:2000002", "GO:2000003", "GO:2000001"),
+  "GO:0043247" = c("GO:1904506", "GO:1904507", "GO:0031848", "GO:1904505", "GO:0097698")
+)
+
+# Store ordered list of DDR GO descriptions
+ddr_descriptions <- unname(unlist(parent_terms))
+
+### 🔁 Step 1: Retrieve p-values across all samples
+go_matrix_df <- map_dfr(names(go_files), function(cond) {
+  file <- go_files[[cond]]
+  df <- tryCatch(fread(file), error = function(e) return(data.table()))
+
+  # Check if expected columns exist
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+    message("⚠️ Skipping or padding malformed file: ", cond)
+    return(tibble(Description = ddr_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+  }
+
+  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue)
+
+  results <- lapply(names(parent_terms), function(parent_id) {
+    all_ids <- c(parent_id, child_map[[parent_id]])
+    df_sub <- df %>% filter(ID %in% all_ids)
+
+    if (nrow(df_sub) == 0) {
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+    } else {
+      best_row <- df_sub %>% slice_min(pvalue, n = 1)
+      tibble(Description = parent_terms[[parent_id]],
+             pvalue = best_row$pvalue,
+             log10p = -log10(best_row$pvalue),
+             Condition = cond)
+    }
+  })
+
+  bind_rows(results)
+})
+
+### 🧱 Step 2: Build heatmap matrix
+heatmap_data <- go_matrix_df %>%
+  dplyr::select(Description, Condition, log10p) %>%
+  pivot_wider(names_from = Condition, values_from = log10p) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+pval_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, pvalue) %>%
+  pivot_wider(names_from = Condition, values_from = pvalue) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+### 🔧 Ensure all conditions are included (even if fully NA)
+all_conditions <- names(go_files)
+missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
+if (length(missing_cols) > 0) {
+  for (cond in missing_cols) {
+    heatmap_data[, cond] <- NA
+    pval_matrix[, cond] <- NA
+  }
+  heatmap_data <- heatmap_data[, all_conditions]
+  pval_matrix <- pval_matrix[, all_conditions]
+}
+
+### 🎨 Step 3: Define color gradient
+breaks <- seq(0, 20, by = 2.5)
+palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
+col_fun <- colorRamp2(breaks, palette)
+
+### 🔥 Step 4: Plot Heatmap
+ht <- Heatmap(
+  heatmap_data,
+  name = "-log10(p)",
+  col = col_fun,
+  na_col = "white",
+  rect_gp = gpar(col = "black", lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p <- pval_matrix[i, j]
+    if (!is.na(raw_p) && raw_p < 0.05) {
+      grid.text("*", x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = "-log10(p value)",
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, "cm"),
+    direction = "horizontal",
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 9)
+  )
+)
+
+### 🖼️ Final Draw
+draw(ht, heatmap_legend_side = "top")
+
+```
+
+
