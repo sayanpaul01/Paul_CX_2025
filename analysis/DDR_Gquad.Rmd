@@ -52,15 +52,13 @@ child_map <- list(
   "GO:0043247" = c("GO:1904506", "GO:1904507", "GO:0031848", "GO:1904505", "GO:0097698")
 )
 
-# Store ordered list of DDR GO descriptions
 ddr_descriptions <- unname(unlist(parent_terms))
 
-### 🔁 Step 1: Retrieve p-values across all samples
+### 🔁 Step 1: Retrieve best p-values across all conditions
 go_matrix_df <- map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(fread(file), error = function(e) return(data.table()))
 
-  # Check if expected columns exist
   if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
     message("⚠️ Skipping or padding malformed file: ", cond)
     return(tibble(Description = ddr_descriptions, pvalue = NA, log10p = NA, Condition = cond))
@@ -86,7 +84,7 @@ go_matrix_df <- map_dfr(names(go_files), function(cond) {
   bind_rows(results)
 })
 
-### 🧱 Step 2: Build heatmap matrix
+### 🧱 Step 2: Build heatmap matrix and p-value matrix
 heatmap_data <- go_matrix_df %>%
   dplyr::select(Description, Condition, log10p) %>%
   pivot_wider(names_from = Condition, values_from = log10p) %>%
@@ -99,7 +97,7 @@ pval_matrix <- go_matrix_df %>%
   column_to_rownames("Description") %>%
   as.matrix()
 
-### 🔧 Ensure all conditions are included (even if fully NA)
+### ✅ Step 3: Ensure all conditions are included
 all_conditions <- names(go_files)
 missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
 if (length(missing_cols) > 0) {
@@ -111,12 +109,12 @@ if (length(missing_cols) > 0) {
   pval_matrix <- pval_matrix[, all_conditions]
 }
 
-### 🎨 Step 3: Define color gradient
+### 🎨 Step 4: Define color palette
 breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 4: Plot Heatmap
+### 🔥 Step 5: Plot Heatmap
 ht <- Heatmap(
   heatmap_data,
   name = "-log10(p)",
@@ -146,9 +144,253 @@ ht <- Heatmap(
   )
 )
 
-### 🖼️ Final Draw
+### 🖼 Final Draw
 draw(ht, heatmap_legend_side = "top")
 
 ```
 
+## **📌 Ribosome biogenesis GO terms**
+```{r RB, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
+### 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+### 📁 Define Input Files (All 12 Conditions)
+go_files <- list(
+  "CX_0.1_3"  = "data/BP/All_Terms/GO_BP_CX_0.1_3.csv",
+  "CX_0.1_24" = "data/BP/All_Terms/GO_BP_CX_0.1_24.csv",
+  "CX_0.1_48" = "data/BP/All_Terms/GO_BP_CX_0.1_48.csv",
+  "CX_0.5_3"  = "data/BP/All_Terms/GO_BP_CX_0.5_3.csv",
+  "CX_0.5_24" = "data/BP/All_Terms/GO_BP_CX_0.5_24.csv",
+  "CX_0.5_48" = "data/BP/All_Terms/GO_BP_CX_0.5_48.csv",
+  "DOX_0.1_3" = "data/BP/All_Terms/GO_BP_DOX_0.1_3.csv",
+  "DOX_0.1_24"= "data/BP/All_Terms/GO_BP_DOX_0.1_24.csv",
+  "DOX_0.1_48"= "data/BP/All_Terms/GO_BP_DOX_0.1_48.csv",
+  "DOX_0.5_3" = "data/BP/All_Terms/GO_BP_DOX_0.5_3.csv",
+  "DOX_0.5_24"= "data/BP/All_Terms/GO_BP_DOX_0.5_24.csv",
+  "DOX_0.5_48"= "data/BP/All_Terms/GO_BP_DOX_0.5_48.csv"
+)
+
+### 🧬 Ribosome Biogenesis GO Terms
+parent_terms <- list(
+  "GO:0042254" = "ribosome biogenesis",
+  "GO:0090071" = "negative regulation of ribosome biogenesis",
+  "GO:0042273" = "ribosomal large subunit biogenesis",
+  "GO:0042274" = "ribosomal small subunit biogenesis",
+  "GO:0000054" = "ribosomal subunit export from nucleus",
+  "GO:0042255" = "ribosome assembly",
+  "GO:0006364" = "rRNA processing"
+)
+
+child_map <- list(
+  "GO:0090071" = c("GO:2000201", "GO:2000233"),
+  "GO:0042273" = c("GO:0000470", "GO:0000027"),
+  "GO:0042274" = c("GO:0030490", "GO:0000028", "GO:0140638"),
+  "GO:0000054" = c("GO:2000201", "GO:2000202", "GO:2000200", "GO:0000055", "GO:0000056"),
+  "GO:0042255" = c("GO:0042256", "GO:0061668", "GO:0000027", "GO:0000028"),
+  "GO:0006364" = c(
+    "GO:1901259", "GO:0000450", "GO:0000483", "GO:0002103", "GO:0000479", "GO:0000449",
+    "GO:0000475", "GO:0000476", "GO:0000460", "GO:0000481", "GO:0000470", "GO:0030490",
+    "GO:2000233", "GO:2000234", "GO:2000232", "GO:0031125", "GO:0000967", "GO:0000154", "GO:1990417"
+  )
+)
+
+### 🔁 Extract –log10(pvalue) per condition for Ribosome Biogenesis terms
+go_descriptions <- unname(unlist(parent_terms))
+
+go_matrix_df <- map_dfr(names(go_files), function(cond) {
+  file <- go_files[[cond]]
+  df <- tryCatch(fread(file), error = function(e) return(data.table()))
+  
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+    message("⚠️ Skipping or padding malformed file: ", cond)
+    return(tibble(Description = go_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+  }
+  
+  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue)
+  
+  results <- lapply(names(parent_terms), function(parent_id) {
+    all_ids <- c(parent_id, child_map[[parent_id]])
+    df_sub <- df %>% filter(ID %in% all_ids)
+    
+    if (nrow(df_sub) == 0) {
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+    } else {
+      best_row <- df_sub %>% slice_min(pvalue, n = 1)
+      tibble(Description = parent_terms[[parent_id]],
+             pvalue = best_row$pvalue,
+             log10p = -log10(best_row$pvalue),
+             Condition = cond)
+    }
+  })
+  
+  bind_rows(results)
+})
+
+### 🧱 Build matrices
+heatmap_data <- go_matrix_df %>%
+  dplyr::select(Description, Condition, log10p) %>%
+  pivot_wider(names_from = Condition, values_from = log10p) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+pval_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, pvalue) %>%
+  pivot_wider(names_from = Condition, values_from = pvalue) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+### 🔧 Ensure all conditions are included
+all_conditions <- names(go_files)
+for (cond in setdiff(all_conditions, colnames(heatmap_data))) {
+  heatmap_data[, cond] <- NA
+  pval_matrix[, cond] <- NA
+}
+heatmap_data <- heatmap_data[, all_conditions]
+pval_matrix <- pval_matrix[, all_conditions]
+
+### 🎨 Color Palette
+breaks <- seq(0, 20, by = 2.5)
+palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
+col_fun <- colorRamp2(breaks, palette)
+
+### 🔥 Plot Heatmap
+ht <- Heatmap(
+  heatmap_data,
+  name = "-log10(p)",
+  col = col_fun,
+  na_col = "white",
+  rect_gp = gpar(col = "black", lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p <- pval_matrix[i, j]
+    if (!is.na(raw_p) && raw_p < 0.05) {
+      grid.text("*", x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = "-log10(p value)",
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, "cm"),
+    direction = "horizontal",
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 9)
+  )
+)
+
+### 🖼 Final Draw
+draw(ht, heatmap_legend_side = "top")
+```
+
+## **📌 G-Quadruplex GO terms**
+```{r GQ, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
+### 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+### 📁 Define Input GO Enrichment Files for DEG Conditions
+go_files <- list(
+  "CX_0.1_3"   = "data/BP/Combined_Terms/GO_All_CX_0.1_3.csv",
+  "CX_0.1_24"  = "data/BP/Combined_Terms/GO_All_CX_0.1_24.csv",
+  "CX_0.1_48"  = "data/BP/Combined_Terms/GO_All_CX_0.1_48.csv",
+  "CX_0.5_3"   = "data/BP/Combined_Terms/GO_All_CX_0.5_3.csv",
+  "CX_0.5_24"  = "data/BP/Combined_Terms/GO_All_CX_0.5_24.csv",
+  "CX_0.5_48"  = "data/BP/Combined_Terms/GO_All_CX_0.5_48.csv",
+  "DOX_0.1_3"  = "data/BP/Combined_Terms/GO_All_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/BP/Combined_Terms/GO_All_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/BP/Combined_Terms/GO_All_DOX_0.1_48.csv",
+  "DOX_0.5_3"  = "data/BP/Combined_Terms/GO_All_DOX_0.5_3.csv",
+  "DOX_0.5_24" = "data/BP/Combined_Terms/GO_All_DOX_0.5_24.csv",
+  "DOX_0.5_48" = "data/BP/Combined_Terms/GO_All_DOX_0.5_48.csv"
+)
+
+### 🧬 Define G-quadruplex GO Terms of Interest
+g4_terms <- list(
+  "GO:0051880" = "G-quadruplex DNA binding",
+  "GO:0002151" = "G-quadruplex RNA binding",
+  "GO:0071919" = "G-quadruplex DNA formation",
+  "GO:1905493" = "Regulation of G-quadruplex DNA binding",
+  "GO:0160225" = "G-quadruplex unwinding activity",
+  "GO:0061849" = "Telomeric G-quadruplex DNA binding"
+)
+
+### 🧪 Function to extract -log10(p.adjust) and raw p-values
+get_go_values <- function(file_path) {
+  df <- fread(file_path)
+  df <- df[, .(ID, p.adjust, pvalue)]
+  
+  log10padj <- sapply(names(g4_terms), function(go_id) {
+    row <- df[ID == go_id]
+    if (nrow(row) == 0) return(NA)
+    return(-log10(row$p.adjust))
+  })
+  
+  raw_p <- sapply(names(g4_terms), function(go_id) {
+    row <- df[ID == go_id]
+    if (nrow(row) == 0) return(NA)
+    return(row$pvalue)
+  })
+  
+  return(list(log10padj = log10padj, raw_p = raw_p))
+}
+
+### 🧊 Build GO matrix and p-value matrix
+matrix_list <- map(go_files, get_go_values)
+
+go_matrix <- sapply(matrix_list, function(x) x$log10padj)
+pval_matrix <- sapply(matrix_list, function(x) x$raw_p)
+
+rownames(go_matrix) <- unname(unlist(g4_terms))
+rownames(pval_matrix) <- rownames(go_matrix)
+
+### 🎨 Step 4: Define color palette
+breaks <- seq(0, 20, by = 2.5)
+palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
+col_fun <- colorRamp2(breaks, palette)
+
+### 🔥 Step 5: Plot heatmap
+ht <- Heatmap(
+  go_matrix,
+  name = "-log10(adj p-value)",
+  col = col_fun,
+  na_col = "white",
+  rect_gp = gpar(col = "black", lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(go_matrix), gp = gpar(fontsize = 9)),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p <- pval_matrix[i, j]
+    if (!is.na(raw_p) && raw_p < 0.05) {
+      grid.text("*", x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = "-log10(p value)",
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, "cm"),
+    direction = "horizontal",
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 9)
+  )
+)
+
+### 🖼 Final Draw
+draw(ht, heatmap_legend_side = "top")
+```
 

@@ -416,10 +416,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree6c5251875af936c0d7e69e1434b55dc8a4c04747targetblank6c52518a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeedb24a53c7fb3f1e7da4d2056ad9cd64fc2fd75atargetblankedb24a5a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/6c5251875af936c0d7e69e1434b55dc8a4c04747" target="_blank">6c52518</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/edb24a53c7fb3f1e7da4d2056ad9cd64fc2fd75a" target="_blank">edb24a5</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree6c5251875af936c0d7e69e1434b55dc8a4c04747targetblank6c52518a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreeedb24a53c7fb3f1e7da4d2056ad9cd64fc2fd75atargetblankedb24a5a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/6c5251875af936c0d7e69e1434b55dc8a4c04747" target="_blank">6c52518</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/edb24a53c7fb3f1e7da4d2056ad9cd64fc2fd75a" target="_blank">edb24a5</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -606,7 +606,6 @@ Untracked files:
     Untracked:  Violin HA.svg
     Untracked:  Violin HV (CX vs DOX).svg
     Untracked:  Violin HV.svg
-    Untracked:  analysis/DDR_Gquad.Rmd
     Untracked:  data/AF.csv
     Untracked:  data/AF_Mapped.csv
     Untracked:  data/AF_genes.csv
@@ -664,10 +663,9 @@ Untracked files:
 
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/DDR_Gquad.Rmd
     Modified:   data/DOX_0.5_48 (Combined).csv
     Modified:   data/Total_number_of_Mapped_reads_by_Individuals.csv
-    Modified:   data/all_GO/prob_5_0.5.csv
     Modified:   data/count.csv
 
 </code></pre>
@@ -683,10 +681,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/DDR_Gquad.Rmd</code>) and HTML
+(<code>docs/DDR_Gquad.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/69a0b926962a0af9a214a5ae62f3ab18abfd5359/analysis/DDR_Gquad.Rmd" target="_blank">69a0b92</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-01
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/55b5edc41aa8a750ccca510f3cf5c78cbedba2e3/docs/DDR_Gquad.html" target="_blank">55b5edc</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-01
+</td>
+<td>
+Commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -737,15 +799,13 @@ child_map &lt;- list(
   &quot;GO:0043247&quot; = c(&quot;GO:1904506&quot;, &quot;GO:1904507&quot;, &quot;GO:0031848&quot;, &quot;GO:1904505&quot;, &quot;GO:0097698&quot;)
 )
 
-# Store ordered list of DDR GO descriptions
 ddr_descriptions &lt;- unname(unlist(parent_terms))
 
-### 🔁 Step 1: Retrieve p-values across all samples
+### 🔁 Step 1: Retrieve best p-values across all conditions
 go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
   file &lt;- go_files[[cond]]
   df &lt;- tryCatch(fread(file), error = function(e) return(data.table()))
 
-  # Check if expected columns exist
   if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;) %in% colnames(df))) {
     message(&quot;⚠️ Skipping or padding malformed file: &quot;, cond)
     return(tibble(Description = ddr_descriptions, pvalue = NA, log10p = NA, Condition = cond))
@@ -771,7 +831,7 @@ go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
   bind_rows(results)
 })
 
-### 🧱 Step 2: Build heatmap matrix
+### 🧱 Step 2: Build heatmap matrix and p-value matrix
 heatmap_data &lt;- go_matrix_df %&gt;%
   dplyr::select(Description, Condition, log10p) %&gt;%
   pivot_wider(names_from = Condition, values_from = log10p) %&gt;%
@@ -784,7 +844,7 @@ pval_matrix &lt;- go_matrix_df %&gt;%
   column_to_rownames(&quot;Description&quot;) %&gt;%
   as.matrix()
 
-### 🔧 Ensure all conditions are included (even if fully NA)
+### ✅ Step 3: Ensure all conditions are included
 all_conditions &lt;- names(go_files)
 missing_cols &lt;- setdiff(all_conditions, colnames(heatmap_data))
 if (length(missing_cols) &gt; 0) {
@@ -796,12 +856,12 @@ if (length(missing_cols) &gt; 0) {
   pval_matrix &lt;- pval_matrix[, all_conditions]
 }
 
-### 🎨 Step 3: Define color gradient
+### 🎨 Step 4: Define color palette
 breaks &lt;- seq(0, 20, by = 2.5)
 palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
 col_fun &lt;- colorRamp2(breaks, palette)
 
-### 🔥 Step 4: Plot Heatmap
+### 🔥 Step 5: Plot Heatmap
 ht &lt;- Heatmap(
   heatmap_data,
   name = &quot;-log10(p)&quot;,
@@ -831,9 +891,291 @@ ht &lt;- Heatmap(
   )
 )
 
-### 🖼️ Final Draw
+### 🖼 Final Draw
 draw(ht, heatmap_legend_side = &quot;top&quot;)</code></pre>
 <p><img src="figure/DDR_Gquad.Rmd/load_libraries-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-load_libraries-1">
+Past versions of load_libraries-1.png
+</button>
+</p>
+<div id="fig-load_libraries-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/55b5edc41aa8a750ccca510f3cf5c78cbedba2e3/docs/figure/DDR_Gquad.Rmd/load_libraries-1.png" target="_blank">55b5edc</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="ribosome-biogenesis-go-terms" class="section level2">
+<h2><strong>📌 Ribosome biogenesis GO terms</strong></h2>
+<pre class="r"><code>### 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+### 📁 Define Input Files (All 12 Conditions)
+go_files &lt;- list(
+  &quot;CX_0.1_3&quot;  = &quot;data/BP/All_Terms/GO_BP_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot; = &quot;data/BP/All_Terms/GO_BP_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot; = &quot;data/BP/All_Terms/GO_BP_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot;  = &quot;data/BP/All_Terms/GO_BP_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot; = &quot;data/BP/All_Terms/GO_BP_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot; = &quot;data/BP/All_Terms/GO_BP_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot; = &quot;data/BP/All_Terms/GO_BP_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot;= &quot;data/BP/All_Terms/GO_BP_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot;= &quot;data/BP/All_Terms/GO_BP_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot; = &quot;data/BP/All_Terms/GO_BP_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot;= &quot;data/BP/All_Terms/GO_BP_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot;= &quot;data/BP/All_Terms/GO_BP_DOX_0.5_48.csv&quot;
+)
+
+### 🧬 Ribosome Biogenesis GO Terms
+parent_terms &lt;- list(
+  &quot;GO:0042254&quot; = &quot;ribosome biogenesis&quot;,
+  &quot;GO:0090071&quot; = &quot;negative regulation of ribosome biogenesis&quot;,
+  &quot;GO:0042273&quot; = &quot;ribosomal large subunit biogenesis&quot;,
+  &quot;GO:0042274&quot; = &quot;ribosomal small subunit biogenesis&quot;,
+  &quot;GO:0000054&quot; = &quot;ribosomal subunit export from nucleus&quot;,
+  &quot;GO:0042255&quot; = &quot;ribosome assembly&quot;,
+  &quot;GO:0006364&quot; = &quot;rRNA processing&quot;
+)
+
+child_map &lt;- list(
+  &quot;GO:0090071&quot; = c(&quot;GO:2000201&quot;, &quot;GO:2000233&quot;),
+  &quot;GO:0042273&quot; = c(&quot;GO:0000470&quot;, &quot;GO:0000027&quot;),
+  &quot;GO:0042274&quot; = c(&quot;GO:0030490&quot;, &quot;GO:0000028&quot;, &quot;GO:0140638&quot;),
+  &quot;GO:0000054&quot; = c(&quot;GO:2000201&quot;, &quot;GO:2000202&quot;, &quot;GO:2000200&quot;, &quot;GO:0000055&quot;, &quot;GO:0000056&quot;),
+  &quot;GO:0042255&quot; = c(&quot;GO:0042256&quot;, &quot;GO:0061668&quot;, &quot;GO:0000027&quot;, &quot;GO:0000028&quot;),
+  &quot;GO:0006364&quot; = c(
+    &quot;GO:1901259&quot;, &quot;GO:0000450&quot;, &quot;GO:0000483&quot;, &quot;GO:0002103&quot;, &quot;GO:0000479&quot;, &quot;GO:0000449&quot;,
+    &quot;GO:0000475&quot;, &quot;GO:0000476&quot;, &quot;GO:0000460&quot;, &quot;GO:0000481&quot;, &quot;GO:0000470&quot;, &quot;GO:0030490&quot;,
+    &quot;GO:2000233&quot;, &quot;GO:2000234&quot;, &quot;GO:2000232&quot;, &quot;GO:0031125&quot;, &quot;GO:0000967&quot;, &quot;GO:0000154&quot;, &quot;GO:1990417&quot;
+  )
+)
+
+### 🔁 Extract –log10(pvalue) per condition for Ribosome Biogenesis terms
+go_descriptions &lt;- unname(unlist(parent_terms))
+
+go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
+  file &lt;- go_files[[cond]]
+  df &lt;- tryCatch(fread(file), error = function(e) return(data.table()))
+  
+  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;) %in% colnames(df))) {
+    message(&quot;⚠️ Skipping or padding malformed file: &quot;, cond)
+    return(tibble(Description = go_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+  }
+  
+  df &lt;- as_tibble(df) %&gt;% dplyr::select(ID, Description, pvalue)
+  
+  results &lt;- lapply(names(parent_terms), function(parent_id) {
+    all_ids &lt;- c(parent_id, child_map[[parent_id]])
+    df_sub &lt;- df %&gt;% filter(ID %in% all_ids)
+    
+    if (nrow(df_sub) == 0) {
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+    } else {
+      best_row &lt;- df_sub %&gt;% slice_min(pvalue, n = 1)
+      tibble(Description = parent_terms[[parent_id]],
+             pvalue = best_row$pvalue,
+             log10p = -log10(best_row$pvalue),
+             Condition = cond)
+    }
+  })
+  
+  bind_rows(results)
+})
+
+### 🧱 Build matrices
+heatmap_data &lt;- go_matrix_df %&gt;%
+  dplyr::select(Description, Condition, log10p) %&gt;%
+  pivot_wider(names_from = Condition, values_from = log10p) %&gt;%
+  column_to_rownames(&quot;Description&quot;) %&gt;%
+  as.matrix()
+
+pval_matrix &lt;- go_matrix_df %&gt;%
+  dplyr::select(Description, Condition, pvalue) %&gt;%
+  pivot_wider(names_from = Condition, values_from = pvalue) %&gt;%
+  column_to_rownames(&quot;Description&quot;) %&gt;%
+  as.matrix()
+
+### 🔧 Ensure all conditions are included
+all_conditions &lt;- names(go_files)
+for (cond in setdiff(all_conditions, colnames(heatmap_data))) {
+  heatmap_data[, cond] &lt;- NA
+  pval_matrix[, cond] &lt;- NA
+}
+heatmap_data &lt;- heatmap_data[, all_conditions]
+pval_matrix &lt;- pval_matrix[, all_conditions]
+
+### 🎨 Color Palette
+breaks &lt;- seq(0, 20, by = 2.5)
+palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
+col_fun &lt;- colorRamp2(breaks, palette)
+
+### 🔥 Plot Heatmap
+ht &lt;- Heatmap(
+  heatmap_data,
+  name = &quot;-log10(p)&quot;,
+  col = col_fun,
+  na_col = &quot;white&quot;,
+  rect_gp = gpar(col = &quot;black&quot;, lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p &lt;- pval_matrix[i, j]
+    if (!is.na(raw_p) &amp;&amp; raw_p &lt; 0.05) {
+      grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = &quot;-log10(p value)&quot;,
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, &quot;cm&quot;),
+    direction = &quot;horizontal&quot;,
+    title_gp = gpar(fontsize = 10, fontface = &quot;bold&quot;),
+    labels_gp = gpar(fontsize = 9)
+  )
+)
+
+### 🖼 Final Draw
+draw(ht, heatmap_legend_side = &quot;top&quot;)</code></pre>
+<p><img src="figure/DDR_Gquad.Rmd/RB-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="g-quadruplex-go-terms" class="section level2">
+<h2><strong>📌 G-Quadruplex GO terms</strong></h2>
+<pre class="r"><code>### 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+### 📁 Define Input GO Enrichment Files for DEG Conditions
+go_files &lt;- list(
+  &quot;CX_0.1_3&quot;   = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_3.csv&quot;,
+  &quot;CX_0.1_24&quot;  = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_24.csv&quot;,
+  &quot;CX_0.1_48&quot;  = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_48.csv&quot;,
+  &quot;CX_0.5_3&quot;   = &quot;data/BP/Combined_Terms/GO_All_CX_0.5_3.csv&quot;,
+  &quot;CX_0.5_24&quot;  = &quot;data/BP/Combined_Terms/GO_All_CX_0.5_24.csv&quot;,
+  &quot;CX_0.5_48&quot;  = &quot;data/BP/Combined_Terms/GO_All_CX_0.5_48.csv&quot;,
+  &quot;DOX_0.1_3&quot;  = &quot;data/BP/Combined_Terms/GO_All_DOX_0.1_3.csv&quot;,
+  &quot;DOX_0.1_24&quot; = &quot;data/BP/Combined_Terms/GO_All_DOX_0.1_24.csv&quot;,
+  &quot;DOX_0.1_48&quot; = &quot;data/BP/Combined_Terms/GO_All_DOX_0.1_48.csv&quot;,
+  &quot;DOX_0.5_3&quot;  = &quot;data/BP/Combined_Terms/GO_All_DOX_0.5_3.csv&quot;,
+  &quot;DOX_0.5_24&quot; = &quot;data/BP/Combined_Terms/GO_All_DOX_0.5_24.csv&quot;,
+  &quot;DOX_0.5_48&quot; = &quot;data/BP/Combined_Terms/GO_All_DOX_0.5_48.csv&quot;
+)
+
+### 🧬 Define G-quadruplex GO Terms of Interest
+g4_terms &lt;- list(
+  &quot;GO:0051880&quot; = &quot;G-quadruplex DNA binding&quot;,
+  &quot;GO:0002151&quot; = &quot;G-quadruplex RNA binding&quot;,
+  &quot;GO:0071919&quot; = &quot;G-quadruplex DNA formation&quot;,
+  &quot;GO:1905493&quot; = &quot;Regulation of G-quadruplex DNA binding&quot;,
+  &quot;GO:0160225&quot; = &quot;G-quadruplex unwinding activity&quot;,
+  &quot;GO:0061849&quot; = &quot;Telomeric G-quadruplex DNA binding&quot;
+)
+
+### 🧪 Function to extract -log10(p.adjust) and raw p-values
+get_go_values &lt;- function(file_path) {
+  df &lt;- fread(file_path)
+  df &lt;- df[, .(ID, p.adjust, pvalue)]
+  
+  log10padj &lt;- sapply(names(g4_terms), function(go_id) {
+    row &lt;- df[ID == go_id]
+    if (nrow(row) == 0) return(NA)
+    return(-log10(row$p.adjust))
+  })
+  
+  raw_p &lt;- sapply(names(g4_terms), function(go_id) {
+    row &lt;- df[ID == go_id]
+    if (nrow(row) == 0) return(NA)
+    return(row$pvalue)
+  })
+  
+  return(list(log10padj = log10padj, raw_p = raw_p))
+}
+
+### 🧊 Build GO matrix and p-value matrix
+matrix_list &lt;- map(go_files, get_go_values)
+
+go_matrix &lt;- sapply(matrix_list, function(x) x$log10padj)
+pval_matrix &lt;- sapply(matrix_list, function(x) x$raw_p)
+
+rownames(go_matrix) &lt;- unname(unlist(g4_terms))
+rownames(pval_matrix) &lt;- rownames(go_matrix)
+
+### 🎨 Step 4: Define color palette
+breaks &lt;- seq(0, 20, by = 2.5)
+palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
+col_fun &lt;- colorRamp2(breaks, palette)
+
+### 🔥 Step 5: Plot heatmap
+ht &lt;- Heatmap(
+  go_matrix,
+  name = &quot;-log10(adj p-value)&quot;,
+  col = col_fun,
+  na_col = &quot;white&quot;,
+  rect_gp = gpar(col = &quot;black&quot;, lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(go_matrix), gp = gpar(fontsize = 9)),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p &lt;- pval_matrix[i, j]
+    if (!is.na(raw_p) &amp;&amp; raw_p &lt; 0.05) {
+      grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = &quot;-log10(p value)&quot;,
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, &quot;cm&quot;),
+    direction = &quot;horizontal&quot;,
+    title_gp = gpar(fontsize = 10, fontface = &quot;bold&quot;),
+    labels_gp = gpar(fontsize = 9)
+  )
+)
+
+### 🖼 Final Draw
+draw(ht, heatmap_legend_side = &quot;top&quot;)</code></pre>
+<p><img src="figure/DDR_Gquad.Rmd/GQ-1.png" width="960" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -882,18 +1224,18 @@ loaded via a namespace (and not attached):
 [22] codetools_0.2-20    clue_0.3-66         httpuv_1.6.15      
 [25] htmltools_0.5.8.1   sass_0.4.10         yaml_2.3.10        
 [28] later_1.3.2         pillar_1.10.2       crayon_1.5.3       
-[31] jquerylib_0.1.4     cachem_1.1.0        magick_2.8.6       
-[34] iterators_1.0.14    foreach_1.5.2       tidyselect_1.2.1   
-[37] digest_0.6.34       stringi_1.8.3       rprojroot_2.0.4    
-[40] fastmap_1.2.0       colorspace_2.1-0    cli_3.6.1          
-[43] magrittr_2.0.3      withr_3.0.2         scales_1.3.0       
-[46] promises_1.3.2      timechange_0.3.0    rmarkdown_2.29     
-[49] matrixStats_1.5.0   workflowr_1.7.1     png_0.1-8          
-[52] GetoptLong_1.0.5    hms_1.1.3           evaluate_1.0.3     
-[55] knitr_1.50          IRanges_2.36.0      doParallel_1.0.17  
-[58] rlang_1.1.3         Rcpp_1.0.12         glue_1.7.0         
-[61] BiocGenerics_0.48.1 rstudioapi_0.17.1   jsonlite_2.0.0     
-[64] R6_2.6.1            fs_1.6.3           </code></pre>
+[31] jquerylib_0.1.4     whisker_0.4.1       cachem_1.1.0       
+[34] magick_2.8.6        iterators_1.0.14    foreach_1.5.2      
+[37] tidyselect_1.2.1    digest_0.6.34       stringi_1.8.3      
+[40] rprojroot_2.0.4     fastmap_1.2.0       colorspace_2.1-0   
+[43] cli_3.6.1           magrittr_2.0.3      withr_3.0.2        
+[46] scales_1.3.0        promises_1.3.2      timechange_0.3.0   
+[49] rmarkdown_2.29      matrixStats_1.5.0   workflowr_1.7.1    
+[52] png_0.1-8           GetoptLong_1.0.5    hms_1.1.3          
+[55] evaluate_1.0.3      knitr_1.50          IRanges_2.36.0     
+[58] doParallel_1.0.17   rlang_1.1.3         Rcpp_1.0.12        
+[61] glue_1.7.0          BiocGenerics_0.48.1 rstudioapi_0.17.1  
+[64] jsonlite_2.0.0      R6_2.6.1            fs_1.6.3           </code></pre>
 </div>
 </div>
 
