@@ -4327,194 +4327,111 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
 ## **📌 Top BP (Cluster Profiler)**
-```{r GO comp, echo=TRUE, message=FALSE, fig.width=14, fig.height=6}
-# Load required libraries
-library(clusterProfiler)
-library(ggplot2)
-library(dplyr)
-library(tibble)
+```{r GO comp1, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 
-# Function to perform GO enrichment for BP
-perform_enrichment <- function(gene_set, background, sample_name) {
-  enrichment <- enrichGO(
-    gene = gene_set,
-    OrgDb = org.Hs.eg.db,
-    keyType = "ENTREZID",
-    universe = background,
-    ont = "BP",
-    pvalueCutoff = 0.05
-  )
-  
-  if (!is.null(enrichment) && nrow(as.data.frame(enrichment)) > 0) {
-    enrichment_df <- as_tibble(as.data.frame(enrichment)) %>%
-      mutate(Sample = sample_name, 
-             GeneRatio = Count / as.numeric(sub("/.*", "", BgRatio)), # Compute Gene Ratio
-             neglog_padj = -log10(p.adjust)) %>%  # Compute -log10(adjusted p-value)
-      arrange(p.adjust) %>%
-      slice_head(n = 5) # Keep top 5 terms
-    
-    return(enrichment_df)
-  } else {
-    return(NULL)
-  }
-}
+### 📦 Load Required Libraries
+library(tidyverse)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
 
-# Define samples and DEG lists
-samples <- list(
-  "CX_0.1_3" = DEG1,
-  "CX_0.1_24" = DEG2,
-  "CX_0.1_48" = DEG3,
-  "CX_0.5_3" = DEG4,
-  "CX_0.5_24" = DEG5,
-  "CX_0.5_48" = DEG6,
-  "DOX_0.1_3" = DEG7,
-  "DOX_0.1_24" = DEG8,
-  "DOX_0.1_48" = DEG9,
-  "DOX_0.5_3" = DEG10,
-  "DOX_0.5_24" = DEG11,
-  "DOX_0.5_48" = DEG12
+### 📁 Input GO Enrichment Files
+go_files <- list(
+  "CX_0.1_3"  = "data/BP/All_Terms/GO_BP_CX_0.1_3.csv",
+  "CX_0.1_24" = "data/BP/All_Terms/GO_BP_CX_0.1_24.csv",
+  "CX_0.1_48" = "data/BP/All_Terms/GO_BP_CX_0.1_48.csv",
+  "CX_0.5_3"  = "data/BP/All_Terms/GO_BP_CX_0.5_3.csv",
+  "CX_0.5_24" = "data/BP/All_Terms/GO_BP_CX_0.5_24.csv",
+  "CX_0.5_48" = "data/BP/All_Terms/GO_BP_CX_0.5_48.csv",
+  "DOX_0.1_3" = "data/BP/All_Terms/GO_BP_DOX_0.1_3.csv",
+  "DOX_0.1_24"= "data/BP/All_Terms/GO_BP_DOX_0.1_24.csv",
+  "DOX_0.1_48"= "data/BP/All_Terms/GO_BP_DOX_0.1_48.csv",
+  "DOX_0.5_3" = "data/BP/All_Terms/GO_BP_DOX_0.5_3.csv",
+  "DOX_0.5_24"= "data/BP/All_Terms/GO_BP_DOX_0.5_24.csv",
+  "DOX_0.5_48"= "data/BP/All_Terms/GO_BP_DOX_0.5_48.csv"
 )
 
-# Perform enrichment for each sample
-enrichment_results <- lapply(names(samples), function(sample) {
-  perform_enrichment(samples[[sample]], background, sample)
+### 🔍 Step 1: Extract Top 5 GO Terms per Sample
+top_go_terms <- map(go_files, function(file) {
+  df <- tryCatch(read.csv(file), error = function(e) return(NULL))
+  if (!is.null(df) && nrow(df) > 0) {
+    df %>%
+      as_tibble() %>%
+      arrange(pvalue) %>%
+      slice_head(n = 5) %>%
+      pull(Description) %>%
+      unique()
+  } else {
+    character(0)
+  }
+}) %>% unlist() %>% unique()
+
+### 🔁 Step 2: Retrieve p-values for all top terms across samples
+go_matrix_df <- map_dfr(names(go_files), function(cond) {
+  file <- go_files[[cond]]
+  df <- tryCatch(read.csv(file), error = function(e) return(data.frame()))
+
+  if (nrow(df) == 0) {
+    tibble(Description = top_go_terms, pvalue = NA, log10p = NA, Condition = cond)
+  } else {
+    df <- as_tibble(df)
+    df %>%
+      dplyr::select(Description, pvalue) %>%
+      filter(Description %in% top_go_terms) %>%
+      mutate(log10p = -log10(pvalue)) %>%
+      right_join(tibble(Description = top_go_terms), by = "Description") %>%
+      mutate(Condition = cond)
+  }
 })
 
-# Combine all results into a single dataframe
-all_enrichment_df <- bind_rows(enrichment_results)
+### 🧱 Step 3: Convert to heatmap matrices
+heatmap_data <- go_matrix_df %>%
+  dplyr::select(Description, Condition, log10p) %>%
+  pivot_wider(names_from = Condition, values_from = log10p) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
 
-# Identify missing samples (samples without enrichment)
-missing_samples <- setdiff(names(samples), unique(all_enrichment_df$Sample))
+pval_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, pvalue) %>%
+  pivot_wider(names_from = Condition, values_from = pvalue) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
 
-# Create placeholder rows for missing samples with "Non enriched terms" in Y-axis
-if (length(missing_samples) > 0) {
-  missing_df <- tibble(
-    Sample = missing_samples,
-    Description = "Non enriched terms",  # Explicitly label missing samples
-    GeneRatio = NA,
-    neglog_padj = NA
+### 🎨 Step 4: Color Gradient (0–20, breaks every 2.5)
+breaks <- seq(0, 20, by = 2.5)
+palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
+col_fun <- colorRamp2(breaks, palette)
+
+### 🔥 Step 5: Plot Heatmap
+ht <- Heatmap(
+  heatmap_data,
+  name = "-log10(p)",
+  col = col_fun,
+  na_col = "white",
+  rect_gp = gpar(col = "black", lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p <- pval_matrix[i, j]
+    if (!is.na(raw_p) && raw_p < 0.05) {
+      grid.text("*", x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = "-log10(p value)",
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, "cm"),
+    direction = "horizontal",
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 9)
   )
-  all_enrichment_df <- bind_rows(all_enrichment_df, missing_df)
-}
-
-# Ensure all samples appear in the X-axis
-all_enrichment_df$Sample <- factor(all_enrichment_df$Sample, levels = names(samples))
-
-# Generate dot plot
-dotplot <- ggplot(all_enrichment_df, aes(x = Sample, y = Description, size = GeneRatio, color = neglog_padj)) +
-  geom_point(na.rm = TRUE) +  # Ignore NA values
-  scale_color_gradient(low = "blue", high = "red", na.value = "grey") +  # NA values in grey
-  labs(
-    x = "Samples",
-    y = "Biological Process",
-    color = "-log10(Adjusted P-Value)",
-    size = "Gene Ratio",
-    title = "Top 5 enriched biological processes across samples"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, face = "bold"),
-    axis.text.y = element_text(size = 12, face = "bold"),
-    legend.text = element_text(size = 10)
-  )
-
-# Display the dot plot
-print(dotplot)
-```
-
-## **📌 Top BP (GProfiler)**
-```{r GO comp2, echo=TRUE, message=FALSE, fig.width=16, fig.height=6}
-# Load required libraries
-library(gprofiler2)
-library(ggplot2)
-library(dplyr)
-library(tibble)
-
-# Function to perform GO enrichment for BP using g:Profiler
-perform_enrichment <- function(gene_set, background, sample_name) {
-  enrichment <- gost(
-    query = gene_set,
-    organism = "hsapiens",
-    ordered_query = FALSE,
-    significant = TRUE,
-    correction_method = "fdr",
-    sources = "GO:BP",
-    custom_bg = background
-  )
-  
-  if (!is.null(enrichment) && nrow(enrichment$result) > 0) {
-    enrichment_df <- as_tibble(enrichment$result) %>%
-      mutate(Sample = sample_name, 
-             GeneRatio = intersection_size / effective_domain_size,  # Compute Gene Ratio
-             neglog_padj = -log10(p_value)) %>%  # Compute -log10(adjusted p-value)
-      arrange(p_value) %>%
-      slice_head(n = 5) # Keep top 5 terms
-    
-    return(enrichment_df)
-  } else {
-    return(NULL)
-  }
-}
-
-# Define samples and DEG lists
-samples <- list(
-  "CX_0.1_3" = DEG1,
-  "CX_0.1_24" = DEG2,
-  "CX_0.1_48" = DEG3,
-  "CX_0.5_3" = DEG4,
-  "CX_0.5_24" = DEG5,
-  "CX_0.5_48" = DEG6,
-  "DOX_0.1_3" = DEG7,
-  "DOX_0.1_24" = DEG8,
-  "DOX_0.1_48" = DEG9,
-  "DOX_0.5_3" = DEG10,
-  "DOX_0.5_24" = DEG11,
-  "DOX_0.5_48" = DEG12
 )
 
-# Perform enrichment for each sample
-enrichment_results <- lapply(names(samples), function(sample) {
-  perform_enrichment(samples[[sample]], background, sample)
-})
-
-# Combine all results into a single dataframe
-all_enrichment_df <- bind_rows(enrichment_results)
-
-# Identify missing samples (samples without enrichment)
-missing_samples <- setdiff(names(samples), unique(all_enrichment_df$Sample))
-
-# Create placeholder rows for missing samples with "Non enriched terms" in Y-axis
-if (length(missing_samples) > 0) {
-  missing_df <- tibble(
-    Sample = missing_samples,
-    term_name = "Non enriched terms",  # Explicitly label missing samples
-    GeneRatio = NA,
-    neglog_padj = NA
-  )
-  all_enrichment_df <- bind_rows(all_enrichment_df, missing_df)
-}
-
-# Ensure all samples appear in the X-axis
-all_enrichment_df$Sample <- factor(all_enrichment_df$Sample, levels = names(samples))
-
-# Generate dot plot
-dotplot <- ggplot(all_enrichment_df, aes(x = Sample, y = term_name, size = GeneRatio, color = neglog_padj)) +
-  geom_point(na.rm = TRUE) +  # Ignore NA values
-  scale_color_gradient(low = "blue", high = "red", na.value = "grey") +  # NA values in grey
-  labs(
-    x = "Samples",
-    y = "Biological Process",
-    color = "-log10(Adjusted P-Value)",
-    size = "Gene Ratio",
-    title = "Comparison of Top BP Enrichments Across Samples (GProfiler)"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, face = "bold"),
-    axis.text.y = element_text(size = 12, face = "bold"),
-    legend.text = element_text(size = 10)
-  )
-
-# Display the dot plot
-print(dotplot)
+### 🖼️ Final Draw
+draw(ht, heatmap_legend_side = "top")
 ```
+
