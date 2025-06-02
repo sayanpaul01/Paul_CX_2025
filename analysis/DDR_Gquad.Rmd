@@ -394,3 +394,146 @@ ht <- Heatmap(
 draw(ht, heatmap_legend_side = "top")
 ```
 
+## **📌 Transcription by RNA polymerase I**
+```{r RNA_POl, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
+
+### 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(ComplexHeatmap)
+library(circlize)
+library(grid)
+
+### 📁 Input GO Enrichment Files
+go_files <- list(
+  "CX_0.1_3"   = "data/BP/Combined_Terms/GO_All_CX_0.1_3.csv",
+  "CX_0.1_24"  = "data/BP/Combined_Terms/GO_All_CX_0.1_24.csv",
+  "CX_0.1_48"  = "data/BP/Combined_Terms/GO_All_CX_0.1_48.csv",
+  "CX_0.5_3"   = "data/BP/Combined_Terms/GO_All_CX_0.5_3.csv",
+  "CX_0.5_24"  = "data/BP/Combined_Terms/GO_All_CX_0.5_24.csv",
+  "CX_0.5_48"  = "data/BP/Combined_Terms/GO_All_CX_0.5_48.csv",
+  "DOX_0.1_3"  = "data/BP/Combined_Terms/GO_All_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/BP/Combined_Terms/GO_All_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/BP/Combined_Terms/GO_All_DOX_0.1_48.csv",
+  "DOX_0.5_3"  = "data/BP/Combined_Terms/GO_All_DOX_0.5_3.csv",
+  "DOX_0.5_24" = "data/BP/Combined_Terms/GO_All_DOX_0.5_24.csv",
+  "DOX_0.5_48" = "data/BP/Combined_Terms/GO_All_DOX_0.5_48.csv"
+)
+
+### 🔧 Parent GO Terms and their Children
+parent_terms <- list(
+  "GO:0006360" = "transcription by RNA polymerase I",
+  "GO:0016479" = "negative regulation of transcription by RNA polymerase I",
+  "GO:0042790" = "nucleolar large rRNA transcription by RNA polymerase I",
+  "GO:0045943" = "positive regulation of transcription by RNA polymerase I",
+  "GO:0006356" = "regulation of transcription by RNA polymerase I",
+  "GO:0006363" = "termination of RNA polymerase I transcription",
+  "GO:0006361" = "transcription initiation at RNA polymerase I promoter",
+  "GO:0005736" = "RNA polymerase I complex"
+)
+
+
+child_map <- list(
+  "GO:0016479" = c("GO:2000731", "GO:2001208", "GO:1901837"),
+  "GO:0042790" = c("GO:1901837", "GO:1901838", "GO:1901836", "GO:0006362"),
+  "GO:0045943" = c("GO:0110016", "GO:2000732", "GO:2001209", "GO:1901838"),
+  "GO:0006356" = c("GO:2000730", "GO:1903357", "GO:1901836"),
+  "GO:0006363" = c("GO:2000731", "GO:2000732", "GO:2000730"),
+  "GO:0006361" = c("GO:1903357", "GO:0001188")
+)
+
+### 🔁 Compile –log10(p) matrix for parent groups
+go_matrix_df <- map_dfr(names(go_files), function(cond) {
+  file <- go_files[[cond]]
+  df <- tryCatch(fread(file), error = function(e) return(data.table()))
+  
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+    message("⚠️ Skipping malformed: ", cond)
+    return(tibble(Description = unname(unlist(parent_terms)), pvalue = NA, log10p = NA, Condition = cond))
+  }
+  
+  df <- df %>% as_tibble() %>% dplyr::select(ID, Description, pvalue)
+  
+  results <- lapply(names(parent_terms), function(pid) {
+    all_ids <- c(pid, child_map[[pid]])
+    df_sub <- df %>% filter(ID %in% all_ids)
+    
+    if (nrow(df_sub) == 0) {
+      tibble(Description = parent_terms[[pid]], pvalue = NA, log10p = NA, Condition = cond)
+    } else {
+      best <- df_sub %>% slice_min(pvalue, n = 1)
+      tibble(Description = parent_terms[[pid]],
+             pvalue = best$pvalue,
+             log10p = -log10(best$pvalue),
+             Condition = cond)
+    }
+  })
+  
+  bind_rows(results)
+})
+
+### 🧱 Build Heatmap Matrices
+heatmap_data <- go_matrix_df %>%
+  dplyr::select(Description, Condition, log10p) %>%
+  pivot_wider(names_from = Condition, values_from = log10p) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+pval_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, pvalue) %>%
+  pivot_wider(names_from = Condition, values_from = pvalue) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+### 🧼 Pad missing columns (if any)
+all_conditions <- names(go_files)
+missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
+if (length(missing_cols) > 0) {
+  for (cond in missing_cols) {
+    heatmap_data[, cond] <- NA
+    pval_matrix[, cond] <- NA
+  }
+  heatmap_data <- heatmap_data[, all_conditions]
+  pval_matrix <- pval_matrix[, all_conditions]
+}
+
+### 🎨 Define Color Palette
+breaks <- seq(0, 20, by = 2.5)
+palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
+col_fun <- colorRamp2(breaks, palette)
+
+### 🔥 Plot Heatmap with Stars for p < 0.05
+ht <- Heatmap(
+  heatmap_data,
+  name = "-log10(p)",
+  col = col_fun,
+  na_col = "white",
+  rect_gp = gpar(col = "black", lwd = 0.5),
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
+  cell_fun = function(j, i, x, y, width, height, fill) {
+    raw_p <- pval_matrix[i, j]
+    if (!is.na(raw_p) && raw_p < 0.05) {
+      grid.text("*", x, y, gp = gpar(fontsize = 12))
+    }
+  },
+  heatmap_legend_param = list(
+    title = "-log10(p value)",
+    at = breaks,
+    labels = as.character(breaks),
+    legend_width = unit(5, "cm"),
+    direction = "horizontal",
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 9)
+  )
+)
+
+### 🖼 Draw
+draw(ht, heatmap_legend_side = "top")
+```
+
+
