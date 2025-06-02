@@ -20,28 +20,39 @@ library(pheatmap)
 ## **📌 Load Data**
 ```{r load_File Paths, echo=TRUE,results='hide',message=FALSE}
 # Read the CSV file into R
+# 📁 Step 0: Load Count Data
 file_path <- "data/count.csv"
 df <- read.csv(file_path, check.names = FALSE)
 
-# Remove 'x' from column headers (if applicable)
+# Remove 'x' from column headers
 colnames(df) <- gsub("^x", "", colnames(df))
 
-# Step 1: Calculate IPSC_CM (Median across VEH samples)
+# View the updated dataframe
+head(df)
+
+# View updated column names
+colnames(df)
+
+
+# Step 1: Calculate IPSC_CM
 # Select columns with 'VEH' in their names
 veh_columns <- grep("VEH", colnames(df), value = TRUE)
 
-# Calculate the median logCPM across VEH samples
-df$IPSC_CM <- apply(df[, veh_columns], 1, median, na.rm = TRUE)
+# Calculate the average logCPM across VEH samples
+df$IPSC_CM <- rowMeans(df[, veh_columns], na.rm = TRUE)
 
-# Create a new dataframe with Entrez_ID and IPSC_CM
-veh_median_df <- df[, c("Entrez_ID", "IPSC_CM")]
+# Create a new dataframe with ENTREZID, SYMBOL, and IPSC_CM
+veh_avg_df <- df[, c("Entrez_ID","IPSC_CM")]
+
+library(biomaRt)
 
 # Step 2: Read the Tissue_Gtex dataset
-Tissue_Gtex <- read.csv("data/Tissue_Gtex.csv")
+Tissue_Gtex <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Concatenation/Data Integration/Human Heart Genes/Tissue specificity/Tissue_Gtex.csv")
 
 # Step 3: Convert Ensembl IDs to Entrez IDs using biomaRt
 mart <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
 
+# Extract Entrez IDs for the Ensembl IDs in the gene.id column
 gene_ids <- Tissue_Gtex$gene.id
 conversion <- getBM(
   attributes = c("ensembl_gene_id", "entrezgene_id"),
@@ -53,28 +64,34 @@ conversion <- getBM(
 # Merge Entrez IDs back into Tissue_Gtex
 Tissue_Gtex <- merge(Tissue_Gtex, conversion, by.x = "gene.id", by.y = "ensembl_gene_id", all.x = TRUE)
 
-# Rename for consistency
+# Rename the column for consistency
 colnames(Tissue_Gtex)[colnames(Tissue_Gtex) == "entrezgene_id"] <- "Entrez_ID"
 
-# Step 4: Ensure Entrez_ID column types match before merging
-veh_median_df$Entrez_ID <- as.character(veh_median_df$Entrez_ID)
+# Step 4: Read the veh_avg_df dataframe
+veh_avg_df <- df[, c("Entrez_ID", "IPSC_CM")]
+
+# Step 5: Merge veh_avg_df with Tissue_Gtex by Entrez_ID
+# Ensure column types match
+veh_avg_df$Entrez_ID <- as.character(veh_avg_df$Entrez_ID)
 Tissue_Gtex$Entrez_ID <- as.character(Tissue_Gtex$Entrez_ID)
 
-# Step 5: Merge iPSC_CM with Tissue_Gtex by Entrez_ID
-merged_df <- merge(veh_median_df, Tissue_Gtex, by = "Entrez_ID", all.x = TRUE)
+# Perform the merge
+merged_df <- merge(veh_avg_df, Tissue_Gtex, by = "Entrez_ID", all.x = TRUE)
 
 # Step 6: Remove rows with NA values
-cleaned_df <- na.omit(merged_df) 
-```
+cleaned_df <- na.omit(merged_df)
 
-## **📌 Correlation heatmap (Tissue specificity)**
-```{r Genes of Interest, echo=TRUE, message=FALSE, fig.height=8, fig.width=10}
+
+# Step 7: Verify and analyze the cleaned dataframe
+head(cleaned_df)
+
+# Step 5: Correlation and heatmap analysis
 # Filter relevant tissue columns
 tissue_cols <- colnames(cleaned_df)[which(colnames(cleaned_df) %in% c(
-  "IPSC_CM", "Adrenal.Gland", "Spleen", "Heart...Atrial", "Pancreas", "Artery", "Breast",
-  "small.Intestine", "Colon", "Nerve...Tibial", "Esophagus", "Muscle...Skeletal",
-  "Thyroid", "Heart..Ventricle", "Stomach", "Uterus", "Vagina", "Skin", "Ovary", "Liver", 
-  "Lung", "Brain", "Pituitary", "Testis", "Prostate", "Salivary.Gland"))]
+  "IPSC_CM", "Adrenal.Gland", "Spleen", "Heart...Atrial", "Pancreas","Artery","Breast",
+  "small.Intestine","Colon","Nerve...Tibial","Esophagus","Muscle...Skeletal",
+  "Thyroid","Heart..Ventricle", "Stomach", "Uterus","Vagina", "Skin", "Ovary", "Liver", "Lung", "Brain", "Pituitary", "Testis", 
+  "Prostate", "Salivary.Gland"))]
 
 data_subset <- cleaned_df[, tissue_cols]
 
@@ -300,3 +317,154 @@ ggplot(proportion_data, aes(x = Set, y = Percentage, fill = Category)) +
     panel.border = element_rect(color = "black", fill = NA, linewidth = 1.5) # Add border
   )
 ```
+
+## **📌 Tissue Specificity Score**
+```{r TS_Score, echo=TRUE,results='hide', message=FALSE, fig.height=8, fig.width=10}
+
+# 📦 Load Required Libraries
+library(ggplot2)
+library(dplyr)
+
+# ✅ Step 1: Load CorrMotif group assignments
+grouped_files <- list(
+  "data/prob_1_0.1.csv" = "Non response 0.1",
+  "data/prob_2_0.1.csv" = "CX-DOX mid-late response 0.1",
+  "data/prob_3_0.1.csv" = "DOX only mid-late response 0.1",
+  "data/prob_1_0.5.csv" = "Non response 0.5",
+  "data/prob_2_0.5.csv" = "DOX-specific response 0.5",
+  "data/prob_3_0.5.csv" = "DOX only mid-late response 0.5",
+  "data/prob_4_0.5.csv" = "CX total + DOX early response 0.5",
+  "data/prob_5_0.5.csv" = "DOX early + CX-DOX mid-late response 0.5"
+)
+
+group_order <- unname(unlist(grouped_files))  # group order for consistent plotting
+
+all_groups <- bind_rows(lapply(names(grouped_files), function(f) {
+  read.csv(f) %>% mutate(Group = grouped_files[[f]])
+})) %>% mutate(Entrez_ID = as.character(Entrez_ID))
+
+# ✅ Step 2: Load TS data
+ts_data <- read.csv("data/TS.csv") %>%
+  mutate(Entrez_ID = as.character(Entrez_ID))
+
+# ✅ Step 3: Merge and clean
+merged_data <- all_groups %>%
+  left_join(ts_data, by = "Entrez_ID") %>%
+  mutate(
+    Heart_Ventricle = as.numeric(Heart_Ventricle),
+    Group = factor(Group, levels = group_order)
+  ) %>%
+  filter(!is.na(Heart_Ventricle))
+
+# ✅ Step 4: Define ALL comparisons
+comparison_map_1 <- list(
+  "CX-DOX mid-late response 0.1" = "Non response 0.1",
+  "DOX only mid-late response 0.1" = "Non response 0.1",
+  "DOX-specific response 0.5" = "Non response 0.5",
+  "DOX only mid-late response 0.5" = "Non response 0.5",
+  "CX total + DOX early response 0.5" = "Non response 0.5",
+  "DOX early + CX-DOX mid-late response 0.5" = "Non response 0.5"
+)
+
+comparison_table_2 <- data.frame(
+  resp_group = c(
+    "DOX only mid-late response 0.1",
+    "DOX-specific response 0.5",
+    "DOX only mid-late response 0.5",
+    "DOX-specific response 0.5",
+    "DOX only mid-late response 0.5"
+  ),
+  control_group = c(
+    "CX-DOX mid-late response 0.1",
+    "CX total + DOX early response 0.5",
+    "CX total + DOX early response 0.5",
+    "DOX early + CX-DOX mid-late response 0.5",
+    "DOX early + CX-DOX mid-late response 0.5"
+  ),
+  stringsAsFactors = FALSE
+)
+
+# ✅ Step 5: Run Wilcoxon test for both comparison sets
+star_df_1 <- lapply(names(comparison_map_1), function(resp_group) {
+  control_group <- comparison_map_1[[resp_group]]
+  resp_vals <- merged_data$Heart_Ventricle[merged_data$Group == resp_group]
+  control_vals <- merged_data$Heart_Ventricle[merged_data$Group == control_group]
+  test_result <- wilcox.test(resp_vals, control_vals)
+  pval <- test_result$p.value
+  
+  if (pval < 0.05) {
+    label <- case_when(pval < 0.001 ~ "***", pval < 0.01 ~ "**", TRUE ~ "*")
+    y_pos <- max(c(resp_vals, control_vals), na.rm = TRUE) + 0.4
+    data.frame(control_group, resp_group, y_pos, label, P_Value = signif(pval, 4))
+  } else {
+    NULL
+  }
+}) %>% bind_rows()
+
+star_df_2 <- lapply(1:nrow(comparison_table_2), function(i) {
+  resp_group <- comparison_table_2$resp_group[i]
+  control_group <- comparison_table_2$control_group[i]
+  resp_vals <- merged_data$Heart_Ventricle[merged_data$Group == resp_group]
+  control_vals <- merged_data$Heart_Ventricle[merged_data$Group == control_group]
+  test_result <- wilcox.test(resp_vals, control_vals)
+  pval <- test_result$p.value
+  
+  if (pval < 0.05) {
+    label <- case_when(pval < 0.001 ~ "***", pval < 0.01 ~ "**", TRUE ~ "*")
+    y_pos <- max(c(resp_vals, control_vals), na.rm = TRUE) + 0.4
+    data.frame(control_group, resp_group, y_pos, label, P_Value = signif(pval, 4))
+  } else {
+    NULL
+  }
+}) %>% bind_rows()
+
+star_df <- bind_rows(star_df_1, star_df_2) %>%
+  mutate(
+    x = as.numeric(factor(control_group, levels = levels(merged_data$Group))),
+    xend = as.numeric(factor(resp_group, levels = levels(merged_data$Group))),
+    bump = 0.8 * (row_number() - 1),
+    y_pos = y_pos + bump
+  )
+
+# ✅ Step 6: Define group colors
+group_colors <- c(
+  "Non response 0.1" = "#33FF33",
+  "CX-DOX mid-late response 0.1" = "#228B22",
+  "DOX only mid-late response 0.1" = "#003366",
+  "Non response 0.5" = "#FF6666",
+  "DOX-specific response 0.5" = "#B22222",
+  "DOX only mid-late response 0.5" = "#FF8C00",
+  "CX total + DOX early response 0.5" = "#4682B4",
+  "DOX early + CX-DOX mid-late response 0.5" = "#8B008B"
+)
+
+# ✅ Step 7: Violin + boxplot with all significance annotations
+p <- ggplot(merged_data, aes(x = Group, y = Heart_Ventricle, fill = Group)) +
+  geom_violin(trim = FALSE, scale = "width", color = "black", alpha = 0.8) +
+  geom_boxplot(width = 0.2, color = "black", fill = "white", outlier.shape = NA) +
+  scale_fill_manual(values = group_colors) +
+  scale_y_continuous(
+    limits = c(-10, max(star_df$y_pos, na.rm = TRUE) + 1),
+    breaks = seq(-10, 25, 5)
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  geom_segment(data = star_df, aes(x = x, xend = xend, y = y_pos, yend = y_pos),
+               inherit.aes = FALSE, color = "black", size = 0.7) +
+  geom_text(data = star_df, aes(x = (x + xend)/2, y = y_pos + 0.3, label = label),
+            inherit.aes = FALSE, size = 6, fontface = "bold") +
+  labs(
+    title = "Violin-Boxplot: Heart Ventricle TS (All Comparisons)",
+    y = "Tissue specificity score (Heart Ventricle)",
+    x = ""
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    legend.position = "none"
+  )
+
+# ✅ Step 8: Show plot
+print(p)
+```
+
