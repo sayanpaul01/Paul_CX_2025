@@ -944,3 +944,182 @@ ggplot(heatmap_data_long, aes(x = Comparison, y = Sample, fill = value)) +
     panel.grid = element_blank()
   )
 ```
+
+## **📌 logFC Correlation heatmap (Complete dataset)**
+```{r colr2, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
+
+# 📦 Load Required Libraries
+library(data.table)
+library(tidyverse)
+library(janitor)
+library(org.Hs.eg.db)
+library(AnnotationDbi)
+library(ComplexHeatmap)
+library(circlize)
+library(RColorBrewer)
+library(grid)
+
+# 🧠 Function to map gene SYMBOL to Entrez ID for colorectal datasets
+map_entrez <- function(df) {
+  df %>%
+    mutate(entrez_id = mapIds(
+      org.Hs.eg.db,
+      keys = Symbol,
+      column = "ENTREZID",
+      keytype = "SYMBOL",
+      multiVals = "first"
+    )) %>%
+    mutate(entrez_id = as.character(entrez_id))
+}
+
+# 📁 Define All logFC Input Files (CX-5461, DOX, Colorectal)
+logfc_files <- list(
+  "CX_0.1_3"   = "data/DEGs/Toptable_CX_0.1_3.csv",
+  "CX_0.1_24"  = "data/DEGs/Toptable_CX_0.1_24.csv",
+  "CX_0.1_48"  = "data/DEGs/Toptable_CX_0.1_48.csv",
+  "CX_0.5_3"   = "data/DEGs/Toptable_CX_0.5_3.csv",
+  "CX_0.5_24"  = "data/DEGs/Toptable_CX_0.5_24.csv",
+  "CX_0.5_48"  = "data/DEGs/Toptable_CX_0.5_48.csv",
+  "DOX_0.1_3"  = "data/DEGs/Toptable_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/DEGs/Toptable_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/DEGs/Toptable_DOX_0.1_48.csv",
+  "DOX_0.5_3"  = "data/DEGs/Toptable_DOX_0.5_3.csv",
+  "DOX_0.5_24" = "data/DEGs/Toptable_DOX_0.5_24.csv",
+  "DOX_0.5_48" = "data/DEGs/Toptable_DOX_0.5_48.csv",
+  "Colorectal_6hr"  = "data/Colorectal/6hrlogFC.csv",
+  "Colorectal_24hr" = "data/Colorectal/24hrlogFC.csv",
+  "Colorectal_72hr" = "data/Colorectal/72hrlogFC.csv"
+)
+
+# 🔁 Process All Files: Extract clean (Entrez_ID, logFC) tibble per sample
+logfc_list <- map2(names(logfc_files), logfc_files, function(name, path) {
+  df <- fread(path, data.table = FALSE) %>% as_tibble()
+
+  # Map Entrez ID for colorectal
+  if (grepl("colorectal", tolower(name))) {
+    df <- map_entrez(df)
+  }
+
+  # Auto-detect columns
+  logfc_col <- names(df)[str_detect(names(df), regex("^logfc$", ignore_case = TRUE))][1]
+  entrez_col <- names(df)[str_detect(names(df), regex("entrez.*id", ignore_case = TRUE))][1]
+
+  if (is.na(logfc_col) || is.na(entrez_col)) {
+    stop(paste("Missing columns in:", name,
+               "\nAvailable columns:", paste(names(df), collapse = ", ")))
+  }
+
+  df %>%
+    filter(!is.na(.data[[logfc_col]]), !is.na(.data[[entrez_col]])) %>%
+    mutate(entrez_id = as.character(.data[[entrez_col]])) %>%
+    distinct(entrez_id, .keep_all = TRUE) %>%
+    dplyr::select(entrez_id, logFC = all_of(logfc_col)) %>%
+    dplyr::rename(!!name := logFC)
+})
+
+
+
+
+# 🧬 Identify Common Entrez_IDs Across All Datasets
+common_ids <- purrr::reduce(logfc_list, inner_join, by = "entrez_id") %>%
+  pull(entrez_id) %>%
+  unique()
+
+
+# 🧱 Build Final logFC Matrix (Entrez_ID × Sample)
+logfc_matrix <- map(logfc_list, ~ filter(.x, entrez_id %in% common_ids)) %>%
+  purrr::reduce(inner_join, by = "entrez_id") %>%
+  column_to_rownames("entrez_id") %>%
+  as.matrix()
+
+# ✅ Assume logfc_matrix is already created
+# Rows = Entrez_IDs, Columns = Samples
+sample_names <- colnames(logfc_matrix)
+
+# 📁 Create Metadata Inline
+metadata <- tibble(Sample = sample_names) %>%
+  mutate(
+    Drug = case_when(
+      str_detect(Sample, "CX") ~ "CX-5461",
+      str_detect(Sample, "DOX") ~ "DOX",
+      str_detect(Sample, "Colorectal") ~ "CX-5461"
+    ),
+    Tissue = case_when(
+      str_detect(Sample, "Colorectal") ~ "Colorectal",
+      TRUE ~ "Cardiomyocyte"
+    ),
+    Time = case_when(
+      str_detect(Sample, "6hr") ~ "6",
+      str_detect(Sample, "24") ~ "24",
+      str_detect(Sample, "72") ~ "72",
+      str_detect(Sample, "48") ~ "48",
+      str_detect(Sample, "3") ~ "3",
+      TRUE ~ NA_character_
+    ),
+    Conc = case_when(
+      str_detect(Sample, "Colorectal") ~ "0.5",
+      str_detect(Sample, "0.1") ~ "0.1",
+      str_detect(Sample, "0.5") ~ "0.5",
+      TRUE ~ NA_character_
+    )
+  )
+
+metadata <- metadata %>%
+  mutate(Time = factor(Time, levels = c("3", "6", "24", "48", "72")))
+
+# 🎨 Define Annotation Colors
+time_colors <- c("3" = "purple", "6" = "blue", "24" = "pink", "48" = "tomato3", "72" = "orange")
+drug_colors <- c("CX-5461" = "gold", "DOX" = "magenta4")
+conc_colors <- c("0.1" = "lightblue", "0.5" = "lightcoral")
+tissue_colors <- c("Cardiomyocyte" = "forestgreen", "Colorectal" = "steelblue")
+
+# 🔝 Top Annotation Track
+top_annot <- HeatmapAnnotation(
+  Tissue = metadata$Tissue,
+  Drug = metadata$Drug,
+  Timepoint = metadata$Time,
+  Concentration = metadata$Conc,
+  col = list(
+    Tissue = tissue_colors,
+    Drug = drug_colors,
+    Timepoint = time_colors,
+    Concentration = conc_colors
+  ),
+  annotation_legend_param = list(
+    Tissue = list(title = "Tissue"),
+    Drug = list(title = "Drug"),
+    Timepoint = list(title = "Timepoint (hr)"),
+    Concentration = list(title = "Conc (µM)")
+  )
+)
+
+# 📊 Compute Pearson Correlation Matrix
+pearson_matrix <- cor(logfc_matrix, method = "pearson")
+
+# 🎨 Color Function for Pearson r
+col_fun <- colorRamp2(c(-1, 0, 1), c("blue", "white", "red"))
+
+
+# 🔥 Draw Pearson Correlation Heatmap
+Heatmap(
+  pearson_matrix,
+  name = "Pearson\nCorrelation",
+  col = col_fun,
+  top_annotation = top_annot,
+  cluster_rows = TRUE,
+  cluster_columns = TRUE,
+  row_names_gp = gpar(fontsize = 9),
+  column_names_gp = gpar(fontsize = 9),
+  column_names_rot = 45,
+  rect_gp = gpar(col = "white", lwd = 0.5),
+  cell_fun = function(j, i, x, y, w, h, fill) {
+    grid.text(sprintf("%.2f", pearson_matrix[i, j]), x, y, gp = gpar(fontsize = 6.5))
+  },
+  heatmap_legend_param = list(
+    title = "Correlation",
+    at = c(-1, -0.5, 0, 0.5, 1),
+    labels = c("-1", "-0.5", "0", "0.5", "1"),
+    direction = "vertical"
+  )
+)
+```
