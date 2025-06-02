@@ -2904,7 +2904,7 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 
 
 ## **📌 Top BP (Cluster Profiler)**
-```{r GO comp, echo=TRUE, message=FALSE, fig.width=14, fig.height=6}
+```{r GO comp, echo=TRUE, message=FALSE, fig.width=10, fig.height=10}
 
 ### 📦 Load Required Libraries
 library(tidyverse)
