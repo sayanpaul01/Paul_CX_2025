@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -378,13 +378,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-04-10
+<strong>Last updated:</strong> 2025-06-02
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebe64e1857141bf2ccd2903335e60cde65ccd1430targetblankbe64e18a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5c791d472ccbec2ef5d28564fe317bcd28d9a35atargetblank5c791d4a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/be64e1857141bf2ccd2903335e60cde65ccd1430" target="_blank">be64e18</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5c791d472ccbec2ef5d28564fe317bcd28d9a35a" target="_blank">5c791d4</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreebe64e1857141bf2ccd2903335e60cde65ccd1430targetblankbe64e18a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree5c791d472ccbec2ef5d28564fe317bcd28d9a35atargetblank5c791d4a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/be64e1857141bf2ccd2903335e60cde65ccd1430" target="_blank">be64e18</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/5c791d472ccbec2ef5d28564fe317bcd28d9a35a" target="_blank">5c791d4</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -547,6 +550,7 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
+    Ignored:    analysis/Corrmotif_Conc.html
 
 Untracked files:
     Untracked:  0.1 density.svg
@@ -555,8 +559,21 @@ Untracked files:
     Untracked:  0.5 box.svg
     Untracked:  0.5 density.svg
     Untracked:  0.5.svg
+    Untracked:  Additional/
+    Untracked:  Autosome factors.svg
+    Untracked:  CX_5461_Pattern_Genes_24hr.csv
+    Untracked:  CX_5461_Pattern_Genes_3hr.csv
+    Untracked:  Cell viability box plot.svg
+    Untracked:  DEG GO terms.svg
+    Untracked:  DNA damage associated GO terms.svg
+    Untracked:  DRC1.svg
     Untracked:  Figure 1.jpeg
     Untracked:  Figure 1.pdf
+    Untracked:  Figure_CM_Purity.pdf
+    Untracked:  G Quadruplex DEGs.svg
+    Untracked:  PC2 Vs PC3 Autosome.svg
+    Untracked:  PCA autosome.svg
+    Untracked:  Rplot 18.svg
     Untracked:  Rplot.svg
     Untracked:  Rplot01.svg
     Untracked:  Rplot02.svg
@@ -566,6 +583,91 @@ Untracked files:
     Untracked:  Rplot07.svg
     Untracked:  Rplot08.jpeg
     Untracked:  Rplot08.svg
+    Untracked:  Rplot09.svg
+    Untracked:  Rplot10.svg
+    Untracked:  Rplot11.svg
+    Untracked:  Rplot12.svg
+    Untracked:  Rplot13.svg
+    Untracked:  Rplot14.svg
+    Untracked:  Rplot15.svg
+    Untracked:  Rplot16.svg
+    Untracked:  Rplot17.svg
+    Untracked:  Rplot18.svg
+    Untracked:  Rplot19.svg
+    Untracked:  Rplot20.svg
+    Untracked:  Rplot21.svg
+    Untracked:  Rplot22.svg
+    Untracked:  Rplot23.svg
+    Untracked:  Rplot24.svg
+    Untracked:  TOP2B.bed
+    Untracked:  TS HPA (Violin).svg
+    Untracked:  TS HPA.svg
+    Untracked:  TS_HA.svg
+    Untracked:  TS_HV.svg
+    Untracked:  Violin HA.svg
+    Untracked:  Violin HV (CX vs DOX).svg
+    Untracked:  Violin HV.svg
+    Untracked:  data/AF.csv
+    Untracked:  data/AF_Mapped.csv
+    Untracked:  data/AF_genes.csv
+    Untracked:  data/Annotated_DOX_Gene_Table.csv
+    Untracked:  data/BP/
+    Untracked:  data/CAD_genes.csv
+    Untracked:  data/Cardiotox.csv
+    Untracked:  data/Cardiotox_mapped.csv
+    Untracked:  data/Corrmotif_GO/
+    Untracked:  data/DOX_Vald.csv
+    Untracked:  data/DOX_Vald_Mapped.csv
+    Untracked:  data/DOX_alt.csv
+    Untracked:  data/Entrez_Cardiotox.csv
+    Untracked:  data/Entrez_Cardiotox_Mapped.csv
+    Untracked:  data/GWAS.xlsx
+    Untracked:  data/GWAS_SNPs.bed
+    Untracked:  data/HF.csv
+    Untracked:  data/HF_Mapped.csv
+    Untracked:  data/HF_genes.csv
+    Untracked:  data/Hypertension_genes.csv
+    Untracked:  data/MI_genes.csv
+    Untracked:  data/P53_Target_mapped.csv
+    Untracked:  data/Sample_annotated.csv
+    Untracked:  data/Samples.csv
+    Untracked:  data/Samples.xlsx
+    Untracked:  data/TOP2A.bed
+    Untracked:  data/TOP2A_target.csv
+    Untracked:  data/TOP2A_target_lit.csv
+    Untracked:  data/TOP2A_target_lit_mapped.csv
+    Untracked:  data/TOP2A_target_mapped.csv
+    Untracked:  data/TOP2B.bed
+    Untracked:  data/TOP2B_target.csv
+    Untracked:  data/TOP2B_target_heatmap.csv
+    Untracked:  data/TOP2B_target_heatmap_mapped.csv
+    Untracked:  data/TOP2B_target_mapped.csv
+    Untracked:  data/TS.csv
+    Untracked:  data/TS_HPA.csv
+    Untracked:  data/TS_HPA_mapped.csv
+    Untracked:  data/Toptable_CX_0.1_24.csv
+    Untracked:  data/Toptable_CX_0.1_3.csv
+    Untracked:  data/Toptable_CX_0.1_48.csv
+    Untracked:  data/Toptable_CX_0.5_24.csv
+    Untracked:  data/Toptable_CX_0.5_3.csv
+    Untracked:  data/Toptable_CX_0.5_48.csv
+    Untracked:  data/Toptable_DOX_0.1_24.csv
+    Untracked:  data/Toptable_DOX_0.1_3.csv
+    Untracked:  data/Toptable_DOX_0.1_48.csv
+    Untracked:  data/Toptable_DOX_0.5_24.csv
+    Untracked:  data/Toptable_DOX_0.5_3.csv
+    Untracked:  data/Toptable_DOX_0.5_48.csv
+    Untracked:  data/count.tsv
+    Untracked:  data/ts_data_mapped
+    Untracked:  results/
+    Untracked:  run_bedtools.bat
+
+Unstaged changes:
+    Deleted:    analysis/Actox.Rmd
+    Modified:   analysis/Corrmotif_overlap.Rmd
+    Modified:   data/DOX_0.5_48 (Combined).csv
+    Modified:   data/Total_number_of_Mapped_reads_by_Individuals.csv
+    Modified:   data/count.csv
 
 </code></pre>
 <p>
@@ -611,6 +713,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/afb68ad82a8b6592536471fa0aee9c2fbe2296c3/docs/Corrmotif_overlap.html" target="_blank">afb68ad</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-04-10
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2877,6 +2996,549 @@ $DOX_high_response
 GO:0045598 GO:0045598           regulation of fat cell differentiation
 GO:0045444 GO:0045444                         fat cell differentiation
 GO:0009084 GO:0009084 glutamine family amino acid biosynthetic process</code></pre>
+</div>
+<div id="overlap-of-bp-functions-between-cormotif-groups-concentration"
+class="section level2">
+<h2><strong>📌 Overlap of BP functions between cormotif groups
+(Concentration)</strong></h2>
+<pre class="r"><code># 📦 Load Required Libraries
+library(UpSetR)
+library(dplyr)
+
+# ✅ Step 1: Define CorMotif GO BP enrichment files
+go_files &lt;- list(
+  &quot;Non response (0.1)&quot;                         = &quot;data/BP/CorMotif_Terms/GO_BP_Non_response_(0.1).csv&quot;,
+  &quot;CX-DOX mid-late response (0.1)&quot;             = &quot;data/BP/CorMotif_Terms/GO_BP_CX-DOX_mid-late_response_(0.1).csv&quot;,
+  &quot;DOX only mid-late (0.1)&quot;                    = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_(0.1).csv&quot;,
+  &quot;Non response (0.5)&quot;                         = &quot;data/BP/CorMotif_Terms/GO_BP_Non_response_(0.5).csv&quot;,
+  &quot;DOX specific response (0.5)&quot;                = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_specific_response_(0.5).csv&quot;,
+  &quot;DOX only mid-late response (0.5)&quot;           = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_response_(0.5).csv&quot;,
+  &quot;CX total + DOX early response (0.5)&quot;        = &quot;data/BP/CorMotif_Terms/GO_BP_CX_total_+_DOX_early_response_(0.5).csv&quot;,
+  &quot;DOX early + CX-DOX mid-late response (0.5)&quot; = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv&quot;
+)
+
+# ✅ Step 2: Read and filter each file (keep only p.adjust &lt; 0.05), extract GO term IDs
+gene_sets &lt;- lapply(go_files, function(file) {
+  read.csv(file) %&gt;%
+    filter(p.adjust &lt; 0.05) %&gt;%
+    pull(ID) %&gt;%
+    as.character()
+})
+
+# 🧮 Step 3: Build binary presence/absence matrix
+all_ids &lt;- unique(unlist(gene_sets))
+binary_matrix &lt;- data.frame(GO_ID = all_ids)
+
+for (group_name in names(gene_sets)) {
+  binary_matrix[[group_name]] &lt;- as.integer(binary_matrix$GO_ID %in% gene_sets[[group_name]])
+}
+
+# ✅ Step 4: Prepare for UpSetR (remove GO_ID column)
+upset_input &lt;- binary_matrix[, -1]
+colnames(upset_input) &lt;- names(gene_sets)
+
+# 🎯 Step 5: Plot the UpSet diagram
+par(mar = c(12, 4, 2, 2))  # Adjust bottom margin for long labels
+upset(
+  upset_input,
+  sets = colnames(upset_input),
+  order.by = &quot;freq&quot;,
+  sets.bar.color = &quot;#1f77b4&quot;,
+  mainbar.y.label = &quot;Number of Shared GO BP Terms (p.adjust &lt; 0.05)&quot;,
+  sets.x.label = &quot;GO BP Terms per CorMotif Group&quot;,
+  text.scale = 1.2,
+  nintersects = 30
+)</code></pre>
+<p><img src="figure/Corrmotif_overlap.Rmd/BP_ol-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="identifying-unique-go-terms" class="section level2">
+<h2><strong>📌 Identifying Unique GO terms</strong></h2>
+<pre class="r"><code># 📦 Load Required Libraries
+library(dplyr)
+
+# ✅ Step 1: Define File Paths for CorMotif Groups
+go_files &lt;- list(
+  &quot;Non response (0.1)&quot;                         = &quot;data/BP/CorMotif_Terms/GO_BP_Non_response_(0.1).csv&quot;,
+  &quot;CX-DOX mid-late response (0.1)&quot;             = &quot;data/BP/CorMotif_Terms/GO_BP_CX-DOX_mid-late_response_(0.1).csv&quot;,
+  &quot;DOX only mid-late (0.1)&quot;                    = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_(0.1).csv&quot;,
+  &quot;Non response (0.5)&quot;                         = &quot;data/BP/CorMotif_Terms/GO_BP_Non_response_(0.5).csv&quot;,
+  &quot;DOX specific response (0.5)&quot;                = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_specific_response_(0.5).csv&quot;,
+  &quot;DOX only mid-late response (0.5)&quot;           = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_response_(0.5).csv&quot;,
+  &quot;CX total + DOX early response (0.5)&quot;        = &quot;data/BP/CorMotif_Terms/GO_BP_CX_total_+_DOX_early_response_(0.5).csv&quot;,
+  &quot;DOX early + CX-DOX mid-late response (0.5)&quot; = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv&quot;
+)
+
+# ✅ Step 2: Read and Filter Each File (p.adjust &lt; 0.05)
+go_data &lt;- lapply(go_files, function(file) {
+  df &lt;- read.csv(file)
+  df %&gt;% filter(p.adjust &lt; 0.05)
+})
+
+# ✅ Step 3: Identify Unique GO Terms in Each Group
+unique_go_terms &lt;- list()
+
+for (group_name in names(go_data)) {
+  current_ids &lt;- go_data[[group_name]]$ID
+  other_ids &lt;- unlist(lapply(go_data[names(go_data) != group_name], `[[`, &quot;ID&quot;), use.names = FALSE)
+  unique_ids &lt;- setdiff(current_ids, other_ids)
+  
+  if (length(unique_ids) &gt; 0) {
+    unique_go_terms[[group_name]] &lt;- unique_ids
+  }
+}
+
+# ✅ Step 4: Map Unique IDs to Description and p.adjust
+mapped_unique_go_terms &lt;- list()
+
+for (group_name in names(unique_go_terms)) {
+  df &lt;- go_data[[group_name]]
+  unique_ids &lt;- unique_go_terms[[group_name]]
+  
+  mapped_df &lt;- df %&gt;%
+    filter(ID %in% unique_ids) %&gt;%
+    dplyr::select(GO_ID = ID, Function = Description, p.adjust)
+  
+  mapped_unique_go_terms[[group_name]] &lt;- mapped_df
+}
+
+# 🎯 Final Output: List of data.frames with GO_ID, Function, and p.adjust per CorMotif group
+mapped_unique_go_terms</code></pre>
+<pre><code>$`Non response (0.1)`
+        GO_ID                                         Function     p.adjust
+1  GO:0034470                                 ncRNA processing 0.0001815089
+2  GO:0042254                              ribosome biogenesis 0.0005788724
+3  GO:0022613             ribonucleoprotein complex biogenesis 0.0007857689
+4  GO:0140053                    mitochondrial gene expression 0.0026866151
+5  GO:0006413                         translational initiation 0.0089771347
+6  GO:0006364                                  rRNA processing 0.0152965023
+7  GO:0032543                        mitochondrial translation 0.0190788319
+8  GO:0048193                          Golgi vesicle transport 0.0280991363
+9  GO:0033108 mitochondrial respiratory chain complex assembly 0.0335010014
+10 GO:0016072                           rRNA metabolic process 0.0391607786
+
+$`CX-DOX mid-late response (0.1)`
+        GO_ID
+1  GO:0006334
+2  GO:0034728
+3  GO:0009162
+4  GO:0072698
+5  GO:0044380
+6  GO:0009130
+7  GO:0006997
+8  GO:0002200
+9  GO:0006999
+10 GO:0006221
+11 GO:0007096
+12 GO:0045859
+13 GO:0006978
+14 GO:0009129
+15 GO:0046785
+16 GO:0002562
+17 GO:0016444
+18 GO:0042772
+19 GO:0000002
+20 GO:0010458
+21 GO:0031100
+22 GO:0071900
+23 GO:0031507
+24 GO:2000780
+25 GO:0051292
+26 GO:0070601
+27 GO:2000042
+28 GO:0006289
+29 GO:0071539
+30 GO:0008584
+31 GO:0045738
+32 GO:1905508
+33 GO:0008406
+34 GO:0046546
+35 GO:0042276
+36 GO:0051177
+37 GO:0032042
+38 GO:0045739
+39 GO:0045137
+40 GO:0043549
+41 GO:0009416
+42 GO:0070828
+43 GO:0043045
+44 GO:0009124
+45 GO:0048144
+                                                                                                          Function
+1                                                                                              nucleosome assembly
+2                                                                                          nucleosome organization
+3                                                              deoxyribonucleoside monophosphate metabolic process
+4                                                                 protein localization to microtubule cytoskeleton
+5                                                                             protein localization to cytoskeleton
+6                                                         pyrimidine nucleoside monophosphate biosynthetic process
+7                                                                                             nucleus organization
+8                                                                      somatic diversification of immune receptors
+9                                                                                        nuclear pore organization
+10                                                                      pyrimidine nucleotide biosynthetic process
+11                                                                                 regulation of exit from mitosis
+12                                                                           regulation of protein kinase activity
+13 DNA damage response, signal transduction by p53 class mediator resulting in transcription of p21 class mediator
+14                                                           pyrimidine nucleoside monophosphate metabolic process
+15                                                                                      microtubule polymerization
+16                    somatic diversification of immune receptors via germline recombination within a single locus
+17                                                                                  somatic cell DNA recombination
+18                                             DNA damage response, signal transduction resulting in transcription
+19                                                                                mitochondrial genome maintenance
+20                                                                                               exit from mitosis
+21                                                                                       animal organ regeneration
+22                                                          regulation of protein serine/threonine kinase activity
+23                                                                                       heterochromatin formation
+24                                                               negative regulation of double-strand break repair
+25                                                                                   nuclear pore complex assembly
+26                                                                           centromeric sister chromatid cohesion
+27                                  negative regulation of double-strand break repair via homologous recombination
+28                                                                                      nucleotide-excision repair
+29                                                                              protein localization to centrosome
+30                                                                                          male gonad development
+31                                                                               negative regulation of DNA repair
+32                                                           protein localization to microtubule organizing center
+33                                                                                               gonad development
+34                                                              development of primary male sexual characteristics
+35                                                                               error-prone translesion synthesis
+36                                                                               meiotic sister chromatid cohesion
+37                                                                             mitochondrial DNA metabolic process
+38                                                                               positive regulation of DNA repair
+39                                                                   development of primary sexual characteristics
+40                                                                                   regulation of kinase activity
+41                                                                                      response to light stimulus
+42                                                                                    heterochromatin organization
+43                                                     post-fertilization epigenetic regulation of gene expression
+44                                                                   nucleoside monophosphate biosynthetic process
+45                                                                                        fibroblast proliferation
+       p.adjust
+1  0.0003861328
+2  0.0006479087
+3  0.0014788872
+4  0.0024622951
+5  0.0035155055
+6  0.0052966414
+7  0.0058175390
+8  0.0072339557
+9  0.0089916864
+10 0.0103315605
+11 0.0114031556
+12 0.0131031340
+13 0.0142896918
+14 0.0142896918
+15 0.0168908111
+16 0.0171175730
+17 0.0171175730
+18 0.0174349461
+19 0.0188185153
+20 0.0188185153
+21 0.0224754344
+22 0.0226156756
+23 0.0237672402
+24 0.0244282890
+25 0.0248104456
+26 0.0248104456
+27 0.0249145865
+28 0.0271863718
+29 0.0274321695
+30 0.0299227438
+31 0.0308498664
+32 0.0308498664
+33 0.0313286488
+34 0.0316201130
+35 0.0317938325
+36 0.0317938325
+37 0.0338435530
+38 0.0338435530
+39 0.0353810819
+40 0.0363260746
+41 0.0366866548
+42 0.0372502514
+43 0.0401760125
+44 0.0423411181
+45 0.0484998561
+
+$`Non response (0.5)`
+       GO_ID                Function     p.adjust
+1 GO:0002181 cytoplasmic translation 0.0007694817
+
+$`DOX only mid-late response (0.5)`
+        GO_ID                                         Function   p.adjust
+1  GO:0007186     G protein-coupled receptor signaling pathway 0.02772816
+2  GO:0009084 glutamine family amino acid biosynthetic process 0.02772816
+3  GO:0048738                cardiac muscle tissue development 0.02772816
+4  GO:0014706               striated muscle tissue development 0.02772816
+5  GO:0099084         postsynaptic specialization organization 0.02772816
+6  GO:0099173                         postsynapse organization 0.03009019
+7  GO:0045598           regulation of fat cell differentiation 0.03070238
+8  GO:0046486                   glycerolipid metabolic process 0.03368615
+9  GO:0003013                       circulatory system process 0.03560381
+10 GO:0045444                         fat cell differentiation 0.03745129
+11 GO:0046620                       regulation of organ growth 0.04085879
+12 GO:0016236                                   macroautophagy 0.04527730
+
+$`CX total + DOX early response (0.5)`
+        GO_ID                                       Function    p.adjust
+1  GO:0048599                             oocyte development 0.006812715
+2  GO:0090305    nucleic acid phosphodiester bond hydrolysis 0.006812715
+3  GO:0009994                         oocyte differentiation 0.007102596
+4  GO:2000243    positive regulation of reproductive process 0.013415572
+5  GO:0018105                peptidyl-serine phosphorylation 0.019761353
+6  GO:0018209                   peptidyl-serine modification 0.024544699
+7  GO:0035561                regulation of chromatin binding 0.028458442
+8  GO:0090657                     telomeric loop disassembly 0.028458442
+9  GO:0048477                                      oogenesis 0.031038091
+10 GO:0071732              cellular response to nitric oxide 0.037940148
+11 GO:0006264                  mitochondrial DNA replication 0.043233032
+12 GO:0000722         telomere maintenance via recombination 0.047547948
+13 GO:0001325     formation of extrachromosomal circular DNA 0.047547948
+14 GO:0010457                   centriole-centriole cohesion 0.047547948
+15 GO:0071731                       response to nitric oxide 0.047547948
+16 GO:0090656                             t-circle formation 0.047547948
+17 GO:0090737     telomere maintenance via telomere trimming 0.047547948
+18 GO:1902170 cellular response to reactive nitrogen species 0.047547948
+
+$`DOX early + CX-DOX mid-late response (0.5)`
+        GO_ID                                                       Function
+1  GO:0071480                           cellular response to gamma radiation
+2  GO:0048146                positive regulation of fibroblast proliferation
+3  GO:0030865                             cortical cytoskeleton organization
+4  GO:0051493                        regulation of cytoskeleton organization
+5  GO:0051782                           negative regulation of cell division
+6  GO:0090399                                         replicative senescence
+7  GO:2000279                negative regulation of DNA biosynthetic process
+8  GO:0030010                                 establishment of cell polarity
+9  GO:0006304                                               DNA modification
+10 GO:1901875 positive regulation of post-translational protein modification
+11 GO:0032147                          activation of protein kinase activity
+12 GO:1902115                               regulation of organelle assembly
+13 GO:0031398                  positive regulation of protein ubiquitination
+14 GO:0007163                  establishment or maintenance of cell polarity
+15 GO:0051972                              regulation of telomerase activity
+       p.adjust
+1  0.0007276198
+2  0.0057549074
+3  0.0082115228
+4  0.0116571708
+5  0.0121152000
+6  0.0121152000
+7  0.0155416338
+8  0.0164807108
+9  0.0222348803
+10 0.0240940317
+11 0.0278469172
+12 0.0418700380
+13 0.0427260492
+14 0.0456421126
+15 0.0487585540</code></pre>
+</div>
+<div id="top-unique-go-terms" class="section level2">
+<h2><strong>📌 TOP Unique GO terms</strong></h2>
+<pre class="r"><code># 📦 Load Required Libraries
+library(dplyr)
+library(readr)
+
+# ✅ Step 1: Load and Filter GO Term Data (p.adjust &lt; 0.05) from CorMotif_Terms
+GO_Non_response_0.1  &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_Non_response_(0.1).csv&quot;)                         %&gt;% filter(p.adjust &lt; 0.05)
+GO_CX_DOX_midlate_0.1 &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_CX-DOX_mid-late_response_(0.1).csv&quot;)           %&gt;% filter(p.adjust &lt; 0.05)
+GO_DOX_only_midlate_0.1 &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_(0.1).csv&quot;)                %&gt;% filter(p.adjust &lt; 0.05)
+
+GO_Non_response_0.5  &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_Non_response_(0.5).csv&quot;)                         %&gt;% filter(p.adjust &lt; 0.05)
+GO_DOX_specific_0.5  &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_DOX_specific_response_(0.5).csv&quot;)               %&gt;% filter(p.adjust &lt; 0.05)
+GO_DOX_only_midlate_0.5 &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_response_(0.5).csv&quot;)       %&gt;% filter(p.adjust &lt; 0.05)
+GO_CX_total_DOX_early_0.5 &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_CX_total_+_DOX_early_response_(0.5).csv&quot;)   %&gt;% filter(p.adjust &lt; 0.05)
+GO_DOX_early_CX_DOX_midlate_0.5 &lt;- read_csv(&quot;data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv&quot;) %&gt;% filter(p.adjust &lt; 0.05)
+
+# ✅ Step 2: Create Named List of Filtered Data Frames
+go_files &lt;- list(
+  &quot;Non response (0.1)&quot;                         = GO_Non_response_0.1,
+  &quot;CX-DOX mid-late response (0.1)&quot;             = GO_CX_DOX_midlate_0.1,
+  &quot;DOX only mid-late (0.1)&quot;                    = GO_DOX_only_midlate_0.1,
+  &quot;Non response (0.5)&quot;                         = GO_Non_response_0.5,
+  &quot;DOX specific response (0.5)&quot;                = GO_DOX_specific_0.5,
+  &quot;DOX only mid-late response (0.5)&quot;           = GO_DOX_only_midlate_0.5,
+  &quot;CX total + DOX early response (0.5)&quot;        = GO_CX_total_DOX_early_0.5,
+  &quot;DOX early + CX-DOX mid-late response (0.5)&quot; = GO_DOX_early_CX_DOX_midlate_0.5
+)
+
+# ✅ Step 3: Identify Unique GO Term IDs per CorMotif Group
+unique_go_terms &lt;- list()
+
+for (set_name in names(go_files)) {
+  current_ids &lt;- go_files[[set_name]]$ID
+  other_ids &lt;- unlist(lapply(go_files[names(go_files) != set_name], `[[`, &quot;ID&quot;), use.names = FALSE)
+  unique_ids &lt;- setdiff(current_ids, other_ids)
+  
+  if (length(unique_ids) &gt; 0) {
+    unique_go_terms[[set_name]] &lt;- unique_ids
+  }
+}
+
+# ✅ Step 4: Map Unique GO IDs to Description and p.adjust
+mapped_unique_go_terms &lt;- list()
+
+for (set_name in names(unique_go_terms)) {
+  source_df &lt;- go_files[[set_name]]
+  unique_ids &lt;- unique_go_terms[[set_name]]
+  
+  mapped_df &lt;- source_df %&gt;%
+    filter(ID %in% unique_ids) %&gt;%
+    dplyr::select(GO_ID = ID, Function = Description, p.adjust)
+  
+  if (nrow(mapped_df) &gt; 0) {
+    mapped_unique_go_terms[[set_name]] &lt;- mapped_df
+  }
+}
+
+# 🎯 Final Output: Named list of data.frames with unique + significant GO terms per CorMotif group
+mapped_unique_go_terms</code></pre>
+<pre><code>$`Non response (0.1)`
+# A tibble: 10 × 3
+   GO_ID      Function                                         p.adjust
+   &lt;chr&gt;      &lt;chr&gt;                                               &lt;dbl&gt;
+ 1 GO:0034470 ncRNA processing                                 0.000182
+ 2 GO:0042254 ribosome biogenesis                              0.000579
+ 3 GO:0022613 ribonucleoprotein complex biogenesis             0.000786
+ 4 GO:0140053 mitochondrial gene expression                    0.00269 
+ 5 GO:0006413 translational initiation                         0.00898 
+ 6 GO:0006364 rRNA processing                                  0.0153  
+ 7 GO:0032543 mitochondrial translation                        0.0191  
+ 8 GO:0048193 Golgi vesicle transport                          0.0281  
+ 9 GO:0033108 mitochondrial respiratory chain complex assembly 0.0335  
+10 GO:0016072 rRNA metabolic process                           0.0392  
+
+$`CX-DOX mid-late response (0.1)`
+# A tibble: 45 × 3
+   GO_ID      Function                                                 p.adjust
+   &lt;chr&gt;      &lt;chr&gt;                                                       &lt;dbl&gt;
+ 1 GO:0006334 nucleosome assembly                                      0.000386
+ 2 GO:0034728 nucleosome organization                                  0.000648
+ 3 GO:0009162 deoxyribonucleoside monophosphate metabolic process      0.00148 
+ 4 GO:0072698 protein localization to microtubule cytoskeleton         0.00246 
+ 5 GO:0044380 protein localization to cytoskeleton                     0.00352 
+ 6 GO:0009130 pyrimidine nucleoside monophosphate biosynthetic process 0.00530 
+ 7 GO:0006997 nucleus organization                                     0.00582 
+ 8 GO:0002200 somatic diversification of immune receptors              0.00723 
+ 9 GO:0006999 nuclear pore organization                                0.00899 
+10 GO:0006221 pyrimidine nucleotide biosynthetic process               0.0103  
+# ℹ 35 more rows
+
+$`Non response (0.5)`
+# A tibble: 1 × 3
+  GO_ID      Function                p.adjust
+  &lt;chr&gt;      &lt;chr&gt;                      &lt;dbl&gt;
+1 GO:0002181 cytoplasmic translation 0.000769
+
+$`DOX only mid-late response (0.5)`
+# A tibble: 12 × 3
+   GO_ID      Function                                         p.adjust
+   &lt;chr&gt;      &lt;chr&gt;                                               &lt;dbl&gt;
+ 1 GO:0007186 G protein-coupled receptor signaling pathway       0.0277
+ 2 GO:0009084 glutamine family amino acid biosynthetic process   0.0277
+ 3 GO:0048738 cardiac muscle tissue development                  0.0277
+ 4 GO:0014706 striated muscle tissue development                 0.0277
+ 5 GO:0099084 postsynaptic specialization organization           0.0277
+ 6 GO:0099173 postsynapse organization                           0.0301
+ 7 GO:0045598 regulation of fat cell differentiation             0.0307
+ 8 GO:0046486 glycerolipid metabolic process                     0.0337
+ 9 GO:0003013 circulatory system process                         0.0356
+10 GO:0045444 fat cell differentiation                           0.0375
+11 GO:0046620 regulation of organ growth                         0.0409
+12 GO:0016236 macroautophagy                                     0.0453
+
+$`CX total + DOX early response (0.5)`
+# A tibble: 18 × 3
+   GO_ID      Function                                       p.adjust
+   &lt;chr&gt;      &lt;chr&gt;                                             &lt;dbl&gt;
+ 1 GO:0048599 oocyte development                              0.00681
+ 2 GO:0090305 nucleic acid phosphodiester bond hydrolysis     0.00681
+ 3 GO:0009994 oocyte differentiation                          0.00710
+ 4 GO:2000243 positive regulation of reproductive process     0.0134 
+ 5 GO:0018105 peptidyl-serine phosphorylation                 0.0198 
+ 6 GO:0018209 peptidyl-serine modification                    0.0245 
+ 7 GO:0035561 regulation of chromatin binding                 0.0285 
+ 8 GO:0090657 telomeric loop disassembly                      0.0285 
+ 9 GO:0048477 oogenesis                                       0.0310 
+10 GO:0071732 cellular response to nitric oxide               0.0379 
+11 GO:0006264 mitochondrial DNA replication                   0.0432 
+12 GO:0000722 telomere maintenance via recombination          0.0475 
+13 GO:0001325 formation of extrachromosomal circular DNA      0.0475 
+14 GO:0010457 centriole-centriole cohesion                    0.0475 
+15 GO:0071731 response to nitric oxide                        0.0475 
+16 GO:0090656 t-circle formation                              0.0475 
+17 GO:0090737 telomere maintenance via telomere trimming      0.0475 
+18 GO:1902170 cellular response to reactive nitrogen species  0.0475 
+
+$`DOX early + CX-DOX mid-late response (0.5)`
+# A tibble: 15 × 3
+   GO_ID      Function                                                  p.adjust
+   &lt;chr&gt;      &lt;chr&gt;                                                        &lt;dbl&gt;
+ 1 GO:0071480 cellular response to gamma radiation                      0.000728
+ 2 GO:0048146 positive regulation of fibroblast proliferation           0.00575 
+ 3 GO:0030865 cortical cytoskeleton organization                        0.00821 
+ 4 GO:0051493 regulation of cytoskeleton organization                   0.0117  
+ 5 GO:0051782 negative regulation of cell division                      0.0121  
+ 6 GO:0090399 replicative senescence                                    0.0121  
+ 7 GO:2000279 negative regulation of DNA biosynthetic process           0.0155  
+ 8 GO:0030010 establishment of cell polarity                            0.0165  
+ 9 GO:0006304 DNA modification                                          0.0222  
+10 GO:1901875 positive regulation of post-translational protein modifi… 0.0241  
+11 GO:0032147 activation of protein kinase activity                     0.0278  
+12 GO:1902115 regulation of organelle assembly                          0.0419  
+13 GO:0031398 positive regulation of protein ubiquitination             0.0427  
+14 GO:0007163 establishment or maintenance of cell polarity             0.0456  
+15 GO:0051972 regulation of telomerase activity                         0.0488  </code></pre>
+</div>
+<div id="plot-unique-go-terms" class="section level2">
+<h2><strong>📌 Plot Unique GO terms</strong></h2>
+<pre class="r"><code># 📦 Load Required Libraries
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
+
+# 🧾 Input: mapped_unique_go_terms (from previous script)
+# This is a named list of data frames with columns: GO_ID, Function, p.adjust
+
+# 🔁 Step 1: Prepare Top 10 Unique Terms per CorMotif Group
+plot_data &lt;- list()
+
+for (set_name in names(mapped_unique_go_terms)) {
+  unique_df &lt;- mapped_unique_go_terms[[set_name]]
+  
+  if (nrow(unique_df) &gt; 0) {
+    unique_df &lt;- dplyr::mutate(unique_df,
+                               Sample = set_name,
+                               NegLog10Padj = -log10(p.adjust))
+    
+    top10 &lt;- unique_df %&gt;%
+      dplyr::slice_min(order_by = p.adjust, n = 10, with_ties = FALSE) %&gt;%
+      dplyr::select(Sample, Function, NegLog10Padj)
+    
+    plot_data[[set_name]] &lt;- top10
+  }
+}
+
+# 🔗 Step 2: Combine and Format for Plotting
+plot_df &lt;- bind_rows(plot_data)
+plot_df$Function &lt;- str_trunc(plot_df$Function, 60)  # Truncate long GO terms
+
+# 🎨 Step 3: Plot Top 10 Barplots by Group
+ggplot(plot_df, aes(x = NegLog10Padj, y = reorder(Function, NegLog10Padj))) +
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;#3182bd&quot;) +
+  facet_wrap(~ Sample, scales = &quot;free_y&quot;, ncol = 2, strip.position = &quot;top&quot;) +
+  labs(
+    x = expression(-log[10]~&quot;(adj. p-value)&quot;),
+    y = &quot;GO Biological Process&quot;,
+    title = &quot;Top 10 Unique Enriched GO BP Terms per CorMotif Group&quot;
+  ) +
+  theme_pubr(base_size = 14) +
+  theme(
+    strip.background = element_rect(color = &quot;black&quot;, fill = &quot;grey90&quot;, size = 1),
+    strip.text = element_text(face = &quot;bold&quot;),
+    axis.text.y = element_text(size = 10),
+    panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+    plot.title = element_text(face = &quot;bold&quot;, hjust = 0.5)
+  )</code></pre>
+<p><img src="figure/Corrmotif_overlap.Rmd/BP_ol3-1.png" width="1920" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2908,34 +3570,40 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] GO.db_3.18.0         AnnotationDbi_1.64.1 IRanges_2.36.0      
- [4] S4Vectors_0.40.1     Biobase_2.62.0       BiocGenerics_0.48.1 
- [7] ggplot2_3.5.1        ggVennDiagram_1.5.2  dplyr_1.1.4         
-[10] UpSetR_1.4.0        
+ [1] stringr_1.5.1        ggpubr_0.6.0         readr_2.1.5         
+ [4] GO.db_3.18.0         AnnotationDbi_1.64.1 IRanges_2.36.0      
+ [7] S4Vectors_0.40.2     Biobase_2.62.0       BiocGenerics_0.48.1 
+[10] ggplot2_3.5.2        ggVennDiagram_1.5.2  dplyr_1.1.4         
+[13] UpSetR_1.4.0        
 
 loaded via a namespace (and not attached):
- [1] KEGGREST_1.42.0         gtable_0.3.6            xfun_0.50              
- [4] bslib_0.8.0             bitops_1.0-7            vctrs_0.6.5            
- [7] generics_0.1.3          tibble_3.2.1            RSQLite_2.3.3          
-[10] blob_1.2.4              pkgconfig_2.0.3         GenomeInfoDbData_1.2.11
-[13] lifecycle_1.0.4         compiler_4.3.0          farver_2.1.2           
-[16] stringr_1.5.1           git2r_0.35.0            Biostrings_2.70.1      
-[19] munsell_0.5.1           httpuv_1.6.15           GenomeInfoDb_1.38.8    
-[22] htmltools_0.5.8.1       sass_0.4.9              RCurl_1.98-1.13        
-[25] yaml_2.3.10             later_1.3.2             pillar_1.10.1          
-[28] crayon_1.5.3            jquerylib_0.1.4         whisker_0.4.1          
-[31] cachem_1.0.8            tidyselect_1.2.1        digest_0.6.34          
-[34] stringi_1.8.3           labeling_0.4.3          rprojroot_2.0.4        
-[37] fastmap_1.1.1           grid_4.3.0              colorspace_2.1-0       
-[40] cli_3.6.1               magrittr_2.0.3          withr_3.0.2            
-[43] scales_1.3.0            promises_1.3.0          bit64_4.0.5            
-[46] rmarkdown_2.29          XVector_0.42.0          httr_1.4.7             
-[49] bit_4.0.5               gridExtra_2.3           workflowr_1.7.1        
-[52] png_0.1-8               memoise_2.0.1           evaluate_1.0.3         
-[55] knitr_1.49              rlang_1.1.3             Rcpp_1.0.12            
-[58] glue_1.7.0              DBI_1.2.3               rstudioapi_0.17.1      
-[61] jsonlite_1.8.9          R6_2.5.1                plyr_1.8.9             
-[64] fs_1.6.3                zlibbioc_1.48.0        </code></pre>
+ [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4             
+ [4] Biostrings_2.70.3       bitops_1.0-9            fastmap_1.2.0          
+ [7] RCurl_1.98-1.17         promises_1.3.2          digest_0.6.34          
+[10] lifecycle_1.0.4         KEGGREST_1.42.0         RSQLite_2.3.9          
+[13] magrittr_2.0.3          compiler_4.3.0          rlang_1.1.3            
+[16] sass_0.4.10             utf8_1.2.4              yaml_2.3.10            
+[19] knitr_1.50              ggsignif_0.6.4          labeling_0.4.3         
+[22] bit_4.6.0               plyr_1.8.9              abind_1.4-8            
+[25] workflowr_1.7.1         withr_3.0.2             purrr_1.0.4            
+[28] grid_4.3.0              git2r_0.36.2            colorspace_2.1-0       
+[31] scales_1.3.0            cli_3.6.1               rmarkdown_2.29         
+[34] crayon_1.5.3            generics_0.1.3          rstudioapi_0.17.1      
+[37] httr_1.4.7              tzdb_0.5.0              DBI_1.2.3              
+[40] cachem_1.1.0            zlibbioc_1.48.2         parallel_4.3.0         
+[43] XVector_0.42.0          vctrs_0.6.5             jsonlite_2.0.0         
+[46] carData_3.0-5           car_3.1-3               hms_1.1.3              
+[49] bit64_4.6.0-1           rstatix_0.7.2           Formula_1.2-5          
+[52] jquerylib_0.1.4         tidyr_1.3.1             glue_1.7.0             
+[55] stringi_1.8.3           gtable_0.3.6            later_1.3.2            
+[58] GenomeInfoDb_1.38.8     munsell_0.5.1           tibble_3.2.1           
+[61] pillar_1.10.2           htmltools_0.5.8.1       GenomeInfoDbData_1.2.11
+[64] R6_2.6.1                rprojroot_2.0.4         vroom_1.6.5            
+[67] evaluate_1.0.3          png_0.1-8               backports_1.5.0        
+[70] memoise_2.0.1           broom_1.0.8             httpuv_1.6.15          
+[73] bslib_0.9.0             Rcpp_1.0.12             gridExtra_2.3          
+[76] whisker_0.4.1           xfun_0.52               fs_1.6.3               
+[79] pkgconfig_2.0.3        </code></pre>
 </div>
 </div>
 

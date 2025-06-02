@@ -91,10 +91,6 @@ p$layers[[3]]$aes_params$size <- 2.5
 p
 ```
 
-
-
-
-
 ## **📌 Overlap of GO functions between Corrmotif all and corrmotif Conc.**
 ```{r 0verlap, echo=TRUE, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
 
@@ -326,4 +322,228 @@ for (set_name in names(unique_go_terms)) {
 
 # Display mapped GO terms
 mapped_unique_go_terms
+```
+
+## **📌 Overlap of BP functions between cormotif groups (Concentration)**
+```{r BP_ol, echo=TRUE, message=FALSE, warning=FALSE, fig.height=8, fig.width=10}
+
+# 📦 Load Required Libraries
+library(UpSetR)
+library(dplyr)
+
+# ✅ Step 1: Define CorMotif GO BP enrichment files
+go_files <- list(
+  "Non response (0.1)"                         = "data/BP/CorMotif_Terms/GO_BP_Non_response_(0.1).csv",
+  "CX-DOX mid-late response (0.1)"             = "data/BP/CorMotif_Terms/GO_BP_CX-DOX_mid-late_response_(0.1).csv",
+  "DOX only mid-late (0.1)"                    = "data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_(0.1).csv",
+  "Non response (0.5)"                         = "data/BP/CorMotif_Terms/GO_BP_Non_response_(0.5).csv",
+  "DOX specific response (0.5)"                = "data/BP/CorMotif_Terms/GO_BP_DOX_specific_response_(0.5).csv",
+  "DOX only mid-late response (0.5)"           = "data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_response_(0.5).csv",
+  "CX total + DOX early response (0.5)"        = "data/BP/CorMotif_Terms/GO_BP_CX_total_+_DOX_early_response_(0.5).csv",
+  "DOX early + CX-DOX mid-late response (0.5)" = "data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv"
+)
+
+# ✅ Step 2: Read and filter each file (keep only p.adjust < 0.05), extract GO term IDs
+gene_sets <- lapply(go_files, function(file) {
+  read.csv(file) %>%
+    filter(p.adjust < 0.05) %>%
+    pull(ID) %>%
+    as.character()
+})
+
+# 🧮 Step 3: Build binary presence/absence matrix
+all_ids <- unique(unlist(gene_sets))
+binary_matrix <- data.frame(GO_ID = all_ids)
+
+for (group_name in names(gene_sets)) {
+  binary_matrix[[group_name]] <- as.integer(binary_matrix$GO_ID %in% gene_sets[[group_name]])
+}
+
+# ✅ Step 4: Prepare for UpSetR (remove GO_ID column)
+upset_input <- binary_matrix[, -1]
+colnames(upset_input) <- names(gene_sets)
+
+# 🎯 Step 5: Plot the UpSet diagram
+par(mar = c(12, 4, 2, 2))  # Adjust bottom margin for long labels
+upset(
+  upset_input,
+  sets = colnames(upset_input),
+  order.by = "freq",
+  sets.bar.color = "#1f77b4",
+  mainbar.y.label = "Number of Shared GO BP Terms (p.adjust < 0.05)",
+  sets.x.label = "GO BP Terms per CorMotif Group",
+  text.scale = 1.2,
+  nintersects = 30
+)
+```
+
+## **📌 Identifying Unique GO terms**
+```{r BP_ol1, echo=TRUE, message=FALSE, warning=FALSE}
+# 📦 Load Required Libraries
+library(dplyr)
+
+# ✅ Step 1: Define File Paths for CorMotif Groups
+go_files <- list(
+  "Non response (0.1)"                         = "data/BP/CorMotif_Terms/GO_BP_Non_response_(0.1).csv",
+  "CX-DOX mid-late response (0.1)"             = "data/BP/CorMotif_Terms/GO_BP_CX-DOX_mid-late_response_(0.1).csv",
+  "DOX only mid-late (0.1)"                    = "data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_(0.1).csv",
+  "Non response (0.5)"                         = "data/BP/CorMotif_Terms/GO_BP_Non_response_(0.5).csv",
+  "DOX specific response (0.5)"                = "data/BP/CorMotif_Terms/GO_BP_DOX_specific_response_(0.5).csv",
+  "DOX only mid-late response (0.5)"           = "data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_response_(0.5).csv",
+  "CX total + DOX early response (0.5)"        = "data/BP/CorMotif_Terms/GO_BP_CX_total_+_DOX_early_response_(0.5).csv",
+  "DOX early + CX-DOX mid-late response (0.5)" = "data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv"
+)
+
+# ✅ Step 2: Read and Filter Each File (p.adjust < 0.05)
+go_data <- lapply(go_files, function(file) {
+  df <- read.csv(file)
+  df %>% filter(p.adjust < 0.05)
+})
+
+# ✅ Step 3: Identify Unique GO Terms in Each Group
+unique_go_terms <- list()
+
+for (group_name in names(go_data)) {
+  current_ids <- go_data[[group_name]]$ID
+  other_ids <- unlist(lapply(go_data[names(go_data) != group_name], `[[`, "ID"), use.names = FALSE)
+  unique_ids <- setdiff(current_ids, other_ids)
+  
+  if (length(unique_ids) > 0) {
+    unique_go_terms[[group_name]] <- unique_ids
+  }
+}
+
+# ✅ Step 4: Map Unique IDs to Description and p.adjust
+mapped_unique_go_terms <- list()
+
+for (group_name in names(unique_go_terms)) {
+  df <- go_data[[group_name]]
+  unique_ids <- unique_go_terms[[group_name]]
+  
+  mapped_df <- df %>%
+    filter(ID %in% unique_ids) %>%
+    dplyr::select(GO_ID = ID, Function = Description, p.adjust)
+  
+  mapped_unique_go_terms[[group_name]] <- mapped_df
+}
+
+# 🎯 Final Output: List of data.frames with GO_ID, Function, and p.adjust per CorMotif group
+mapped_unique_go_terms
+```
+
+
+## **📌 TOP Unique GO terms**
+```{r BP_ol2, echo=TRUE, message=FALSE, warning=FALSE}
+
+# 📦 Load Required Libraries
+library(dplyr)
+library(readr)
+
+# ✅ Step 1: Load and Filter GO Term Data (p.adjust < 0.05) from CorMotif_Terms
+GO_Non_response_0.1  <- read_csv("data/BP/CorMotif_Terms/GO_BP_Non_response_(0.1).csv")                         %>% filter(p.adjust < 0.05)
+GO_CX_DOX_midlate_0.1 <- read_csv("data/BP/CorMotif_Terms/GO_BP_CX-DOX_mid-late_response_(0.1).csv")           %>% filter(p.adjust < 0.05)
+GO_DOX_only_midlate_0.1 <- read_csv("data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_(0.1).csv")                %>% filter(p.adjust < 0.05)
+
+GO_Non_response_0.5  <- read_csv("data/BP/CorMotif_Terms/GO_BP_Non_response_(0.5).csv")                         %>% filter(p.adjust < 0.05)
+GO_DOX_specific_0.5  <- read_csv("data/BP/CorMotif_Terms/GO_BP_DOX_specific_response_(0.5).csv")               %>% filter(p.adjust < 0.05)
+GO_DOX_only_midlate_0.5 <- read_csv("data/BP/CorMotif_Terms/GO_BP_DOX_only_mid-late_response_(0.5).csv")       %>% filter(p.adjust < 0.05)
+GO_CX_total_DOX_early_0.5 <- read_csv("data/BP/CorMotif_Terms/GO_BP_CX_total_+_DOX_early_response_(0.5).csv")   %>% filter(p.adjust < 0.05)
+GO_DOX_early_CX_DOX_midlate_0.5 <- read_csv("data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv") %>% filter(p.adjust < 0.05)
+
+# ✅ Step 2: Create Named List of Filtered Data Frames
+go_files <- list(
+  "Non response (0.1)"                         = GO_Non_response_0.1,
+  "CX-DOX mid-late response (0.1)"             = GO_CX_DOX_midlate_0.1,
+  "DOX only mid-late (0.1)"                    = GO_DOX_only_midlate_0.1,
+  "Non response (0.5)"                         = GO_Non_response_0.5,
+  "DOX specific response (0.5)"                = GO_DOX_specific_0.5,
+  "DOX only mid-late response (0.5)"           = GO_DOX_only_midlate_0.5,
+  "CX total + DOX early response (0.5)"        = GO_CX_total_DOX_early_0.5,
+  "DOX early + CX-DOX mid-late response (0.5)" = GO_DOX_early_CX_DOX_midlate_0.5
+)
+
+# ✅ Step 3: Identify Unique GO Term IDs per CorMotif Group
+unique_go_terms <- list()
+
+for (set_name in names(go_files)) {
+  current_ids <- go_files[[set_name]]$ID
+  other_ids <- unlist(lapply(go_files[names(go_files) != set_name], `[[`, "ID"), use.names = FALSE)
+  unique_ids <- setdiff(current_ids, other_ids)
+  
+  if (length(unique_ids) > 0) {
+    unique_go_terms[[set_name]] <- unique_ids
+  }
+}
+
+# ✅ Step 4: Map Unique GO IDs to Description and p.adjust
+mapped_unique_go_terms <- list()
+
+for (set_name in names(unique_go_terms)) {
+  source_df <- go_files[[set_name]]
+  unique_ids <- unique_go_terms[[set_name]]
+  
+  mapped_df <- source_df %>%
+    filter(ID %in% unique_ids) %>%
+    dplyr::select(GO_ID = ID, Function = Description, p.adjust)
+  
+  if (nrow(mapped_df) > 0) {
+    mapped_unique_go_terms[[set_name]] <- mapped_df
+  }
+}
+
+# 🎯 Final Output: Named list of data.frames with unique + significant GO terms per CorMotif group
+mapped_unique_go_terms
+```
+
+## **📌 Plot Unique GO terms**
+```{r BP_ol3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=20, fig.height=10}
+# 📦 Load Required Libraries
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
+
+# 🧾 Input: mapped_unique_go_terms (from previous script)
+# This is a named list of data frames with columns: GO_ID, Function, p.adjust
+
+# 🔁 Step 1: Prepare Top 10 Unique Terms per CorMotif Group
+plot_data <- list()
+
+for (set_name in names(mapped_unique_go_terms)) {
+  unique_df <- mapped_unique_go_terms[[set_name]]
+  
+  if (nrow(unique_df) > 0) {
+    unique_df <- dplyr::mutate(unique_df,
+                               Sample = set_name,
+                               NegLog10Padj = -log10(p.adjust))
+    
+    top10 <- unique_df %>%
+      dplyr::slice_min(order_by = p.adjust, n = 10, with_ties = FALSE) %>%
+      dplyr::select(Sample, Function, NegLog10Padj)
+    
+    plot_data[[set_name]] <- top10
+  }
+}
+
+# 🔗 Step 2: Combine and Format for Plotting
+plot_df <- bind_rows(plot_data)
+plot_df$Function <- str_trunc(plot_df$Function, 60)  # Truncate long GO terms
+
+# 🎨 Step 3: Plot Top 10 Barplots by Group
+ggplot(plot_df, aes(x = NegLog10Padj, y = reorder(Function, NegLog10Padj))) +
+  geom_bar(stat = "identity", fill = "#3182bd") +
+  facet_wrap(~ Sample, scales = "free_y", ncol = 2, strip.position = "top") +
+  labs(
+    x = expression(-log[10]~"(adj. p-value)"),
+    y = "GO Biological Process",
+    title = "Top 10 Unique Enriched GO BP Terms per CorMotif Group"
+  ) +
+  theme_pubr(base_size = 14) +
+  theme(
+    strip.background = element_rect(color = "black", fill = "grey90", size = 1),
+    strip.text = element_text(face = "bold"),
+    axis.text.y = element_text(size = 10),
+    panel.border = element_rect(color = "black", fill = NA, size = 1),
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
 ```
