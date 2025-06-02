@@ -64,6 +64,8 @@ Welcome to my research website.
 
 - **[Function and pathway enrichment of Corrmotif Models (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc_GO.html)**
 
+- **[Specific GO terms enrichment in Cormotif Models (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/DDR_Gquad_Corr.html)**
+
 - **[Corrmotif Model and Patterns (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time.html)**
 
 - **[Function and pathway enrichment of Corrmotif Models (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time_GO.html)**
