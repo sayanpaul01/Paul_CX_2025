@@ -15,32 +15,38 @@ library(dplyr)
 ## **📌 Read and Process GO Terms**
 ```{r load_GO, echo=TRUE, results='hide',message=FALSE, warning=FALSE}
 # Load GO term data for different conditions
-# Load GO term data for different conditions
-CX_0.1_24_GO <- read.csv("data/CX_0.1_24 (Combined).csv")
-CX_0.1_48_GO <- read.csv("data/CX_0.1_48 (Combined).csv")
-CX_0.5_3_GO  <- read.csv("data/CX_0.5_3 (Combined).csv")
-CX_0.5_24_GO <- read.csv("data/CX_0.5_24 (Combined).csv")
-CX_0.5_48_GO <- read.csv("data/CX_0.5_48 (Combined).csv")
+# 📦 Load Required Library
+library(dplyr)
 
-DOX_0.1_3_GO  <- read.csv("data/DOX_0.1_3 (Combined).csv")
-DOX_0.1_24_GO <- read.csv("data/DOX_0.1_24 (Combined).csv")
-DOX_0.1_48_GO <- read.csv("data/DOX_0.1_48 (Combined).csv")
-DOX_0.5_3_GO  <- read.csv("data/DOX_0.5_3 (Combined).csv")
-DOX_0.5_24_GO <- read.csv("data/DOX_0.5_24 (Combined).csv")
-DOX_0.5_48_GO <- read.csv("data/DOX_0.5_48 (Combined).csv")
+# 📁 Load GO Term Enrichment Data (Filtered for p.adjust < 0.05)
 
-# Extract GO term IDs for each condition
-DEG2_GO <- CX_0.1_24_GO$ID
-DEG3_GO <- CX_0.1_48_GO$ID
-DEG4_GO <- CX_0.5_3_GO$ID
-DEG5_GO <- CX_0.5_24_GO$ID
-DEG6_GO <- CX_0.5_48_GO$ID
-DEG7_GO <- DOX_0.1_3_GO$ID
-DEG8_GO <- DOX_0.1_24_GO$ID
-DEG9_GO <- DOX_0.1_48_GO$ID
-DEG10_GO <- DOX_0.5_3_GO$ID
-DEG11_GO <- DOX_0.5_24_GO$ID
-DEG12_GO <- DOX_0.5_48_GO$term_id
+CX_0.1_24_GO <- read.csv("data/BP/Combined_Terms/GO_All_CX_0.1_24.csv")
+CX_0.1_48_GO <- read.csv("data/BP/Combined_Terms/GO_All_CX_0.1_48.csv")
+CX_0.5_3_GO  <- read.csv("data/BP/Combined_Terms/GO_All_CX_0.5_3.csv")
+CX_0.5_24_GO <- read.csv("data/BP/Combined_Terms/GO_All_CX_0.5_24.csv")
+CX_0.5_48_GO <- read.csv("data/BP/Combined_Terms/GO_All_CX_0.5_48.csv")
+
+DOX_0.1_3_GO  <- read.csv("data/BP/Combined_Terms/GO_All_DOX_0.1_3.csv")
+DOX_0.1_24_GO <- read.csv("data/BP/Combined_Terms/GO_All_DOX_0.1_24.csv")
+DOX_0.1_48_GO <- read.csv("data/BP/Combined_Terms/GO_All_DOX_0.1_48.csv")
+DOX_0.5_3_GO  <- read.csv("data/BP/Combined_Terms/GO_All_DOX_0.5_3.csv")
+DOX_0.5_24_GO <- read.csv("data/BP/Combined_Terms/GO_All_DOX_0.5_24.csv")
+DOX_0.5_48_GO <- read.csv("data/BP/Combined_Terms/GO_All_DOX_0.5_48.csv")
+
+# ✅ Extract Significant GO Term IDs (p.adjust < 0.05)
+
+DEG2_GO  <- CX_0.1_24_GO  %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG3_GO  <- CX_0.1_48_GO  %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG4_GO  <- CX_0.5_3_GO   %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG5_GO  <- CX_0.5_24_GO  %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG6_GO  <- CX_0.5_48_GO  %>% filter(p.adjust < 0.05) %>% pull(ID)
+
+DEG7_GO  <- DOX_0.1_3_GO  %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG8_GO  <- DOX_0.1_24_GO %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG9_GO  <- DOX_0.1_48_GO %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG10_GO <- DOX_0.5_3_GO  %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG11_GO <- DOX_0.5_24_GO %>% filter(p.adjust < 0.05) %>% pull(ID)
+DEG12_GO <- DOX_0.5_48_GO %>% filter(p.adjust < 0.05) %>% pull(ID)
 ```
 
 ## **📌 Overlap of GO Terms across the drugs**
@@ -178,7 +184,7 @@ ggVennDiagram(Timepoint_48hrs, label = "count") +
   labs(title = "48 Hours GO Term Overlap")
 ```
 
-## **📌Overlapping of GO terms across all samples Upset plot**
+## **📌Overlapping of BP terms across all samples Upset plot**
 ```{r Upset1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
 
 # 📦 Load Required Libraries
@@ -186,29 +192,26 @@ library(UpSetR)
 library(dplyr)
 library(tidyr)
 
-# ✅ Load all GO term datasets
-CX_0.1_24_GO <- read.csv("data/BP/CX_0.1_24 (Combined).csv")
-CX_0.1_48_GO <- read.csv("data/BP/CX_0.1_48 (Combined).csv")
-CX_0.5_3_GO  <- read.csv("data/BP/CX_0.5_3 (Combined).csv")
-CX_0.5_24_GO <- read.csv("data/BP/CX_0.5_24 (Combined).csv")
-CX_0.5_48_GO <- read.csv("data/BP/CX_0.5_48 (Combined).csv")
-DOX_0.1_3_GO <- read.csv("data/BP/DOX_0.1_3 (Combined).csv")
-DOX_0.1_24_GO <- read.csv("data/BP/DOX_0.1_24 (Combined).csv")
-DOX_0.1_48_GO <- read.csv("data/BP/DOX_0.1_48 (Combined).csv")
-DOX_0.5_3_GO <- read.csv("data/BP/DOX_0.5_3 (Combined).csv")
-
-# ✅ Prepare list of GO IDs
-gene_sets <- list(
-  `CX_0.1_24` = as.character(CX_0.1_24_GO$ID),
-  `CX_0.1_48` = as.character(CX_0.1_48_GO$ID),
-  `CX_0.5_3`  = as.character(CX_0.5_3_GO$ID),
-  `CX_0.5_24` = as.character(CX_0.5_24_GO$ID),
-  `CX_0.5_48` = as.character(CX_0.5_48_GO$ID),
-  `DOX_0.1_3` = as.character(DOX_0.1_3_GO$ID),
-  `DOX_0.1_24` = as.character(DOX_0.1_24_GO$ID),
-  `DOX_0.1_48` = as.character(DOX_0.1_48_GO$ID),
-  `DOX_0.5_3` = as.character(DOX_0.5_3_GO$ID)
+# ✅ Define GO Enrichment Files (Combined_Terms structure, but now All_Terms paths)
+go_files <- list(
+  "CX_0.1_24"  = "data/BP/All_Terms/GO_BP_CX_0.1_24.csv",
+  "CX_0.1_48"  = "data/BP/All_Terms/GO_BP_CX_0.1_48.csv",
+  "CX_0.5_3"   = "data/BP/All_Terms/GO_BP_CX_0.5_3.csv",
+  "CX_0.5_24"  = "data/BP/All_Terms/GO_BP_CX_0.5_24.csv",
+  "CX_0.5_48"  = "data/BP/All_Terms/GO_BP_CX_0.5_48.csv",
+  "DOX_0.1_3"  = "data/BP/All_Terms/GO_BP_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/BP/All_Terms/GO_BP_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/BP/All_Terms/GO_BP_DOX_0.1_48.csv",
+  "DOX_0.5_3"  = "data/BP/All_Terms/GO_BP_DOX_0.5_3.csv"
 )
+
+# ✅ Read and filter (p.adjust < 0.05), extract GO term IDs
+gene_sets <- lapply(go_files, function(file) {
+  read.csv(file) %>%
+    filter(p.adjust < 0.05) %>%
+    pull(ID) %>%
+    as.character()
+})
 
 # 🧮 Build binary matrix
 all_ids <- unique(unlist(gene_sets))
@@ -218,17 +221,17 @@ for (name in names(gene_sets)) {
   binary_matrix[[name]] <- as.integer(binary_matrix$GO_ID %in% gene_sets[[name]])
 }
 
-# ✅ Remove GO_ID for upset input
+# ✅ Prepare matrix for UpSetR
 upset_input <- binary_matrix[, -1]
-colnames(upset_input) <- names(gene_sets)  # ensure consistent names
+colnames(upset_input) <- names(gene_sets)
 
-# ✅ Plot
-par(mar = c(10, 4, 2, 2))  # bottom, left, top, right
+# 🎯 Plot UpSet
+par(mar = c(10, 4, 2, 2))
 upset(upset_input,
       sets = colnames(upset_input),
       order.by = "freq",
       sets.bar.color = "#56B4E9",
-      mainbar.y.label = "Number of Shared BP",
+      mainbar.y.label = "Number of Shared BP (p.adjust < 0.05)",
       sets.x.label = "BP per Condition",
       text.scale = 1.2,
       nintersects = 30)
@@ -237,39 +240,34 @@ upset(upset_input,
 ## **📌Identifying Unique GO terms**
 ```{r Unique, echo=TRUE, message=FALSE, warning=FALSE}
 # 📦 Load Required Libraries
+# 📦 Load Required Libraries
 library(dplyr)
-library(readr)
 
-# ✅ Step 1: Load GO Enrichment Files
-CX_0.1_24_GO <- read_csv("data/BP/CX_0.1_24 (Combined).csv")
-CX_0.1_48_GO <- read_csv("data/BP/CX_0.1_48 (Combined).csv")
-CX_0.5_3_GO  <- read_csv("data/BP/CX_0.5_3 (Combined).csv")
-CX_0.5_24_GO <- read_csv("data/BP/CX_0.5_24 (Combined).csv")
-CX_0.5_48_GO <- read_csv("data/BP/CX_0.5_48 (Combined).csv")
-DOX_0.1_3_GO <- read_csv("data/BP/DOX_0.1_3 (Combined).csv")
-DOX_0.1_24_GO <- read_csv("data/BP/DOX_0.1_24 (Combined).csv")
-DOX_0.1_48_GO <- read_csv("data/BP/DOX_0.1_48 (Combined).csv")
-DOX_0.5_3_GO <- read_csv("data/BP/DOX_0.5_3 (Combined).csv")
-
-# ✅ Step 2: Create Named List of Data Frames
+# ✅ Step 1: Define File Paths for All_Terms
 go_files <- list(
-  `CX_0.1_24` = CX_0.1_24_GO,
-  `CX_0.1_48` = CX_0.1_48_GO,
-  `CX_0.5_3`  = CX_0.5_3_GO,
-  `CX_0.5_24` = CX_0.5_24_GO,
-  `CX_0.5_48` = CX_0.5_48_GO,
-  `DOX_0.1_3` = DOX_0.1_3_GO,
-  `DOX_0.1_24` = DOX_0.1_24_GO,
-  `DOX_0.1_48` = DOX_0.1_48_GO,
-  `DOX_0.5_3` = DOX_0.5_3_GO
+  "CX_0.1_24"  = "data/BP/All_Terms/GO_BP_CX_0.1_24.csv",
+  "CX_0.1_48"  = "data/BP/All_Terms/GO_BP_CX_0.1_48.csv",
+  "CX_0.5_3"   = "data/BP/All_Terms/GO_BP_CX_0.5_3.csv",
+  "CX_0.5_24"  = "data/BP/All_Terms/GO_BP_CX_0.5_24.csv",
+  "CX_0.5_48"  = "data/BP/All_Terms/GO_BP_CX_0.5_48.csv",
+  "DOX_0.1_3"  = "data/BP/All_Terms/GO_BP_DOX_0.1_3.csv",
+  "DOX_0.1_24" = "data/BP/All_Terms/GO_BP_DOX_0.1_24.csv",
+  "DOX_0.1_48" = "data/BP/All_Terms/GO_BP_DOX_0.1_48.csv",
+  "DOX_0.5_3"  = "data/BP/All_Terms/GO_BP_DOX_0.5_3.csv"
 )
 
-# ✅ Step 3: Find Unique GO IDs for Each Condition
+# ✅ Step 2: Read and Filter Each File (p.adjust < 0.05)
+go_data <- lapply(go_files, function(file) {
+  df <- read.csv(file)
+  df %>% filter(p.adjust < 0.05)
+})
+
+# ✅ Step 3: Identify Unique GO Terms in Each Condition
 unique_go_terms <- list()
 
-for (set_name in names(go_files)) {
-  current_ids <- go_files[[set_name]]$ID
-  other_ids <- unlist(go_files[names(go_files) != set_name], use.names = FALSE)
+for (set_name in names(go_data)) {
+  current_ids <- go_data[[set_name]]$ID
+  other_ids <- unlist(lapply(go_data[names(go_data) != set_name], `[[`, "ID"), use.names = FALSE)
   unique_ids <- setdiff(current_ids, other_ids)
   
   if (length(unique_ids) > 0) {
@@ -277,7 +275,69 @@ for (set_name in names(go_files)) {
   }
 }
 
-# ✅ Step 4: Map Unique GO IDs to Descriptions and p.adjust
+# ✅ Step 4: Map Unique IDs to Description and p.adjust
+mapped_unique_go_terms <- list()
+
+for (set_name in names(unique_go_terms)) {
+  df <- go_data[[set_name]]
+  unique_ids <- unique_go_terms[[set_name]]
+  
+  mapped_df <- df %>%
+    filter(ID %in% unique_ids) %>%
+    dplyr::select(GO_ID = ID, Function = Description, p.adjust)
+  
+  mapped_unique_go_terms[[set_name]] <- mapped_df
+}
+
+# 🎯 Final Output: List of data.frames with GO_ID, Function, and p.adjust
+mapped_unique_go_terms
+```
+
+## **📌TOP Unique GO terms**
+```{r Unique1, echo=TRUE, message=FALSE, warning=FALSE}
+
+# 📦 Load Required Libraries
+library(dplyr)
+library(readr)
+
+# ✅ Step 1: Load and Filter GO Term Data (p.adjust < 0.05) from All_Terms
+CX_0.1_24_GO  <- read_csv("data/BP/All_Terms/GO_BP_CX_0.1_24.csv")  %>% filter(p.adjust < 0.05)
+CX_0.1_48_GO  <- read_csv("data/BP/All_Terms/GO_BP_CX_0.1_48.csv")  %>% filter(p.adjust < 0.05)
+CX_0.5_3_GO   <- read_csv("data/BP/All_Terms/GO_BP_CX_0.5_3.csv")   %>% filter(p.adjust < 0.05)
+CX_0.5_24_GO  <- read_csv("data/BP/All_Terms/GO_BP_CX_0.5_24.csv")  %>% filter(p.adjust < 0.05)
+CX_0.5_48_GO  <- read_csv("data/BP/All_Terms/GO_BP_CX_0.5_48.csv")  %>% filter(p.adjust < 0.05)
+DOX_0.1_3_GO  <- read_csv("data/BP/All_Terms/GO_BP_DOX_0.1_3.csv")  %>% filter(p.adjust < 0.05)
+DOX_0.1_24_GO <- read_csv("data/BP/All_Terms/GO_BP_DOX_0.1_24.csv") %>% filter(p.adjust < 0.05)
+DOX_0.1_48_GO <- read_csv("data/BP/All_Terms/GO_BP_DOX_0.1_48.csv") %>% filter(p.adjust < 0.05)
+DOX_0.5_3_GO  <- read_csv("data/BP/All_Terms/GO_BP_DOX_0.5_3.csv")  %>% filter(p.adjust < 0.05)
+
+# ✅ Step 2: Create Named List of Filtered Data Frames
+go_files <- list(
+  `CX_0.1_24`  = CX_0.1_24_GO,
+  `CX_0.1_48`  = CX_0.1_48_GO,
+  `CX_0.5_3`   = CX_0.5_3_GO,
+  `CX_0.5_24`  = CX_0.5_24_GO,
+  `CX_0.5_48`  = CX_0.5_48_GO,
+  `DOX_0.1_3`  = DOX_0.1_3_GO,
+  `DOX_0.1_24` = DOX_0.1_24_GO,
+  `DOX_0.1_48` = DOX_0.1_48_GO,
+  `DOX_0.5_3`  = DOX_0.5_3_GO
+)
+
+# ✅ Step 3: Identify Unique GO Term IDs per Condition
+unique_go_terms <- list()
+
+for (set_name in names(go_files)) {
+  current_ids <- go_files[[set_name]]$ID
+  other_ids <- unlist(lapply(go_files[names(go_files) != set_name], `[[`, "ID"), use.names = FALSE)
+  unique_ids <- setdiff(current_ids, other_ids)
+  
+  if (length(unique_ids) > 0) {
+    unique_go_terms[[set_name]] <- unique_ids
+  }
+}
+
+# ✅ Step 4: Map Unique GO IDs to Description and p.adjust
 mapped_unique_go_terms <- list()
 
 for (set_name in names(unique_go_terms)) {
@@ -288,56 +348,63 @@ for (set_name in names(unique_go_terms)) {
     filter(ID %in% unique_ids) %>%
     dplyr::select(GO_ID = ID, Function = Description, p.adjust)
   
-  mapped_unique_go_terms[[set_name]] <- mapped_df
+  if (nrow(mapped_df) > 0) {
+    mapped_unique_go_terms[[set_name]] <- mapped_df
+  }
 }
 
-# 🎯 Final Output: List of data.frames with GO_ID, Description, and p.adjust
+# 🎯 Final Output: Named list of data.frames with unique + significant GO terms per condition
 mapped_unique_go_terms
 ```
 
-## **📌TOP Unique GO terms**
-```{r Unique1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=12, fig.height=10}
-
+## **📌Plot Unique GO terms**
+```{r Unique2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=12, fig.height=10}
 # 📦 Load Required Libraries
 library(dplyr)
 library(ggplot2)
 library(ggpubr)
 library(stringr)
 
-# 🧾 mapped_unique_go_terms must already be defined from your previous step:
-# List of data frames with GO_ID, Function, p.adjust
+# 🧾 Assumes: mapped_unique_go_terms is a list of data.frames with GO_ID, Function, p.adjust
 
-# 🔁 Step 1: Prepare top 10 unique terms per sample
+# 🔁 Step 1: Extract Top 10 Terms by p.adjust per Condition
 plot_data <- list()
 
 for (set_name in names(mapped_unique_go_terms)) {
   unique_df <- mapped_unique_go_terms[[set_name]]
   
   if (nrow(unique_df) > 0) {
-    unique_df$Sample <- set_name
-    unique_df$NegLog10Padj <- -log10(unique_df$p.adjust)
+    unique_df <- unique_df %>%
+      mutate(Sample = set_name,
+             NegLog10Padj = -log10(p.adjust))
     
     top10 <- unique_df %>%
-      dplyr::slice_min(order_by = p.adjust, n = 10, with_ties = FALSE) %>%
-      dplyr::select(Sample, Function, NegLog10Padj)
+      slice_min(order_by = p.adjust, n = 10, with_ties = FALSE) %>%
+      dplyr::select(Sample, Function, NegLog10Padj)  #  fully qualified here
     
     plot_data[[set_name]] <- top10
   }
 }
 
-# 🔗 Step 2: Combine all and format
-plot_df <- bind_rows(plot_data)
-plot_df$Function <- str_trunc(plot_df$Function, 60)
+# 🔗 Step 2: Combine and Format Labels
+plot_df <- bind_rows(plot_data) %>%
+  mutate(Function = str_trunc(Function, width = 60))
 
-# 🎨 Step 3: Plot
+# 🎨 Step 3: Faceted Bar Plot
 ggplot(plot_df, aes(x = NegLog10Padj, y = reorder(Function, NegLog10Padj))) +
   geom_bar(stat = "identity", fill = "#3182bd") +
   facet_wrap(~ Sample, scales = "free_y", ncol = 2, strip.position = "top") +
-  labs(x = "-log10(p.adjust)", y = "GO Term", title = "Top Unique GO BP Terms per Sample") +
+  labs(
+    x = "-log10(p.adjust)",
+    y = "GO Term",
+    title = "Top Unique GO Biological Process Terms per Condition"
+  ) +
   theme_pubr(base_size = 14) +
-  theme(strip.background = element_rect(colour = "black", fill = "grey90", size = 1),
-        strip.text = element_text(face = "bold"),
-        axis.text.y = element_text(size = 10),
-        panel.border = element_rect(color = "black", fill = NA, size = 1))
+  theme(
+    strip.background = element_rect(colour = "black", fill = "grey90", size = 1),
+    strip.text = element_text(face = "bold"),
+    axis.text.y = element_text(size = 10),
+    panel.border = element_rect(color = "black", fill = NA, size = 1)
+  )
 ```
 
