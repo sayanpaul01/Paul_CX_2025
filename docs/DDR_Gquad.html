@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CX5461_Project/</code> <span
@@ -407,18 +407,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -509,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3bfb39952c781ca63bd236e2e8db286d07c7190atargetblank3bfb399a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree8d1b3667973a6dc52fdc3058b689f1c2024bc4b6targetblank8d1b366a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3bfb39952c781ca63bd236e2e8db286d07c7190a" target="_blank">3bfb399</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/8d1b3667973a6dc52fdc3058b689f1c2024bc4b6" target="_blank">8d1b366</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree3bfb39952c781ca63bd236e2e8db286d07c7190atargetblank3bfb399a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree8d1b3667973a6dc52fdc3058b689f1c2024bc4b6targetblank8d1b366a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -527,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/3bfb39952c781ca63bd236e2e8db286d07c7190a" target="_blank">3bfb399</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/8d1b3667973a6dc52fdc3058b689f1c2024bc4b6" target="_blank">8d1b366</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -661,6 +664,8 @@ Untracked files:
 
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
+    Modified:   analysis/DDR_Gquad.Rmd
+    Modified:   analysis/DDR_Gquad_Corr.Rmd
     Modified:   data/DOX_0.5_48 (Combined).csv
     Modified:   data/Total_number_of_Mapped_reads_by_Individuals.csv
 
@@ -708,6 +713,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/8d1b3667973a6dc52fdc3058b689f1c2024bc4b6/docs/DDR_Gquad.html" target="_blank">8d1b366</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-03
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1242,7 +1264,7 @@ library(ComplexHeatmap)
 library(circlize)
 library(grid)
 
-### 📁 Define Input GO Enrichment Files for DEG Conditions
+# 📁 Define GO enrichment input files
 go_files &lt;- list(
   &quot;CX_0.1_3&quot;   = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot;  = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_24.csv&quot;,
@@ -1258,7 +1280,7 @@ go_files &lt;- list(
   &quot;DOX_0.5_48&quot; = &quot;data/BP/Combined_Terms/GO_All_DOX_0.5_48.csv&quot;
 )
 
-### 🧬 Define G-quadruplex GO Terms of Interest
+# 🧬 Define G4-related GO terms
 g4_terms &lt;- list(
   &quot;GO:0051880&quot; = &quot;G-quadruplex DNA binding&quot;,
   &quot;GO:0002151&quot; = &quot;G-quadruplex RNA binding&quot;,
@@ -1268,44 +1290,44 @@ g4_terms &lt;- list(
   &quot;GO:0061849&quot; = &quot;Telomeric G-quadruplex DNA binding&quot;
 )
 
-### 🧪 Function to extract -log10(p.adjust) and raw p-values
+# 🔍 Function to extract values
 get_go_values &lt;- function(file_path) {
   df &lt;- fread(file_path)
   df &lt;- df[, .(ID, p.adjust, pvalue)]
   
-  log10padj &lt;- sapply(names(g4_terms), function(go_id) {
+  log10pval &lt;- sapply(names(g4_terms), function(go_id) {
     row &lt;- df[ID == go_id]
     if (nrow(row) == 0) return(NA)
-    return(-log10(row$p.adjust))
+    return(-log10(row$pvalue))
   })
   
-  raw_p &lt;- sapply(names(g4_terms), function(go_id) {
+  adj_p &lt;- sapply(names(g4_terms), function(go_id) {
     row &lt;- df[ID == go_id]
     if (nrow(row) == 0) return(NA)
-    return(row$pvalue)
+    return(row$p.adjust)
   })
   
-  return(list(log10padj = log10padj, raw_p = raw_p))
+  return(list(log10pval = log10pval, adj_p = adj_p))
 }
 
-### 🧊 Build GO matrix and p-value matrix
+# 🧊 Matrix generation
 matrix_list &lt;- map(go_files, get_go_values)
 
-go_matrix &lt;- sapply(matrix_list, function(x) x$log10padj)
-pval_matrix &lt;- sapply(matrix_list, function(x) x$raw_p)
+go_matrix &lt;- sapply(matrix_list, function(x) x$log10pval)
+padj_matrix &lt;- sapply(matrix_list, function(x) x$adj_p)
 
 rownames(go_matrix) &lt;- unname(unlist(g4_terms))
-rownames(pval_matrix) &lt;- rownames(go_matrix)
+rownames(padj_matrix) &lt;- rownames(go_matrix)
 
-### 🎨 Step 4: Define color palette
+# 🎨 Colors
 breaks &lt;- seq(0, 20, by = 2.5)
 palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
 col_fun &lt;- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot Heatmap with Stars for p.adjust &lt; 0.05
+# 🔥 Heatmap with correct cell color and stars for adj p &lt; 0.05
 ht &lt;- Heatmap(
   go_matrix,
-  name = &quot;-log10(adj p-value)&quot;,
+  name = &quot;-log10(p value)&quot;,
   col = col_fun,
   na_col = &quot;white&quot;,
   rect_gp = gpar(col = &quot;black&quot;, lwd = 0.5),
@@ -1316,7 +1338,7 @@ ht &lt;- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(go_matrix), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    adj_p &lt;- pval_matrix[i, j]  # Use p.adjust matrix for significance check
+    adj_p &lt;- padj_matrix[i, j]
     if (!is.na(adj_p) &amp;&amp; adj_p &lt; 0.05) {
       grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
     }
@@ -1332,7 +1354,7 @@ ht &lt;- Heatmap(
   )
 )
 
-### 🖼 Final Draw
+# 🖼 Draw
 draw(ht, heatmap_legend_side = &quot;top&quot;)</code></pre>
 <p><img src="figure/DDR_Gquad.Rmd/GQ-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>

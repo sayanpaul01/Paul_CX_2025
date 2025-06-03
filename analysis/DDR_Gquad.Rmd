@@ -312,7 +312,7 @@ library(ComplexHeatmap)
 library(circlize)
 library(grid)
 
-### 📁 Define Input GO Enrichment Files for DEG Conditions
+# 📁 Define GO enrichment input files
 go_files <- list(
   "CX_0.1_3"   = "data/BP/Combined_Terms/GO_All_CX_0.1_3.csv",
   "CX_0.1_24"  = "data/BP/Combined_Terms/GO_All_CX_0.1_24.csv",
@@ -328,7 +328,7 @@ go_files <- list(
   "DOX_0.5_48" = "data/BP/Combined_Terms/GO_All_DOX_0.5_48.csv"
 )
 
-### 🧬 Define G-quadruplex GO Terms of Interest
+# 🧬 Define G4-related GO terms
 g4_terms <- list(
   "GO:0051880" = "G-quadruplex DNA binding",
   "GO:0002151" = "G-quadruplex RNA binding",
@@ -338,44 +338,44 @@ g4_terms <- list(
   "GO:0061849" = "Telomeric G-quadruplex DNA binding"
 )
 
-### 🧪 Function to extract -log10(p.adjust) and raw p-values
+# 🔍 Function to extract values
 get_go_values <- function(file_path) {
   df <- fread(file_path)
   df <- df[, .(ID, p.adjust, pvalue)]
   
-  log10padj <- sapply(names(g4_terms), function(go_id) {
+  log10pval <- sapply(names(g4_terms), function(go_id) {
     row <- df[ID == go_id]
     if (nrow(row) == 0) return(NA)
-    return(-log10(row$p.adjust))
+    return(-log10(row$pvalue))
   })
   
-  raw_p <- sapply(names(g4_terms), function(go_id) {
+  adj_p <- sapply(names(g4_terms), function(go_id) {
     row <- df[ID == go_id]
     if (nrow(row) == 0) return(NA)
-    return(row$pvalue)
+    return(row$p.adjust)
   })
   
-  return(list(log10padj = log10padj, raw_p = raw_p))
+  return(list(log10pval = log10pval, adj_p = adj_p))
 }
 
-### 🧊 Build GO matrix and p-value matrix
+# 🧊 Matrix generation
 matrix_list <- map(go_files, get_go_values)
 
-go_matrix <- sapply(matrix_list, function(x) x$log10padj)
-pval_matrix <- sapply(matrix_list, function(x) x$raw_p)
+go_matrix <- sapply(matrix_list, function(x) x$log10pval)
+padj_matrix <- sapply(matrix_list, function(x) x$adj_p)
 
 rownames(go_matrix) <- unname(unlist(g4_terms))
-rownames(pval_matrix) <- rownames(go_matrix)
+rownames(padj_matrix) <- rownames(go_matrix)
 
-### 🎨 Step 4: Define color palette
+# 🎨 Colors
 breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot Heatmap with Stars for p.adjust < 0.05
+# 🔥 Heatmap with correct cell color and stars for adj p < 0.05
 ht <- Heatmap(
   go_matrix,
-  name = "-log10(adj p-value)",
+  name = "-log10(p value)",
   col = col_fun,
   na_col = "white",
   rect_gp = gpar(col = "black", lwd = 0.5),
@@ -386,7 +386,7 @@ ht <- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(go_matrix), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    adj_p <- pval_matrix[i, j]  # Use p.adjust matrix for significance check
+    adj_p <- padj_matrix[i, j]
     if (!is.na(adj_p) && adj_p < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
@@ -402,7 +402,7 @@ ht <- Heatmap(
   )
 )
 
-### 🖼 Final Draw
+# 🖼 Draw
 draw(ht, heatmap_legend_side = "top")
 ```
 
