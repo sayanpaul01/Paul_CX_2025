@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-01
+<strong>Last updated:</strong> 2025-06-03
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreee9c6af4c7ab7f23e7c14e3fd723421a3e795c8actargetblanke9c6af4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreecf7130e93656c60e3c7d34ee57d65ce6cdccf00btargetblankcf7130ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/e9c6af4c7ab7f23e7c14e3fd723421a3e795c8ac" target="_blank">e9c6af4</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/cf7130e93656c60e3c7d34ee57d65ce6cdccf00b" target="_blank">cf7130e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreee9c6af4c7ab7f23e7c14e3fd723421a3e795c8actargetblanke9c6af4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreecf7130e93656c60e3c7d34ee57d65ce6cdccf00btargetblankcf7130ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/e9c6af4c7ab7f23e7c14e3fd723421a3e795c8ac" target="_blank">e9c6af4</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/cf7130e93656c60e3c7d34ee57d65ce6cdccf00b" target="_blank">cf7130e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -598,6 +598,7 @@ Untracked files:
     Untracked:  Rplot21.svg
     Untracked:  Rplot22.svg
     Untracked:  Rplot23.svg
+    Untracked:  Rplot24.svg
     Untracked:  TOP2B.bed
     Untracked:  TS HPA (Violin).svg
     Untracked:  TS HPA.svg
@@ -666,7 +667,6 @@ Unstaged changes:
     Modified:   analysis/DDR_Gquad.Rmd
     Modified:   data/DOX_0.5_48 (Combined).csv
     Modified:   data/Total_number_of_Mapped_reads_by_Individuals.csv
-    Modified:   data/count.csv
 
 </code></pre>
 <p>
@@ -712,6 +712,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b07a3be9936d58d138f6b6651a6725c4f1918542/analysis/DDR_Gquad.Rmd" target="_blank">b07a3be</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-01
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/b07a3be9936d58d138f6b6651a6725c4f1918542/docs/DDR_Gquad.html" target="_blank">b07a3be</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-01
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -840,23 +874,24 @@ go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
   file &lt;- go_files[[cond]]
   df &lt;- tryCatch(fread(file), error = function(e) return(data.table()))
 
-  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;) %in% colnames(df))) {
+  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;, &quot;p.adjust&quot;) %in% colnames(df))) {
     message(&quot;⚠️ Skipping or padding malformed file: &quot;, cond)
-    return(tibble(Description = ddr_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+    return(tibble(Description = ddr_descriptions, pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond))
   }
 
-  df &lt;- as_tibble(df) %&gt;% dplyr::select(ID, Description, pvalue)
+  df &lt;- as_tibble(df) %&gt;% dplyr::select(ID, Description, pvalue, p.adjust)
 
   results &lt;- lapply(names(parent_terms), function(parent_id) {
     all_ids &lt;- c(parent_id, child_map[[parent_id]])
     df_sub &lt;- df %&gt;% filter(ID %in% all_ids)
 
     if (nrow(df_sub) == 0) {
-      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond)
     } else {
       best_row &lt;- df_sub %&gt;% slice_min(pvalue, n = 1)
       tibble(Description = parent_terms[[parent_id]],
              pvalue = best_row$pvalue,
+             p.adjust = best_row$p.adjust,
              log10p = -log10(best_row$pvalue),
              Condition = cond)
     }
@@ -875,6 +910,12 @@ heatmap_data &lt;- go_matrix_df %&gt;%
 pval_matrix &lt;- go_matrix_df %&gt;%
   dplyr::select(Description, Condition, pvalue) %&gt;%
   pivot_wider(names_from = Condition, values_from = pvalue) %&gt;%
+  column_to_rownames(&quot;Description&quot;) %&gt;%
+  as.matrix()
+
+p_adj_matrix &lt;- go_matrix_df %&gt;%
+  dplyr::select(Description, Condition, p.adjust) %&gt;%
+  pivot_wider(names_from = Condition, values_from = p.adjust) %&gt;%
   column_to_rownames(&quot;Description&quot;) %&gt;%
   as.matrix()
 
@@ -909,8 +950,8 @@ ht &lt;- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p &lt;- pval_matrix[i, j]
-    if (!is.na(raw_p) &amp;&amp; raw_p &lt; 0.05) {
+    adj_p &lt;- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) &amp;&amp; adj_p &lt; 0.05) {
       grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -1021,29 +1062,30 @@ go_descriptions &lt;- unname(unlist(parent_terms))
 go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
   file &lt;- go_files[[cond]]
   df &lt;- tryCatch(fread(file), error = function(e) return(data.table()))
-  
-  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;) %in% colnames(df))) {
+
+  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;, &quot;p.adjust&quot;) %in% colnames(df))) {
     message(&quot;⚠️ Skipping or padding malformed file: &quot;, cond)
-    return(tibble(Description = go_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+    return(tibble(Description = go_descriptions, pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond))
   }
-  
-  df &lt;- as_tibble(df) %&gt;% dplyr::select(ID, Description, pvalue)
-  
+
+  df &lt;- as_tibble(df) %&gt;% dplyr::select(ID, Description, pvalue, p.adjust)
+
   results &lt;- lapply(names(parent_terms), function(parent_id) {
     all_ids &lt;- c(parent_id, child_map[[parent_id]])
     df_sub &lt;- df %&gt;% filter(ID %in% all_ids)
-    
+
     if (nrow(df_sub) == 0) {
-      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond)
     } else {
       best_row &lt;- df_sub %&gt;% slice_min(pvalue, n = 1)
       tibble(Description = parent_terms[[parent_id]],
              pvalue = best_row$pvalue,
+             p.adjust = best_row$p.adjust,
              log10p = -log10(best_row$pvalue),
              Condition = cond)
     }
   })
-  
+
   bind_rows(results)
 })
 
@@ -1057,6 +1099,12 @@ heatmap_data &lt;- go_matrix_df %&gt;%
 pval_matrix &lt;- go_matrix_df %&gt;%
   dplyr::select(Description, Condition, pvalue) %&gt;%
   pivot_wider(names_from = Condition, values_from = pvalue) %&gt;%
+  column_to_rownames(&quot;Description&quot;) %&gt;%
+  as.matrix()
+
+p_adj_matrix &lt;- go_matrix_df %&gt;%
+  dplyr::select(Description, Condition, p.adjust) %&gt;%
+  pivot_wider(names_from = Condition, values_from = p.adjust) %&gt;%
   column_to_rownames(&quot;Description&quot;) %&gt;%
   as.matrix()
 
@@ -1088,8 +1136,8 @@ ht &lt;- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p &lt;- pval_matrix[i, j]
-    if (!is.na(raw_p) &amp;&amp; raw_p &lt; 0.05) {
+    adj_p &lt;- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) &amp;&amp; adj_p &lt; 0.05) {
       grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -1147,8 +1195,7 @@ sayanpaul01
 </div>
 <div id="g-quadruplex-go-terms" class="section level2">
 <h2><strong>📌 G-Quadruplex GO terms</strong></h2>
-<pre class="r"><code>### 📦 Load Required Libraries
-library(tidyverse)
+<pre class="r"><code>library(tidyverse)
 library(data.table)
 library(ComplexHeatmap)
 library(circlize)
@@ -1214,7 +1261,7 @@ breaks &lt;- seq(0, 20, by = 2.5)
 palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
 col_fun &lt;- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot heatmap
+### 🔥 Step 5: Plot Heatmap with Stars for p.adjust &lt; 0.05
 ht &lt;- Heatmap(
   go_matrix,
   name = &quot;-log10(adj p-value)&quot;,
@@ -1228,8 +1275,8 @@ ht &lt;- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(go_matrix), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p &lt;- pval_matrix[i, j]
-    if (!is.na(raw_p) &amp;&amp; raw_p &lt; 0.05) {
+    adj_p &lt;- pval_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) &amp;&amp; adj_p &lt; 0.05) {
       grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -1287,14 +1334,13 @@ sayanpaul01
 </div>
 <div id="transcription-by-rna-polymerase-i" class="section level2">
 <h2><strong>📌 Transcription by RNA polymerase I</strong></h2>
-<pre class="r"><code>### 📦 Load Required Libraries
-library(tidyverse)
+<pre class="r"><code>library(tidyverse)
 library(data.table)
 library(ComplexHeatmap)
 library(circlize)
 library(grid)
 
-### 📁 Input GO Enrichment Files
+### 📁 Define Input GO Enrichment Files for DEG Conditions
 go_files &lt;- list(
   &quot;CX_0.1_3&quot;   = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_3.csv&quot;,
   &quot;CX_0.1_24&quot;  = &quot;data/BP/Combined_Terms/GO_All_CX_0.1_24.csv&quot;,
@@ -1322,7 +1368,6 @@ parent_terms &lt;- list(
   &quot;GO:0005736&quot; = &quot;RNA polymerase I complex&quot;
 )
 
-
 child_map &lt;- list(
   &quot;GO:0016479&quot; = c(&quot;GO:2000731&quot;, &quot;GO:2001208&quot;, &quot;GO:1901837&quot;),
   &quot;GO:0042790&quot; = c(&quot;GO:1901837&quot;, &quot;GO:1901838&quot;, &quot;GO:1901836&quot;, &quot;GO:0006362&quot;),
@@ -1337,12 +1382,12 @@ go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
   file &lt;- go_files[[cond]]
   df &lt;- tryCatch(fread(file), error = function(e) return(data.table()))
   
-  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;) %in% colnames(df))) {
+  if (nrow(df) == 0 || !all(c(&quot;ID&quot;, &quot;Description&quot;, &quot;pvalue&quot;, &quot;p.adjust&quot;) %in% colnames(df))) {
     message(&quot;⚠️ Skipping malformed: &quot;, cond)
     return(tibble(Description = unname(unlist(parent_terms)), pvalue = NA, log10p = NA, Condition = cond))
   }
   
-  df &lt;- df %&gt;% as_tibble() %&gt;% dplyr::select(ID, Description, pvalue)
+  df &lt;- df %&gt;% as_tibble() %&gt;% dplyr::select(ID, Description, pvalue, p.adjust)
   
   results &lt;- lapply(names(parent_terms), function(pid) {
     all_ids &lt;- c(pid, child_map[[pid]])
@@ -1354,6 +1399,7 @@ go_matrix_df &lt;- map_dfr(names(go_files), function(cond) {
       best &lt;- df_sub %&gt;% slice_min(pvalue, n = 1)
       tibble(Description = parent_terms[[pid]],
              pvalue = best$pvalue,
+             p.adjust = best$p.adjust,
              log10p = -log10(best$pvalue),
              Condition = cond)
     }
@@ -1375,6 +1421,12 @@ pval_matrix &lt;- go_matrix_df %&gt;%
   column_to_rownames(&quot;Description&quot;) %&gt;%
   as.matrix()
 
+p_adj_matrix &lt;- go_matrix_df %&gt;%
+  dplyr::select(Description, Condition, p.adjust) %&gt;%
+  pivot_wider(names_from = Condition, values_from = p.adjust) %&gt;%
+  column_to_rownames(&quot;Description&quot;) %&gt;%
+  as.matrix()
+
 ### 🧼 Pad missing columns (if any)
 all_conditions &lt;- names(go_files)
 missing_cols &lt;- setdiff(all_conditions, colnames(heatmap_data))
@@ -1392,7 +1444,7 @@ breaks &lt;- seq(0, 20, by = 2.5)
 palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
 col_fun &lt;- colorRamp2(breaks, palette)
 
-### 🔥 Plot Heatmap with Stars for p &lt; 0.05
+### 🔥 Plot Heatmap with Stars for p.adjust &lt; 0.05
 ht &lt;- Heatmap(
   heatmap_data,
   name = &quot;-log10(p)&quot;,
@@ -1406,8 +1458,8 @@ ht &lt;- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p &lt;- pval_matrix[i, j]
-    if (!is.na(raw_p) &amp;&amp; raw_p &lt; 0.05) {
+    adj_p &lt;- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) &amp;&amp; adj_p &lt; 0.05) {
       grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -1425,6 +1477,43 @@ ht &lt;- Heatmap(
 ### 🖼 Draw
 draw(ht, heatmap_legend_side = &quot;top&quot;)</code></pre>
 <p><img src="figure/DDR_Gquad.Rmd/RNA_POl-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-RNA_POl-1">
+Past versions of RNA_POl-1.png
+</button>
+</p>
+<div id="fig-RNA_POl-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/b07a3be9936d58d138f6b6651a6725c4f1918542/docs/figure/DDR_Gquad.Rmd/RNA_POl-1.png" target="_blank">b07a3be</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
