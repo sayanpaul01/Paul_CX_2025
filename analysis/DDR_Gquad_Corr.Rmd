@@ -8,7 +8,6 @@ editor_options:
 ## **📌 DNA damage response GO terms**
 ```{r load_libraries, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
 
-### 📦 Load Required Libraries
 library(tidyverse)
 library(data.table)
 library(ComplexHeatmap)
@@ -55,23 +54,24 @@ go_matrix_df <- map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(fread(file), error = function(e) return(data.table()))
   
-  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue", "p.adjust") %in% colnames(df))) {
     message("⚠️ Skipping or padding malformed file: ", cond)
-    return(tibble(Description = ddr_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+    return(tibble(Description = ddr_descriptions, pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond))
   }
   
-  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue)
+  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue, p.adjust)
   
   results <- lapply(names(parent_terms), function(parent_id) {
     all_ids <- c(parent_id, child_map[[parent_id]])
     df_sub <- df %>% filter(ID %in% all_ids)
     
     if (nrow(df_sub) == 0) {
-      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond)
     } else {
       best_row <- df_sub %>% slice_min(pvalue, n = 1)
       tibble(Description = parent_terms[[parent_id]],
              pvalue = best_row$pvalue,
+             p.adjust = best_row$p.adjust,
              log10p = -log10(best_row$pvalue),
              Condition = cond)
     }
@@ -93,6 +93,12 @@ pval_matrix <- go_matrix_df %>%
   tibble::column_to_rownames("Description") %>%
   as.matrix()
 
+p_adj_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, p.adjust) %>%
+  tidyr::pivot_wider(names_from = Condition, values_from = p.adjust) %>%
+  tibble::column_to_rownames("Description") %>%
+  as.matrix()
+
 ### ✅ Step 3: Pad missing columns
 all_conditions <- names(go_files)
 missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
@@ -110,7 +116,7 @@ breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot heatmap
+### 🔥 Step 5: Plot heatmap with stars for p.adjust < 0.05
 ht <- Heatmap(
   heatmap_data,
   name = "-log10(p)",
@@ -124,8 +130,8 @@ ht <- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p <- pval_matrix[i, j]
-    if (!is.na(raw_p) && raw_p < 0.05) {
+    adj_p <- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) && adj_p < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -147,7 +153,6 @@ draw(ht, heatmap_legend_side = "top")
 
 ## **📌 Ribosome biogenesis GO terms**
 ```{r RB, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
-### 📦 Load Required Libraries
 library(tidyverse)
 library(data.table)
 library(ComplexHeatmap)
@@ -197,24 +202,25 @@ go_matrix_df <- purrr::map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(fread(file), error = function(e) return(data.table()))
 
-  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue", "p.adjust") %in% colnames(df))) {
     message("⚠️ Skipping or padding malformed file: ", cond)
-    return(tibble(Description = rbio_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+    return(tibble(Description = rbio_descriptions, pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond))
   }
 
-  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue)
+  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue, p.adjust)
 
   results <- lapply(names(parent_terms), function(parent_id) {
     all_ids <- c(parent_id, child_map[[parent_id]])
     df_sub <- df %>% dplyr::filter(ID %in% all_ids)
 
     if (nrow(df_sub) == 0) {
-      tibble(Description = parent_terms[[parent_id]], pvalue = NA, log10p = NA, Condition = cond)
+      tibble(Description = parent_terms[[parent_id]], pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond)
     } else {
       best_row <- df_sub %>% dplyr::slice_min(pvalue, n = 1)
       tibble(
         Description = parent_terms[[parent_id]],
         pvalue = best_row$pvalue,
+        p.adjust = best_row$p.adjust,
         log10p = -log10(best_row$pvalue),
         Condition = cond
       )
@@ -237,6 +243,12 @@ pval_matrix <- go_matrix_df %>%
   tibble::column_to_rownames("Description") %>%
   as.matrix()
 
+p_adj_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, p.adjust) %>%
+  tidyr::pivot_wider(names_from = Condition, values_from = p.adjust) %>%
+  tibble::column_to_rownames("Description") %>%
+  as.matrix()
+
 ### ✅ Step 3: Pad missing columns
 all_conditions <- names(go_files)
 missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
@@ -254,7 +266,7 @@ breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot heatmap
+### 🔥 Step 5: Plot heatmap with stars for p.adjust < 0.05
 ht <- Heatmap(
   heatmap_data,
   name = "-log10(p)",
@@ -268,8 +280,8 @@ ht <- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p <- pval_matrix[i, j]
-    if (!is.na(raw_p) && raw_p < 0.05) {
+    adj_p <- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) && adj_p < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -291,13 +303,14 @@ draw(ht, heatmap_legend_side = "top")
 ## **📌 G-Quadruplex GO terms**
 ```{r GQ, echo=TRUE, message=FALSE, warning=FALSE, fig.width=10,fig.height=6}
 ### 📦 Load Required Libraries
+# 📦 Load Required Libraries
 library(tidyverse)
 library(data.table)
 library(ComplexHeatmap)
 library(circlize)
 library(grid)
 
-### 📁 Define GO Enrichment Files
+# 📁 Define GO Enrichment Files
 go_files <- list(
   "Non response (0.1)"                         = "data/BP/CorMotif_Terms_Combined/GO_All_Non_response_(0.1).csv",
   "CX-DOX mid-late response (0.1)"             = "data/BP/CorMotif_Terms_Combined/GO_All_CX-DOX_mid-late_response_(0.1).csv",
@@ -309,7 +322,7 @@ go_files <- list(
   "DOX early + CX-DOX mid-late response (0.5)" = "data/BP/CorMotif_Terms_Combined/GO_All_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv"
 )
 
-### 🧬 G4-Related GO Terms
+# 🧬 G4-Related GO Terms
 g4_terms <- list(
   "GO:0051880" = "G-quadruplex DNA binding",
   "GO:0002151" = "G-quadruplex RNA binding",
@@ -321,27 +334,28 @@ g4_terms <- list(
 
 g4_descriptions <- unname(unlist(g4_terms))
 
-### 🔁 Step 1: Extract best p-values
+# 🔁 Step 1: Extract best p-values and p.adjust values
 go_matrix_df <- purrr::map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(fread(file), error = function(e) return(data.table()))
 
-  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue", "p.adjust") %in% colnames(df))) {
     message("⚠️ Skipping or padding malformed file: ", cond)
-    return(tibble(Description = g4_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+    return(tibble(Description = g4_descriptions, pvalue = NA, padj = NA, log10p = NA, Condition = cond))
   }
 
-  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue)
+  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue, p.adjust)
 
   results <- lapply(names(g4_terms), function(go_id) {
     df_sub <- df %>% dplyr::filter(ID == go_id)
     if (nrow(df_sub) == 0) {
-      tibble(Description = g4_terms[[go_id]], pvalue = NA, log10p = NA, Condition = cond)
+      tibble(Description = g4_terms[[go_id]], pvalue = NA, padj = NA, log10p = NA, Condition = cond)
     } else {
       best_row <- df_sub %>% dplyr::slice_min(pvalue, n = 1)
       tibble(
         Description = g4_terms[[go_id]],
         pvalue = best_row$pvalue,
+        padj = best_row$p.adjust,
         log10p = -log10(best_row$pvalue),
         Condition = cond
       )
@@ -351,7 +365,7 @@ go_matrix_df <- purrr::map_dfr(names(go_files), function(cond) {
   bind_rows(results)
 })
 
-### 🧱 Step 2: Create heatmap and p-value matrices
+# 🧱 Step 2: Create heatmap and p-value matrices
 heatmap_data <- go_matrix_df %>%
   dplyr::select(Description, Condition, log10p) %>%
   tidyr::pivot_wider(names_from = Condition, values_from = log10p) %>%
@@ -364,24 +378,32 @@ pval_matrix <- go_matrix_df %>%
   tibble::column_to_rownames("Description") %>%
   as.matrix()
 
-### ✅ Step 3: Pad missing columns
+padj_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, padj) %>%
+  tidyr::pivot_wider(names_from = Condition, values_from = padj) %>%
+  tibble::column_to_rownames("Description") %>%
+  as.matrix()
+
+# ✅ Step 3: Pad missing columns
 all_conditions <- names(go_files)
 missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
 if (length(missing_cols) > 0) {
   for (cond in missing_cols) {
     heatmap_data[, cond] <- NA
     pval_matrix[, cond] <- NA
+    padj_matrix[, cond] <- NA
   }
   heatmap_data <- heatmap_data[, all_conditions]
   pval_matrix <- pval_matrix[, all_conditions]
+  padj_matrix <- padj_matrix[, all_conditions]
 }
 
-### 🎨 Step 4: Color palette
+# 🎨 Step 4: Color palette
 breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot heatmap
+# 🔥 Step 5: Plot heatmap
 ht <- Heatmap(
   heatmap_data,
   name = "-log10(p)",
@@ -395,8 +417,8 @@ ht <- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p <- pval_matrix[i, j]
-    if (!is.na(raw_p) && raw_p < 0.05) {
+    raw_padj <- padj_matrix[i, j]
+    if (!is.na(raw_padj) && raw_padj < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -411,7 +433,7 @@ ht <- Heatmap(
   )
 )
 
-### 🖼 Final Draw
+# 🖼 Final Draw
 draw(ht, heatmap_legend_side = "top")
 ```
 
@@ -456,22 +478,23 @@ go_matrix_df <- purrr::map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(fread(file), error = function(e) return(data.table()))
 
-  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue") %in% colnames(df))) {
+  if (nrow(df) == 0 || !all(c("ID", "Description", "pvalue", "p.adjust") %in% colnames(df))) {
     message("⚠️ Skipping or padding malformed file: ", cond)
-    return(tibble(Description = rnapolI_descriptions, pvalue = NA, log10p = NA, Condition = cond))
+    return(tibble(Description = rnapolI_descriptions, pvalue = NA, padj = NA, log10p = NA, Condition = cond))
   }
 
-  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue)
+  df <- as_tibble(df) %>% dplyr::select(ID, Description, pvalue, p.adjust)
 
   results <- lapply(names(parent_terms), function(go_id) {
     df_sub <- df %>% dplyr::filter(ID == go_id)
     if (nrow(df_sub) == 0) {
-      tibble(Description = parent_terms[[go_id]], pvalue = NA, log10p = NA, Condition = cond)
+      tibble(Description = parent_terms[[go_id]], pvalue = NA, padj = NA, log10p = NA, Condition = cond)
     } else {
       best_row <- df_sub %>% dplyr::slice_min(pvalue, n = 1)
       tibble(
         Description = parent_terms[[go_id]],
         pvalue = best_row$pvalue,
+        padj = best_row$p.adjust,
         log10p = -log10(best_row$pvalue),
         Condition = cond
       )
@@ -488,9 +511,9 @@ heatmap_data <- go_matrix_df %>%
   tibble::column_to_rownames("Description") %>%
   as.matrix()
 
-pval_matrix <- go_matrix_df %>%
-  dplyr::select(Description, Condition, pvalue) %>%
-  tidyr::pivot_wider(names_from = Condition, values_from = pvalue) %>%
+padj_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, padj) %>%
+  tidyr::pivot_wider(names_from = Condition, values_from = padj) %>%
   tibble::column_to_rownames("Description") %>%
   as.matrix()
 
@@ -500,10 +523,10 @@ missing_cols <- setdiff(all_conditions, colnames(heatmap_data))
 if (length(missing_cols) > 0) {
   for (cond in missing_cols) {
     heatmap_data[, cond] <- NA
-    pval_matrix[, cond] <- NA
+    padj_matrix[, cond] <- NA
   }
   heatmap_data <- heatmap_data[, all_conditions]
-  pval_matrix <- pval_matrix[, all_conditions]
+  padj_matrix <- padj_matrix[, all_conditions]
 }
 
 ### 🎨 Step 4: Color palette
@@ -525,8 +548,8 @@ ht <- Heatmap(
   column_names_rot = 45,
   row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p <- pval_matrix[i, j]
-    if (!is.na(raw_p) && raw_p < 0.05) {
+    adj_p <- padj_matrix[i, j]
+    if (!is.na(adj_p) && adj_p < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
   },
