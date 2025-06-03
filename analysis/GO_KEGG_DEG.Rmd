@@ -4366,17 +4366,17 @@ top_go_terms <- map(go_files, function(file) {
   }
 }) %>% unlist() %>% unique()
 
-### 🔁 Step 2: Retrieve p-values for all top terms across samples
+### 🔁 Step 2: Retrieve p-values and p.adjust for all top terms across samples
 go_matrix_df <- map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(read.csv(file), error = function(e) return(data.frame()))
 
   if (nrow(df) == 0) {
-    tibble(Description = top_go_terms, pvalue = NA, log10p = NA, Condition = cond)
+    tibble(Description = top_go_terms, pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond)
   } else {
     df <- as_tibble(df)
     df %>%
-      dplyr::select(Description, pvalue) %>%
+      dplyr::select(Description, pvalue, p.adjust) %>%
       filter(Description %in% top_go_terms) %>%
       mutate(log10p = -log10(pvalue)) %>%
       right_join(tibble(Description = top_go_terms), by = "Description") %>%
@@ -4394,6 +4394,12 @@ heatmap_data <- go_matrix_df %>%
 pval_matrix <- go_matrix_df %>%
   dplyr::select(Description, Condition, pvalue) %>%
   pivot_wider(names_from = Condition, values_from = pvalue) %>%
+  column_to_rownames("Description") %>%
+  as.matrix()
+
+p_adj_matrix <- go_matrix_df %>%
+  dplyr::select(Description, Condition, p.adjust) %>%
+  pivot_wider(names_from = Condition, values_from = p.adjust) %>%
   column_to_rownames("Description") %>%
   as.matrix()
 
@@ -4415,8 +4421,8 @@ ht <- Heatmap(
   column_names_gp = gpar(fontsize = 9),
   column_names_rot = 45,
   cell_fun = function(j, i, x, y, width, height, fill) {
-    raw_p <- pval_matrix[i, j]
-    if (!is.na(raw_p) && raw_p < 0.05) {
+    adj_p <- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    if (!is.na(adj_p) && adj_p < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
   },
