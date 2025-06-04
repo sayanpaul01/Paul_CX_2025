@@ -4329,13 +4329,13 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ## **📌 Top BP (Cluster Profiler)**
 ```{r GO comp1, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 
-### 📦 Load Required Libraries
+### Load Required Libraries
 library(tidyverse)
 library(ComplexHeatmap)
 library(circlize)
 library(grid)
 
-### 📁 Input GO Enrichment Files
+### Input GO Enrichment Files
 go_files <- list(
   "CX_0.1_3"  = "data/BP/All_Terms/GO_BP_CX_0.1_3.csv",
   "CX_0.1_24" = "data/BP/All_Terms/GO_BP_CX_0.1_24.csv",
@@ -4351,13 +4351,15 @@ go_files <- list(
   "DOX_0.5_48"= "data/BP/All_Terms/GO_BP_DOX_0.5_48.csv"
 )
 
-### 🔍 Step 1: Extract Top 5 GO Terms per Sample
+### Step 1: Extract Top 5 GO Terms with Padj < 0.05
 top_go_terms <- map(go_files, function(file) {
   df <- tryCatch(read.csv(file), error = function(e) return(NULL))
   if (!is.null(df) && nrow(df) > 0) {
     df %>%
       as_tibble() %>%
-      arrange(pvalue) %>%
+      filter(p.adjust < 0.05) %>%
+      arrange(p.adjust) %>%
+      dplyr::select(Description) %>%
       slice_head(n = 5) %>%
       pull(Description) %>%
       unique()
@@ -4366,16 +4368,16 @@ top_go_terms <- map(go_files, function(file) {
   }
 }) %>% unlist() %>% unique()
 
-### 🔁 Step 2: Retrieve p-values and p.adjust for all top terms across samples
+### Step 2: Build Combined Table with P, P.adj, and -log10(p)
 go_matrix_df <- map_dfr(names(go_files), function(cond) {
   file <- go_files[[cond]]
   df <- tryCatch(read.csv(file), error = function(e) return(data.frame()))
-
+  
   if (nrow(df) == 0) {
     tibble(Description = top_go_terms, pvalue = NA, p.adjust = NA, log10p = NA, Condition = cond)
   } else {
-    df <- as_tibble(df)
     df %>%
+      as_tibble() %>%
       dplyr::select(Description, pvalue, p.adjust) %>%
       filter(Description %in% top_go_terms) %>%
       mutate(log10p = -log10(pvalue)) %>%
@@ -4384,7 +4386,7 @@ go_matrix_df <- map_dfr(names(go_files), function(cond) {
   }
 })
 
-### 🧱 Step 3: Convert to heatmap matrices
+### Step 3: Convert to Heatmap Matrices
 heatmap_data <- go_matrix_df %>%
   dplyr::select(Description, Condition, log10p) %>%
   pivot_wider(names_from = Condition, values_from = log10p) %>%
@@ -4403,12 +4405,12 @@ p_adj_matrix <- go_matrix_df %>%
   column_to_rownames("Description") %>%
   as.matrix()
 
-### 🎨 Step 4: Color Gradient (0–20, breaks every 2.5)
+### Step 4: Define Color Scale on Raw P-values
 breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot Heatmap
+### Step 5: Plot Heatmap with Stars Based on Padj < 0.05
 ht <- Heatmap(
   heatmap_data,
   name = "-log10(p)",
@@ -4420,9 +4422,9 @@ ht <- Heatmap(
   row_names_gp = gpar(fontsize = 9),
   column_names_gp = gpar(fontsize = 9),
   column_names_rot = 45,
+  row_names_max_width = max_text_width(rownames(heatmap_data), gp = gpar(fontsize = 9)),
   cell_fun = function(j, i, x, y, width, height, fill) {
-    adj_p <- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
-    if (!is.na(adj_p) && adj_p < 0.05) {
+    if (!is.na(p_adj_matrix[i, j]) && p_adj_matrix[i, j] < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
   },
@@ -4437,7 +4439,7 @@ ht <- Heatmap(
   )
 )
 
-### 🖼️ Final Draw
+### 🖼 Final Draw
 draw(ht, heatmap_legend_side = "top")
 ```
 
