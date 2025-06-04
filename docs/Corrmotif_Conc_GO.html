@@ -379,7 +379,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-03
+<strong>Last updated:</strong> 2025-06-04
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree641fe5cf8685fb4c29cb6a8a1cd3747b2d0b7312targetblank641fe5ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3targetblank199f276a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/641fe5cf8685fb4c29cb6a8a1cd3747b2d0b7312" target="_blank">641fe5c</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3" target="_blank">199f276</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree641fe5cf8685fb4c29cb6a8a1cd3747b2d0b7312targetblank641fe5ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3targetblank199f276a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/641fe5cf8685fb4c29cb6a8a1cd3747b2d0b7312" target="_blank">641fe5c</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3" target="_blank">199f276</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -713,6 +713,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/cf7130e93656c60e3c7d34ee57d65ce6cdccf00b/analysis/Corrmotif_Conc_GO.Rmd" target="_blank">cf7130e</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-03
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/cf7130e93656c60e3c7d34ee57d65ce6cdccf00b/docs/Corrmotif_Conc_GO.html" target="_blank">cf7130e</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-03
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -5261,13 +5295,15 @@ go_files &lt;- list(
   &quot;DOX early + CX-DOX mid-late response (0.5)&quot; = &quot;data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv&quot;
 )
 
-### 🔍 Step 1: Extract Top 5 GO Terms per Group
+### 🔍 Step 1: Extract Top 5 GO Terms Per Group Based on Adjusted P-value
 top_go_terms &lt;- map(go_files, function(file) {
   df &lt;- tryCatch(read.csv(file), error = function(e) return(NULL))
-  if (!is.null(df) &amp;&amp; nrow(df) &gt; 0 &amp;&amp; all(c(&quot;Description&quot;, &quot;pvalue&quot;) %in% colnames(df))) {
+  if (!is.null(df) &amp;&amp; nrow(df) &gt; 0 &amp;&amp; all(c(&quot;Description&quot;, &quot;p.adjust&quot;) %in% colnames(df))) {
     df %&gt;%
       as_tibble() %&gt;%
-      arrange(pvalue) %&gt;%
+      filter(p.adjust &lt; 0.05) %&gt;%
+      arrange(p.adjust) %&gt;%
+      dplyr::select(Description) %&gt;%
       slice_head(n = 5) %&gt;%
       pull(Description) %&gt;%
       unique()
@@ -5276,29 +5312,29 @@ top_go_terms &lt;- map(go_files, function(file) {
   }
 }) %&gt;% unlist() %&gt;% unique()
 
-### 🔁 Step 2: Retrieve p-values and p.adjust for all top terms across CorMotif groups
+### 🔁 Step 2: Collect All Matrix Values for Top GO Terms
 go_matrix_df &lt;- map_dfr(names(go_files), function(group) {
   file &lt;- go_files[[group]]
-  df &lt;- tryCatch(read.csv(file), error = function(e) return(data.frame()))
+  df &lt;- tryCatch(read.csv(file), error = function(e) return(tibble()))
 
   if (nrow(df) == 0 || !all(c(&quot;Description&quot;, &quot;pvalue&quot;, &quot;p.adjust&quot;) %in% colnames(df))) {
     tibble(Description = top_go_terms, pvalue = NA, p.adjust = NA, log10p = NA, Group = group)
   } else {
-    df &lt;- as_tibble(df)
     df_filtered &lt;- df %&gt;%
+      as_tibble() %&gt;%
       dplyr::select(Description, pvalue, p.adjust) %&gt;%
       filter(Description %in% top_go_terms)
 
     tibble(Description = top_go_terms) %&gt;%
       left_join(df_filtered, by = &quot;Description&quot;) %&gt;%
       mutate(
-        log10p = ifelse(is.na(pvalue), NA, -log10(pvalue)),
+        log10p = ifelse(!is.na(pvalue), -log10(pvalue), NA),
         Group = group
       )
   }
 })
 
-### 🧱 Step 3: Convert to heatmap matrices
+### 🧱 Step 3: Pivot to Heatmap Matrices
 heatmap_data &lt;- go_matrix_df %&gt;%
   dplyr::select(Description, Group, log10p) %&gt;%
   pivot_wider(names_from = Group, values_from = log10p) %&gt;%
@@ -5317,12 +5353,12 @@ p_adj_matrix &lt;- go_matrix_df %&gt;%
   column_to_rownames(&quot;Description&quot;) %&gt;%
   as.matrix()
 
-### 🎨 Step 4: Define Color Gradient (0–20, breaks every 2.5)
+### 🎨 Step 4: Define Heatmap Color Gradient
 breaks &lt;- seq(0, 20, by = 2.5)
 palette &lt;- colorRampPalette(c(&quot;white&quot;, &quot;#fde0dd&quot;, &quot;#fa9fb5&quot;, &quot;#f768a1&quot;, &quot;#c51b8a&quot;, &quot;#7a0177&quot;, &quot;#49006a&quot;))(length(breaks))
 col_fun &lt;- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot Heatmap
+### 🔥 Step 5: Draw Heatmap with Stars for p.adjust &lt; 0.05
 ht &lt;- Heatmap(
   heatmap_data,
   name = &quot;-log10(p)&quot;,
@@ -5335,7 +5371,7 @@ ht &lt;- Heatmap(
   column_names_gp = gpar(fontsize = 9),
   column_names_rot = 45,
   cell_fun = function(j, i, x, y, width, height, fill) {
-    adj_p &lt;- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    adj_p &lt;- p_adj_matrix[i, j]
     if (!is.na(adj_p) &amp;&amp; adj_p &lt; 0.05) {
       grid.text(&quot;*&quot;, x, y, gp = gpar(fontsize = 12))
     }
@@ -5351,7 +5387,7 @@ ht &lt;- Heatmap(
   )
 )
 
-### 🖼️ Final Draw
+### 🖼️ Final Output
 draw(ht, heatmap_legend_side = &quot;top&quot;)</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO%20comp-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
@@ -5376,6 +5412,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/cf7130e93656c60e3c7d34ee57d65ce6cdccf00b/docs/figure/Corrmotif_Conc_GO.Rmd/GO comp-1.png" target="_blank">cf7130e</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-03
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/c5f10c43ccea82d6a53f4730efcb8ed5e21d8742/docs/figure/Corrmotif_Conc_GO.Rmd/GO comp-1.png" target="_blank">c5f10c4</a>

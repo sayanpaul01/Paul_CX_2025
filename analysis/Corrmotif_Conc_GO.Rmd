@@ -2904,7 +2904,7 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 
 
 ## **📌 Top BP (Cluster Profiler)**
-```{r GO comp, echo=TRUE, message=FALSE, fig.width=10, fig.height=10}
+```{r GO comp, echo=TRUE, message=FALSE, fig.width=10, fig.height=8}
 
 ### 📦 Load Required Libraries
 library(tidyverse)
@@ -2924,13 +2924,15 @@ go_files <- list(
   "DOX early + CX-DOX mid-late response (0.5)" = "data/BP/CorMotif_Terms/GO_BP_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv"
 )
 
-### 🔍 Step 1: Extract Top 5 GO Terms per Group
+### 🔍 Step 1: Extract Top 5 GO Terms Per Group Based on Adjusted P-value
 top_go_terms <- map(go_files, function(file) {
   df <- tryCatch(read.csv(file), error = function(e) return(NULL))
-  if (!is.null(df) && nrow(df) > 0 && all(c("Description", "pvalue") %in% colnames(df))) {
+  if (!is.null(df) && nrow(df) > 0 && all(c("Description", "p.adjust") %in% colnames(df))) {
     df %>%
       as_tibble() %>%
-      arrange(pvalue) %>%
+      filter(p.adjust < 0.05) %>%
+      arrange(p.adjust) %>%
+      dplyr::select(Description) %>%
       slice_head(n = 5) %>%
       pull(Description) %>%
       unique()
@@ -2939,29 +2941,29 @@ top_go_terms <- map(go_files, function(file) {
   }
 }) %>% unlist() %>% unique()
 
-### 🔁 Step 2: Retrieve p-values and p.adjust for all top terms across CorMotif groups
+### 🔁 Step 2: Collect All Matrix Values for Top GO Terms
 go_matrix_df <- map_dfr(names(go_files), function(group) {
   file <- go_files[[group]]
-  df <- tryCatch(read.csv(file), error = function(e) return(data.frame()))
+  df <- tryCatch(read.csv(file), error = function(e) return(tibble()))
 
   if (nrow(df) == 0 || !all(c("Description", "pvalue", "p.adjust") %in% colnames(df))) {
     tibble(Description = top_go_terms, pvalue = NA, p.adjust = NA, log10p = NA, Group = group)
   } else {
-    df <- as_tibble(df)
     df_filtered <- df %>%
+      as_tibble() %>%
       dplyr::select(Description, pvalue, p.adjust) %>%
       filter(Description %in% top_go_terms)
 
     tibble(Description = top_go_terms) %>%
       left_join(df_filtered, by = "Description") %>%
       mutate(
-        log10p = ifelse(is.na(pvalue), NA, -log10(pvalue)),
+        log10p = ifelse(!is.na(pvalue), -log10(pvalue), NA),
         Group = group
       )
   }
 })
 
-### 🧱 Step 3: Convert to heatmap matrices
+### 🧱 Step 3: Pivot to Heatmap Matrices
 heatmap_data <- go_matrix_df %>%
   dplyr::select(Description, Group, log10p) %>%
   pivot_wider(names_from = Group, values_from = log10p) %>%
@@ -2980,12 +2982,12 @@ p_adj_matrix <- go_matrix_df %>%
   column_to_rownames("Description") %>%
   as.matrix()
 
-### 🎨 Step 4: Define Color Gradient (0–20, breaks every 2.5)
+### 🎨 Step 4: Define Heatmap Color Gradient
 breaks <- seq(0, 20, by = 2.5)
 palette <- colorRampPalette(c("white", "#fde0dd", "#fa9fb5", "#f768a1", "#c51b8a", "#7a0177", "#49006a"))(length(breaks))
 col_fun <- colorRamp2(breaks, palette)
 
-### 🔥 Step 5: Plot Heatmap
+### 🔥 Step 5: Draw Heatmap with Stars for p.adjust < 0.05
 ht <- Heatmap(
   heatmap_data,
   name = "-log10(p)",
@@ -2998,7 +3000,7 @@ ht <- Heatmap(
   column_names_gp = gpar(fontsize = 9),
   column_names_rot = 45,
   cell_fun = function(j, i, x, y, width, height, fill) {
-    adj_p <- p_adj_matrix[i, j]  # Use p.adjust matrix for significance check
+    adj_p <- p_adj_matrix[i, j]
     if (!is.na(adj_p) && adj_p < 0.05) {
       grid.text("*", x, y, gp = gpar(fontsize = 12))
     }
@@ -3014,8 +3016,7 @@ ht <- Heatmap(
   )
 )
 
-### 🖼️ Final Draw
+### 🖼️ Final Output
 draw(ht, heatmap_legend_side = "top")
-
 ```
 
