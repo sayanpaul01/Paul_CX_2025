@@ -49,55 +49,37 @@ background<-as.character(CX_0.1_3$Entrez_ID)
 ## **📌 Non response (0.1 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO1, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_1_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Libraries
+library(tidyverse)
+library(patchwork)
+library(data.table)
 
-go_enrichment_MF <- enrichGO(gene = prob_1_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load File
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_Non_response_(0.1).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_1_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Convert and filter (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# Create tibbles for each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plot function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -105,20 +87,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🔧 Plot for each GO category
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine plots
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 
@@ -404,55 +384,37 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ## **📌 CX-DOX mid-late response (0.1 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO2, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_2_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_2_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load GO CSV for CX-DOX mid-late response (0.1)
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_CX-DOX_mid-late_response_(0.1).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_2_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Convert and filter (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# Create tibbles for each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plot function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -460,21 +422,20 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🔧 Plot for each GO category
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine plots
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
+
 ```
 
 
@@ -759,55 +720,37 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ## **📌 DOX only mid-late (0.1 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO3, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_3_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_3_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load GO Enrichment CSV
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_DOX_only_mid-late_(0.1).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_3_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Convert and filter (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# Create tibbles for each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plot function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -815,20 +758,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🔧 Plot for each GO category
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine plots
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 
@@ -1130,55 +1071,37 @@ background<-as.character(CX_0.1_3$Entrez_ID)
 ## **📌 Non response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO4, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_1_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_1_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_Non_response_(0.5).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_1_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# ⛏️ Extract each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -1186,20 +1109,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine & Show
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 
@@ -1485,55 +1406,37 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ## **📌 DOX-specific response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO5, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_2_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_2_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_DOX_specific_response_(0.5).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_2_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# ⛏️ Extract each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -1541,20 +1444,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine & Show
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 
@@ -1840,55 +1741,37 @@ if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ## **📌 DOX only mid-late response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO6, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_3_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_3_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_DOX_only_mid-late_response_(0.5).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_3_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# ⛏️ Extract each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -1896,20 +1779,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine & Show
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 
@@ -2192,58 +2073,40 @@ if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
-## **📌 CX + DOX (early) response (0.5 µM)**
+## **📌 CX total + DOX early response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO7, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_4_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_4_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_CX_total_+_DOX_early_response_(0.5).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_4_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# ⛏️ Extract each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -2251,20 +2114,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine & Show
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 
@@ -2547,58 +2408,40 @@ if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)
 ```
 
-## **📌 DOX + CX (mid-late) response (0.5 µM)**
+## **📌 DOX early + CX-DOX mid-late response (0.5 µM)**
 ## **📌 GO Enrichment Clusterprofiler**
 ```{r GO8, echo=TRUE, message=FALSE, fig.width=12, fig.height=12}
-# Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP <- enrichGO(gene = prob_5_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "BP",
-                             pvalueCutoff = 0.05)
+# 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF <- enrichGO(gene = prob_5_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "MF",
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df <- fread("data/BP/CorMotif_Terms_Combined/GO_All_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv")
 
-go_enrichment_CC <- enrichGO(gene = prob_5_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = "ENTREZID",
-                             universe = background,
-                             ont = "CC",
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble <- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = "No enriched terms", neglog = 0, Category = category))
-  } else {
-    enrichment %>%
-      as_tibble() %>%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %>% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %>%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p < 0.05)
+process_enrichment_tibble <- function(df, ontology, category_label) {
+  df %>%
+    filter(Ontology == ontology & p.adjust < 0.05) %>%
+    mutate(neglog = -log(p.adjust)) %>%
+    arrange(desc(neglog)) %>%
+    slice(1:20) %>%
+    mutate(Category = category_label)
 }
 
-BP_Tibble <- process_enrichment_tibble(go_enrichment_BP, "Biological Process")
-MF_Tibble <- process_enrichment_tibble(go_enrichment_MF, "Molecular Function")
-CC_Tibble <- process_enrichment_tibble(go_enrichment_CC, "Cellular Component")
+# ⛏️ Extract each GO class
+BP_Tibble <- process_enrichment_tibble(go_df, "BP", "Biological Process")
+MF_Tibble <- process_enrichment_tibble(go_df, "MF", "Molecular Function")
+CC_Tibble <- process_enrichment_tibble(go_df, "CC", "Cellular Component")
 
-# Combine all tibbles
-combined_GO_Tibble <- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot <- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = "identity", fill = color) +
-    labs(x = "-log(p-adjust)",
-         y = title,
-         title = paste("Top 20", title, "GO Terms")) +
+    labs(
+      x = "-log(p-adjust)", y = title,
+      title = paste("Top 20", title, "GO Terms (adj p < 0.05)")
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 45, hjust = 1),
@@ -2606,20 +2449,18 @@ process_enrichment_plot <- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = "bold", colour = "black"),
       axis.title.y = element_text(size = 14, face = "bold", colour = "black"),
       plot.title = element_text(size = 14, face = "bold", colour = "black"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 0.3)
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP <- process_enrichment_plot(BP_Tibble, "Biological Process", "#2E86C1")
 plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
-# Combine the plots using patchwork
+# 🧩 Combine & Show
 combined_plot <- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot
 ```
 

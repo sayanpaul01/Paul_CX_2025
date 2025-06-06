@@ -379,7 +379,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-04
+<strong>Last updated:</strong> 2025-06-06
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3targetblank199f276a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree305a6c0fadfece5ff62a8fa46cfc46d19d4e6070targetblank305a6c0a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3" target="_blank">199f276</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070" target="_blank">305a6c0</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3targetblank199f276a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree305a6c0fadfece5ff62a8fa46cfc46d19d4e6070targetblank305a6c0a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/199f27669b0b82ad9b9f50d5ec28eff13c9dc5a3" target="_blank">199f276</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070" target="_blank">305a6c0</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -551,7 +551,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
-    Ignored:    analysis/Corrmotif_Conc.html
 
 Untracked files:
     Untracked:  0.1 density.svg
@@ -665,8 +664,10 @@ Untracked files:
 
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
+    Modified:   analysis/Corrmotif_Conc.Rmd
     Modified:   analysis/Corrmotif_Conc_GO.Rmd
     Modified:   data/DOX_0.5_48 (Combined).csv
+    Modified:   data/Human_Heart_Genes.csv
     Modified:   data/Total_number_of_Mapped_reads_by_Individuals.csv
 
 </code></pre>
@@ -713,6 +714,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/analysis/Corrmotif_Conc_GO.Rmd" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/df65b82ed20ee529ee980c6798b831c117e5159b/docs/Corrmotif_Conc_GO.html" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1005,55 +1040,38 @@ background&lt;-as.character(CX_0.1_3$Entrez_ID)</code></pre>
 </div>
 <div id="go-enrichment-clusterprofiler" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_1_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Libraries
+library(tidyverse)
+library(patchwork)</code></pre>
+<pre><code>Warning: package &#39;patchwork&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(data.table)</code></pre>
+<pre><code>Warning: package &#39;data.table&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code># 📁 Load File
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_Non_response_(0.1).csv&quot;)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_1_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
-
-go_enrichment_CC &lt;- enrichGO(gene = prob_1_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Convert and filter (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# Create tibbles for each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plot function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -1061,25 +1079,18 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
-plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)</code></pre>
-<pre><code>Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.
-ℹ Please use the `linewidth` argument instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-generated.</code></pre>
-<pre class="r"><code>plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+# 🔧 Plot for each GO category
+plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
+plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine plots
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO1-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -1138,9 +1149,9 @@ library(gprofiler2)</code></pre>
 <pre><code>Warning: package &#39;gprofiler2&#39; was built under R version 4.3.3</code></pre>
 <pre class="r"><code>library(ggplot2)
 library(dplyr)
-library(patchwork)</code></pre>
-<pre><code>Warning: package &#39;patchwork&#39; was built under R version 4.3.3</code></pre>
-<pre class="r"><code># Perform GO enrichment analysis with gprofiler2
+library(patchwork)
+
+# Perform GO enrichment analysis with gprofiler2
 gost_results &lt;- gost(
   query = prob_1_0.1,           # List of input genes (prob_all_1)
   organism = &quot;hsapiens&quot;,   # Human organism
@@ -1237,6 +1248,11 @@ if (nrow(combined_results) == 1 &amp;&amp; combined_results$term_name == &quot;N
   # Display the combined plot
   combined_plot
 }</code></pre>
+<pre><code>Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.
+ℹ Please use the `linewidth` argument instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/gprofiler_GO-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-gprofiler_GO-1">
@@ -1478,6 +1494,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/84d7de5032ca5de1dc0e236e7fe0266edca68c60/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment-1.png" target="_blank">84d7de5</a>
 </td>
 <td>
@@ -1558,55 +1585,37 @@ sayanpaul01
 </div>
 <div id="go-enrichment-clusterprofiler-1" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_2_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_2_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load GO CSV for CX-DOX mid-late response (0.1)
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_CX-DOX_mid-late_response_(0.1).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_2_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Convert and filter (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# Create tibbles for each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plot function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -1614,20 +1623,18 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🔧 Plot for each GO category
 plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
 plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine plots
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO2-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -2025,6 +2032,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment2-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/84d7de5032ca5de1dc0e236e7fe0266edca68c60/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment2-1.png" target="_blank">84d7de5</a>
 </td>
 <td>
@@ -2116,55 +2134,37 @@ sayanpaul01
 </div>
 <div id="go-enrichment-clusterprofiler-2" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_3_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_3_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load GO Enrichment CSV
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_DOX_only_mid-late_(0.1).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_3_0.1,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Convert and filter (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# Create tibbles for each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plot function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -2172,20 +2172,20 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
-plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
-plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+# 🔧 Plot for each GO category
+plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)</code></pre>
+<pre><code>Warning in max(tibble$neglog, na.rm = TRUE): no non-missing arguments to max;
+returning -Inf</code></pre>
+<pre class="r"><code>plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine plots
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO3-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -2572,6 +2572,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment3-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/84d7de5032ca5de1dc0e236e7fe0266edca68c60/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment3-1.png" target="_blank">84d7de5</a>
 </td>
 <td>
@@ -2679,55 +2690,37 @@ background&lt;-as.character(CX_0.1_3$Entrez_ID)</code></pre>
 </div>
 <div id="go-enrichment-clusterprofiler-3" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_1_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_1_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_Non_response_(0.5).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_1_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# ⛏️ Extract each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -2735,20 +2728,18 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
 plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine &amp; Show
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO4-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -3135,6 +3126,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment4-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/84d7de5032ca5de1dc0e236e7fe0266edca68c60/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment4-1.png" target="_blank">84d7de5</a>
 </td>
 <td>
@@ -3226,55 +3228,37 @@ sayanpaul01
 </div>
 <div id="go-enrichment-clusterprofiler-4" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_2_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_2_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_DOX_specific_response_(0.5).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_2_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# ⛏️ Extract each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -3282,20 +3266,20 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
-plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
-plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
+# 🎨 Generate GO Plots
+plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)</code></pre>
+<pre><code>Warning in max(tibble$neglog, na.rm = TRUE): no non-missing arguments to max;
+returning -Inf</code></pre>
+<pre class="r"><code>plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine &amp; Show
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO5-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -3724,55 +3708,37 @@ sayanpaul01
 </div>
 <div id="go-enrichment-clusterprofiler-5" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_3_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_3_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_DOX_only_mid-late_response_(0.5).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_3_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# ⛏️ Extract each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -3780,20 +3746,21 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
-plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
-plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
-
-# Combine the plots using patchwork
+plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)</code></pre>
+<pre><code>Warning in max(tibble$neglog, na.rm = TRUE): no non-missing arguments to max;
+returning -Inf</code></pre>
+<pre class="r"><code>plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)</code></pre>
+<pre><code>Warning in max(tibble$neglog, na.rm = TRUE): no non-missing arguments to max;
+returning -Inf</code></pre>
+<pre class="r"><code># 🧩 Combine &amp; Show
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO6-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -4157,60 +4124,42 @@ if (!is.null(gprofiler_reactome) &amp;&amp; !is.null(gprofiler_kegg)) {
 if (!is.null(cluster_combined)) print(cluster_combined)
 if (!is.null(gprofiler_combined)) print(gprofiler_combined)</code></pre>
 </div>
-<div id="cx-dox-early-response-0.5-µm" class="section level2">
-<h2><strong>📌 CX + DOX (early) response (0.5 µM)</strong></h2>
+<div id="cx-total-dox-early-response-0.5-µm" class="section level2">
+<h2><strong>📌 CX total + DOX early response (0.5 µM)</strong></h2>
 </div>
 <div id="go-enrichment-clusterprofiler-6" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_4_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_4_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_CX_total_+_DOX_early_response_(0.5).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_4_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# ⛏️ Extract each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -4218,20 +4167,18 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
 plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine &amp; Show
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO7-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -4629,6 +4576,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment7-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/84d7de5032ca5de1dc0e236e7fe0266edca68c60/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment7-1.png" target="_blank">84d7de5</a>
 </td>
 <td>
@@ -4715,60 +4673,44 @@ sayanpaul01
 </div>
 </div>
 </div>
-<div id="dox-cx-mid-late-response-0.5-µm" class="section level2">
-<h2><strong>📌 DOX + CX (mid-late) response (0.5 µM)</strong></h2>
+<div id="dox-early-cx-dox-mid-late-response-0.5-µm"
+class="section level2">
+<h2><strong>📌 DOX early + CX-DOX mid-late response (0.5
+µM)</strong></h2>
 </div>
 <div id="go-enrichment-clusterprofiler-7" class="section level2">
 <h2><strong>📌 GO Enrichment Clusterprofiler</strong></h2>
-<pre class="r"><code># Perform GO enrichment analysis for BP, MF, and CC
-go_enrichment_BP &lt;- enrichGO(gene = prob_5_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;BP&quot;,
-                             pvalueCutoff = 0.05)
+<pre class="r"><code># 📦 Load Required Libraries
+library(tidyverse)
+library(data.table)
+library(patchwork)
 
-go_enrichment_MF &lt;- enrichGO(gene = prob_5_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;MF&quot;,
-                             pvalueCutoff = 0.05)
+# 📁 Load Enrichment File
+go_df &lt;- fread(&quot;data/BP/CorMotif_Terms_Combined/GO_All_DOX_early_+_CX-DOX_mid-late_response_(0.5).csv&quot;)
 
-go_enrichment_CC &lt;- enrichGO(gene = prob_5_0.5,
-                             OrgDb = org.Hs.eg.db,
-                             keyType = &quot;ENTREZID&quot;,
-                             universe = background,
-                             ont = &quot;CC&quot;,
-                             pvalueCutoff = 0.05)
-
-# Convert each enrichment result to a tibble, add a category column, and select top 20 terms
-process_enrichment_tibble &lt;- function(enrichment, category) {
-  if (is.null(enrichment) || nrow(as.data.frame(enrichment)) == 0) {
-    return(tibble(Description = &quot;No enriched terms&quot;, neglog = 0, Category = category))
-  } else {
-    enrichment %&gt;%
-      as_tibble() %&gt;%
-      mutate(Category = category,
-             neglog = -log(p.adjust)) %&gt;% # Add -log(p.adjust) column
-      arrange(desc(neglog)) %&gt;%          # Sort by -log(p.adjust)
-      slice(1:20)                        # Select top 20 terms
-  }
+# 🧠 Process Enrichment (only adj p &lt; 0.05)
+process_enrichment_tibble &lt;- function(df, ontology, category_label) {
+  df %&gt;%
+    filter(Ontology == ontology &amp; p.adjust &lt; 0.05) %&gt;%
+    mutate(neglog = -log(p.adjust)) %&gt;%
+    arrange(desc(neglog)) %&gt;%
+    slice(1:20) %&gt;%
+    mutate(Category = category_label)
 }
 
-BP_Tibble &lt;- process_enrichment_tibble(go_enrichment_BP, &quot;Biological Process&quot;)
-MF_Tibble &lt;- process_enrichment_tibble(go_enrichment_MF, &quot;Molecular Function&quot;)
-CC_Tibble &lt;- process_enrichment_tibble(go_enrichment_CC, &quot;Cellular Component&quot;)
+# ⛏️ Extract each GO class
+BP_Tibble &lt;- process_enrichment_tibble(go_df, &quot;BP&quot;, &quot;Biological Process&quot;)
+MF_Tibble &lt;- process_enrichment_tibble(go_df, &quot;MF&quot;, &quot;Molecular Function&quot;)
+CC_Tibble &lt;- process_enrichment_tibble(go_df, &quot;CC&quot;, &quot;Cellular Component&quot;)
 
-# Combine all tibbles
-combined_GO_Tibble &lt;- bind_rows(BP_Tibble, MF_Tibble, CC_Tibble)
-# Function to generate enrichment plots
+# 📊 Plotting Function
 process_enrichment_plot &lt;- function(tibble, title, color) {
-  ggplot(data = tibble, aes(x = neglog, y = reorder(Description, neglog))) +
+  ggplot(tibble, aes(x = neglog, y = reorder(Description, neglog))) +
     geom_bar(stat = &quot;identity&quot;, fill = color) +
-    labs(x = &quot;-log(p-adjust)&quot;,
-         y = title,
-         title = paste(&quot;Top 20&quot;, title, &quot;GO Terms&quot;)) +
+    labs(
+      x = &quot;-log(p-adjust)&quot;, y = title,
+      title = paste(&quot;Top 20&quot;, title, &quot;GO Terms (adj p &lt; 0.05)&quot;)
+    ) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 45, hjust = 1),
@@ -4776,20 +4718,18 @@ process_enrichment_plot &lt;- function(tibble, title, color) {
       axis.title.x = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       axis.title.y = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
       plot.title = element_text(size = 14, face = &quot;bold&quot;, colour = &quot;black&quot;),
-      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.3)
+      panel.border = element_rect(colour = &quot;black&quot;, fill = NA, linewidth = 0.3)
     ) +
-    xlim(c(0, max(tibble$neglog) + 1))
+    xlim(0, max(tibble$neglog, na.rm = TRUE) + 1)
 }
 
-# Generate separate plots
+# 🎨 Generate GO Plots
 plot_BP &lt;- process_enrichment_plot(BP_Tibble, &quot;Biological Process&quot;, &quot;#2E86C1&quot;)
 plot_MF &lt;- process_enrichment_plot(MF_Tibble, &quot;Molecular Function&quot;, &quot;#28B463&quot;)
 plot_CC &lt;- process_enrichment_plot(CC_Tibble, &quot;Cellular Component&quot;, &quot;#D35400&quot;)
 
-# Combine the plots using patchwork
+# 🧩 Combine &amp; Show
 combined_plot &lt;- plot_BP / plot_MF / plot_CC
-
-# Display the combined plot
 combined_plot</code></pre>
 <p><img src="figure/Corrmotif_Conc_GO.Rmd/GO8-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
@@ -5187,6 +5127,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment8-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/84d7de5032ca5de1dc0e236e7fe0266edca68c60/docs/figure/Corrmotif_Conc_GO.Rmd/pathway_enrichment8-1.png" target="_blank">84d7de5</a>
 </td>
 <td>
@@ -5414,6 +5365,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/df65b82ed20ee529ee980c6798b831c117e5159b/docs/figure/Corrmotif_Conc_GO.Rmd/GO comp-1.png" target="_blank">df65b82</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/cf7130e93656c60e3c7d34ee57d65ce6cdccf00b/docs/figure/Corrmotif_Conc_GO.Rmd/GO comp-1.png" target="_blank">cf7130e</a>
 </td>
 <td>
@@ -5494,42 +5456,43 @@ other attached packages:
  [1] circlize_0.4.16                         
  [2] ComplexHeatmap_2.18.0                   
  [3] ReactomePA_1.46.0                       
- [4] patchwork_1.3.0                         
- [5] gprofiler2_0.2.3                        
- [6] DOSE_3.28.2                             
- [7] TxDb.Hsapiens.UCSC.hg38.knownGene_3.18.0
- [8] RColorBrewer_1.1-3                      
- [9] clusterProfiler_4.10.1                  
-[10] pheatmap_1.0.12                         
-[11] qvalue_2.34.0                           
-[12] BiocParallel_1.36.0                     
-[13] Homo.sapiens_1.3.1                      
-[14] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2 
-[15] org.Hs.eg.db_3.18.0                     
-[16] GO.db_3.18.0                            
-[17] OrganismDbi_1.44.0                      
-[18] GenomicFeatures_1.54.4                  
-[19] GenomicRanges_1.54.1                    
-[20] GenomeInfoDb_1.38.8                     
-[21] AnnotationDbi_1.64.1                    
-[22] IRanges_2.36.0                          
-[23] S4Vectors_0.40.2                        
-[24] Biobase_2.62.0                          
-[25] BiocGenerics_0.48.1                     
-[26] edgeR_4.0.16                            
-[27] limma_3.58.1                            
-[28] cluster_2.1.8.1                         
-[29] ggfortify_0.4.17                        
-[30] lubridate_1.9.4                         
-[31] forcats_1.0.0                           
-[32] stringr_1.5.1                           
-[33] dplyr_1.1.4                             
-[34] purrr_1.0.4                             
-[35] readr_2.1.5                             
-[36] tidyr_1.3.1                             
-[37] tibble_3.2.1                            
-[38] ggplot2_3.5.2                           
-[39] tidyverse_2.0.0                         
+ [4] gprofiler2_0.2.3                        
+ [5] data.table_1.17.0                       
+ [6] patchwork_1.3.0                         
+ [7] DOSE_3.28.2                             
+ [8] TxDb.Hsapiens.UCSC.hg38.knownGene_3.18.0
+ [9] RColorBrewer_1.1-3                      
+[10] clusterProfiler_4.10.1                  
+[11] pheatmap_1.0.12                         
+[12] qvalue_2.34.0                           
+[13] BiocParallel_1.36.0                     
+[14] Homo.sapiens_1.3.1                      
+[15] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2 
+[16] org.Hs.eg.db_3.18.0                     
+[17] GO.db_3.18.0                            
+[18] OrganismDbi_1.44.0                      
+[19] GenomicFeatures_1.54.4                  
+[20] GenomicRanges_1.54.1                    
+[21] GenomeInfoDb_1.38.8                     
+[22] AnnotationDbi_1.64.1                    
+[23] IRanges_2.36.0                          
+[24] S4Vectors_0.40.2                        
+[25] Biobase_2.62.0                          
+[26] BiocGenerics_0.48.1                     
+[27] edgeR_4.0.16                            
+[28] limma_3.58.1                            
+[29] cluster_2.1.8.1                         
+[30] ggfortify_0.4.17                        
+[31] lubridate_1.9.4                         
+[32] forcats_1.0.0                           
+[33] stringr_1.5.1                           
+[34] dplyr_1.1.4                             
+[35] purrr_1.0.4                             
+[36] readr_2.1.5                             
+[37] tidyr_1.3.1                             
+[38] tibble_3.2.1                            
+[39] ggplot2_3.5.2                           
+[40] tidyverse_2.0.0                         
 
 loaded via a namespace (and not attached):
   [1] splines_4.3.0               later_1.3.2                
@@ -5569,41 +5532,41 @@ loaded via a namespace (and not attached):
  [69] gridGraphics_0.5-1          colorspace_2.1-0           
  [71] Cairo_1.6-2                 biomaRt_2.58.2             
  [73] RSQLite_2.3.9               generics_0.1.3             
- [75] data.table_1.17.0           rtracklayer_1.62.0         
- [77] htmlwidgets_1.6.4           prettyunits_1.2.0          
- [79] graphlayouts_1.2.2          httr_1.4.7                 
- [81] S4Arrays_1.2.1              scatterpie_0.2.4           
- [83] graphite_1.48.0             whisker_0.4.1              
- [85] pkgconfig_2.0.3             gtable_0.3.6               
- [87] blob_1.2.4                  workflowr_1.7.1            
- [89] XVector_0.42.0              shadowtext_0.1.4           
- [91] htmltools_0.5.8.1           fgsea_1.28.0               
- [93] RBGL_1.78.0                 clue_0.3-66                
- [95] scales_1.3.0                png_0.1-8                  
- [97] ggfun_0.1.8                 knitr_1.50                 
- [99] rstudioapi_0.17.1           tzdb_0.5.0                 
-[101] reshape2_1.4.4              rjson_0.2.23               
-[103] nlme_3.1-168                curl_6.2.2                 
-[105] GlobalOptions_0.1.2         cachem_1.1.0               
-[107] parallel_4.3.0              HDO.db_0.99.1              
-[109] restfulr_0.0.15             pillar_1.10.2              
-[111] vctrs_0.6.5                 promises_1.3.2             
-[113] dbplyr_2.5.0                evaluate_1.0.3             
-[115] magick_2.8.6                cli_3.6.1                  
-[117] locfit_1.5-9.12             compiler_4.3.0             
-[119] Rsamtools_2.18.0            rlang_1.1.3                
-[121] crayon_1.5.3                labeling_0.4.3             
-[123] plyr_1.8.9                  fs_1.6.3                   
-[125] stringi_1.8.3               viridisLite_0.4.2          
-[127] munsell_0.5.1               Biostrings_2.70.3          
-[129] lazyeval_0.2.2              GOSemSim_2.28.1            
-[131] Matrix_1.6-1.1              hms_1.1.3                  
-[133] bit64_4.6.0-1               KEGGREST_1.42.0            
-[135] statmod_1.5.0               SummarizedExperiment_1.32.0
-[137] igraph_2.1.4                memoise_2.0.1              
-[139] bslib_0.9.0                 ggtree_3.10.1              
-[141] fastmatch_1.1-6             bit_4.6.0                  
-[143] gson_0.1.0                  ape_5.8-1                  </code></pre>
+ [75] rtracklayer_1.62.0          htmlwidgets_1.6.4          
+ [77] prettyunits_1.2.0           graphlayouts_1.2.2         
+ [79] httr_1.4.7                  S4Arrays_1.2.1             
+ [81] scatterpie_0.2.4            graphite_1.48.0            
+ [83] whisker_0.4.1               pkgconfig_2.0.3            
+ [85] gtable_0.3.6                blob_1.2.4                 
+ [87] workflowr_1.7.1             XVector_0.42.0             
+ [89] shadowtext_0.1.4            htmltools_0.5.8.1          
+ [91] fgsea_1.28.0                RBGL_1.78.0                
+ [93] clue_0.3-66                 scales_1.3.0               
+ [95] png_0.1-8                   ggfun_0.1.8                
+ [97] knitr_1.50                  rstudioapi_0.17.1          
+ [99] tzdb_0.5.0                  reshape2_1.4.4             
+[101] rjson_0.2.23                nlme_3.1-168               
+[103] curl_6.2.2                  GlobalOptions_0.1.2        
+[105] cachem_1.1.0                parallel_4.3.0             
+[107] HDO.db_0.99.1               restfulr_0.0.15            
+[109] pillar_1.10.2               vctrs_0.6.5                
+[111] promises_1.3.2              dbplyr_2.5.0               
+[113] evaluate_1.0.3              magick_2.8.6               
+[115] cli_3.6.1                   locfit_1.5-9.12            
+[117] compiler_4.3.0              Rsamtools_2.18.0           
+[119] rlang_1.1.3                 crayon_1.5.3               
+[121] labeling_0.4.3              plyr_1.8.9                 
+[123] fs_1.6.3                    stringi_1.8.3              
+[125] viridisLite_0.4.2           munsell_0.5.1              
+[127] Biostrings_2.70.3           lazyeval_0.2.2             
+[129] GOSemSim_2.28.1             Matrix_1.6-1.1             
+[131] hms_1.1.3                   bit64_4.6.0-1              
+[133] KEGGREST_1.42.0             statmod_1.5.0              
+[135] SummarizedExperiment_1.32.0 igraph_2.1.4               
+[137] memoise_2.0.1               bslib_0.9.0                
+[139] ggtree_3.10.1               fastmatch_1.1-6            
+[141] bit_4.6.0                   gson_0.1.0                 
+[143] ape_5.8-1                  </code></pre>
 </div>
 </div>
 
