@@ -4,6 +4,144 @@ output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
 ---
+## **📌 Proportion of Colorectal cancer DEGs in CX and DOX treated samples**
+
+## **📌 Load Required Libraries**
+```{r Col_DEGs, echo=TRUE, message=FALSE}
+# 📦 Load Required Libraries
+# 📦 Load Required Libraries
+library(tidyverse)
+library(org.Hs.eg.db)
+
+# 📁 Load Consolidated Gene Symbols and convert to Entrez
+col_symbols <- read.csv("data/Col_DEGs.csv") %>%
+  pull(Symbol) %>%
+  unique()
+
+col_entrez <- mapIds(
+  org.Hs.eg.db,
+  keys = col_symbols,
+  column = "ENTREZID",
+  keytype = "SYMBOL",
+  multiVals = "first"
+) %>%
+  na.omit() %>%
+  unique() %>%
+  as.character()
+
+# 🧬 Load DEG Data
+deg_list <- list(
+  "CX_0.1_3"   = read.csv("data/DEGs/Toptable_CX_0.1_3.csv"),
+  "CX_0.1_24"  = read.csv("data/DEGs/Toptable_CX_0.1_24.csv"),
+  "CX_0.1_48"  = read.csv("data/DEGs/Toptable_CX_0.1_48.csv"),
+  "CX_0.5_3"   = read.csv("data/DEGs/Toptable_CX_0.5_3.csv"),
+  "CX_0.5_24"  = read.csv("data/DEGs/Toptable_CX_0.5_24.csv"),
+  "CX_0.5_48"  = read.csv("data/DEGs/Toptable_CX_0.5_48.csv"),
+  "DOX_0.1_3"  = read.csv("data/DEGs/Toptable_DOX_0.1_3.csv"),
+  "DOX_0.1_24" = read.csv("data/DEGs/Toptable_DOX_0.1_24.csv"),
+  "DOX_0.1_48" = read.csv("data/DEGs/Toptable_DOX_0.1_48.csv"),
+  "DOX_0.5_3"  = read.csv("data/DEGs/Toptable_DOX_0.5_3.csv"),
+  "DOX_0.5_24" = read.csv("data/DEGs/Toptable_DOX_0.5_24.csv"),
+  "DOX_0.5_48" = read.csv("data/DEGs/Toptable_DOX_0.5_48.csv")
+)
+
+# ✅ Extract Significant DEGs and Calculate Overlap
+proportion_data <- map_dfr(names(deg_list), function(sample) {
+  sig_df <- deg_list[[sample]] %>%
+    filter(adj.P.Val < 0.05)
+  sample_degs <- unique(as.character(sig_df$Entrez_ID))
+  
+  yes <- sum(sample_degs %in% col_entrez)
+  no <- length(sample_degs) - yes
+  
+  data.frame(
+    Sample = sample,
+    Category = c("Yes", "No"),
+    Count = c(yes, no)
+  )
+}) %>%
+  group_by(Sample) %>%
+  mutate(Proportion = Count / sum(Count) * 100)
+
+# 🔁 Reorder Sample Levels
+proportion_data$Sample <- factor(proportion_data$Sample, levels = c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+))
+
+# ✅ Set Yes on top
+proportion_data$Category <- factor(proportion_data$Category, levels = c("Yes", "No"))
+
+# 🔬 Chi-square Test for CX vs DOX matched conditions
+matched_pairs <- list(
+  "0.1_3"  = c("CX_0.1_3", "DOX_0.1_3"),
+  "0.1_24" = c("CX_0.1_24", "DOX_0.1_24"),
+  "0.1_48" = c("CX_0.1_48", "DOX_0.1_48"),
+  "0.5_3"  = c("CX_0.5_3", "DOX_0.5_3"),
+  "0.5_24" = c("CX_0.5_24", "DOX_0.5_24"),
+  "0.5_48" = c("CX_0.5_48", "DOX_0.5_48")
+)
+
+# Compute p-values
+chi_results <- map_dfr(names(matched_pairs), function(label) {
+  cx <- matched_pairs[[label]][1]
+  dox <- matched_pairs[[label]][2]
+  
+  cx_df <- deg_list[[cx]] %>% filter(adj.P.Val < 0.05)
+  dox_df <- deg_list[[dox]] %>% filter(adj.P.Val < 0.05)
+  
+  a1 <- sum(cx_df$Entrez_ID %in% col_entrez)
+  b1 <- nrow(cx_df) - a1
+  a2 <- sum(dox_df$Entrez_ID %in% col_entrez)
+  b2 <- nrow(dox_df) - a2
+  
+  chisq <- chisq.test(matrix(c(a1, b1, a2, b2), nrow = 2, byrow = TRUE))
+  
+  data.frame(
+    Comparison = label,
+    CX_sample = cx,
+    DOX_sample = dox,
+    P_value = chisq$p.value,
+    Star = ifelse(chisq$p.value < 0.05, "*", "")
+  )
+})
+
+# ✏️ Label placement
+# 🆙 Place stars only above CX samples where p < 0.05
+# Ensure dplyr functions are used explicitly
+annot_df <- chi_results %>%
+  dplyr::filter(Star == "*") %>%
+  dplyr::select(CX_sample, Star) %>%
+  dplyr::rename(Sample = CX_sample) %>%
+  dplyr::mutate(y_pos = 102)
+
+
+
+ggplot(proportion_data, aes(x = Sample, y = Proportion, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(data = annot_df, aes(x = Sample, y = y_pos, label = Star),
+            inherit.aes = FALSE, size = 6) +
+  scale_fill_manual(
+    values = c("Yes" = "#e41a1c", "No" = "#377eb8"),
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), limits = c(0, 105)) +
+  labs(
+    title = "Proportion of Colorectal Cancer DEGs\nin CX and DOX treated samples",
+    x = "Sample",
+    y = "Percentage of DEGs",
+    fill = "Overlap"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5),
+    legend.title = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1)
+  )
+```
 
 ## **📌 Proportion of Colorectal cancer DE genes in Corrmotif clusters**
 
