@@ -270,7 +270,7 @@ for (plot_name in names(volcano_plots)) {
 ```{r DNA, echo=TRUE, message=FALSE, warning=FALSE, fig.height=12, fig.width=10}
 # 📌 DDR Gene Expression Heatmap — CX-5461 and DOX (68 genes, with categories)
 
-# Load libraries
+# 📦 Load Required Libraries
 library(tidyverse)
 library(ComplexHeatmap)
 library(circlize)
@@ -278,7 +278,7 @@ library(grid)
 library(org.Hs.eg.db)
 library(reshape2)
 
-# Load DEG files
+# 📁 Load DEG files
 load_deg <- function(path) read.csv(path)
 
 CX_0.1_3 <- load_deg("data/DEGs/Toptable_CX_0.1_3.csv")
@@ -294,7 +294,7 @@ DOX_0.5_3 <- load_deg("data/DEGs/Toptable_DOX_0.5_3.csv")
 DOX_0.5_24 <- load_deg("data/DEGs/Toptable_DOX_0.5_24.csv")
 DOX_0.5_48 <- load_deg("data/DEGs/Toptable_DOX_0.5_48.csv")
 
-# Final Entrez IDs and categories (68 genes)
+# 📌 Define Entrez IDs and Categories (excluding DOX Cardiotoxicity genes)
 entrez_category <- tribble(
   ~ENTREZID, ~Category,
   317, "Apoptosis", 355, "Apoptosis", 581, "Apoptosis", 637, "Apoptosis",
@@ -319,13 +319,12 @@ entrez_category <- tribble(
   11200, "DNA Repair", 1643, "DNA Repair", 8243, "DNA Repair", 5981, "DNA Repair",
   7157, "p53 Regulators / Targets", 4193, "p53 Regulators / Targets", 5371, "p53 Regulators / Targets",
   27244, "p53 Regulators / Targets", 50484, "p53 Regulators / Targets",
-  5916, "DOX Cardiotoxicity", 7799, "DOX Cardiotoxicity", 4292, "DOX Cardiotoxicity",
   207, "Miscellaneous / Broad", 25, "Miscellaneous / Broad"
 )
 
 entrez_ids <- entrez_category$ENTREZID
 
-# Extract relevant DEG values
+# 📌 Extract Data Function
 extract_data <- function(df, name) {
   df %>%
     filter(Entrez_ID %in% entrez_ids) %>%
@@ -337,7 +336,7 @@ extract_data <- function(df, name) {
     )
 }
 
-# DEG list
+# 📁 DEG list
 deg_list <- list(
   "CX_0.1_3" = CX_0.1_3, "CX_0.1_24" = CX_0.1_24, "CX_0.1_48" = CX_0.1_48,
   "CX_0.5_3" = CX_0.5_3, "CX_0.5_24" = CX_0.5_24, "CX_0.5_48" = CX_0.5_48,
@@ -345,15 +344,15 @@ deg_list <- list(
   "DOX_0.5_3" = DOX_0.5_3, "DOX_0.5_24" = DOX_0.5_24, "DOX_0.5_48" = DOX_0.5_48
 )
 
-# Combine all DEGs and annotate
+# 🔗 Combine and Annotate
 all_data <- bind_rows(mapply(extract_data, deg_list, names(deg_list), SIMPLIFY = FALSE)) %>%
   left_join(entrez_category, by = c("Entrez_ID" = "ENTREZID"))
 
-# Create matrices
+# 🔢 Create matrices
 logFC_mat <- acast(all_data, Gene ~ Condition, value.var = "logFC")
 signif_mat <- acast(all_data, Gene ~ Condition, value.var = "Signif")
 
-# Set desired order
+# 🧱 Set column order
 desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
                    "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
                    "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
@@ -362,7 +361,7 @@ desired_order <- c("CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
 logFC_mat <- logFC_mat[, desired_order, drop = FALSE]
 signif_mat <- signif_mat[, desired_order, drop = FALSE]
 
-# Column annotation
+# 🏷️ Column annotations
 meta <- str_split_fixed(colnames(logFC_mat), "_", 3)
 col_annot <- HeatmapAnnotation(
   Drug = meta[, 1],
@@ -376,7 +375,7 @@ col_annot <- HeatmapAnnotation(
   annotation_height = unit(c(1, 1, 1), "cm")
 )
 
-# Row annotation
+# 🧬 Row annotations
 gene_order_df <- all_data %>%
   distinct(Gene, Category) %>%
   arrange(factor(Category, levels = sort(unique(entrez_category$Category))), Gene)
@@ -385,18 +384,25 @@ ordered_genes <- gene_order_df$Gene
 logFC_mat <- logFC_mat[ordered_genes, ]
 signif_mat <- signif_mat[ordered_genes, ]
 
-category_colors <- structure(
-  c("darkorange", "steelblue", "darkgreen", "firebrick", "gold", "mediumpurple", "gray60"),
-  names = sort(unique(entrez_category$Category))
+# 🎨 Category color mapping
+category_colors_named <- c(
+  "Apoptosis" = "darkorange",
+  "Cell Cycle / Checkpoint" = "steelblue",
+  "Damage Sensors / Signal Transducers" = "darkgreen",
+  "DNA Repair" = "firebrick",
+  "p53 Regulators / Targets" = "gold",
+  "Miscellaneous / Broad" = "gray60"
 )
+
+gene_order_df$Category <- factor(gene_order_df$Category, levels = names(category_colors_named))
 
 ha_left <- rowAnnotation(
   Category = gene_order_df$Category,
-  col = list(Category = category_colors),
+  col = list(Category = category_colors_named),
   annotation_name_side = "top"
 )
 
-# Final Heatmap
+# 📊 Final Heatmap
 Heatmap(logFC_mat,
         name = "logFC",
         top_annotation = col_annot,
@@ -406,7 +412,7 @@ Heatmap(logFC_mat,
         show_row_names = TRUE,
         show_column_names = FALSE,
         row_names_gp = gpar(fontsize = 10),
-        column_title = "DDR Gene Expression Response (n = 68)\nCX-5461 and DOX",
+        column_title = "DDR Gene Expression Response (n = 65)\nCX-5461 and DOX",
         column_title_gp = gpar(fontsize = 14, fontface = "bold"),
         cell_fun = function(j, i, x, y, width, height, fill) {
           grid.text(signif_mat[i, j], x, y, gp = gpar(fontsize = 9))
