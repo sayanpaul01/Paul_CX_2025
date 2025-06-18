@@ -188,6 +188,67 @@ saveRDS(list(
 ), file = "data/Toptable_list.rds")
 ```
 
+## **📌 Proportion of DEGs**
+```{r prop, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+# Load required packages
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Step 1: Load all DEG files from folder
+deg_files <- list.files("data/DEGs/", pattern = "Toptable_.*\\.csv", full.names = TRUE)
+
+# Step 2: Create named list of DEG data frames
+deg_list <- lapply(deg_files, read.csv)
+names(deg_list) <- gsub("Toptable_|\\.csv", "", basename(deg_files))  # e.g., "CX_0.1_3"
+
+# Step 3: Process each DEG data frame
+prop_data <- lapply(names(deg_list), function(name) {
+  df <- deg_list[[name]]
+  df <- df %>%
+    mutate(Category = case_when(
+      adj.P.Val < 0.05 & logFC > 0 ~ "Upregulated",
+      adj.P.Val < 0.05 & logFC < 0 ~ "Downregulated",
+      TRUE ~ "Non-DEGs"
+    ))
+  
+  df %>%
+    count(Category) %>%
+    mutate(Sample = name,
+           Proportion = 100 * n / sum(n)) %>%
+    dplyr::select(Sample, Category, Proportion)
+}) %>% bind_rows()
+
+# Step 4: Set the correct sample order (by time: 3hr, 24hr, 48hr within each drug-dose)
+sample_order <- c(
+  "CX_0.1_3", "CX_0.1_24", "CX_0.1_48",
+  "CX_0.5_3", "CX_0.5_24", "CX_0.5_48",
+  "DOX_0.1_3", "DOX_0.1_24", "DOX_0.1_48",
+  "DOX_0.5_3", "DOX_0.5_24", "DOX_0.5_48"
+)
+
+prop_data$Sample <- factor(prop_data$Sample, levels = sample_order)
+prop_data$Category <- factor(prop_data$Category, levels = c("Upregulated", "Downregulated", "Non-DEGs"))
+
+# Step 5: Define fill colors
+fill_colors <- c("Upregulated" = "blue", "Downregulated" = "red", "Non-DEGs" = "grey")
+
+# Step 6: Plot the stacked bar chart
+ggplot(prop_data, aes(x = Sample, y = Proportion, fill = Category)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = fill_colors) +
+  labs(
+    title = "Proportion of DEGs and Non-DEGs across Samples",
+    x = "Samples",
+    y = "Proportion (%)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(face = "bold")
+  )
+```
 
 ## **📌 Volcano Plots for Differential Expression Analysis**
 ```{r volcano plot, echo=TRUE, message=FALSE}
