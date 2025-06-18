@@ -149,6 +149,84 @@ for (gene in cardiac_genes) {
 }
 ```
 
+## **📌Generate Boxplots for Veh_Cardiac Genes**
+```{r Veh_cardiac, echo=TRUE,message=FALSE, fig.width=10,fig.height=7}
+# 📌 Prepare data
+cardiac_data <- boxplot1 %>%
+  filter(SYMBOL %in% cardiac_genes) %>%
+  pivot_longer(cols = -c(ENTREZID, SYMBOL, GENENAME), names_to = "Sample", values_to = "log2CPM") %>%
+  mutate(
+    Indv = case_when(
+      grepl("75.1", Sample) ~ "1",
+      grepl("78.1", Sample) ~ "2",
+      grepl("87.1", Sample) ~ "3",
+      grepl("17.3", Sample) ~ "4",
+      grepl("84.1", Sample) ~ "5",
+      grepl("90.1", Sample) ~ "6",
+      TRUE ~ NA_character_
+    ),
+    Drug = case_when(
+      grepl("CX.5461", Sample) ~ "CX",
+      grepl("DOX", Sample) ~ "DOX",
+      grepl("VEH", Sample) ~ "VEH",
+      TRUE ~ NA_character_
+    ),
+    Conc. = case_when(
+      grepl("_0.1_", Sample) ~ "0.1",
+      grepl("_0.5_", Sample) ~ "0.5",
+      TRUE ~ NA_character_
+    ),
+    Timepoint = case_when(
+      grepl("_3$", Sample) ~ "3",
+      grepl("_24$", Sample) ~ "24",
+      grepl("_48$", Sample) ~ "48",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(Drug == "VEH")
+
+# 📌 Set factors
+cardiac_data$SYMBOL <- factor(cardiac_data$SYMBOL, levels = cardiac_genes)
+cardiac_data$Timepoint <- factor(cardiac_data$Timepoint, levels = c("3", "24", "48"))
+cardiac_data$Conc. <- factor(cardiac_data$Conc., levels = c("0.1", "0.5"))
+
+# Add a new combined X-axis label: Gene + Timepoint
+cardiac_data <- cardiac_data %>%
+  mutate(Gene_Time = interaction(SYMBOL, Timepoint, sep = "_"),
+         SYMBOL = factor(SYMBOL, levels = cardiac_genes),
+         Timepoint = factor(Timepoint, levels = c("3", "24", "48")),
+         Conc. = factor(Conc., levels = c("0.1", "0.5")))
+
+# Plot using Gene-Time combination for clean x-axis dodge
+ggplot(cardiac_data, aes(x = SYMBOL, y = log2CPM, fill = Timepoint)) +
+  geom_boxplot(
+    aes(group = interaction(SYMBOL, Timepoint)),
+    position = position_dodge(width = 0.8),
+    outlier.shape = NA,
+    width = 0.6
+  ) +
+  geom_point(
+    aes(color = Indv, group = interaction(SYMBOL, Timepoint)),
+    position = position_dodge(width = 0.8),
+    size = 2,
+    alpha = 0.8
+  ) +
+  facet_grid(. ~ Conc., labeller = label_both) +
+  labs(
+    title = "Cardiac Gene Expression in Vehicle-Treated iPSC-CMs",
+    x = "Cardiac Gene",
+    y = "log2CPM"
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 13, face = "bold"),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right"
+  )
+```
 
 ## **📌Generate Boxplots for TOP2 Genes**
 ```{r TOP2, echo=TRUE,message=FALSE}
