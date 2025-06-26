@@ -378,7 +378,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-06
+<strong>Last updated:</strong> 2025-06-26
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreedf65b82ed20ee529ee980c6798b831c117e5159btargetblankdf65b82a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree84d97de4e606ee3f7bdc50b96e98bf91fd77fd25targetblank84d97dea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/df65b82ed20ee529ee980c6798b831c117e5159b" target="_blank">df65b82</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/84d97de4e606ee3f7bdc50b96e98bf91fd77fd25" target="_blank">84d97de</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreedf65b82ed20ee529ee980c6798b831c117e5159btargetblankdf65b82a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree84d97de4e606ee3f7bdc50b96e98bf91fd77fd25targetblank84d97dea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/df65b82ed20ee529ee980c6798b831c117e5159b" target="_blank">df65b82</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/84d97de4e606ee3f7bdc50b96e98bf91fd77fd25" target="_blank">84d97de</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,7 +550,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
-    Ignored:    analysis/Corrmotif_Conc.html
 
 Untracked files:
     Untracked:  0.1 density.svg
@@ -615,6 +614,8 @@ Untracked files:
     Untracked:  data/CAD_genes.csv
     Untracked:  data/Cardiotox.csv
     Untracked:  data/Cardiotox_mapped.csv
+    Untracked:  data/Col_DEG_proportion_data.csv
+    Untracked:  data/Col_DEGs.csv
     Untracked:  data/Corrmotif_GO/
     Untracked:  data/DOX_Vald.csv
     Untracked:  data/DOX_Vald_Mapped.csv
@@ -658,6 +659,7 @@ Untracked files:
     Untracked:  data/Toptable_DOX_0.5_3.csv
     Untracked:  data/Toptable_DOX_0.5_48.csv
     Untracked:  data/count.tsv
+    Untracked:  data/heatmap.csv
     Untracked:  data/ts_data_mapped
     Untracked:  results/
     Untracked:  run_bedtools.bat
@@ -665,8 +667,8 @@ Untracked files:
 Unstaged changes:
     Deleted:    analysis/Actox.Rmd
     Modified:   analysis/Corrmotif_Conc.Rmd
+    Modified:   data/DEGs/Toptable_DOX_0.5_3.csv
     Modified:   data/DOX_0.5_48 (Combined).csv
-    Modified:   data/Human_Heart_Genes.csv
     Modified:   data/Total_number_of_Mapped_reads_by_Individuals.csv
 
 </code></pre>
@@ -713,6 +715,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/044878aa1d429cfd33ad221229d5e60e3e5bfd9d/analysis/Corrmotif_Conc.Rmd" target="_blank">044878a</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/Corrmotif_Conc.html" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -11743,12 +11779,12 @@ heart_genes$Entrez_ID &lt;- mapIds(
 heart_entrez_ids &lt;- na.omit(heart_genes$Entrez_ID)
 
 # ----------------- Load CorrMotif Groups -----------------
-# 0.1
+# 0.1 µM
 prob_1_0.1 &lt;- as.character(read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID)
 prob_2_0.1 &lt;- as.character(read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID)
 prob_3_0.1 &lt;- as.character(read.csv(&quot;data/prob_3_0.1.csv&quot;)$Entrez_ID)
 
-# 0.5
+# 0.5 µM
 prob_1_0.5 &lt;- as.character(read.csv(&quot;data/prob_1_0.5.csv&quot;)$Entrez_ID)
 prob_2_0.5 &lt;- as.character(read.csv(&quot;data/prob_2_0.5.csv&quot;)$Entrez_ID)
 prob_3_0.5 &lt;- as.character(read.csv(&quot;data/prob_3_0.5.csv&quot;)$Entrez_ID)
@@ -11790,8 +11826,8 @@ proportion_data &lt;- df_combined %&gt;%
   dplyr::group_by(Concentration, Response_Group) %&gt;%
   dplyr::mutate(Percentage = Count / sum(Count) * 100)
 
-# ----------------- Chi-square or Fisher&#39;s Test -----------------
-get_chi_or_fisher &lt;- function(df, ref_group) {
+# ----------------- Chi-square Test Only -----------------
+get_chi_square &lt;- function(df, ref_group) {
   ref_counts &lt;- df %&gt;%
     dplyr::ungroup() %&gt;%
     dplyr::filter(Response_Group == ref_group) %&gt;%
@@ -11809,22 +11845,24 @@ get_chi_or_fisher &lt;- function(df, ref_group) {
           group_counts[1], group_counts[2],
           ref_counts[&quot;Heart-specific Genes&quot;], ref_counts[&quot;Non-Heart-specific Genes&quot;]
         ), nrow = 2)
-        if (any(contingency_table &lt; 5)) {
-          fisher.test(contingency_table)$p.value
-        } else {
-          chisq.test(contingency_table)$p.value
-        }
+        chisq.test(contingency_table)$p.value
       },
       .groups = &quot;drop&quot;
     ) %&gt;%
     dplyr::mutate(Significance = ifelse(!is.na(p_value) &amp; p_value &lt; 0.05, &quot;*&quot;, &quot;&quot;))
 }
 
-# Run tests
-chi_0.1 &lt;- get_chi_or_fisher(proportion_data %&gt;% dplyr::filter(Concentration == &quot;0.1&quot;), &quot;Non response&quot;)
-chi_0.5 &lt;- get_chi_or_fisher(proportion_data %&gt;% dplyr::filter(Concentration == &quot;0.5&quot;), &quot;Non response&quot;)
-
-chi_all &lt;- bind_rows(
+# Run Chi-square tests
+chi_0.1 &lt;- get_chi_square(proportion_data %&gt;% dplyr::filter(Concentration == &quot;0.1&quot;), &quot;Non response&quot;)
+chi_0.5 &lt;- get_chi_square(proportion_data %&gt;% dplyr::filter(Concentration == &quot;0.5&quot;), &quot;Non response&quot;)</code></pre>
+<pre><code>Warning: There were 2 warnings in `dplyr::summarise()`.
+The first warning was:
+ℹ In argument: `p_value = { ... }`.
+ℹ In group 2: `Response_Group = &quot;DOX early + CX-DOX mid-late response&quot;`.
+Caused by warning in `chisq.test()`:
+! Chi-squared approximation may be incorrect
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
+<pre class="r"><code>chi_all &lt;- bind_rows(
   chi_0.1 %&gt;% mutate(Concentration = &quot;0.1&quot;),
   chi_0.5 %&gt;% mutate(Concentration = &quot;0.5&quot;)
 )
@@ -11850,7 +11888,6 @@ label_data &lt;- proportion_data %&gt;%
   summarise(Significance = dplyr::first(Significance), .groups = &quot;drop&quot;) %&gt;%
   filter(!is.na(Significance)) %&gt;%
   mutate(y_pos = 105)
-
 
 # ----------------- Final Plot -----------------
 ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)) +
@@ -11910,6 +11947,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/prop heart comb-1.png" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/4bad905ad26e9ebac9188a323b7f5fe10aa56ce6/docs/figure/Corrmotif_Conc.Rmd/prop heart comb-1.png" target="_blank">4bad905</a>
@@ -12136,6 +12184,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS logFC-1.png" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS logFC-1.png" target="_blank">01a423f</a>
 </td>
 <td>
@@ -12338,6 +12397,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS_2 logFC1-1.png" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS_2 logFC1-1.png" target="_blank">01a423f</a>
 </td>
 <td>
@@ -12507,6 +12577,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-1.png" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-1.png" target="_blank">01a423f</a>
 </td>
 <td>
@@ -12673,6 +12754,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-2.png" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-2.png" target="_blank">01a423f</a>
@@ -13340,6 +13432,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_2 logFC1-1.png" target="_blank">305a6c0</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/01a423feca180bf7e8669c85a3c03e54357c1b38/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_2 logFC1-1.png" target="_blank">01a423f</a>

@@ -7542,12 +7542,12 @@ heart_genes$Entrez_ID <- mapIds(
 heart_entrez_ids <- na.omit(heart_genes$Entrez_ID)
 
 # ----------------- Load CorrMotif Groups -----------------
-# 0.1
+# 0.1 µM
 prob_1_0.1 <- as.character(read.csv("data/prob_1_0.1.csv")$Entrez_ID)
 prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
 prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
 
-# 0.5
+# 0.5 µM
 prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
 prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
 prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
@@ -7589,8 +7589,8 @@ proportion_data <- df_combined %>%
   dplyr::group_by(Concentration, Response_Group) %>%
   dplyr::mutate(Percentage = Count / sum(Count) * 100)
 
-# ----------------- Chi-square or Fisher's Test -----------------
-get_chi_or_fisher <- function(df, ref_group) {
+# ----------------- Chi-square Test Only -----------------
+get_chi_square <- function(df, ref_group) {
   ref_counts <- df %>%
     dplyr::ungroup() %>%
     dplyr::filter(Response_Group == ref_group) %>%
@@ -7608,20 +7608,16 @@ get_chi_or_fisher <- function(df, ref_group) {
           group_counts[1], group_counts[2],
           ref_counts["Heart-specific Genes"], ref_counts["Non-Heart-specific Genes"]
         ), nrow = 2)
-        if (any(contingency_table < 5)) {
-          fisher.test(contingency_table)$p.value
-        } else {
-          chisq.test(contingency_table)$p.value
-        }
+        chisq.test(contingency_table)$p.value
       },
       .groups = "drop"
     ) %>%
     dplyr::mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
 }
 
-# Run tests
-chi_0.1 <- get_chi_or_fisher(proportion_data %>% dplyr::filter(Concentration == "0.1"), "Non response")
-chi_0.5 <- get_chi_or_fisher(proportion_data %>% dplyr::filter(Concentration == "0.5"), "Non response")
+# Run Chi-square tests
+chi_0.1 <- get_chi_square(proportion_data %>% dplyr::filter(Concentration == "0.1"), "Non response")
+chi_0.5 <- get_chi_square(proportion_data %>% dplyr::filter(Concentration == "0.5"), "Non response")
 
 chi_all <- bind_rows(
   chi_0.1 %>% mutate(Concentration = "0.1"),
@@ -7649,7 +7645,6 @@ label_data <- proportion_data %>%
   summarise(Significance = dplyr::first(Significance), .groups = "drop") %>%
   filter(!is.na(Significance)) %>%
   mutate(y_pos = 105)
-
 
 # ----------------- Final Plot -----------------
 ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)) +
@@ -7686,7 +7681,6 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
     panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2),
     panel.spacing = unit(1.2, "lines")
   )
-
 ```
 
 ## **📌 Mean logFC of Heart specific genes across corrmotifs (per concentration)**
