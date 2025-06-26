@@ -512,15 +512,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree84d97de4e606ee3f7bdc50b96e98bf91fd77fd25targetblank84d97dea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec34034d445fbde68383282984408fd62bb538179targetblankc34034da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/84d97de4e606ee3f7bdc50b96e98bf91fd77fd25" target="_blank">84d97de</a>
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c34034d445fbde68383282984408fd62bb538179" target="_blank">c34034d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttree84d97de4e606ee3f7bdc50b96e98bf91fd77fd25targetblank84d97dea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01CX5461Projecttreec34034d445fbde68383282984408fd62bb538179targetblankc34034da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +530,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/CX5461_Project/tree/84d97de4e606ee3f7bdc50b96e98bf91fd77fd25" target="_blank">84d97de</a>.
+<a href="https://github.com/sayanpaul01/CX5461_Project/tree/c34034d445fbde68383282984408fd62bb538179" target="_blank">c34034d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -715,6 +715,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/analysis/Corrmotif_Conc.Rmd" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/CX5461_Project/c34034d445fbde68383282984408fd62bb538179/docs/Corrmotif_Conc.html" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+<td>
+Commit
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -11779,12 +11813,12 @@ heart_genes$Entrez_ID &lt;- mapIds(
 heart_entrez_ids &lt;- na.omit(heart_genes$Entrez_ID)
 
 # ----------------- Load CorrMotif Groups -----------------
-# 0.1 µM
+# 0.1
 prob_1_0.1 &lt;- as.character(read.csv(&quot;data/prob_1_0.1.csv&quot;)$Entrez_ID)
 prob_2_0.1 &lt;- as.character(read.csv(&quot;data/prob_2_0.1.csv&quot;)$Entrez_ID)
 prob_3_0.1 &lt;- as.character(read.csv(&quot;data/prob_3_0.1.csv&quot;)$Entrez_ID)
 
-# 0.5 µM
+# 0.5
 prob_1_0.5 &lt;- as.character(read.csv(&quot;data/prob_1_0.5.csv&quot;)$Entrez_ID)
 prob_2_0.5 &lt;- as.character(read.csv(&quot;data/prob_2_0.5.csv&quot;)$Entrez_ID)
 prob_3_0.5 &lt;- as.character(read.csv(&quot;data/prob_3_0.5.csv&quot;)$Entrez_ID)
@@ -11821,20 +11855,23 @@ df_combined &lt;- bind_rows(df_0.1, df_0.5)
 
 # ----------------- Calculate Proportions -----------------
 proportion_data &lt;- df_combined %&gt;%
-  dplyr::group_by(Concentration, Response_Group, Category) %&gt;%
-  dplyr::summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
-  dplyr::group_by(Concentration, Response_Group) %&gt;%
-  dplyr::mutate(Percentage = Count / sum(Count) * 100)
+  group_by(Concentration, Response_Group, Category) %&gt;%
+  summarise(Count = n(), .groups = &quot;drop&quot;) %&gt;%
+  group_by(Concentration, Response_Group) %&gt;%
+  mutate(Percentage = Count / sum(Count) * 100)
 
-# ----------------- Chi-square Test Only -----------------
-get_chi_square &lt;- function(df, ref_group) {
+# ----------------- Fisher&#39;s Exact Test -----------------
+run_fisher_test &lt;- function(df, ref_group) {
+  # Get reference counts
   ref_counts &lt;- df %&gt;%
     dplyr::ungroup() %&gt;%
     dplyr::filter(Response_Group == ref_group) %&gt;%
     dplyr::select(Category, Count) %&gt;%
     {setNames(.$Count, .$Category)}
   
+  # Run Fisher test for each group vs. reference
   df %&gt;%
+    dplyr::ungroup() %&gt;%
     dplyr::filter(Response_Group != ref_group) %&gt;%
     dplyr::group_by(Response_Group) %&gt;%
     dplyr::summarise(
@@ -11845,31 +11882,25 @@ get_chi_square &lt;- function(df, ref_group) {
           group_counts[1], group_counts[2],
           ref_counts[&quot;Heart-specific Genes&quot;], ref_counts[&quot;Non-Heart-specific Genes&quot;]
         ), nrow = 2)
-        chisq.test(contingency_table)$p.value
+        fisher.test(contingency_table)$p.value
       },
       .groups = &quot;drop&quot;
     ) %&gt;%
     dplyr::mutate(Significance = ifelse(!is.na(p_value) &amp; p_value &lt; 0.05, &quot;*&quot;, &quot;&quot;))
 }
 
-# Run Chi-square tests
-chi_0.1 &lt;- get_chi_square(proportion_data %&gt;% dplyr::filter(Concentration == &quot;0.1&quot;), &quot;Non response&quot;)
-chi_0.5 &lt;- get_chi_square(proportion_data %&gt;% dplyr::filter(Concentration == &quot;0.5&quot;), &quot;Non response&quot;)</code></pre>
-<pre><code>Warning: There were 2 warnings in `dplyr::summarise()`.
-The first warning was:
-ℹ In argument: `p_value = { ... }`.
-ℹ In group 2: `Response_Group = &quot;DOX early + CX-DOX mid-late response&quot;`.
-Caused by warning in `chisq.test()`:
-! Chi-squared approximation may be incorrect
-ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
-<pre class="r"><code>chi_all &lt;- bind_rows(
-  chi_0.1 %&gt;% mutate(Concentration = &quot;0.1&quot;),
-  chi_0.5 %&gt;% mutate(Concentration = &quot;0.5&quot;)
+# Run Fisher test
+fisher_0.1 &lt;- run_fisher_test(proportion_data %&gt;% filter(Concentration == &quot;0.1&quot;), &quot;Non response&quot;)
+fisher_0.5 &lt;- run_fisher_test(proportion_data %&gt;% filter(Concentration == &quot;0.5&quot;), &quot;Non response&quot;)
+
+fisher_all &lt;- bind_rows(
+  fisher_0.1 %&gt;% mutate(Concentration = &quot;0.1&quot;),
+  fisher_0.5 %&gt;% mutate(Concentration = &quot;0.5&quot;)
 )
 
-# Merge test results
+# ----------------- Merge Fisher Results -----------------
 proportion_data &lt;- proportion_data %&gt;%
-  left_join(chi_all, by = c(&quot;Concentration&quot;, &quot;Response_Group&quot;))
+  left_join(fisher_all, by = c(&quot;Concentration&quot;, &quot;Response_Group&quot;))
 
 # ----------------- Reorder Factor Levels -----------------
 proportion_data$Concentration &lt;- factor(proportion_data$Concentration, levels = c(&quot;0.1&quot;, &quot;0.5&quot;))
@@ -11882,7 +11913,7 @@ proportion_data$Response_Group &lt;- factor(proportion_data$Response_Group, leve
   &quot;DOX early + CX-DOX mid-late response&quot;
 ))
 
-# ----------------- Position Significance Stars -----------------
+# ----------------- Significance Star Labels -----------------
 label_data &lt;- proportion_data %&gt;%
   group_by(Concentration, Response_Group) %&gt;%
   summarise(Significance = dplyr::first(Significance), .groups = &quot;drop&quot;) %&gt;%
@@ -11906,7 +11937,7 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
   )) +
   scale_y_continuous(limits = c(0, 110), expand = c(0, 0)) +
   labs(
-    title = &quot;Heart-Specific Gene Proportions Across\nCormotif Clusters (0.1 and 0.5)&quot;,
+    title = &quot;Heart-Specific Gene Proportions Across\nCormotif Clusters (0.1 and 0.5 µM)&quot;,
     x = &quot;Response Groups&quot;,
     y = &quot;Percentage of Genes&quot;,
     fill = &quot;Gene Category&quot;
@@ -11947,6 +11978,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/docs/figure/Corrmotif_Conc.Rmd/prop heart comb-1.png" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/prop heart comb-1.png" target="_blank">305a6c0</a>
@@ -12184,6 +12226,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/docs/figure/Corrmotif_Conc.Rmd/Mean HS logFC-1.png" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS logFC-1.png" target="_blank">305a6c0</a>
 </td>
 <td>
@@ -12397,6 +12450,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/docs/figure/Corrmotif_Conc.Rmd/Mean HS_2 logFC1-1.png" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS_2 logFC1-1.png" target="_blank">305a6c0</a>
 </td>
 <td>
@@ -12577,6 +12641,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-1.png" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-1.png" target="_blank">305a6c0</a>
 </td>
 <td>
@@ -12754,6 +12829,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-2.png" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean HS_3 logFC3-2.png" target="_blank">305a6c0</a>
@@ -13432,6 +13518,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/CX5461_Project/blob/c34034d445fbde68383282984408fd62bb538179/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_2 logFC1-1.png" target="_blank">c34034d</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-06-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/sayanpaul01/CX5461_Project/blob/305a6c0fadfece5ff62a8fa46cfc46d19d4e6070/docs/figure/Corrmotif_Conc.Rmd/Mean AF logFC_2 logFC1-1.png" target="_blank">305a6c0</a>

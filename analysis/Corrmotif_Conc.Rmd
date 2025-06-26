@@ -7542,12 +7542,12 @@ heart_genes$Entrez_ID <- mapIds(
 heart_entrez_ids <- na.omit(heart_genes$Entrez_ID)
 
 # ----------------- Load CorrMotif Groups -----------------
-# 0.1 µM
+# 0.1
 prob_1_0.1 <- as.character(read.csv("data/prob_1_0.1.csv")$Entrez_ID)
 prob_2_0.1 <- as.character(read.csv("data/prob_2_0.1.csv")$Entrez_ID)
 prob_3_0.1 <- as.character(read.csv("data/prob_3_0.1.csv")$Entrez_ID)
 
-# 0.5 µM
+# 0.5
 prob_1_0.5 <- as.character(read.csv("data/prob_1_0.5.csv")$Entrez_ID)
 prob_2_0.5 <- as.character(read.csv("data/prob_2_0.5.csv")$Entrez_ID)
 prob_3_0.5 <- as.character(read.csv("data/prob_3_0.5.csv")$Entrez_ID)
@@ -7584,20 +7584,23 @@ df_combined <- bind_rows(df_0.1, df_0.5)
 
 # ----------------- Calculate Proportions -----------------
 proportion_data <- df_combined %>%
-  dplyr::group_by(Concentration, Response_Group, Category) %>%
-  dplyr::summarise(Count = n(), .groups = "drop") %>%
-  dplyr::group_by(Concentration, Response_Group) %>%
-  dplyr::mutate(Percentage = Count / sum(Count) * 100)
+  group_by(Concentration, Response_Group, Category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Concentration, Response_Group) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
 
-# ----------------- Chi-square Test Only -----------------
-get_chi_square <- function(df, ref_group) {
+# ----------------- Fisher's Exact Test -----------------
+run_fisher_test <- function(df, ref_group) {
+  # Get reference counts
   ref_counts <- df %>%
     dplyr::ungroup() %>%
     dplyr::filter(Response_Group == ref_group) %>%
     dplyr::select(Category, Count) %>%
     {setNames(.$Count, .$Category)}
   
+  # Run Fisher test for each group vs. reference
   df %>%
+    dplyr::ungroup() %>%
     dplyr::filter(Response_Group != ref_group) %>%
     dplyr::group_by(Response_Group) %>%
     dplyr::summarise(
@@ -7608,25 +7611,25 @@ get_chi_square <- function(df, ref_group) {
           group_counts[1], group_counts[2],
           ref_counts["Heart-specific Genes"], ref_counts["Non-Heart-specific Genes"]
         ), nrow = 2)
-        chisq.test(contingency_table)$p.value
+        fisher.test(contingency_table)$p.value
       },
       .groups = "drop"
     ) %>%
     dplyr::mutate(Significance = ifelse(!is.na(p_value) & p_value < 0.05, "*", ""))
 }
 
-# Run Chi-square tests
-chi_0.1 <- get_chi_square(proportion_data %>% dplyr::filter(Concentration == "0.1"), "Non response")
-chi_0.5 <- get_chi_square(proportion_data %>% dplyr::filter(Concentration == "0.5"), "Non response")
+# Run Fisher test
+fisher_0.1 <- run_fisher_test(proportion_data %>% filter(Concentration == "0.1"), "Non response")
+fisher_0.5 <- run_fisher_test(proportion_data %>% filter(Concentration == "0.5"), "Non response")
 
-chi_all <- bind_rows(
-  chi_0.1 %>% mutate(Concentration = "0.1"),
-  chi_0.5 %>% mutate(Concentration = "0.5")
+fisher_all <- bind_rows(
+  fisher_0.1 %>% mutate(Concentration = "0.1"),
+  fisher_0.5 %>% mutate(Concentration = "0.5")
 )
 
-# Merge test results
+# ----------------- Merge Fisher Results -----------------
 proportion_data <- proportion_data %>%
-  left_join(chi_all, by = c("Concentration", "Response_Group"))
+  left_join(fisher_all, by = c("Concentration", "Response_Group"))
 
 # ----------------- Reorder Factor Levels -----------------
 proportion_data$Concentration <- factor(proportion_data$Concentration, levels = c("0.1", "0.5"))
@@ -7639,7 +7642,7 @@ proportion_data$Response_Group <- factor(proportion_data$Response_Group, levels 
   "DOX early + CX-DOX mid-late response"
 ))
 
-# ----------------- Position Significance Stars -----------------
+# ----------------- Significance Star Labels -----------------
 label_data <- proportion_data %>%
   group_by(Concentration, Response_Group) %>%
   summarise(Significance = dplyr::first(Significance), .groups = "drop") %>%
@@ -7663,7 +7666,7 @@ ggplot(proportion_data, aes(x = Response_Group, y = Percentage, fill = Category)
   )) +
   scale_y_continuous(limits = c(0, 110), expand = c(0, 0)) +
   labs(
-    title = "Heart-Specific Gene Proportions Across\nCormotif Clusters (0.1 and 0.5)",
+    title = "Heart-Specific Gene Proportions Across\nCormotif Clusters (0.1 and 0.5 µM)",
     x = "Response Groups",
     y = "Percentage of Genes",
     fill = "Gene Category"
