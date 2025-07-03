@@ -89,4 +89,4 @@ Welcome to my research website.
 
 ### 🔗 **Source Code**  
 
-[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/sayanpaul01/CX5461_Project)
+[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/sayanpaul01/Paul_CX_2025)

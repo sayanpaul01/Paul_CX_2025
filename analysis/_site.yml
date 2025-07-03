@@ -1,7 +1,7 @@
-name: "CX5461_Project"
+name: "Paul_CX_2025"
 output_dir: ../docs
 navbar:
-  title: "CX5461_Project"
+  title: "Paul_CX_2025"
   left:
   - text: Home
     href: index.html
