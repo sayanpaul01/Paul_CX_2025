@@ -12,81 +12,82 @@ Welcome to my research website.
 
 ### **Cardiomyocyte Purity**  
 
-- **[Cardiomyocyte Purity](https://sayanpaul01.github.io/CX5461_Project/Flow.html)**
+- **[Cardiomyocyte Purity](https://mward-lab.github.io/Paul_CX_2025/Flow.html)**
 
 ### **DRC comparison between CX-5461 and DOX**  
 
-- **[DRC Plot](https://sayanpaul01.github.io/CX5461_Project/DRC.html)**
+- **[DRC Plot](https://mward-lab.github.io/Paul_CX_2025/DRC.html)**
 
 
 ### **QC Data**  
 
-- **[Total Reads and Mapped Reads](https://sayanpaul01.github.io/CX5461_Project/total_reads_and_mapped_reads.html)**
+- **[Total Reads and Mapped Reads](https://mward-lab.github.io/Paul_CX_2025/total_reads_and_mapped_reads.html)**
 
-- **[Feature Count Matrix Analysis](https://sayanpaul01.github.io/CX5461_Project/count_matrix_analysis.html)**
+- **[Feature Count Matrix Analysis](https://mward-lab.github.io/Paul_CX_2025/count_matrix_analysis.html)**
 
-- **[PCA Analysis](https://sayanpaul01.github.io/CX5461_Project/PCA.html)**  
+- **[PCA Analysis](https://mward-lab.github.io/Paul_CX_2025/PCA.html)**  
 
-- **[Correlation Heatmap of Samples](https://sayanpaul01.github.io/CX5461_Project/Correlation_Heatmap_of_Samples.html)**
+- **[Correlation Heatmap of Samples](https://mward-lab.github.io/Paul_CX_2025/Correlation_Heatmap_of_Samples.html)**
 
 
 ## **Differential Gene Expression Analysis**  
 
-- **[DGE Analysis](https://sayanpaul01.github.io/CX5461_Project/DGE_Analysis.html)**
+- **[DGE Analysis](https://mward-lab.github.io/Paul_CX_2025/DGE_Analysis.html)**
 
-- **[LogFC Correlation](https://sayanpaul01.github.io/CX5461_Project/LogFC_Correlation.html)**  
+- **[LogFC Correlation](https://mward-lab.github.io/Paul_CX_2025/LogFC_Correlation.html)**  
 
-- **[Log2CPM Boxplots](https://sayanpaul01.github.io/CX5461_Project/Log2CPM_Boxplots.html)** 
+- **[Log2CPM Boxplots](https://mward-lab.github.io/Paul_CX_2025/Log2CPM_Boxplots.html)** 
 
-- **[Cardiac and TOP2 and DNA Damage Genes](https://sayanpaul01.github.io/CX5461_Project/Cardiac_and_TOP2_Genes.html)**
+- **[Cardiac and TOP2 and DNA Damage Genes](https://mward-lab.github.io/Paul_CX_2025/Cardiac_and_TOP2_Genes.html)**
 
-- **[Overlap of DEGs](https://sayanpaul01.github.io/CX5461_Project/Overlap_DEGs.html)**
+- **[Overlap of DEGs](https://mward-lab.github.io/Paul_CX_2025/Overlap_DEGs.html)**
 
-- **[Correlation between CX and DOX logFC](https://sayanpaul01.github.io/CX5461_Project/CX_DOX.html)**
+- **[Correlation between CX and DOX logFC](https://mward-lab.github.io/Paul_CX_2025/CX_DOX.html)**
 
-- **[Function and Pathway Enrichment of DEGs](https://sayanpaul01.github.io/CX5461_Project/GO_KEGG_DEG.html)** 
+- **[Function and Pathway Enrichment of DEGs](https://mward-lab.github.io/Paul_CX_2025/GO_KEGG_DEG.html)** 
 
-- **[Overlap of GO Terms across drugs, concentrations, and timepoints](https://sayanpaul01.github.io/CX5461_Project/Overlap_GO_DEG.html)**
+- **[Overlap of GO Terms across drugs, concentrations, and timepoints](https://mward-lab.github.io/Paul_CX_2025/Overlap_GO_DEG.html)**
 
-- **[Specific GO terms enrichment in DEGs](https://sayanpaul01.github.io/CX5461_Project/DDR_Gquad.html)**
+- **[Specific GO terms enrichment in DEGs](https://mward-lab.github.io/Paul_CX_2025/DDR_Gquad.html)**
 
 
-- **[Genes in AC toxicity-associated loci response to CX5461 and DOX](https://sayanpaul01.github.io/CX5461_Project/Cardiotox.html)**
+- **[Genes in AC toxicity-associated loci response to CX5461 and DOX](https://mward-lab.github.io/Paul_CX_2025/Cardiotox.html)**
 
 
 ## **Bayesian Clustering of Gene Expression with Corrmotif**
 
-- **[Corrmotif Model and Patterns (all samples)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all.html)**
+- **[Corrmotif Model and Patterns (all samples)](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_all.html)**
 
-- **[Function and pathway enrichment of Corrmotif Models (all samples)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_all_GO.html)**
+- **[Function and pathway enrichment of Corrmotif Models (all samples)](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_all_GO.html)**
 
-- **[Corrmotif Model and Patterns (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc.html)**
+- **[Corrmotif Model and Patterns (Concentrations)](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_Conc.html)**
 
-- **[Function and pathway enrichment of Corrmotif Models (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Conc_GO.html)**
+- **[Function and pathway enrichment of Corrmotif Models (Concentrations)](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_Conc_GO.html)**
 
-- **[Specific GO terms enrichment in Cormotif Models (Concentrations)](https://sayanpaul01.github.io/CX5461_Project/DDR_Gquad_Corr.html)**
+- **[Specific GO terms enrichment in Cormotif Models (Concentrations)](https://mward-lab.github.io/Paul_CX_2025/DDR_Gquad_Corr.html)**
 
-- **[Corrmotif Model and Patterns (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time.html)**
+- **[Corrmotif Model and Patterns (Timepoints)](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_Time.html)**
 
-- **[Function and pathway enrichment of Corrmotif Models (Timepoints)](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_Time_GO.html)**
+- **[Function and pathway enrichment of Corrmotif Models (Timepoints)](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_Time_GO.html)**
 
-- **[Overlap of Genes and functions across corrmotifs](https://sayanpaul01.github.io/CX5461_Project/Corrmotif_overlap.html)**
+- **[Overlap of Genes and functions across corrmotifs](https://mward-lab.github.io/Paul_CX_2025/Corrmotif_overlap.html)**
 
 
 ## **Tissue Specificity Analysis**
 
-- **[Tissue Specificity analysis](https://sayanpaul01.github.io/CX5461_Project/Tissue.html)**
+- **[Tissue Specificity analysis](https://mward-lab.github.io/Paul_CX_2025/Tissue.html)**
 
 
 ## **Literature data comparisons**
 
-- **[Colorectal Cancer dataset](https://sayanpaul01.github.io/CX5461_Project/Colorectal.html)**
+- **[Colorectal Cancer dataset](https://mward-lab.github.io/Paul_CX_2025/Colorectal.html)**
 
-- **[Myeloma dataset](https://sayanpaul01.github.io/CX5461_Project/Myeloma.html)**
+- **[Myeloma dataset](https://mward-lab.github.io/Paul_CX_2025/Myeloma.html)**
 
-- **[Macrophage dataset](https://sayanpaul01.github.io/CX5461_Project/Macrophage.html)**
+- **[Macrophage dataset](https://mward-lab.github.io/Paul_CX_2025/Macrophage.html)**
 
 
 ### 🔗 **Source Code**  
 
-[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/sayanpaul01/Paul_CX_2025)
+[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/mward-lab/Paul_CX_2025)
+
