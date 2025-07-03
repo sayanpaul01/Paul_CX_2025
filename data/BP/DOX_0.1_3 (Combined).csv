@@ -1,0 +1,5 @@
+ID,Description,GeneRatio,BgRatio,pvalue,p.adjust,qvalue,geneID,Count,Category
+GO:1900034,regulation of cellular response to heat,2-Jan,16/12185,0.002624563,0.010498253,NA,51278,1,Biological Process
+GO:0034605,cellular response to heat,2-Jan,51/12185,0.008353772,0.016707544,NA,51278,1,Biological Process
+GO:0009408,response to heat,2-Jan,79/12185,0.012925257,0.017233676,NA,51278,1,Biological Process
+GO:0009266,response to temperature stimulus,2-Jan,124/12185,0.02025016,0.02025016,NA,51278,1,Biological Process

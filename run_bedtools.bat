@@ -1,0 +1,1 @@
+bedtools closest -a "C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/GWAS/gwas_snps.bed" -b "data/genes.bed" -d > "C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/GWAS/snps_nearest_genes.bed"

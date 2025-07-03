@@ -1,0 +1,6 @@
+ID,Description,GeneRatio,BgRatio,pvalue,p.adjust,qvalue,geneID,Count,Category
+GO:0060218,hematopoietic stem cell differentiation,1-Jan,30/12185,0.002462043,0.012310217,NA,1106,1,Biological Process
+GO:0034728,nucleosome organization,1-Jan,83/12185,0.006811654,0.014498701,NA,1106,1,Biological Process
+GO:0002244,hematopoietic progenitor cell differentiation,1-Jan,106/12185,0.00869922,0.014498701,NA,1106,1,Biological Process
+GO:0048863,stem cell differentiation,1-Jan,195/12185,0.016003283,0.020004103,NA,1106,1,Biological Process
+GO:0007517,muscle organ development,1-Jan,278/12185,0.022814936,0.022814936,NA,1106,1,Biological Process

@@ -1,0 +1,26 @@
+Symbol,ENTREZID,Mechanistic_Implication
+CAT,847,ROS generation/handling
+CBR1,873,ROS generation/handling
+ERBB2,2064,ROS generation/handling
+GPX3,2878,ROS generation/handling
+GSTM1,2944,ROS generation/handling
+HAS3,3038,ROS generation/handling
+NOS3,4846,ROS generation/handling
+PLCE1,51196,ROS generation/handling
+RAC2,5880,ROS generation/handling
+SPG7,6687,ROS generation/handling
+PRDM2,7799,DNA damage
+MLH1,4292,DNA damage
+RARG,5916,DNA damage
+HFE,3077,Iron uptake and homeostasis
+SLC22A17,51310,DOX uptake
+SLC28A1,9154,DOX uptake
+SLC28A3,64078,DOX uptake
+ABCB4,5244,DOX efflux
+ABCC5,10057,DOX efflux
+ABCC9,10060,DOX efflux
+ABCC10,89845,DOX efflux
+CELF4,56853,Calcium handling
+MYH7,4625,Calcium handling
+CYP2J2,1573,Cardiac electrical activity
+RIN3,79890,Cardiac electrical activity
