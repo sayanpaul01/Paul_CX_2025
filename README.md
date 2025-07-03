@@ -1,4 +1,4 @@
-# CX5461_Project
+# Paul_CX_2025
 
 A [workflowr][] project.
 
