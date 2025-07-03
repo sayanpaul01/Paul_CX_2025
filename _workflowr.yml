@@ -1,6 +1,6 @@
 # workflowr options
 # Version 1.7.1
-
+site_url: https://mward-lab.github.io/Paul_CX_2025
 # The seed to use for random number generation. See ?set.seed for details.
 seed: 20250129
 # The working directory to build the R Markdown files. The path is relative to
