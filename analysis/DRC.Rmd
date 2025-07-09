@@ -349,7 +349,7 @@ ggplot(combined_data, aes(x = Drug, y = Ratio, fill = Drug)) +
   )
 ```
 
-## **📌 DOX 0 vs 0.1 and 0 vs 0.5**
+## **📌 VEH 0 vs DOX 0.1, 0.5, 1, 5 and 10**
 ```{r comp, echo=TRUE, message=FALSE}
 # 📦 Load required libraries
 library(tidyverse)
@@ -416,10 +416,227 @@ summary_stats_01 <- dox_wide_01 %>%
 # 📌 Print results
 print(summary_stats_01)
 print(paired_ttest_01)
+
+
+
+# 📌 DOX 0 vs 1 µM
+dox_paired_1 <- combined_data %>%
+  filter(Drug == "DOX", Conc %in% c(0, 1)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(dox_paired_1$Indv, dox_paired_1$Conc))
+
+dox_wide_1 <- dox_paired_1 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_1 <- t.test(dox_wide_1$Conc_0, dox_wide_1$Conc_1, paired = TRUE)
+
+summary_stats_1 <- dox_wide_1 %>%
+  summarise(
+    mean_0    = mean(Conc_0, na.rm = TRUE),
+    mean_1    = mean(Conc_1, na.rm = TRUE),
+    median_0  = median(Conc_0, na.rm = TRUE),
+    median_1  = median(Conc_1, na.rm = TRUE)
+  )
+
+print(summary_stats_1)
+print(paired_ttest_1)
+
+# --------------------------------------------
+
+# 📌 DOX 0 vs 5 µM
+dox_paired_5 <- combined_data %>%
+  filter(Drug == "DOX", Conc %in% c(0, 5)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(dox_paired_5$Indv, dox_paired_5$Conc))
+
+dox_wide_5 <- dox_paired_5 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_5 <- t.test(dox_wide_5$Conc_0, dox_wide_5$Conc_5, paired = TRUE)
+
+summary_stats_5 <- dox_wide_5 %>%
+  summarise(
+    mean_0    = mean(Conc_0, na.rm = TRUE),
+    mean_5    = mean(Conc_5, na.rm = TRUE),
+    median_0  = median(Conc_0, na.rm = TRUE),
+    median_5  = median(Conc_5, na.rm = TRUE)
+  )
+
+print(summary_stats_5)
+print(paired_ttest_5)
+
+# --------------------------------------------
+
+# 📌 DOX 0 vs 10 µM
+dox_paired_10 <- combined_data %>%
+  filter(Drug == "DOX", Conc %in% c(0, 10)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(dox_paired_10$Indv, dox_paired_10$Conc))
+
+dox_wide_10 <- dox_paired_10 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_10 <- t.test(dox_wide_10$Conc_0, dox_wide_10$Conc_10, paired = TRUE)
+
+summary_stats_10 <- dox_wide_10 %>%
+  summarise(
+    mean_0     = mean(Conc_0, na.rm = TRUE),
+    mean_10    = mean(Conc_10, na.rm = TRUE),
+    median_0   = median(Conc_0, na.rm = TRUE),
+    median_10  = median(Conc_10, na.rm = TRUE)
+  )
+
+print(summary_stats_10)
+print(paired_ttest_10)
 ```
 
+## **📌 VEH 0 vs CX 0.1, 0.5, 1, 5 and 10**
+```{r comp_CX, echo=TRUE, message=FALSE}
+# 📦 Load required libraries
+library(tidyverse)
 
+# 📌 CX 0 vs 0.1 µM
+cx_paired_01 <- combined_data %>%
+  filter(Drug == "CX.5461", Conc %in% c(0, 0.1)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
 
+print(table(cx_paired_01$Indv, cx_paired_01$Conc))
+
+cx_wide_01 <- cx_paired_01 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_01 <- t.test(cx_wide_01$Conc_0, cx_wide_01$Conc_0.1, paired = TRUE)
+
+summary_stats_01 <- cx_wide_01 %>%
+  summarise(
+    mean_0    = mean(Conc_0, na.rm = TRUE),
+    mean_0.1  = mean(Conc_0.1, na.rm = TRUE),
+    median_0  = median(Conc_0, na.rm = TRUE),
+    median_0.1= median(Conc_0.1, na.rm = TRUE)
+  )
+
+print(summary_stats_01)
+print(paired_ttest_01)
+
+# --------------------------------------------
+
+# 📌 CX 0 vs 0.5 µM
+cx_paired_05 <- combined_data %>%
+  filter(Drug == "CX.5461", Conc %in% c(0, 0.5)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(cx_paired_05$Indv, cx_paired_05$Conc))
+
+cx_wide_05 <- cx_paired_05 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_05 <- t.test(cx_wide_05$Conc_0, cx_wide_05$Conc_0.5, paired = TRUE)
+
+summary_stats_05 <- cx_wide_05 %>%
+  summarise(
+    mean_0    = mean(Conc_0, na.rm = TRUE),
+    mean_0.5  = mean(Conc_0.5, na.rm = TRUE),
+    median_0  = median(Conc_0, na.rm = TRUE),
+    median_0.5= median(Conc_0.5, na.rm = TRUE)
+  )
+
+print(summary_stats_05)
+print(paired_ttest_05)
+
+# --------------------------------------------
+
+# 📌 CX 0 vs 1 µM
+cx_paired_1 <- combined_data %>%
+  filter(Drug == "CX.5461", Conc %in% c(0, 1)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(cx_paired_1$Indv, cx_paired_1$Conc))
+
+cx_wide_1 <- cx_paired_1 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_1 <- t.test(cx_wide_1$Conc_0, cx_wide_1$Conc_1, paired = TRUE)
+
+summary_stats_1 <- cx_wide_1 %>%
+  summarise(
+    mean_0    = mean(Conc_0, na.rm = TRUE),
+    mean_1    = mean(Conc_1, na.rm = TRUE),
+    median_0  = median(Conc_0, na.rm = TRUE),
+    median_1  = median(Conc_1, na.rm = TRUE)
+  )
+
+print(summary_stats_1)
+print(paired_ttest_1)
+
+# --------------------------------------------
+
+# 📌 CX 0 vs 5 µM
+cx_paired_5 <- combined_data %>%
+  filter(Drug == "CX.5461", Conc %in% c(0, 5)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(cx_paired_5$Indv, cx_paired_5$Conc))
+
+cx_wide_5 <- cx_paired_5 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_5 <- t.test(cx_wide_5$Conc_0, cx_wide_5$Conc_5, paired = TRUE)
+
+summary_stats_5 <- cx_wide_5 %>%
+  summarise(
+    mean_0    = mean(Conc_0, na.rm = TRUE),
+    mean_5    = mean(Conc_5, na.rm = TRUE),
+    median_0  = median(Conc_0, na.rm = TRUE),
+    median_5  = median(Conc_5, na.rm = TRUE)
+  )
+
+print(summary_stats_5)
+print(paired_ttest_5)
+
+# --------------------------------------------
+
+# 📌 CX 0 vs 10 µM
+cx_paired_10 <- combined_data %>%
+  filter(Drug == "CX.5461", Conc %in% c(0, 10)) %>%
+  mutate(Conc = as.numeric(as.character(Conc))) %>%
+  arrange(Indv, Conc)
+
+print(table(cx_paired_10$Indv, cx_paired_10$Conc))
+
+cx_wide_10 <- cx_paired_10 %>%
+  select(Indv, Conc, Ratio) %>%
+  pivot_wider(names_from = Conc, values_from = Ratio, names_prefix = "Conc_")
+
+paired_ttest_10 <- t.test(cx_wide_10$Conc_0, cx_wide_10$Conc_10, paired = TRUE)
+
+summary_stats_10 <- cx_wide_10 %>%
+  summarise(
+    mean_0     = mean(Conc_0, na.rm = TRUE),
+    mean_10    = mean(Conc_10, na.rm = TRUE),
+    median_0   = median(Conc_0, na.rm = TRUE),
+    median_10  = median(Conc_10, na.rm = TRUE)
+  )
+
+print(summary_stats_10)
+print(paired_ttest_10)
+```
 
 
 

@@ -98,7 +98,7 @@ plot_MF <- process_enrichment_plot(MF_Tibble, "Molecular Function", "#28B463")
 plot_CC <- process_enrichment_plot(CC_Tibble, "Cellular Component", "#D35400")
 
 # 🧩 Combine plots
-combined_plot <- plot_BP / plot_MF / plot_CC
+combined_plot <- plot_BP
 combined_plot
 ```
 
