@@ -1,0 +1,190 @@
+---
+title: "Figure_1"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## **📌 CX and DOX dose response curves **
+```{r load_libraries2, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
+
+# 📌 Load Required Libraries
+library(drc)
+library(dplyr)
+library(ggplot2)
+
+# 📌 Load CX-5461 and DOX data
+DRC <- read.csv("data/CX-5461.csv")
+DRC2 <- read.csv("data/DOX.csv")
+
+# 📌 Map individual labels
+individual_map <- list(`75-1` = "Ind1", `78-1` = "Ind2", `87-1` = "Ind3")
+
+# 📌 Predict concentrations for curve fitting
+pred_conc_cx <- exp(seq(log(0.01), log(50), length.out = 200))
+pred_conc_dox <- exp(seq(log(0.01), log(10), length.out = 200))
+
+# 📌 Fit and predict CX-5461
+fits_cx <- DRC %>%
+  group_split(Indv) %>%
+  setNames(unique(DRC$Indv)) %>%
+  lapply(function(df) {
+    tryCatch({
+      drm(Ratio ~ Conc, data = df, fct = LL.4(fixed = c(NA, 0, 1, NA)))
+    }, error = function(e) NULL)
+  })
+
+curve_data_cx <- do.call(rbind, lapply(names(fits_cx), function(name) {
+  fit <- fits_cx[[name]]
+  if (!is.null(fit)) {
+    indiv <- individual_map[[name]]
+    preds <- predict(fit, newdata = data.frame(Conc = pred_conc_cx))
+    data.frame(Conc = pred_conc_cx, Ratio = preds, Label = paste0(indiv, "_CX"))
+  }
+}))
+
+# 📌 Fit and predict DOX
+fits_dox <- DRC2 %>%
+  group_split(Indv) %>%
+  setNames(unique(DRC2$Indv)) %>%
+  lapply(function(df) {
+    tryCatch({
+      drm(Ratio ~ Conc, data = df, fct = LL.4(fixed = c(NA, 0, 1, NA)))
+    }, error = function(e) NULL)
+  })
+
+curve_data_dox <- do.call(rbind, lapply(names(fits_dox), function(name) {
+  fit <- fits_dox[[name]]
+  if (!is.null(fit)) {
+    indiv <- individual_map[[name]]
+    preds <- predict(fit, newdata = data.frame(Conc = pred_conc_dox))
+    data.frame(Conc = pred_conc_dox, Ratio = preds, Label = paste0(indiv, "_DOX"))
+  }
+}))
+
+# 📌 Combine all prediction curves
+combined_data <- bind_rows(curve_data_cx, curve_data_dox) %>%
+  mutate(
+    Drug = ifelse(grepl("_CX$", Label), "CX-5461", "DOX"),
+    Indv = case_when(
+      grepl("^Ind1", Label) ~ "Ind1",
+      grepl("^Ind2", Label) ~ "Ind2",
+      grepl("^Ind3", Label) ~ "Ind3"
+    )
+  )
+
+# 📌 Define style settings
+line_types <- c("Ind1" = "dotted", "Ind2" = "dashed", "Ind3" = "solid")
+drug_colors <- c("CX-5461" = "#08306B", "DOX" = "#E7298A")
+
+# 📌 Function to calculate EC50 per individual
+calculate_EC50 <- function(data, compound_name) {
+  individual_data <- split(data, data$Ind)
+  EC50_values <- data.frame(Individual = character(), EC50 = numeric(), stringsAsFactors = FALSE)
+  
+  for (individual in names(individual_data)) {
+    fit <- drm(Ratio ~ Conc, data = individual_data[[individual]],
+               fct = LL.4(fixed = c(NA, 0, 1, NA),
+                          names = c("hill", "min", "max", "EC50")))
+    EC50 <- summary(fit)$coefficients["EC50:(Intercept)", "Estimate"]
+    EC50_values <- rbind(EC50_values, data.frame(Individual = individual, EC50 = EC50))
+  }
+  
+  EC50_values$Compound <- compound_name
+  return(EC50_values)
+}
+
+# 📌 Calculate EC50s
+EC50_CX <- calculate_EC50(DRC, "CX-5461")
+EC50_DOX <- calculate_EC50(DRC2, "DOX")
+EC50_results <- bind_rows(EC50_CX, EC50_DOX) %>%
+  mutate(
+    Indv = recode(Individual, "75-1" = "Ind1", "78-1" = "Ind2", "87-1" = "Ind3"),
+    EC50 = round(EC50, 3)
+  )
+
+# 📌 Prepare annotation text
+cx_text <- EC50_results %>%
+  filter(Compound == "CX-5461") %>%
+  arrange(Indv) %>%
+  mutate(line = paste0(Indv, ": ", EC50)) %>%
+  pull(line)
+
+dox_text <- EC50_results %>%
+  filter(Compound == "DOX") %>%
+  arrange(Indv) %>%
+  mutate(line = paste0(Indv, ": ", EC50)) %>%
+  pull(line)
+
+combined_label <- paste0(
+  "LD50 CX-5461:\n", paste(cx_text, collapse = "\n"),
+  "\n\nLD50 DOX:\n", paste(dox_text, collapse = "\n")
+)
+
+# 📌 Plot with EC50 lines and label
+ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
+  geom_line(linewidth = 1.5) +
+  geom_vline(
+    data = EC50_results,
+    aes(xintercept = EC50),
+    color = "red", linetype = "dotted", linewidth = 0.8, inherit.aes = FALSE
+  ) +
+  annotate("label", x = 0.015, y = 0.05, hjust = 0, vjust = 0,
+           label = combined_label, size = 4.2, fontface = "bold", 
+           color = "black", fill = "#f0f0f0", label.size = 0.4)+
+  scale_color_manual(values = drug_colors) +
+  scale_linetype_manual(values = line_types) +
+  scale_x_log10(
+    limits = c(0.01, 50),
+    breaks = c(0.01, 0.1, 1, 10, 50),
+    labels = c("0.01", "0.1", "1", "10", "50")
+  ) +
+  labs(
+    title = "CX-5461 and DOX Cell Viability Curves with LD50",
+    x = "Concentration (μM)",
+    y = "Proportion of Viable Cells",
+    color = "Drug",
+    linetype = "Individual"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right",
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(color = "black"),
+    axis.title = element_text(color = "black"),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 1)
+  )
+```
+
+
+## **📌Immunofluorescence quantification 0.5 micromolar**
+```{r load_libraries3, echo=TRUE, message=FALSE, fig.width=8, fig.height=6}
+# Load necessary libraries
+library(ggplot2)
+
+# Create the dataset
+data <- data.frame(
+  Group = c("CX5461", "CX5461", "CX5461", "Dox", "Dox", "Dox", "Veh", "Veh", "Veh"),
+  Timepoint = rep(c("3hr", "24hr", "48hr"), 3),
+  Value = c(0.061339, 0.061610, 0.098899, 0.869496, 0.908774, 0.939833, 0.045066, 0.055042, 0.047006),
+  SD = c(0.007428, 0.014060, 0.034619, 0.024596, 0.006490, 0.017384, 0.011254, 0.011681, 0.012807)
+)
+
+# Ensure the order of groups and timepoints
+data$Group <- factor(data$Group, levels = c("Veh", "CX5461", "Dox"))
+data$Timepoint <- factor(data$Timepoint, levels = c("3hr", "24hr", "48hr"))
+
+# Create the bar chart with error bars
+ggplot(data, aes(x = Timepoint, y = Value, fill = Group)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(aes(ymin = Value - SD, ymax = Value + SD), 
+                position = position_dodge(0.9), width = 0.25) +
+  labs(title = "Immunofluorescence quantification 0.5 micromolar", 
+       x = "Timepoint", 
+       y = "Value") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set1")
+```

@@ -26,7 +26,7 @@ library(dplyr)
 ## **📍 2. Load Data**
 ```{r load-data, echo=TRUE, message=FALSE}
 # Load the dataset containing the total reads per sample
-align <- read.csv("data/Total_number_of_reads_by_sample.csv")  # Ensure the file is in the 'data/' folder
+align <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Paul_CX_2025/data/Total_number_of_reads_by_sample.csv")  # Ensure the file is in the 'data/' folder
 map <- data.frame(align)
 ```
 
@@ -76,12 +76,6 @@ p
 
 
 ## **📌 Total Reads by Treatment**
-
-```{r setup, include=FALSE}
-source("analysis/_setup.R")  # Load global setup script
-```
-
-
 ## **📍 Define Color Palettes**
 ```{r colors treatment, echo=TRUE}
 # Define color palettes for plots
@@ -96,7 +90,7 @@ Combined_palc <- c("#FF0000","#00FF00","#0000FF","#FFFF00","#FF00FF","#00FFFF",
 
 ## **📍 Load dataset for total reads by treatment**
 ```{r treatment, echo=TRUE, message=FALSE}
-align1 <- read.csv("data/Total_number_of_reads_by_treatment.csv")  # Ensure this file is inside the 'data/' folder
+align1 <- read.csv("C:/Work/Postdoc_UTMB/CX-5461 Project/RNA Seq/Alignment/Paul_CX_2025/data/Total_number_of_reads_by_sample.csv")  # Ensure this file is inside the 'data/' folder
 map1 <- data.frame(align1)
 ```
 

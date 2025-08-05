@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Figure_1</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Paul_CX_2025</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Figure_1</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-08-05
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Paul_CX_2025/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250129code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250129)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250129code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250129)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01PaulCX2025tree5208243b341795ebdc396d0909c84b409079c40ctargetblank5208243a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/tree/5208243b341795ebdc396d0909c84b409079c40c" target="_blank">5208243</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01PaulCX2025tree5208243b341795ebdc396d0909c84b409079c40ctargetblank5208243a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/tree/5208243b341795ebdc396d0909c84b409079c40c" target="_blank">5208243</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    0.1 box.svg
+    Ignored:    Rplot04.svg
+
+Untracked files:
+    Untracked:  analysis/Figure_1.Rmd
+    Untracked:  analysis/output/
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/total_reads_and_mapped_reads.Rmd
+    Modified:   data/Total_number_of_reads_by_sample.csv
+    Modified:   output/total_reads_by_sample_plot.png
+    Modified:   output/total_reads_by_treatment_plot.png
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="cx-and-dox-dose-response-curves" class="section level2">
+<h2><strong>📌 CX and DOX dose response curves </strong></h2>
+<pre class="r"><code># 📌 Load Required Libraries
+library(drc)</code></pre>
+<pre><code>Warning: package &#39;drc&#39; was built under R version 4.3.2</code></pre>
+<pre><code>Warning: package &#39;MASS&#39; was built under R version 4.3.1</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>Warning: package &#39;dplyr&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>library(ggplot2)
+
+# 📌 Load CX-5461 and DOX data
+DRC &lt;- read.csv(&quot;data/CX-5461.csv&quot;)
+DRC2 &lt;- read.csv(&quot;data/DOX.csv&quot;)
+
+# 📌 Map individual labels
+individual_map &lt;- list(`75-1` = &quot;Ind1&quot;, `78-1` = &quot;Ind2&quot;, `87-1` = &quot;Ind3&quot;)
+
+# 📌 Predict concentrations for curve fitting
+pred_conc_cx &lt;- exp(seq(log(0.01), log(50), length.out = 200))
+pred_conc_dox &lt;- exp(seq(log(0.01), log(10), length.out = 200))
+
+# 📌 Fit and predict CX-5461
+fits_cx &lt;- DRC %&gt;%
+  group_split(Indv) %&gt;%
+  setNames(unique(DRC$Indv)) %&gt;%
+  lapply(function(df) {
+    tryCatch({
+      drm(Ratio ~ Conc, data = df, fct = LL.4(fixed = c(NA, 0, 1, NA)))
+    }, error = function(e) NULL)
+  })
+
+curve_data_cx &lt;- do.call(rbind, lapply(names(fits_cx), function(name) {
+  fit &lt;- fits_cx[[name]]
+  if (!is.null(fit)) {
+    indiv &lt;- individual_map[[name]]
+    preds &lt;- predict(fit, newdata = data.frame(Conc = pred_conc_cx))
+    data.frame(Conc = pred_conc_cx, Ratio = preds, Label = paste0(indiv, &quot;_CX&quot;))
+  }
+}))
+
+# 📌 Fit and predict DOX
+fits_dox &lt;- DRC2 %&gt;%
+  group_split(Indv) %&gt;%
+  setNames(unique(DRC2$Indv)) %&gt;%
+  lapply(function(df) {
+    tryCatch({
+      drm(Ratio ~ Conc, data = df, fct = LL.4(fixed = c(NA, 0, 1, NA)))
+    }, error = function(e) NULL)
+  })
+
+curve_data_dox &lt;- do.call(rbind, lapply(names(fits_dox), function(name) {
+  fit &lt;- fits_dox[[name]]
+  if (!is.null(fit)) {
+    indiv &lt;- individual_map[[name]]
+    preds &lt;- predict(fit, newdata = data.frame(Conc = pred_conc_dox))
+    data.frame(Conc = pred_conc_dox, Ratio = preds, Label = paste0(indiv, &quot;_DOX&quot;))
+  }
+}))
+
+# 📌 Combine all prediction curves
+combined_data &lt;- bind_rows(curve_data_cx, curve_data_dox) %&gt;%
+  mutate(
+    Drug = ifelse(grepl(&quot;_CX$&quot;, Label), &quot;CX-5461&quot;, &quot;DOX&quot;),
+    Indv = case_when(
+      grepl(&quot;^Ind1&quot;, Label) ~ &quot;Ind1&quot;,
+      grepl(&quot;^Ind2&quot;, Label) ~ &quot;Ind2&quot;,
+      grepl(&quot;^Ind3&quot;, Label) ~ &quot;Ind3&quot;
+    )
+  )
+
+# 📌 Define style settings
+line_types &lt;- c(&quot;Ind1&quot; = &quot;dotted&quot;, &quot;Ind2&quot; = &quot;dashed&quot;, &quot;Ind3&quot; = &quot;solid&quot;)
+drug_colors &lt;- c(&quot;CX-5461&quot; = &quot;#08306B&quot;, &quot;DOX&quot; = &quot;#E7298A&quot;)
+
+# 📌 Function to calculate EC50 per individual
+calculate_EC50 &lt;- function(data, compound_name) {
+  individual_data &lt;- split(data, data$Ind)
+  EC50_values &lt;- data.frame(Individual = character(), EC50 = numeric(), stringsAsFactors = FALSE)
+  
+  for (individual in names(individual_data)) {
+    fit &lt;- drm(Ratio ~ Conc, data = individual_data[[individual]],
+               fct = LL.4(fixed = c(NA, 0, 1, NA),
+                          names = c(&quot;hill&quot;, &quot;min&quot;, &quot;max&quot;, &quot;EC50&quot;)))
+    EC50 &lt;- summary(fit)$coefficients[&quot;EC50:(Intercept)&quot;, &quot;Estimate&quot;]
+    EC50_values &lt;- rbind(EC50_values, data.frame(Individual = individual, EC50 = EC50))
+  }
+  
+  EC50_values$Compound &lt;- compound_name
+  return(EC50_values)
+}
+
+# 📌 Calculate EC50s
+EC50_CX &lt;- calculate_EC50(DRC, &quot;CX-5461&quot;)
+EC50_DOX &lt;- calculate_EC50(DRC2, &quot;DOX&quot;)
+EC50_results &lt;- bind_rows(EC50_CX, EC50_DOX) %&gt;%
+  mutate(
+    Indv = recode(Individual, &quot;75-1&quot; = &quot;Ind1&quot;, &quot;78-1&quot; = &quot;Ind2&quot;, &quot;87-1&quot; = &quot;Ind3&quot;),
+    EC50 = round(EC50, 3)
+  )
+
+# 📌 Prepare annotation text
+cx_text &lt;- EC50_results %&gt;%
+  filter(Compound == &quot;CX-5461&quot;) %&gt;%
+  arrange(Indv) %&gt;%
+  mutate(line = paste0(Indv, &quot;: &quot;, EC50)) %&gt;%
+  pull(line)
+
+dox_text &lt;- EC50_results %&gt;%
+  filter(Compound == &quot;DOX&quot;) %&gt;%
+  arrange(Indv) %&gt;%
+  mutate(line = paste0(Indv, &quot;: &quot;, EC50)) %&gt;%
+  pull(line)
+
+combined_label &lt;- paste0(
+  &quot;LD50 CX-5461:\n&quot;, paste(cx_text, collapse = &quot;\n&quot;),
+  &quot;\n\nLD50 DOX:\n&quot;, paste(dox_text, collapse = &quot;\n&quot;)
+)
+
+# 📌 Plot with EC50 lines and label
+ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
+  geom_line(linewidth = 1.5) +
+  geom_vline(
+    data = EC50_results,
+    aes(xintercept = EC50),
+    color = &quot;red&quot;, linetype = &quot;dotted&quot;, linewidth = 0.8, inherit.aes = FALSE
+  ) +
+  annotate(&quot;label&quot;, x = 0.015, y = 0.05, hjust = 0, vjust = 0,
+           label = combined_label, size = 4.2, fontface = &quot;bold&quot;, 
+           color = &quot;black&quot;, fill = &quot;#f0f0f0&quot;, label.size = 0.4)+
+  scale_color_manual(values = drug_colors) +
+  scale_linetype_manual(values = line_types) +
+  scale_x_log10(
+    limits = c(0.01, 50),
+    breaks = c(0.01, 0.1, 1, 10, 50),
+    labels = c(&quot;0.01&quot;, &quot;0.1&quot;, &quot;1&quot;, &quot;10&quot;, &quot;50&quot;)
+  ) +
+  labs(
+    title = &quot;CX-5461 and DOX Cell Viability Curves with LD50&quot;,
+    x = &quot;Concentration (μM)&quot;,
+    y = &quot;Proportion of Viable Cells&quot;,
+    color = &quot;Drug&quot;,
+    linetype = &quot;Individual&quot;
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = &quot;bold&quot;, hjust = 0.5),
+    legend.title = element_text(face = &quot;bold&quot;),
+    legend.position = &quot;right&quot;,
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(color = &quot;black&quot;),
+    axis.title = element_text(color = &quot;black&quot;),
+    plot.background = element_rect(fill = &quot;white&quot;, color = NA),
+    panel.border = element_rect(fill = NA, color = &quot;black&quot;, linewidth = 1)
+  )</code></pre>
+<pre><code>Warning in geom_vline(data = EC50_results, aes(xintercept = EC50), color =
+&quot;red&quot;, : Ignoring unknown parameters: `inherit.aes`</code></pre>
+<p><img src="figure/Figure_1.Rmd/load_libraries2-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="immunofluorescence-quantification-0.5-micromolar"
+class="section level2">
+<h2><strong>📌Immunofluorescence quantification 0.5
+micromolar</strong></h2>
+<pre class="r"><code># Load necessary libraries
+library(ggplot2)
+
+# Create the dataset
+data &lt;- data.frame(
+  Group = c(&quot;CX5461&quot;, &quot;CX5461&quot;, &quot;CX5461&quot;, &quot;Dox&quot;, &quot;Dox&quot;, &quot;Dox&quot;, &quot;Veh&quot;, &quot;Veh&quot;, &quot;Veh&quot;),
+  Timepoint = rep(c(&quot;3hr&quot;, &quot;24hr&quot;, &quot;48hr&quot;), 3),
+  Value = c(0.061339, 0.061610, 0.098899, 0.869496, 0.908774, 0.939833, 0.045066, 0.055042, 0.047006),
+  SD = c(0.007428, 0.014060, 0.034619, 0.024596, 0.006490, 0.017384, 0.011254, 0.011681, 0.012807)
+)
+
+# Ensure the order of groups and timepoints
+data$Group &lt;- factor(data$Group, levels = c(&quot;Veh&quot;, &quot;CX5461&quot;, &quot;Dox&quot;))
+data$Timepoint &lt;- factor(data$Timepoint, levels = c(&quot;3hr&quot;, &quot;24hr&quot;, &quot;48hr&quot;))
+
+# Create the bar chart with error bars
+ggplot(data, aes(x = Timepoint, y = Value, fill = Group)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  geom_errorbar(aes(ymin = Value - SD, ymax = Value + SD), 
+                position = position_dodge(0.9), width = 0.25) +
+  labs(title = &quot;Immunofluorescence quantification 0.5 micromolar&quot;, 
+       x = &quot;Timepoint&quot;, 
+       y = &quot;Value&quot;) +
+  theme_minimal() +
+  scale_fill_brewer(palette = &quot;Set1&quot;)</code></pre>
+<p><img src="figure/Figure_1.Rmd/load_libraries3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.0 (2023-04-21 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 11 x64 (build 26100)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggplot2_3.5.2 dplyr_1.1.4   drc_3.0-1     MASS_7.3-60  
+
+loaded via a namespace (and not attached):
+ [1] generics_0.1.3     sandwich_3.1-1     sass_0.4.10        gtools_3.9.5      
+ [5] stringi_1.8.3      lattice_0.22-7     digest_0.6.34      magrittr_2.0.3    
+ [9] RColorBrewer_1.1-3 evaluate_1.0.3     grid_4.3.0         mvtnorm_1.3-3     
+[13] fastmap_1.2.0      rprojroot_2.0.4    workflowr_1.7.1    jsonlite_2.0.0    
+[17] Matrix_1.6-1.1     Formula_1.2-5      survival_3.8-3     multcomp_1.4-28   
+[21] promises_1.3.2     scales_1.3.0       TH.data_1.1-3      codetools_0.2-20  
+[25] jquerylib_0.1.4    abind_1.4-8        cli_3.6.1          rlang_1.1.3       
+[29] munsell_0.5.1      splines_4.3.0      withr_3.0.2        cachem_1.1.0      
+[33] yaml_2.3.10        plotrix_3.8-4      tools_4.3.0        colorspace_2.1-0  
+[37] httpuv_1.6.15      vctrs_0.6.5        R6_2.6.1           zoo_1.8-14        
+[41] lifecycle_1.0.4    git2r_0.36.2       stringr_1.5.1      fs_1.6.3          
+[45] car_3.1-3          pkgconfig_2.0.3    gtable_0.3.6       pillar_1.10.2     
+[49] bslib_0.9.0        later_1.3.2        glue_1.7.0         Rcpp_1.0.12       
+[53] tidyselect_1.2.1   xfun_0.52          tibble_3.2.1       rstudioapi_0.17.1 
+[57] knitr_1.50         farver_2.1.2       htmltools_0.5.8.1  labeling_0.4.3    
+[61] rmarkdown_2.29     carData_3.0-5      compiler_4.3.0    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

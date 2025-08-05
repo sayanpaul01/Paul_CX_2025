@@ -10,6 +10,9 @@ editor_options:
 
 Welcome to my research website.
 
+### **Main Figures**
+- **[Figure 1](https://mward-lab.github.io/Paul_CX_2025/Figure_1.html)**
+
 ### **Cardiomyocyte Purity**  
 
 - **[Cardiomyocyte Purity](https://mward-lab.github.io/Paul_CX_2025/Flow.html)**
