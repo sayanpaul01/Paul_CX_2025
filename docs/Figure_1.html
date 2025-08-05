@@ -357,7 +357,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -368,8 +368,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -382,9 +382,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>Paul_CX_2025/</code> <span
@@ -407,21 +407,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -512,15 +509,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01PaulCX2025tree5208243b341795ebdc396d0909c84b409079c40ctargetblank5208243a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01PaulCX2025tree267e2ea0dc508d266d818e9340a4af32a82e4f9dtargetblank267e2eaa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/sayanpaul01/Paul_CX_2025/tree/5208243b341795ebdc396d0909c84b409079c40c" target="_blank">5208243</a>
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/tree/267e2ea0dc508d266d818e9340a4af32a82e4f9d" target="_blank">267e2ea</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01PaulCX2025tree5208243b341795ebdc396d0909c84b409079c40ctargetblank5208243a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomsayanpaul01PaulCX2025tree267e2ea0dc508d266d818e9340a4af32a82e4f9dtargetblank267e2eaa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -530,7 +527,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/sayanpaul01/Paul_CX_2025/tree/5208243b341795ebdc396d0909c84b409079c40c" target="_blank">5208243</a>.
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/tree/267e2ea0dc508d266d818e9340a4af32a82e4f9d" target="_blank">267e2ea</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -551,17 +548,6 @@ Ignored files:
     Ignored:    0.1 box.svg
     Ignored:    Rplot04.svg
 
-Untracked files:
-    Untracked:  analysis/Figure_1.Rmd
-    Untracked:  analysis/output/
-
-Unstaged changes:
-    Modified:   analysis/index.Rmd
-    Modified:   analysis/total_reads_and_mapped_reads.Rmd
-    Modified:   data/Total_number_of_reads_by_sample.csv
-    Modified:   output/total_reads_by_sample_plot.png
-    Modified:   output/total_reads_by_treatment_plot.png
-
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -575,10 +561,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/Figure_1.Rmd</code>) and HTML
+(<code>docs/Figure_1.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/blob/39d5f384bf79bbd1290daa160233ba47b0d9898c/analysis/Figure_1.Rmd" target="_blank">39d5f38</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-08-05
+</td>
+<td>
+Commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/sayanpaul01/Paul_CX_2025/39d5f384bf79bbd1290daa160233ba47b0d9898c/docs/Figure_1.html" target="_blank">39d5f38</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-08-05
+</td>
+<td>
+Commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -740,6 +790,43 @@ ggplot(combined_data, aes(x = Conc, y = Ratio, color = Drug, linetype = Indv)) +
 <pre><code>Warning in geom_vline(data = EC50_results, aes(xintercept = EC50), color =
 &quot;red&quot;, : Ignoring unknown parameters: `inherit.aes`</code></pre>
 <p><img src="figure/Figure_1.Rmd/load_libraries2-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-load_libraries2-1">
+Past versions of load_libraries2-1.png
+</button>
+</p>
+<div id="fig-load_libraries2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/blob/39d5f384bf79bbd1290daa160233ba47b0d9898c/docs/figure/Figure_1.Rmd/load_libraries2-1.png" target="_blank">39d5f38</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-08-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="immunofluorescence-quantification-0.5-micromolar"
 class="section level2">
@@ -771,6 +858,43 @@ ggplot(data, aes(x = Timepoint, y = Value, fill = Group)) +
   theme_minimal() +
   scale_fill_brewer(palette = &quot;Set1&quot;)</code></pre>
 <p><img src="figure/Figure_1.Rmd/load_libraries3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-load_libraries3-1">
+Past versions of load_libraries3-1.png
+</button>
+</p>
+<div id="fig-load_libraries3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/sayanpaul01/Paul_CX_2025/blob/39d5f384bf79bbd1290daa160233ba47b0d9898c/docs/figure/Figure_1.Rmd/load_libraries3-1.png" target="_blank">39d5f38</a>
+</td>
+<td>
+sayanpaul01
+</td>
+<td>
+2025-08-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -801,25 +925,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggplot2_3.5.2 dplyr_1.1.4   drc_3.0-1     MASS_7.3-60  
+[1] ggplot2_3.5.2   dplyr_1.1.4     drc_3.0-1       MASS_7.3-60    
+[5] workflowr_1.7.1
 
 loaded via a namespace (and not attached):
  [1] generics_0.1.3     sandwich_3.1-1     sass_0.4.10        gtools_3.9.5      
  [5] stringi_1.8.3      lattice_0.22-7     digest_0.6.34      magrittr_2.0.3    
  [9] RColorBrewer_1.1-3 evaluate_1.0.3     grid_4.3.0         mvtnorm_1.3-3     
-[13] fastmap_1.2.0      rprojroot_2.0.4    workflowr_1.7.1    jsonlite_2.0.0    
-[17] Matrix_1.6-1.1     Formula_1.2-5      survival_3.8-3     multcomp_1.4-28   
-[21] promises_1.3.2     scales_1.3.0       TH.data_1.1-3      codetools_0.2-20  
-[25] jquerylib_0.1.4    abind_1.4-8        cli_3.6.1          rlang_1.1.3       
-[29] munsell_0.5.1      splines_4.3.0      withr_3.0.2        cachem_1.1.0      
-[33] yaml_2.3.10        plotrix_3.8-4      tools_4.3.0        colorspace_2.1-0  
-[37] httpuv_1.6.15      vctrs_0.6.5        R6_2.6.1           zoo_1.8-14        
-[41] lifecycle_1.0.4    git2r_0.36.2       stringr_1.5.1      fs_1.6.3          
-[45] car_3.1-3          pkgconfig_2.0.3    gtable_0.3.6       pillar_1.10.2     
-[49] bslib_0.9.0        later_1.3.2        glue_1.7.0         Rcpp_1.0.12       
-[53] tidyselect_1.2.1   xfun_0.52          tibble_3.2.1       rstudioapi_0.17.1 
-[57] knitr_1.50         farver_2.1.2       htmltools_0.5.8.1  labeling_0.4.3    
-[61] rmarkdown_2.29     carData_3.0-5      compiler_4.3.0    </code></pre>
+[13] fastmap_1.2.0      rprojroot_2.0.4    jsonlite_2.0.0     Matrix_1.6-1.1    
+[17] processx_3.8.6     whisker_0.4.1      Formula_1.2-5      survival_3.8-3    
+[21] ps_1.8.1           multcomp_1.4-28    promises_1.3.2     httr_1.4.7        
+[25] scales_1.3.0       TH.data_1.1-3      codetools_0.2-20   jquerylib_0.1.4   
+[29] abind_1.4-8        cli_3.6.1          rlang_1.1.3        munsell_0.5.1     
+[33] splines_4.3.0      withr_3.0.2        plotrix_3.8-4      cachem_1.1.0      
+[37] yaml_2.3.10        tools_4.3.0        colorspace_2.1-0   httpuv_1.6.15     
+[41] vctrs_0.6.5        R6_2.6.1           zoo_1.8-14         lifecycle_1.0.4   
+[45] git2r_0.36.2       stringr_1.5.1      fs_1.6.3           car_3.1-3         
+[49] pkgconfig_2.0.3    callr_3.7.6        gtable_0.3.6       pillar_1.10.2     
+[53] bslib_0.9.0        later_1.3.2        glue_1.7.0         Rcpp_1.0.12       
+[57] tidyselect_1.2.1   xfun_0.52          tibble_3.2.1       rstudioapi_0.17.1 
+[61] knitr_1.50         farver_2.1.2       htmltools_0.5.8.1  labeling_0.4.3    
+[65] rmarkdown_2.29     carData_3.0-5      compiler_4.3.0     getPass_0.2-4     </code></pre>
 </div>
 </div>
 
